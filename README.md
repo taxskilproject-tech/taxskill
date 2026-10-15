@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TaxSkills
 
-## Getting Started
+Sistema documental contable y laboral con Next.js, Supabase Cloud y Atomic Design.
 
-First, run the development server:
+**H01 y H02 implementados:** acceso, empresas, cuentas, roles, permisos por módulo, responsables, soft delete y auditoría. El recorrido documental comienza en H03.
 
-```bash
-npm run dev
-# or
+## Inicio
+
+Requiere Node.js 22.12+ compatible, Yarn Classic 1.22.22 y Supabase CLI autenticado.
+
+```powershell
+yarn install --frozen-lockfile
+supabase login
+supabase link --project-ref gzwrqvqofcrdjvzoblaz
+yarn env:setup gzwrqvqofcrdjvzoblaz
+yarn env:admin gzwrqvqofcrdjvzoblaz
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir http://localhost:3000. `yarn env:setup` crea `.env.local` y rechaza sobrescribirlo. `yarn env:admin` añade las dos claves privadas sin mostrarlas. Para una base nueva, aplicar migraciones y seguir el bootstrap de la [guía de desarrollo](docs/desarrollo.md#11-acceso-administrativo-y-demostracion-de-h02). No hay registro público ni recuperación por correo.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Verificación
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```powershell
+yarn verify
+yarn build
+```
 
-## Learn More
+Compilar siempre con Yarn. `yarn.lock` es el único lockfile.
 
-To learn more about Next.js, take a look at the following resources:
+## Documentación
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Desarrollo, configuración y migraciones](docs/desarrollo.md).
+- [Hitos del proyecto](docs/hitos/README.md).
+- [H01 y sus criterios](docs/hitos/h01-preparacion-tecnica.md).
+- [Evidencias de H01](docs/hitos/evidencias/h01.md).
+- [H02 y sus criterios](docs/hitos/h02-acceso-empresas.md).
+- [Evidencias y operación de H02](docs/hitos/evidencias/h02.md).
+- [Arquitectura y decisiones](docs/diseno-tecnico.md).
+- [Reglas de agentes](.agents/rules.md).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+RLS y la revocación universal de consultas directas permanecen pendientes de H08/T01; durante desarrollo se utilizan datos sintéticos. Docker solo es necesario para ejecutar Supabase local.

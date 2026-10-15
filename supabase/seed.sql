@@ -1,0 +1,6 @@
+-- H02: Auth se siembra mediante Admin SDK, nunca con contraseñas en SQL.
+-- Tras aplicar migraciones: yarn seed:demo (una vez) y yarn test:h02:live.
+-- El segundo comando necesita la app local en 127.0.0.1:3001.
+-- Bootstrap crea catálogo y roles transaccionalmente; las fixtures son idempotentes.
+-- Ver docs/desarrollo.md y docs/hitos/evidencias/h02.md.
+-- Este archivo no inserta identidades en esquemas internos administrados por Auth.
