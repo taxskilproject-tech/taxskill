@@ -3,7 +3,7 @@
 - **Versión:** 1.1
 - **Fecha:** 10 de octubre de 2026
 - **Proyecto:** tax-skill / SGD Contable
-- **Estado actualizado al 17 de octubre de 2026:** H01–H07 implementados; REV-01–REV-03 cerradas con publicación e historia conservada. REV-04–REV-05 [corregidas y verificadas en Docker](hitos/evidencias/h07-cierre-complementario.md), pendiente publicar la migración adicional: local 57 / Cloud 56. Preparación productiva H08 pendiente.
+- **Estado actualizado al 17 de octubre de 2026:** H01–H07 implementados; REV-01–REV-05 cerradas. [Cierre complementario](hitos/evidencias/h07-cierre-complementario.md): 57 versiones local/Cloud coincidentes y 13 huellas históricas conservadas, con pruebas únicamente en Docker. Base lista para comenzar H08; preparación productiva y aceptación formal pendientes.
 - **Operación inicial:** un estudio contable en Perú, zona horaria America/Lima.
 
 ### Índice

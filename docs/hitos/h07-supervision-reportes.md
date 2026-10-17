@@ -1,6 +1,6 @@
 # H07 — Supervisión y reportes
 
-**Estado:** implementado; REV-01–REV-03 [cerradas y publicadas](evidencias/h07-correcciones.md), REV-04–REV-05 [corregidas y verificadas en Docker](evidencias/h07-cierre-complementario.md). Local 57 / Cloud 56; pendiente publicar la nueva migración antes del frontend. Sin fixtures remotos. [Evidencias iniciales](evidencias/h07.md) y [contratos](../supervision-reportes.md). Aceptación formal independiente. **Depende de:** [H06](h06-actividades-notificaciones.md). **Habilita:** [H08](h08-preparacion-produccion.md) tras completar la sincronización. Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
+**Estado:** implementado; REV-01–REV-03 [cerradas y publicadas](evidencias/h07-correcciones.md), REV-04–REV-05 [cerradas con publicación verificada](evidencias/h07-cierre-complementario.md). Local/Cloud: 57 versiones coincidentes y 13 huellas históricas conservadas. Sin fixtures remotos. [Evidencias iniciales](evidencias/h07.md) y [contratos](../supervision-reportes.md). Aceptación formal independiente. **Depende de:** [H06](h06-actividades-notificaciones.md). **Habilita:** [H08](h08-preparacion-produccion.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
 
 <a id="objetivo"></a>
 ## 1. Objetivo
@@ -145,9 +145,9 @@ Conservar ejemplos de Excel/PDF generados exclusivamente con datos ficticios, fi
 - [x] Medición sintética de capacidad/P95 y estimación de consumo están documentadas con ajustes pendientes identificados.
 - [x] Arquitectura y estados pertinentes verificados; feedback de exportación descartado al cambiar identidad incluso con caché y retorno A → B → A (REV-05).
 - [x] CA17, CA23–CA24 funcionales, CA30 y regresión pertinente tienen evidencia, incluidos los casos afectados por REV-01–REV-03. Seguridad efectiva y ajuste productivo pendientes H08.
-- [x] Publicación correctiva autorizada en Cloud verificada: 56 migraciones coincidentes, resolver activo, lint sin errores y 13 huellas históricas conservadas. Contratos, tipos, documentación, base Git y pruebas locales preparados para H08.
+- [x] Primera publicación correctiva de auditoría verificada: 56 versiones coincidentes al publicarla, resolver activo, lint PASS y 13 huellas conservadas; evidencia histórica en el cierre REV-01–REV-03.
 - [x] REV-04–REV-05 corregidas y verificadas en pruebas, SQL y navegador local; [cierre complementario](evidencias/h07-cierre-complementario.md).
-- [ ] Migración `20261017175617` publicada y base local/Cloud sincronizada antes de desplegar el frontend actualizado.
+- [x] Migración `20261017175617` publicada con autorización explícita; 57 versiones coincidentes, 13 huellas conservadas, helper privado, lint remoto PASS y dry-run sin pendientes antes del frontend actualizado.
 
 ## 9. Límites y continuidad
 

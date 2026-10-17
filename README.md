@@ -2,7 +2,7 @@
 
 Sistema documental contable y laboral con Next.js, Supabase Cloud y Atomic Design.
 
-**H01–H07 implementados y comprobados localmente.** REV-01–REV-03 tienen [cierre y publicación verificada](docs/hitos/evidencias/h07-correcciones.md); REV-04–REV-05 están [corregidas y validadas en Docker](docs/hitos/evidencias/h07-cierre-complementario.md). Local: 57 migraciones; Cloud: 56, pendiente publicar la corrección adicional antes de desplegar este frontend. Ver [contratos H07](docs/supervision-reportes.md), [evidencias H07](docs/hitos/evidencias/h07.md) y [entornos](docs/desarrollo.md). Pruebas exclusivamente en Docker, sin fixtures remotos. H08 y la aceptación formal siguen pendientes; completar la sincronización para registrar su base final.
+**H01–H07 implementados y comprobados localmente.** REV-01–REV-03 tienen [cierre y publicación verificada](docs/hitos/evidencias/h07-correcciones.md); REV-04–REV-05 están [corregidas, verificadas y publicadas](docs/hitos/evidencias/h07-cierre-complementario.md). Local y Cloud: **57 migraciones coincidentes**, 13 huellas históricas conservadas. Ver [contratos H07](docs/supervision-reportes.md), [evidencias H07](docs/hitos/evidencias/h07.md) y [entornos](docs/desarrollo.md). Pruebas exclusivamente en Docker, sin fixtures remotos. Base técnica lista para comenzar H08; su preparación productiva y la aceptación formal siguen pendientes.
 
 ## Inicio
 

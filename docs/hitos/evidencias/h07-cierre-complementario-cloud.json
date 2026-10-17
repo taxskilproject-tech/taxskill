@@ -1,0 +1,29 @@
+{
+  "verifiedAt": "2026-10-17T18:15:14.623Z",
+  "project": "gzwrqvqofcrdjvzoblaz",
+  "migration": "20261017175617_h07_indicator_intersections.sql",
+  "localRemoteVersionsMatched": 57,
+  "historyFingerprintsUnchanged": 13,
+  "inventory": {
+    "audit_resolver": true,
+    "export_checks_view": true,
+    "h06_jobs": 0,
+    "indicator_helper": true,
+    "indicator_helper_private": true,
+    "migrations": 57,
+    "query_uses_indicators": true,
+    "tables": 29,
+    "tables_rls": 0
+  },
+  "seeds": 0,
+  "roles": 0,
+  "finalDryRun": {
+    "upToDate": true,
+    "dryRun": true,
+    "migrations": [],
+    "seeds": [],
+    "roles": [],
+    "message": "Remote database is up to date."
+  },
+  "lint": "PASS; public/private; level error"
+}

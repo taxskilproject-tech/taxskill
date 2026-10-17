@@ -1,6 +1,6 @@
 # Cierre de observaciones previo a H08
 
-**Fecha:** 17 de octubre de 2026. **Estado de REV-01–REV-03:** corregidas y validadas en Docker local. Migración correctiva publicada en Cloud con autorización específica del usuario; 56 migraciones coincidentes y 13 huellas históricas conservadas. La [revisión complementaria posterior](revision-final-pre-h08.md) identifica REV-04 y REV-05 como nuevos casos pendientes antes de la conformidad completa de H07. H08 permanece pendiente.
+**Fecha:** 17 de octubre de 2026. **Estado de REV-01–REV-03:** corregidas y validadas en Docker local. Migración correctiva publicada en Cloud con autorización específica; en esa entrega se verificaron 56 versiones y 13 huellas conservadas. REV-04–REV-05 de la [revisión posterior](revision-final-pre-h08.md) tienen su [cierre complementario publicado](h07-cierre-complementario.md), con 57 versiones coincidentes. H08 permanece pendiente.
 
 Se conserva la [revisión inicial](revision-pre-h08.md) para consultar los defectos, sus requisitos y la reproducción anterior. Esta evidencia registra su corrección; no acredita todavía seguridad ni operación productiva de H08.
 
@@ -70,6 +70,6 @@ El código completo de H03–H07 y las tres correcciones están publicados en Gi
 
 ## 5. Continuidad
 
-REV-01–REV-03 y su entrega correctiva remota están cerradas. Los dos casos de la [revisión complementaria](revision-final-pre-h08.md) están [corregidos y verificados en Docker](h07-cierre-complementario.md); su publicación adicional se registra por separado antes de consolidar la base de [H08](../h08-preparacion-produccion.md).
+REV-01–REV-03 y su entrega correctiva remota están cerradas. Los dos casos de la [revisión complementaria](revision-final-pre-h08.md) están [corregidos, verificados y publicados](h07-cierre-complementario.md), con 57 versiones coincidentes y la base lista para comenzar [H08](../h08-preparacion-produccion.md).
 
 El piloto real sigue condicionado a RLS/privilegios/sesiones, Storage, respaldos/restauración, monitoreo, configuración productiva, canal WhatsApp y aceptación del equipo. Esta corrección no cierra esos requisitos.

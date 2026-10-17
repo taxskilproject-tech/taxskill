@@ -1,6 +1,6 @@
 # Cierre complementario de H07 · REV-04 y REV-05
 
-**Fecha:** 17 de octubre de 2026. **Estado:** ambas observaciones corregidas y verificadas en Docker local; publicación de la migración adicional pendiente. REV-01–REV-03 conservan su [cierre anterior](h07-correcciones.md). El [informe que reprodujo los defectos](revision-final-pre-h08.md) se conserva como evidencia histórica.
+**Fecha:** 17 de octubre de 2026. **Estado:** ambas observaciones corregidas, verificadas en Docker y publicadas en Cloud con autorización explícita; 57 versiones coincidentes y 13 huellas históricas sin cambios. REV-01–REV-03 conservan su [cierre anterior](h07-correcciones.md). El [informe que reprodujo los defectos](revision-final-pre-h08.md) se conserva como evidencia histórica.
 
 ## 1. Indicadores por intersección · REV-04
 
@@ -32,6 +32,7 @@ El trabajo activo se marca como descartado y se aborta al cambiar identidad o de
 | `yarn build`, `yarn check:bundle` | PASS: 19 páginas, dos workers, Proxy y ausencia de secretos configurados en recursos públicos. |
 | `yarn test:h07:live` | PASS: 30 empresas, 100 usuarios, 1.000 trabajadores, 12.000 obligaciones; Excel/PDF de 1.000 filas y auditoría. Solo Docker. |
 | Navegador real | Build en `127.0.0.1:3001`, Docker `127.0.0.1:54331`. Indicador cero abre cero manteniendo Observaciones. Excel prepara 185 filas; al volver a Observaciones aparece el mensaje actual de cero. No acredita guardado físico del archivo. |
+| Cloud autorizado | Únicamente la nueva migración aplicada; 57 versiones coincidentes, 13 huellas históricas conservadas, helper privado, consulta actualizada y permisos conjuntos preservados. Lint remoto PASS; dry-run final sin pendientes; cero seeds, roles o jobs nuevos. |
 
 Medición sin el arranque concurrente del contenedor auxiliar: P95 dashboard **1.280,2 ms**, reportes **1.193,8 ms**, documentos **763,7 ms**, auditoría **495,1 ms**. Un calentamiento y 20 muestras por recurso, un usuario concurrente, HTTP loopback; referencia local ≤2.000 ms. Excel de 1.000 filas: 423,9 ms; PDF: 1.204,0 ms; heap final aproximado: 82,2 MB. Consultas combinadas, 20 muestras sobre 12.000 obligaciones: pendientes + próximas **1.121,2 ms**, revisión + observadas **920,1 ms**. Ambos conjuntos resultaron vacíos; la conciliación no vacía está cubierta por la prueba SQL de archivos mixtos. No acredita SLA, concurrencia ni dispositivos productivos.
 
@@ -51,6 +52,8 @@ Después de exportar 185 obligaciones y volver a Observaciones ya consultado, el
 
 El código y la evidencia están publicados en GitHub, rama `codex/h02-acceso-empresas`, commit `7b18e83`. Publicar la migración antes de desplegar el frontend que envía `indicators`. El dry-run identifica exclusivamente `20261017175617_h07_indicator_intersections.sql`, sin seeds ni roles. Se guardaron las 13 huellas históricas y el inventario remoto mediante consultas de solo lectura.
 
-**Publicación no ejecutada:** la revisión automática rechazó aplicar esta migración nueva al entorno real porque la autorización anterior correspondía específicamente a `20261017164155`, no a esta corrección. Es necesaria la autorización explícita del usuario para publicar únicamente `20261017175617_h07_indicator_intersections.sql` en `gzwrqvqofcrdjvzoblaz`. No se intentó otra vía ni se modificó el historial remoto. Tras autorización, comprobar 57 versiones coincidentes, las 13 huellas sin cambios, el helper privado, el lint y cero jobs nuevos antes de registrar el cierre remoto.
+La revisión automática bloqueó inicialmente la publicación porque la autorización anterior correspondía a `20261017164155`. Después el usuario autorizó explícitamente publicar únicamente `20261017175617_h07_indicator_intersections.sql` en `gzwrqvqofcrdjvzoblaz`. Se repitió el dry-run con una comprobación que rechaza cualquier migración, seed o rol adicional y se publicó exactamente esa corrección mediante CLI. No se reparó ni revirtió el historial remoto.
 
-Ambas observaciones están cerradas funcionalmente en local. Completar la publicación y comprobar las huellas permitirá registrar la base sincronizada para [H08](../h08-preparacion-produccion.md). RLS/privilegios/sesiones, Storage, respaldos/restauración, monitoreo, dominio, secretos y canal productivo siguen siendo alcance de H08. Esta corrección no implementa esos controles ni realiza un piloto real.
+La verificación posterior confirmó las 57 versiones local/remoto coincidentes, las 13 huellas idénticas, el helper privado sin ejecución para `anon`/`authenticated`, su uso en la consulta y el requisito conjunto de lectura/exportación. El resolver de auditoría anterior permanece presente. Lint `public`/`private` PASS y dry-run final `upToDate: true`, sin pendientes. Se conservan 29 tablas, RLS diferido y cero jobs de WhatsApp. [Inventario sanitizado](h07-cierre-complementario-cloud.json). Los resultados originales ignorados están en `test-results/revision-pre-h08/indicators-cloud-*`.
+
+REV-04–REV-05 y su publicación correctiva están cerradas. La base técnica está sincronizada para comenzar [H08](../h08-preparacion-produccion.md). RLS/privilegios/sesiones, Storage, respaldos/restauración, monitoreo, dominio, secretos y canal productivo siguen siendo alcance de H08. Esta corrección no implementa esos controles ni realiza un piloto real; la aceptación formal de producto sigue siendo independiente.
