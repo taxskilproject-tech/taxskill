@@ -120,8 +120,9 @@ export function ParametersForm() {
         />
       </fieldset>
       <p className="text-xs leading-6 text-zinc-500">
-        Zona horaria: America/Lima. Los procesos documentales y avisos
-        consumirán estos parámetros al implementarse.
+        Zona horaria: America/Lima. Los procesos documentales y avisos usan
+        estos parámetros. Los cambios documentales se conservan en cada nueva
+        obligación.
       </p>
       <FormActions
         busy={command.busy}

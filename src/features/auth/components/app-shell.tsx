@@ -7,6 +7,7 @@ import { Button } from "@/components/atoms/button";
 import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { SelectField } from "@/components/molecules/select-field";
 import type { ShellProps } from "@/features/auth/types/auth.types";
+import { NotificationBell } from "@/features/notifications/components/notification-bell";
 
 export function AppShell({
   children,
@@ -20,7 +21,12 @@ export function AppShell({
   const pathname = usePathname();
   const navigation = [
     { href: "/dashboard", label: "Inicio" },
+    { href: "/actividades", label: "Actividades" },
     { href: "/empresas", label: "Empresas" },
+    { href: "/documentos", label: "Documentos" },
+    ...(context.member.is_admin || context.capabilities.some(item => item.action === "reports.view") ? [{ href: "/reportes", label: "Reportes" }] : []),
+    ...(context.member.is_admin || context.capabilities.some(item => item.action === "audit.view") ? [{ href: "/auditoria", label: "Auditoría" }] : []),
+    { href: "/notificaciones", label: "Notificaciones" },
     ...(context.member.is_admin
       ? [
           { href: "/usuarios", label: "Usuarios" },
@@ -98,8 +104,9 @@ export function AppShell({
               ))}
             </SelectField>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right">
+          <div className="flex w-full flex-wrap items-center justify-between gap-3 sm:w-auto sm:flex-nowrap">
+            <NotificationBell />
+            <div className="min-w-0 flex-1 text-left sm:text-right">
               <p className="text-sm font-medium">{context.profile.full_name}</p>
               <p className="text-xs text-zinc-500">
                 {context.member.is_admin

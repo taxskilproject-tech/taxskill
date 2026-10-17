@@ -15,7 +15,7 @@ import { failure } from "@/domain/common/utils/operation-result";
 import { userRowSchema } from "@/features/access/contracts/directory-row.schema";
 import { operationStatusSchema } from "@/features/users/contracts/operation-status.schema";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
-import type { Json } from "@/lib/supabase/types/database.types";
+import { asJson } from "@/lib/supabase/utils/as-json";
 import { decodeRpc } from "@/lib/supabase/utils/decode-rpc";
 
 export function requireBrowserClient() {
@@ -29,9 +29,7 @@ export function requireData<T>(data: T | null, error: unknown): T {
   return data;
 }
 
-export function asJson(value: unknown): Json {
-  return z.json().parse(JSON.parse(JSON.stringify(value)));
-}
+export { asJson };
 
 export async function executeCommand(envelope: CommandEnvelope) {
   const parsed = commandEnvelopeSchema.safeParse(envelope);

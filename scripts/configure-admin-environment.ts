@@ -6,7 +6,9 @@ import { runSupabase } from "./utils/run-supabase";
 
 const projectRef = process.argv[2];
 if (!projectRef || !/^[a-z]{20}$/.test(projectRef))
-  throw new Error("Indica el project-ref de desarrollo.");
+  throw new Error(
+    "Indica el project-ref Cloud previsto; para Docker utiliza yarn env:local.",
+  );
 const current = readFileSync(".env.local", "utf8");
 if (!current.includes("https://" + projectRef + ".supabase.co"))
   throw new Error("El proyecto no coincide con .env.local.");

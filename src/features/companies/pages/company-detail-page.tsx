@@ -3,9 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 
-import { Badge } from "@/components/atoms/badge";
 import { ResourceState } from "@/components/organisms/resource-state";
-import { DOCUMENT_MODULES } from "@/domain/common/constants/modules";
 import { PageHeading } from "@/features/access/components/page-heading";
 import { QueryState } from "@/features/access/components/query-state";
 import {
@@ -16,6 +14,8 @@ import {
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 import { ModuleSettingsPanel } from "@/features/companies/components/module-settings-panel";
 import type { CompanyDetailProps } from "@/features/companies/types/company.types";
+import { CompanyDocumentTabs } from "@/features/documents/components/company-document-tabs";
+import { CompanyReportingSummary } from "@/features/reporting/components/company-reporting-summary";
 import { useDataScope } from "@/lib/query/hooks/use-data-scope";
 import { createScopedQueryKey } from "@/lib/query/utils/query-keys";
 
@@ -97,27 +97,8 @@ export function CompanyDetailPage({ companyId }: CompanyDetailProps) {
                 </p>
               </div>
             </section>
-            <section className="space-y-4">
-              <h2 className="text-lg font-semibold">Áreas habilitadas</h2>
-              <div className="flex flex-wrap gap-2">
-                {DOCUMENT_MODULES.filter(
-                  (module) =>
-                    context.member.is_admin ||
-                    context.capabilities.some(
-                      (item) =>
-                        item.company_id === companyId &&
-                        item.module === module.id &&
-                        item.action === "view",
-                    ),
-                ).map((module) => (
-                  <Badge key={module.id}>{module.name}</Badge>
-                ))}
-              </div>
-              <p className="text-sm text-zinc-500">
-                La entrega y revisión documental se incorporarán a partir del
-                siguiente hito.
-              </p>
-            </section>
+            <CompanyReportingSummary companyId={companyId} />
+            <CompanyDocumentTabs companyId={companyId} />
             {context.member.is_admin && directory.data && (
               <ModuleSettingsPanel
                 company={company.data}

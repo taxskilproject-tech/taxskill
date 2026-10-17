@@ -13,9 +13,12 @@ import type {
   UserDetailProps,
 } from "@/features/access/types/access-ui.types";
 import { parseForm, readForm } from "@/features/access/utils/form-data";
+import { useWorkspace } from "@/features/auth/providers/workspace-context";
 import { useAdminCommand } from "@/features/users/hooks/use-admin-command";
 
 export function AccountControls({ user, onChanged }: UserDetailProps) {
+  const { context } = useWorkspace();
+  const ownAccount = context.profile.user_id === user.profile.user_id;
   const password = useAdminCommand();
   const enabled = useAdminCommand();
   const [validation, setValidation] = useState<string | null>(null);
@@ -101,10 +104,13 @@ export function AccountControls({ user, onChanged }: UserDetailProps) {
             : "Cuenta inhabilitada. Al habilitarla deberá iniciar una sesión nueva."}
         </p>
         <p className="text-xs text-zinc-500">
-          El último administrador efectivo está protegido.
+          {ownAccount
+            ? "Otro administrador debe cambiar el estado de tu cuenta."
+            : "El último administrador efectivo está protegido."}
         </p>
         <FormActions
           busy={enabled.busy}
+          disabled={ownAccount}
           error={enabled.error}
           label={
             user.profile.enabled ? "Inhabilitar cuenta" : "Habilitar cuenta"

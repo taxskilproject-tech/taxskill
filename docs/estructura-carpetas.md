@@ -447,6 +447,8 @@ E2E recorre entrega, observación, corrección, revisión parcial, reapertura, c
 
 ## 12. Referencias
 
+**Implementación H05:** `src/features/workers/` contiene componentes, hooks, repositorio, tipos y mapeo de formularios; `src/domain/workers/` mantiene contratos y constantes. La única ruta laboral nueva es `src/app/(app)/empresas/[companyId]/trabajadores/[workerId]/page.tsx`. Las tres áreas componen `features/documents` y el motor existente, sin tres copias de servicios. Detalles en [contratos laborales](expediente-laboral.md).
+
 - Guía instalada de Next.js: estructura, Server/Client Components, Route Handlers y template bajo node_modules/next/dist/docs/01-app; consultar esa versión al escribir código conforme a AGENTS.md.
 - [Estructura oficial de App Router](https://nextjs.org/docs/app/getting-started/project-structure).
 - [Componentes cliente/servidor](https://nextjs.org/docs/app/getting-started/server-and-client-components).

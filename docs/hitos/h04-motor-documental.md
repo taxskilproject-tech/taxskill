@@ -1,6 +1,6 @@
 # H04 — Motor documental completo
 
-**Estado:** pendiente. **Depende de:** [H03](h03-primer-recorrido-documental.md). **Habilita:** [H05](h05-areas-documentales.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
+**Estado:** implementado y validado técnicamente en Docker local el 16/10/2026; aceptación formal de producto pendiente. **Depende de:** [H03](h03-primer-recorrido-documental.md). **Habilita:** [H05](h05-areas-documentales.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
 
 <a id="objetivo"></a>
 ## 1. Objetivo
@@ -129,20 +129,24 @@ Registrar fecha local, regla/versión, clave de ocurrencia, cursor inicial/final
 <a id="definition-of-done"></a>
 ## 8. Definition of Done
 
-- [ ] H04-RF01–H04-RF15 y H04-RT01–H04-RT13 están implementados y verificados con datos ficticios.
-- [ ] Las diez periodicidades y sus plazos funcionan, con pruebas de límites de calendario pertinentes.
-- [ ] No se activa una regla incompleta y sus formularios distinguen errores/estados.
-- [ ] Unicidad de ocurrencia soporta repetición, concurrencia y cambio de versión sin duplicados.
-- [ ] Versiones/snapshots conservan las condiciones históricas; nueva vigencia no reescribe periodos iniciados.
-- [ ] Nueva empresa genera desde periodo vigente; plazo pasado se advierte sin alterar.
-- [ ] Lotes y cursor se recuperan tras fallo parcial/caída sin perder destinos.
-- [ ] Pausas administrativas y caídas técnicas tienen recuperación diferente y comprobada.
-- [ ] Soft delete/restauración respeta ancestros, unicidad y obligaciones emitidas.
-- [ ] Responsables se heredan/reasignan y pérdida de elegibilidad produce incidencia sin omisión.
-- [ ] Cron de desarrollo funciona sin navegador y existe evidencia de avance/error.
-- [ ] Operaciones directas, reglas puras y Atomic Design se reutilizan; no existe motor paralelo por área.
-- [ ] CA12–CA14, CA26 y escenarios complementarios tienen evidencia; configuración productiva/RLS permanecen para H08.
-- [ ] Contratos/tipos/documentación y Definition of Done común permiten iniciar H05.
+- [x] H04-RF01–H04-RF15 y H04-RT01–H04-RT13 están implementados y verificados con datos ficticios.
+- [x] Las diez periodicidades y sus plazos funcionan, con pruebas de límites de calendario pertinentes.
+- [x] No se activa una regla incompleta y sus formularios distinguen errores/estados.
+- [x] Unicidad de ocurrencia soporta repetición, concurrencia y cambio de versión sin duplicados.
+- [x] Versiones/snapshots conservan las condiciones históricas; nueva vigencia no reescribe periodos iniciados.
+- [x] Nueva empresa genera desde periodo vigente; plazo pasado se advierte sin alterar.
+- [x] Lotes y cursor se recuperan tras fallo parcial/caída sin perder destinos.
+- [x] Pausas administrativas y caídas técnicas tienen recuperación diferente y comprobada.
+- [x] Soft delete/restauración respeta ancestros, unicidad y obligaciones emitidas.
+- [x] Responsables se heredan/reasignan y pérdida de elegibilidad produce incidencia sin omisión.
+- [x] Cron de desarrollo funciona sin navegador y existe evidencia de avance/error.
+- [x] Operaciones directas, reglas puras y Atomic Design se reutilizan; no existe motor paralelo por área.
+- [x] CA12–CA14, CA26 y escenarios complementarios tienen evidencia; configuración productiva/RLS permanecen para H08.
+- [x] Contratos/tipos/documentación y Definition of Done común permiten iniciar H05.
+
+- [ ] Aceptación formal del responsable de producto, registrada por separado de la validación técnica.
+
+Evidencias y trazabilidad: [validación H04](evidencias/h04.md). Contratos, límites y operación: [motor documental](../motor-documental.md).
 
 ## 9. Límites y continuidad
 

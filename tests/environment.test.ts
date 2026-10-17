@@ -42,7 +42,7 @@ it("permite Supabase local y mantiene opcional la configuración administrativa 
   expect(
     parsePublicEnvironment({
       ...publicEnvironment,
-      NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321",
+      NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54331",
     }).ok,
   ).toBe(true);
   expect(parseAdminEnvironment({}).ok).toBe(false);

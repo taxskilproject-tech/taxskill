@@ -10,6 +10,15 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Reglas obligatorias del proyecto
 
+### Entornos y datos de prueba
+
+El Supabase Cloud `gzwrqvqofcrdjvzoblaz` compartido por el usuario es el destino de la aplicación real.
+**Todos los datos ficticios, seeds, pruebas SQL y pruebas de integración deben ejecutarse exclusivamente
+en Supabase local sobre Docker.** Nunca usar Cloud como sustituto si Docker no está disponible.
+Los scripts de prueba deben rechazar destinos remotos antes de iniciar solicitudes o escrituras.
+No borrar datos existentes de Cloud ni revertir migraciones para limpiar fixtures sin autorización específica.
+Consulta [desarrollo y entornos](docs/desarrollo.md) antes de preparar o cambiar la conexión.
+
 Antes de crear o modificar código, lee y aplica [las reglas del agente](.agents/rules.md).
 Son obligatorias para todo el repositorio e incluyen Atomic Design, Tailwind sin CSS personalizado,
 tipos en archivos separados, componentes de hasta 170 líneas, feedback asíncrono en acciones,

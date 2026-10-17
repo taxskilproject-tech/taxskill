@@ -2,7 +2,7 @@
 
 **Estado:** implementado y verificado técnicamente el 14 de octubre de 2026. **Dependencia:** documentación vigente. **Habilita:** [H02 — Acceso y empresas](h02-acceso-empresas.md). Aplican las [reglas comunes](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
 
-Ver [evidencias, resultados y límites de la verificación](evidencias/h01.md) y [guía de desarrollo](../desarrollo.md). Docker local no se inició porque su motor no estaba activo; no hay migraciones de negocio en H01. La recepción del equipo/producto queda para su revisión.
+Ver [evidencias, resultados y límites de la verificación](evidencias/h01.md) y [guía de desarrollo](../desarrollo.md). Durante H01 Docker no se inició porque su motor no estaba activo; no hay migraciones de negocio en H01. Ese bloqueo se resolvió en la [validación local H02/H03](evidencias/validacion-local-h02-h03.md) del 16 de octubre. La recepción del equipo/producto queda para su revisión.
 
 <a id="objetivo"></a>
 ## 1. Objetivo
@@ -43,7 +43,7 @@ Este es un hito de infraestructura: sus requisitos preparan la experiencia futur
 - **H01-RT04 — Adaptadores separados.** Cliente Supabase de navegador para operaciones habituales y adaptador administrativo exclusivamente de servidor. Validar configuraciones en su frontera. No precargar datos privados habitualmente desde Server Components ni crear una API intermediaria para CRUD.
 - **H01-RT05 — Secretos y entornos.** Versionar únicamente nombres y ejemplos vacíos de variables. El navegador puede conocer `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; las claves administrativas, HMAC y n8n permanecen en sus ejecutores de servidor/Edge. Separar desarrollo, preview y producción.
 - **H01-RT06 — Contrato de operaciones.** Adoptar `request_id` UUID, `expected_revision` entero cuando aplique, códigos de error acordados y respuestas tipadas. El repositorio traduce errores del SDK; la equivalencia HTTP se limita a Route Handlers.
-- **H01-RT07 — Migraciones y datos ficticios.** Preparar estructura Supabase, forma de aplicar migraciones y generar tipos. Las migraciones se agrupan por capacidad/dependencia, no obligatoriamente por tabla. Los seeds de desarrollo no se ejecutan sin control en producción.
+- **H01-RT07 — Migraciones y datos ficticios.** Preparar estructura Supabase, forma de aplicar migraciones y generar tipos. Las migraciones se agrupan por capacidad/dependencia, no obligatoriamente por tabla. Todos los seeds y pruebas con datos ficticios se ejecutan exclusivamente en Docker local, nunca contra el Supabase Cloud compartido.
 - **H01-RT08 — Fechas y tipos.** Diferenciar `date` y `timestamptz`; centralizar conversión a Lima y formato de interfaz. No convertir fechas civiles a medianoche UTC para calcular el periodo.
 - **H01-RT09 — Estado y caché.** Definir claves de caché con usuario, estudio, empresa y filtros pertinentes; estrategia de limpieza al cerrar sesión/cambiar contexto y cancelación de respuestas anteriores. No compartir datos autenticados mediante caché pública.
 - **H01-RT10 — Calidad proporcional.** Definir verificaciones de tipos, lint/build y pruebas significativas de reglas/contratos. Preparar datos sintéticos y evidencia reproducible; no añadir pruebas que solo reflejen componentes triviales.

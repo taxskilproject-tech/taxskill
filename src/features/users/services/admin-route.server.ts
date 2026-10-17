@@ -95,6 +95,8 @@ export async function handleAdminRoute({
     const verified = await connection.data.auth.getUser();
     if (verified.error || !verified.data.user)
       throw new Error("UNAUTHENTICATED");
+    if (operation === "SetUserEnabled" && userId === verified.data.user.id)
+      throw new Error("FORBIDDEN");
     const contextResult = await connection.data.rpc("h02_context");
     const context = decodeRpc(
       contextResult.data,

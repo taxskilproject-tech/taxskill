@@ -1,6 +1,6 @@
 # H02 — Acceso y empresas
 
-**Estado:** implementado y verificado técnicamente; demostración disponible para revisión del equipo. [Evidencias y límites](evidencias/h02.md). **Depende de:** [H01](h01-preparacion-tecnica.md). **Habilita:** [H03](h03-primer-recorrido-documental.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
+**Estado:** implementado y verificado técnicamente, incluida reconstrucción e integración en Docker el 16 de octubre de 2026; demostración disponible para revisión del equipo. [Validación local vigente](evidencias/validacion-local-h02-h03.md) · [Evidencias históricas y límites](evidencias/h02.md). **Depende de:** [H01](h01-preparacion-tecnica.md). **Habilita:** [H03](h03-primer-recorrido-documental.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
 
 <a id="objetivo"></a>
 ## 1. Objetivo

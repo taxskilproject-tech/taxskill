@@ -114,6 +114,7 @@ export interface ListToolbarProps {
   allowDeleted: boolean;
 }
 export interface PaginationProps {
+  pageSize?: number;
   page: number;
   count: number;
   onPage: (page: number) => void;

@@ -1,0 +1,50 @@
+-- Called only after requireLocalTestEnvironment(), against the named local container.
+begin;
+do $$
+declare org uuid:='a7070000-0000-4000-8000-000000000001'; actor uuid:='__ACTOR__'; period_id uuid; dtype uuid;
+begin
+  if exists(select 1 from public.organizations where id=org) then return; end if;
+  insert into public.organizations(id,name) values(org,'H07 Docker capacity');
+  insert into public.organization_members(organization_id,user_id,member_type,is_admin) values(org,actor,'internal',true);
+  insert into auth.users(id,email) select gen_random_uuid(),'h07-capacity-'||i||'@example.test' from generate_series(1,99) i;
+  insert into public.profiles(user_id,email,full_name,provisioning_status) select id,email,'H07 capacity '||email,'ready' from auth.users where email like 'h07-capacity-%@example.test';
+  insert into public.organization_members(organization_id,user_id,member_type) select org,user_id,'internal' from public.profiles where email like 'h07-capacity-%@example.test';
+  insert into public.permissions(organization_id,module,action,description) select org,m,a,a from unnest(array['tributario','laboral_trabajador','laboral_general','actividades']) m cross join unnest(array['view','reports.view','reports.export','audit.view']) a;
+  insert into public.companies(organization_id,ruc,legal_name,control_start_date) select org,'2070700'||lpad(i::text,4,'0'),'H07 Capacidad empresa '||lpad(i::text,2,'0'),'2026-01-01' from generate_series(1,30) i;
+  insert into public.workers(organization_id,company_id,identity_type,identity_number,first_names,last_names)
+    select org,c.id,'DNI',lpad(i::text,8,'0'),'Trabajador '||i,'H07 Capacidad'
+    from generate_series(1,1000) i cross join lateral(select id from public.companies where organization_id=org order by ruc offset ((i-1)%30) limit 1) c;
+  insert into public.employment_periods(organization_id,company_id,worker_id,sequence_number,start_date)
+    select org,company_id,id,1,'2026-01-01' from public.workers where organization_id=org;
+  insert into public.document_types(organization_id,code,name,module) values(org,'h07-capacity','Constancia de trabajo H07','laboral_trabajador') returning id into dtype;
+  insert into public.periods(organization_id,kind,period_key,start_date,end_date)
+    select org,'monthly',to_char(d,'YYYY-MM'),d::date,(d+interval '1 month -1 day')::date from generate_series('2026-01-01'::date,'2026-12-01'::date,'1 month') d;
+  insert into public.obligations(organization_id,class,company_id,employment_period_id,module,period_id,document_type_id,destination_key,occurrence_key,manual_request_id,title,initial_due_date,assignment_issue,snapshot)
+    select org,'documentary',e.company_id,e.id,'laboral_trabajador',p.id,dtype,'employment_period:'||e.id,p.period_key,gen_random_uuid(),
+      'Constancia mensual · H07 '||p.period_key,p.end_date,true,jsonb_build_object('schema_version',1,'module','laboral_trabajador','initial_due_date',p.end_date)
+      from public.employment_periods e cross join public.periods p where e.organization_id=org and p.organization_id=org;
+  insert into public.deliverables(organization_id,obligation_id,position_code,label,display_order)
+    select org,id,'document','Constancia',1 from public.obligations where organization_id=org;
+  insert into public.submission_cycles(organization_id,deliverable_id,cycle_number,reason,due_date)
+    select org,d.id,1,'initial',o.initial_due_date from public.deliverables d join public.obligations o on o.id=d.obligation_id where d.organization_id=org;
+  insert into public.audit_events(organization_id,actor_kind,actor_user_id,company_id,module,action,resource_table,resource_id,request_id)
+    select org,'user',actor,company_id,module,'H07CapacityFixture','obligations',id,gen_random_uuid() from public.obligations where organization_id=org;
+end $$;
+-- Metadata-only fixtures, just like pgTAP upload fixtures: no fabricated Storage object is claimed.
+do $$ declare org uuid:='a7070000-0000-4000-8000-000000000001'; actor uuid:='__ACTOR__'; begin
+  if exists(select 1 from public.document_versions where organization_id=org) then return; end if;
+  insert into public.upload_intents(organization_id,deliverable_id,cycle_id,user_id,request_id,reserved_version_id,expected_deliverable_revision,original_name,declared_bytes,declared_mime,staging_path,final_path)
+    select org,d.id,c.id,actor,gen_random_uuid(),gen_random_uuid(),d.revision,'constancia-h07.pdf',200,'application/pdf','h07-fixtures/'||d.id||'.pdf','h07-fixtures/'||d.id||'.pdf'
+    from public.deliverables d join public.obligations o on o.id=d.obligation_id join public.submission_cycles c on c.deliverable_id=d.id
+    where o.organization_id=org and o.occurrence_key='2026-01';
+  insert into public.document_versions(id,organization_id,deliverable_id,cycle_id,upload_intent_id,version_number,storage_path,original_name,validated_bytes,validated_mime,extension,sha256,uploaded_by,finalized_at)
+    select reserved_version_id,org,deliverable_id,cycle_id,id,1,final_path,original_name,200,'application/pdf','pdf',repeat('a',64),actor,'2026-01-31T15:00:00Z' from public.upload_intents where organization_id=org;
+  update public.upload_intents set state='ready',confirmed_version_id=reserved_version_id,validation_result=jsonb_build_object('status','accepted','actual_bytes',200,'sha256',repeat('a',64),'checks',jsonb_build_object('size',true,'signature',true),'actual_mime','application/pdf','extension','pdf','validated_at',now()) where organization_id=org;
+  update public.deliverables d set current_version_id=v.id,review_state='por_revisar' from public.document_versions v where v.organization_id=org and v.deliverable_id=d.id;
+  update public.submission_cycles c set state='submitted',first_submitted_at='2026-01-31T15:00:00Z' from public.document_versions v where v.organization_id=org and v.cycle_id=c.id;
+end $$;
+commit;
+analyze public.obligations;
+analyze public.deliverables;
+analyze public.submission_cycles;
+analyze public.audit_events;

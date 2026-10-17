@@ -37,6 +37,7 @@ yarn-error.log*
 # Yarn local cache and reports
 /.yarn-cache/
 /test-results/
+/public/pdf.worker.min.mjs
 
 # vercel
 .vercel

@@ -1,5 +1,7 @@
--- Synthetic fixtures only. Always roll back; suitable for a linked development DB.
+-- Synthetic fixtures: Docker/local ONLY, via yarn test:h02:sql. Never --linked.
 begin;
+create extension if not exists pgtap with schema extensions;
+select extensions.plan(1);
 create function pg_temp.expect(value boolean, label text) returns void language plpgsql as $$
 begin if value is distinct from true then raise exception 'H02 acceptance failed: %',label; end if; end $$;
 do $$
@@ -68,5 +70,6 @@ begin
   perform pg_temp.expect(not has_table_privilege('authenticated','public.audit_events','INSERT'),'browser cannot forge audit');
   perform pg_temp.expect(not has_function_privilege('authenticated','public.h02_admin_prepare(uuid,uuid,uuid,text,text,uuid)','EXECUTE'),'Auth admin RPC private');
 end $$;
+select extensions.pass('H02 SQL acceptance passed; fixtures are rolled back.');
+select * from extensions.finish();
 rollback;
-select 'H02 SQL acceptance passed; fixtures rolled back.' as result;

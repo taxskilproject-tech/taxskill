@@ -5,6 +5,9 @@ export type OperationErrorCode =
   | "CONFLICT"
   | "VALIDATION_ERROR"
   | "FILE_TOO_LARGE"
+  | "FILE_INVALID"
+  | "FILE_MISSING"
+  | "STORAGE_LIMIT_INCOMPATIBLE"
   | "DEPENDENCY_UNAVAILABLE";
 
 export interface OperationError {

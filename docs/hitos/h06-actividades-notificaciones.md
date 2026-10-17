@@ -1,6 +1,6 @@
 # H06 — Actividades y notificaciones
 
-**Estado:** pendiente. **Depende de:** [H05](h05-areas-documentales.md). **Habilita:** [H07](h07-supervision-reportes.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
+**Estado:** implementado y validado técnicamente en Docker el 16 de octubre de 2026; esquema publicado en Cloud sin fixtures. Aceptación formal de producto independiente. Ver [evidencias](evidencias/h06.md), [contratos y operación](../actividades-notificaciones.md) y [workflow](../../integrations/n8n/README.md). **Depende de:** [H05](h05-areas-documentales.md). **Habilita:** [H07](h07-supervision-reportes.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
 
 <a id="objetivo"></a>
 ## 1. Objetivo
@@ -151,20 +151,20 @@ Conservar identificadores y conteos del workflow de prueba, digests e intentos, 
 <a id="definition-of-done"></a>
 ## 8. Definition of Done
 
-- [ ] H06-RF01–H06-RF17 y H06-RT01–H06-RT16 tienen evidencia funcional y de integración.
-- [ ] Bandeja central usa obligaciones originales, con filtros, grupos, urgencia, fechas y retorno correctos.
-- [ ] Adicionales únicas/recurrentes de empresa/internas requieren archivos/revisión y se crean solo por administrador.
-- [ ] Responsabilidad no concede acceso; pérdida de elegibilidad muestra incidencia y permite reasignar.
-- [ ] Indicador de adicionales permanece separado del cumplimiento documental.
-- [ ] Notificaciones internas cubren eventos/umbrales, se deduplican y actualizan por canal personal.
-- [ ] Lectura/enlaces/contexto respetan sus contratos y estados accesibles.
-- [ ] Resumen diario incluye solo avisos vigentes y contacto válido; no hay mensajes vacíos.
-- [ ] IDs/payload congelados, unicidad diaria y deduplicación durable n8n sobreviven reintentos/reinicio.
-- [ ] Receipts están autenticados, son idempotentes y no degradan estados confirmados.
-- [ ] Estados enviados/entregados tienen evidencia real del entorno de prueba; aceptación HTTP no se confunde con entrega.
-- [ ] Fallos ambiguos/caducidad/observaciones reservadas tienen tratamiento y procedimiento de conciliación documentado.
-- [ ] Contratos, workflow, migraciones/tipos y evidencias CA20–CA22 están entregados sin datos sensibles.
-- [ ] Quedan separados los pendientes productivos/RLS de H08 y se satisface la Definition of Done común.
+- [x] H06-RF01–H06-RF17 y H06-RT01–H06-RT16 tienen evidencia funcional y de integración.
+- [x] Bandeja central usa obligaciones originales, con filtros, grupos, urgencia, fechas y retorno correctos.
+- [x] Adicionales únicas/recurrentes de empresa/internas requieren archivos/revisión y se crean solo por administrador.
+- [x] Responsabilidad no concede acceso; pérdida de elegibilidad muestra incidencia y permite reasignar.
+- [x] Indicador de adicionales permanece separado del cumplimiento documental.
+- [x] Notificaciones internas cubren eventos/umbrales, se deduplican y actualizan por canal personal.
+- [x] Lectura/enlaces/contexto respetan sus contratos y estados accesibles.
+- [x] Resumen diario incluye solo avisos vigentes y contacto válido; no hay mensajes vacíos.
+- [x] IDs/payload congelados, unicidad diaria y deduplicación durable n8n sobreviven reintentos/reinicio.
+- [x] Receipts están autenticados, son idempotentes y no degradan estados confirmados.
+- [x] Estados enviados/entregados tienen evidencia real del entorno de prueba; aceptación HTTP no se confunde con entrega.
+- [x] Fallos ambiguos/caducidad/observaciones reservadas tienen tratamiento y procedimiento de conciliación documentado.
+- [x] Contratos, workflow, migraciones/tipos y evidencias CA20–CA22 están entregados sin datos sensibles.
+- [x] Quedan separados los pendientes productivos/RLS de H08 y se satisface la Definition of Done común.
 
 ## 9. Límites y continuidad
 

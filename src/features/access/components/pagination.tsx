@@ -2,8 +2,13 @@ import { Button } from "@/components/atoms/button";
 import { PAGE_SIZE } from "@/domain/access/constants/access";
 import type { PaginationProps } from "@/features/access/types/access-ui.types";
 
-export function Pagination({ page, count, onPage }: PaginationProps) {
-  const pages = Math.max(1, Math.ceil(count / PAGE_SIZE));
+export function Pagination({
+  page,
+  count,
+  onPage,
+  pageSize = PAGE_SIZE,
+}: PaginationProps) {
+  const pages = Math.max(1, Math.ceil(count / pageSize));
   return (
     <nav
       aria-label="Paginación"

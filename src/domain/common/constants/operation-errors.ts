@@ -7,6 +7,12 @@ export const OPERATION_MESSAGES: Readonly<Record<OperationErrorCode, string>> =
     DEPENDENCY_UNAVAILABLE:
       "No se pudo completar la operación. Inténtalo de nuevo.",
     FILE_TOO_LARGE: "El archivo supera el tamaño permitido.",
+    FILE_INVALID:
+      "El contenido del archivo no corresponde a un formato permitido. Revisa el archivo y crea otra entrega.",
+    FILE_MISSING:
+      "El archivo aún no está disponible en recepción. Reanuda la transferencia e intenta confirmar de nuevo.",
+    STORAGE_LIMIT_INCOMPATIBLE:
+      "El almacenamiento no admite el tamaño configurado para esta obligación. Consulta al administrador; las condiciones históricas se conservan.",
     FORBIDDEN: "No tienes permiso para realizar esta acción.",
     NOT_FOUND: "El recurso no está disponible.",
     UNAUTHENTICATED: "Inicia sesión para continuar.",
@@ -19,6 +25,9 @@ export const OPERATION_HTTP_STATUS: Readonly<
   CONFLICT: 409,
   DEPENDENCY_UNAVAILABLE: 503,
   FILE_TOO_LARGE: 413,
+  FILE_INVALID: 422,
+  FILE_MISSING: 422,
+  STORAGE_LIMIT_INCOMPATIBLE: 503,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
   UNAUTHENTICATED: 401,

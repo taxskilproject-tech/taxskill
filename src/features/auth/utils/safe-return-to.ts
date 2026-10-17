@@ -1,5 +1,5 @@
 const ALLOWED_ROUTES =
-  /^\/(dashboard|empresas(?:\/[0-9a-f-]{36})?|usuarios|configuracion|actividades(?:\/[0-9a-f-]{36})?|reportes|notificaciones|documentos|auditoria)$/;
+  /^\/(dashboard|empresas(?:\/[0-9a-f-]{36}(?:\/trabajadores\/[0-9a-f-]{36})?)?|usuarios|configuracion|actividades(?:\/[0-9a-f-]{36})?|reportes|notificaciones|documentos|auditoria)$/;
 const ALLOWED_QUERY = new Set([
   "tab",
   "companyId",
@@ -9,6 +9,19 @@ const ALLOWED_QUERY = new Set([
   "pageSize",
   "group",
   "sort",
+  "class",
+  "priority",
+  "responsibleId",
+  "scope",
+  "period",
+  "dueFrom",
+  "dueTo",
+  "state",
+  "unread",
+  "employmentPeriodId",
+  "stage",
+  "company_id", "include_deleted", "report", "indicator", "year", "month", "worker_id", "document_type_id",
+  "due_from", "due_to", "actor_id", "resource", "action", "from", "to",
 ]);
 
 export function safeReturnTo(value: string | null) {

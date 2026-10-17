@@ -3,14 +3,20 @@ import { join } from "node:path";
 import { loadEnvConfig } from "@next/env";
 
 loadEnvConfig(process.cwd());
-const secrets = [
+const requiredSecrets = [
   process.env.SUPABASE_SECRET_KEY,
   process.env.IDEMPOTENCY_HMAC_KEY,
 ].filter((value): value is string => Boolean(value));
-if (secrets.length !== 2)
+if (requiredSecrets.length !== 2)
   throw new Error(
     "Configura las dos claves privadas antes de verificar el bundle.",
   );
+const secrets = [
+  ...requiredSecrets,
+  process.env.N8N_RECEIPT_TOKEN,
+  process.env.N8N_WEBHOOK_TOKEN,
+  process.env.H06_DISPATCH_SECRET,
+].filter((value): value is string => Boolean(value));
 function inspect(directory: string): void {
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
     const path = join(directory, entry.name);
@@ -27,5 +33,5 @@ function inspect(directory: string): void {
 }
 inspect(".next/static");
 console.info(
-  "Bundle del navegador verificado: sin clave administrativa ni clave HMAC.",
+  "Bundle del navegador verificado: sin claves administrativas, HMAC ni secretos H06 configurados.",
 );

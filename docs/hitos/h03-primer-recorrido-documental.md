@@ -1,6 +1,6 @@
 # H03 — Primer recorrido documental
 
-**Estado:** pendiente. **Depende de:** [H02](h02-acceso-empresas.md). **Habilita:** [H04](h04-motor-documental.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
+**Estado:** implementado y validado técnicamente en Docker el 16 de octubre de 2026; base lista para H04, aceptación formal de producto pendiente. Ver [reconstrucción e integración local](evidencias/validacion-local-h02-h03.md). Las pruebas históricas usaron Cloud por error: se conservan la [corrección de entornos](evidencias/correccion-entornos.md) y las [evidencias históricas](evidencias/h03.md). **Depende de:** [H02](h02-acceso-empresas.md). **Habilita:** [H04](h04-motor-documental.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
 
 <a id="objetivo"></a>
 ## 1. Objetivo
@@ -61,7 +61,7 @@ Este recorrido valida la arquitectura con una capacidad completa antes de amplia
 - **H03-RT08 — Versiones/ciclos.** Primera finalización del ciclo fija recepción y puntualidad. Reemplazar antes de aprobación agrega versión sin cambiar la primera recepción del mismo ciclo. Observar/reabrir abre un ciclo nuevo con plazo explícito no anterior a la fecha local actual.
 - **H03-RT09 — Mutación concurrente.** `ApproveVersion`, `ObserveVersion` y `ReopenApproved` usan versión vigente y `expected_revision`; cambio, revisión, auditoría y eventos en una transacción. CONFLICT no se transforma en aprobación automática después de refrescar.
 - **H03-RT10 — Estados calculados.** Persistir `pendiente`, `por_revisar`, `observado`, `aprobado` para revisión según el diccionario. `cargado`/`corregido` son eventos y `vencido` es cálculo de ciclo abierto sin entrega, no otro estado de revisión.
-- **H03-RT11 — Descarga breve.** `RequestDownload` por RPC registra intento autorizado y Storage emite URL firmada de 60 segundos según la base técnica. No guardar URL firmada como dato permanente ni usar archivos públicos. La restricción efectiva de Storage se completa en H08.
+- **H03-RT11 — Descarga breve.** `RequestDownload` por RPC registra intento autorizado y Storage emite URL firmada de 60 segundos según la base técnica. En H03 la Edge ejecuta esa RPC como el usuario y firma mediante SDK administrativo, porque la emisión directa en navegador requiere las políticas aplazadas a H08. Los bytes siguen viajando directamente desde Storage. No guardar URL firmada como dato permanente ni usar archivos públicos. La restricción efectiva universal de Storage se completa en H08.
 - **H03-RT12 — Temporales.** TTL inicial de staging: 24 horas para objetos sin versión confirmada y sin validación en curso. Conservar intención/resultados; no limpiar archivos finales ni versiones/revisiones por este TTL.
 - **H03-RT13 — Presentación desacoplada.** Repositorios/mappers/hooks encapsulan SDK, subida, estado de intención y errores. Componentes por posición y visor se componen con Atomic Design; las reglas agregadas viven en dominio.
 - **H03-RT14 — Consulta y caché.** Listados paginados y campos seleccionados; progreso de intención consultado con espera limitada/backoff, sin recargar toda la bandeja. Invalidar recurso/counters tras confirmar una operación.
@@ -137,20 +137,24 @@ La evidencia incluirá IDs de regla/obligación/posición/versión/ciclo y consu
 <a id="definition-of-done"></a>
 ## 8. Definition of Done
 
-- [ ] H03-RF01–H03-RF15 y H03-RT01–H03-RT15 tienen evidencia del recorrido y de sus fallos relevantes.
-- [ ] La regla mensual genera exactamente una obligación con dos posiciones y condiciones conservadas.
-- [ ] Carga directa reanudable y validación real de formato/tamaño funcionan; confirmación no depende del MIME del navegador.
-- [ ] Reintento tras fallo Storage/SQL converge sin duplicar versiones, revisiones ni eventos.
-- [ ] Revisión por posición, aprobación parcial y cumplimiento total respetan los contadores.
-- [ ] Entrega puntual sin revisar no aparece vencida para el cliente.
-- [ ] Observación, corrección tardía y reapertura conservan plazos, versiones y decisiones anteriores.
-- [ ] Concurrencia produce CONFLICT sin sobrescritura ni reintento automático de revisión.
-- [ ] No aplica/cancelación exigen motivo y conservan la documentación.
-- [ ] Historial/descarga breve y limpieza exclusiva de staging funcionan según su ciclo de vida.
-- [ ] Auditoría y eventos relacionados nacen de la operación confiable, sin inserciones arbitrarias del cliente.
-- [ ] Componentes, hooks y repositorios respetan Atomic Design, contexto y estados accesibles.
-- [ ] Se entregan migraciones/tipos/contratos y evidencia CA06–CA11, CA16, CA18–CA19 y checks transversales pertinentes.
-- [ ] El aislamiento de Storage/Data API y privilegios internos sigue identificado para H08; Definition of Done común satisfecha.
+- [x] H03-RF01–H03-RF15 y H03-RT01–H03-RT15 tienen evidencia del recorrido y de sus fallos relevantes.
+- [x] La regla mensual genera exactamente una obligación con dos posiciones y condiciones conservadas.
+- [x] Carga directa reanudable y validación real de formato/tamaño funcionan; confirmación no depende del MIME del navegador.
+- [x] Reintento tras fallo Storage/SQL converge sin duplicar versiones, revisiones ni eventos.
+- [x] Revisión por posición, aprobación parcial y cumplimiento total respetan los contadores.
+- [x] Entrega puntual sin revisar no aparece vencida para el cliente.
+- [x] Observación, corrección tardía y reapertura conservan plazos, versiones y decisiones anteriores.
+- [x] Concurrencia produce CONFLICT sin sobrescritura ni reintento automático de revisión.
+- [x] No aplica/cancelación exigen motivo y conservan la documentación.
+- [x] Historial/descarga breve y limpieza exclusiva de staging funcionan según su ciclo de vida.
+- [x] Auditoría y eventos relacionados nacen de la operación confiable, sin inserciones arbitrarias del cliente.
+- [x] Componentes, hooks y repositorios respetan Atomic Design, contexto y estados accesibles.
+- [x] Se entregan migraciones/tipos/contratos y evidencia CA06–CA11, CA16, CA18–CA19 y checks transversales pertinentes.
+- [x] Reconstrucción limpia y actualización desde H02 verificadas en Docker, conservando los datos previos; integración SQL/SDK local repetida.
+- [x] El aislamiento universal de Storage/Data API y privilegios internos continúa identificado para H08/T01.
+- [ ] Aceptación formal del responsable de producto y cierre de su seguimiento en la Definition of Done común.
+
+El pendiente técnico del reset y la integración local quedó resuelto: 19 migraciones en base nueva, actualización con huellas coincidentes de las 13 tablas H02, dos suites SQL y 59 comprobaciones del recorrido H03. Los controles de código pasan 111 pruebas en 18 archivos. Consultar la [evidencia vigente](evidencias/validacion-local-h02-h03.md); la aceptación formal de producto permanece separada. RLS conserva su etapa H08.
 
 ## 9. Límites y continuidad
 

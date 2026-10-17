@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@2.117.3",
+    "zod": "npm:zod@4.6.7",
+    "fflate": "npm:fflate@0.8.3",
+    "cfb": "npm:cfb@1.2.2"
+  },
+  "compilerOptions": { "strict": true }
+}

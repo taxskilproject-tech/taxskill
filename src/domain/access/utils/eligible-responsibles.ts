@@ -6,8 +6,23 @@ import type {
 import type { ModuleId } from "@/domain/common/types/module.types";
 
 export function eligibleInternalProfiles(directory: Directory) {
-  const memberIds = new Set(directory.members.filter((member) => member.member_type === "internal" && member.active && !member.deleted_at).map((member) => member.user_id));
-  return directory.profiles.filter((profile) => memberIds.has(profile.user_id) && profile.enabled && profile.provisioning_status === "ready" && !profile.deleted_at);
+  const memberIds = new Set(
+    directory.members
+      .filter(
+        (member) =>
+          member.member_type === "internal" &&
+          member.active &&
+          !member.deleted_at,
+      )
+      .map((member) => member.user_id),
+  );
+  return directory.profiles.filter(
+    (profile) =>
+      memberIds.has(profile.user_id) &&
+      profile.enabled &&
+      profile.provisioning_status === "ready" &&
+      !profile.deleted_at,
+  );
 }
 
 export function eligibleResponsibles(

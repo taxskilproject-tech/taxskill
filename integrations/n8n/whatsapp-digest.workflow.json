@@ -1,0 +1,418 @@
+{
+  "id": "taxskillH06Digest",
+  "versionId": "c27126de-bf11-44ca-88b8-4254568745fe",
+  "name": "TaxSkill · Daily WhatsApp digest",
+  "active": false,
+  "nodes": [
+    {
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        240
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "taxskill-whatsapp-digest",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "responseData": "firstEntryJson",
+        "options": {}
+      },
+      "webhookId": "a9ccbbd7-2bec-45ac-8cfe-40fbd9845220",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "taxskill-h06-webhook",
+          "name": "TaxSkill incoming digest"
+        }
+      }
+    },
+    {
+      "id": "split-digests",
+      "name": "Split digests",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        240
+      ],
+      "parameters": {
+        "jsCode": "const body=$json.body;\nif (!body || body.schema_version!=='1.0' || body.event_type!=='whatsapp.digest.batch' || body.timezone!=='America/Lima' || !Array.isArray(body.digests) || body.digests.length<1 || body.digests.length>50) throw new Error('INVALID_DIGEST_CONTRACT');\nreturn body.digests.map(digest=>({json:{digest}}));"
+      }
+    },
+    {
+      "id": "claim-delivery",
+      "name": "Claim delivery",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        240
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://SUPABASE_PROJECT.invalid/rest/v1/rpc/h06_gateway_claim",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpCustomAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { p_delivery_id: $json.digest.delivery_id, p_digest: $json.digest } }}",
+        "options": {
+          "timeout": 5000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "taxskill-h06-db",
+          "name": "TaxSkill database RPC"
+        }
+      }
+    },
+    {
+      "id": "can-send",
+      "name": "Can send",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        240
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "new-claim",
+              "leftValue": "={{ $json.send }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "provider",
+      "name": "Provider",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        80
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://WHATSAPP_PROVIDER.invalid/send",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { delivery_id: $('Split digests').item.json.digest.delivery_id, phone: $('Split digests').item.json.digest.phone, text: $('Split digests').item.json.digest.items.map(i => [i.company || 'Interna del estudio', i.title, i.category === 'observed' ? 'Corrección pendiente' : i.category === 'overdue' ? 'Entrega vencida' : 'Próximo vencimiento', i.due_date, i.url].join(' · ')).join('\\n') } }}",
+        "options": {
+          "timeout": 5000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "taxskill-h06-provider",
+          "name": "TaxSkill WhatsApp provider"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": false
+    },
+    {
+      "id": "build-receipt",
+      "name": "Build receipt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        80
+      ],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const claim=$('Claim delivery').item.json;\nconst digest=$('Split digests').item.json.digest;\nconst raw=$json;\nconst allowed=['sent','delivered','failed','unknown'];\nconst validTime=typeof raw.occurred_at==='string' && Number.isFinite(Date.parse(raw.occurred_at));\nconst validId=typeof raw.provider_message_id==='string' && raw.provider_message_id.length>0 && raw.provider_message_id.length<=200;\nconst status=allowed.includes(raw.status) && (['failed','unknown'].includes(raw.status) || validId && validTime) ? raw.status : 'unknown';\nconst receipt={schema_version:'1.0',receipt_id:claim.receipt_id,delivery_id:digest.delivery_id,status,occurred_at:validTime ? new Date(raw.occurred_at).toISOString() : new Date().toISOString()};\nif(validId) receipt.provider_message_id=raw.provider_message_id;\nif(['failed','unknown'].includes(status)) receipt.error_code=status==='failed'?'PROVIDER_FAILED':'PROVIDER_AMBIGUOUS';\nreturn {json:{claim_id:claim.claim_id,receipt}};"
+      }
+    },
+    {
+      "id": "store-provider-evidence",
+      "name": "Store provider evidence",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        80
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://SUPABASE_PROJECT.invalid/rest/v1/rpc/h06_gateway_complete",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpCustomAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { p_delivery_id: $json.receipt.delivery_id, p_claim_id: $json.claim_id, p_receipt: $json.receipt } }}",
+        "options": {
+          "timeout": 5000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "taxskill-h06-db",
+          "name": "TaxSkill database RPC"
+        }
+      }
+    },
+    {
+      "id": "has-receipt",
+      "name": "Has receipt",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        960,
+        400
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "saved-receipt",
+              "leftValue": "={{ Boolean($json.receipt && $json.receipt.receipt_id) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "replay-receipt",
+      "name": "Replay receipt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        360
+      ],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "return {json:$json.receipt};"
+      }
+    },
+    {
+      "id": "receipt",
+      "name": "Receipt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1680,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://TAXSKILL_APP.invalid/api/integrations/n8n/receipts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 5000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "taxskill-h06-receipt",
+          "name": "TaxSkill receipt callback"
+        }
+      }
+    },
+    {
+      "id": "accepted",
+      "name": "Accepted",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        240
+      ],
+      "parameters": {
+        "jsCode": "return [{json:{accepted:true}}];"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Split digests",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split digests": {
+      "main": [
+        [
+          {
+            "node": "Claim delivery",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claim delivery": {
+      "main": [
+        [
+          {
+            "node": "Can send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Can send": {
+      "main": [
+        [
+          {
+            "node": "Provider",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Has receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Provider": {
+      "main": [
+        [
+          {
+            "node": "Build receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build receipt": {
+      "main": [
+        [
+          {
+            "node": "Store provider evidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store provider evidence": {
+      "main": [
+        [
+          {
+            "node": "Receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has receipt": {
+      "main": [
+        [
+          {
+            "node": "Replay receipt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Accepted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replay receipt": {
+      "main": [
+        [
+          {
+            "node": "Receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receipt": {
+      "main": [
+        [
+          {
+            "node": "Accepted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveExecutionProgress": false,
+    "executionTimeout": 120
+  }
+}

@@ -3,7 +3,7 @@
 - **Versión:** 1.1
 - **Fecha:** 10 de octubre de 2026
 - **Proyecto:** tax-skill / SGD Contable
-- **Estado:** diseño de la primera versión acordado; funcionalidades por implementar.
+- **Estado actualizado al 17 de octubre de 2026:** H01–H07 implementados y observaciones corregidas localmente; publicación de migración correctiva y preparación productiva H08 pendientes. Ver [cierre de observaciones](hitos/evidencias/h07-correcciones.md).
 - **Operación inicial:** un estudio contable en Perú, zona horaria America/Lima.
 
 ### Índice
@@ -19,6 +19,8 @@
 ## 1. Propósito, fuentes y lectura
 
 Este documento transforma el análisis funcional y las decisiones de la conversación en una base para implementar la aplicación. Describe arquitectura, información, autorización, ciclos documentales, actividades, automatizaciones, operación y aceptación.
+
+Concreción H06 entregada: [contratos de Actividades y notificaciones](actividades-notificaciones.md), [evidencias](hitos/evidencias/h06.md) y [workflow n8n](../integrations/n8n/README.md). Se completan las 29 tablas sin tareas duplicadas; las reservas técnicas de transporte/gateway y las dos fases inmutables por intento se detallan en el [diccionario](tablas-db.md#tabla-26). RLS y canal productivo conservan su cierre en H08.
 
 Las fuentes funcionales son:
 
@@ -39,13 +41,13 @@ Los archivos de análisis describen necesidades y propuestas del producto. Sus p
 | PREPUBLICACIÓN | Configuración o validación operativa necesaria para publicar; no equivale a una función aplazada. |
 | TÉCNICO DIFERIDO | Trabajo técnico que se implementará en una etapa posterior del MVP; no se desarrolla ahora ni se considera una función comercial futura. |
 
-### 1.2 Estado del repositorio
+### 1.2 Estado de partida y avance del repositorio
 
-El repositorio contiene la plantilla inicial de Next.js, sin integración de Supabase ni lógica del dominio. Las versiones declaradas son Next.js 16.4.0, React 19.3.0, TypeScript 5 y Tailwind CSS 4. La configuración activa Cache Components y Partial Prefetching.
+Al redactar este diseño, el repositorio contenía la plantilla inicial de Next.js, sin integración de Supabase ni lógica del dominio. Esa descripción corresponde al punto de partida: H01–H07 ya tienen implementación y el [índice de hitos](hitos/README.md) registra el avance y los pendientes vigentes. Las versiones declaradas son Next.js 16.4.0, React 19.3.0, TypeScript 5 y Tailwind CSS 4. La configuración activa Cache Components y Partial Prefetching.
 
 Antes de implementar código de Next.js deben consultarse los manuales incluidos en node_modules/next/dist/docs, conforme a AGENTS.md. Se revisaron las guías de componentes de servidor/cliente y autenticación con Cache Components. Las versiones anteriores del framework no son una referencia suficiente para este proyecto.
 
-Esta entrega desarrolla documentación. No contiene migraciones aplicadas, servicios desplegados ni funcionalidades de la aplicación ya implementadas.
+Este diseño define los contratos; por sí solo no acredita migraciones aplicadas, servicios desplegados ni aceptación funcional. Para ello deben consultarse las evidencias de cada hito y la revisión vigente.
 
 ### 1.3 Actualización del diseño
 
@@ -487,6 +489,8 @@ La credencial administrativa se usa en servidor para administrar Auth y trabajos
 
 ### 7.1 Configuración
 
+H04 implementa el motor común descrito en esta sección. Sus contratos, límites iniciales, cursor, reanudación y operación local se concretan en [Motor documental H04](motor-documental.md). Los resultados verificables están en [evidencias H04](hitos/evidencias/h04.md); la gestión laboral de H05 y los controles productivos de H08 conservan sus etapas.
+
 El catálogo pertenece al estudio. La aplicación de cada tipo se configura por empresa o destino laboral, incluyendo frecuencia, vigencia, formatos, posiciones de archivo, responsable, obligatoriedad, plazo y condición de aplicabilidad.
 
 Cada instancia conserva un snapshot de las condiciones usadas al generarla. Cambiar una regla crea una nueva versión. Para reglas recurrentes, la vigencia comienza en el siguiente ciclo no iniciado de la regla anterior; una fecha posterior explícita también es válida. Las obligaciones ya creadas no se recalculan automáticamente.
@@ -596,6 +600,8 @@ Una revisión obsoleta devuelve conflicto, sin modificar estado, auditoría ni n
 
 ## 9. Expediente laboral
 
+**Implementación H05:** contratos de operaciones, consultas, fechas, permisos, dinero exacto y continuación documentados en [expediente laboral](expediente-laboral.md). Ver [evidencias](hitos/evidencias/h05.md) para distinguir validación técnica, despliegue de esquema y aceptación de producto.
+
 La persona se registra dentro de una empresa y conserva varios periodos laborales. Remuneración, cargo, área, contrato, ingreso y cese se contextualizan en cada periodo.
 
 Registrar un ingreso crea su checklist configurado y habilita obligaciones periódicas vigentes mientras la relación esté activa. Para un trabajador ya contratado antes de incorporar la empresa, se solicita documentación de ingreso como checklist actual y se generan periodos vigentes; no se crean boletas históricas automáticamente.
@@ -609,6 +615,8 @@ El reingreso crea otra relación laboral. No reutiliza fechas ni documentos de c
 ## 10. Carga, acceso y conservación de archivos
 
 ### 10.1 Proceso de carga
+
+**BASE TÉCNICA aplicada en H03:** mientras las políticas de Storage se completan en H08, la Edge Function `document-operations` autoriza la intención con la sesión real y emite un token de carga limitado a su ruta. TUS usa `/storage/v1/upload/resumable/sign` con bloques de 6 MiB y sin upsert; los bytes viajan directamente del navegador a Storage. Para descargar, la misma Edge ejecuta `RequestDownload` como el usuario y emite mediante SDK administrativo un enlace de 60 segundos. No hay proxy Next.js ni transferencia del archivo final a través de Edge. Esta adaptación reemplaza únicamente la emisión de enlaces con el SDK del navegador, que requeriría políticas de Storage aún aplazadas. Véanse las [evidencias y límites de H03](hitos/evidencias/h03.md).
 
 1. El hook de carga invoca directamente la RPC CreateUploadIntent indicando entregable, ciclo, revisión esperada, nombre, tamaño y tipo declarado.
 2. La RPC comprueba el actor y las reglas de la operación: permisos, disposición, versión vigente y límites. Reserva un objeto nuevo y devuelve intención y ruta de recepción.
@@ -746,7 +754,7 @@ La creación de asignaciones y la configuración de roles siguen siendo operacio
 | FinalizeUpload | Edge Function invocada con SDK; confirmación SQL interna. | Validación binaria y promoción privilegiada; no confiarlas al navegador. |
 | Estado de intención de carga | Data API directa. | Consultar el progreso sin endpoint propio. |
 | ApproveVersion, ObserveVersion, ReopenApproved, SetNotApplicable, CancelObligation | RPC directas. | Una transacción con versión esperada, auditoría y avisos. |
-| RequestDownload | RPC directa + createSignedUrl en Storage. | Autorización/auditoría y emisión breve; sin proxy de descarga. |
+| RequestDownload | RPC de usuario + createSignedUrl en Storage; emisión privilegiada dentro de Edge en H03. | Autoriza de nuevo cada petición, incluso un reintento; auditoría del intento y enlace de 60 segundos. Los bytes van directamente a Storage. |
 | GenerateReport y exportación | Vistas/RPC directas + archivo generado en navegador. | Reportes básicos sin secreto ni procesamiento privilegiado. |
 | MarkNotificationRead | RPC directa. | Actualizar lectura del destinatario y devolver resultado mínimo. |
 | CreateUser, SetUserPassword, SetUserEnabled | Route Handler administrativo. | Supabase Auth Admin requiere credencial secreta; verificación del administrador en servidor. |
@@ -921,7 +929,7 @@ La producción requiere escoger planes adecuados al uso comercial, almacenamient
 
 ### 17.1 Entornos y configuración
 
-Desarrollo local con Supabase local o proyecto de desarrollo; validación con proyecto aislado; producción con su propio Supabase y despliegue Vercel. Un preview de frontend no utiliza datos reales de producción por defecto.
+**Decisión confirmada de entornos:** desarrollo, seeds, fixtures y pruebas SQL/integración se realizan exclusivamente con Supabase local sobre Docker. El proyecto Cloud compartido por el usuario es el destino de la aplicación real y no se usa como sustituto cuando Docker falla. Producción mantiene Supabase Cloud y despliegue Vercel. Un preview de frontend tampoco introduce datos ficticios en ese proyecto. Los scripts bloquean pruebas remotas; consultar la [guía operativa](desarrollo.md) y la [corrección de entornos](hitos/evidencias/correccion-entornos.md).
 
 | Configuración | Lugar y exposición |
 |---|---|

@@ -1,6 +1,6 @@
 # H07 — Supervisión y reportes
 
-**Estado:** pendiente. **Depende de:** [H06](h06-actividades-notificaciones.md). **Habilita:** [H08](h08-preparacion-produccion.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
+**Estado:** implementado; las tres observaciones previas a H08 están [corregidas y validadas en Docker](evidencias/h07-correcciones.md). La migración correctiva adicional espera autorización específica para Cloud: 56 versiones locales y 55 remotas. Las ocho migraciones originales H07 ya estaban publicadas con autorización, historia conservada y sin fixtures remotos. [Evidencias iniciales](evidencias/h07.md) y [contratos](../supervision-reportes.md). Aceptación formal de producto independiente. **Depende de:** [H06](h06-actividades-notificaciones.md). **Habilita:** [H08](h08-preparacion-produccion.md) tras completar la entrega correctiva. Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
 
 <a id="objetivo"></a>
 ## 1. Objetivo
@@ -131,20 +131,21 @@ Conservar ejemplos de Excel/PDF generados exclusivamente con datos ficticios, fi
 <a id="definition-of-done"></a>
 ## 8. Definition of Done
 
-- [ ] H07-RF01–H07-RF15 y H07-RT01–H07-RT13 tienen evidencia y entregables.
-- [ ] Dashboard muestra unidades correctas y navegación a recursos/listados existentes.
-- [ ] Cumplimiento usa exigibles/aprobadas y global ponderado; vacío muestra “Sin obligaciones”.
-- [ ] Adicionales están separadas y las internas no contaminan métricas de empresas.
-- [ ] Búsqueda por metadatos funciona con filtros/paginación y sin OCR ni descargas anticipadas.
-- [ ] Reportes básicos concuerdan con detalle/dashboard bajo los mismos datos/filtros.
-- [ ] Excel/PDF incluyen todos los lotes solicitados, con progreso/cancelación y errores explícitos.
-- [ ] Textos de Excel no se ejecutan como fórmulas; PDF representativo fue revisado visualmente.
-- [ ] Exportación/auditoría registra acciones con datos mínimos y no afirma guardado local.
-- [ ] Consulta histórica distingue eliminados sin alterar unicidad ni resultados conservados.
-- [ ] Medición sintética de capacidad/P95 y estimación de consumo están documentadas con ajustes pendientes identificados.
-- [ ] Estados, Atomic Design y cambio de contexto están verificados.
-- [ ] CA17, CA23–CA24 funcionales, CA30 y regresión pertinente tienen evidencia; seguridad efectiva y ajuste productivo pendientes H08.
-- [ ] Contratos/migraciones pertinentes/tipos/documentación y Definition of Done común permiten iniciar H08.
+- [x] H07-RF01–H07-RF15 y H07-RT01–H07-RT13 tienen evidencia y entregables. REV-01–REV-03 corregidas y validadas en el [cierre](evidencias/h07-correcciones.md).
+- [x] Dashboard muestra unidades correctas y navegación a recursos/listados existentes, conservando el recurso de origen con permisos distintos por empresa/módulo (REV-02).
+- [x] Cumplimiento usa exigibles/aprobadas y global ponderado; vacío muestra “Sin obligaciones”.
+- [x] Adicionales están separadas y las internas no contaminan métricas de empresas.
+- [x] Búsqueda por metadatos funciona con filtros/paginación y sin OCR ni descargas anticipadas.
+- [x] Reportes básicos concuerdan con detalle/dashboard bajo los mismos datos/filtros.
+- [x] Excel/PDF incluyen todos los lotes solicitados, con progreso/cancelación, espera acotada de registro y conciliación idempotente explícita (REV-03).
+- [x] Textos de Excel no se ejecutan como fórmulas; PDF representativo fue revisado visualmente.
+- [x] Exportación/auditoría registra acciones con datos mínimos y no afirma guardado local.
+- [x] Filtros de auditoría incluyen revisiones, descargas y eventos laborales mediante el ámbito correcto del recurso (REV-01).
+- [x] Consulta histórica distingue eliminados sin alterar unicidad ni resultados conservados.
+- [x] Medición sintética de capacidad/P95 y estimación de consumo están documentadas con ajustes pendientes identificados.
+- [x] Estados, Atomic Design y cambio de contexto están verificados.
+- [x] CA17, CA23–CA24 funcionales, CA30 y regresión pertinente tienen evidencia, incluidos los casos afectados por REV-01–REV-03. Seguridad efectiva y ajuste productivo pendientes H08.
+- [ ] Completar publicación correctiva autorizada en Cloud y verificar su inventario/historia. Contratos, tipos, documentación y pruebas locales ya preparados para H08.
 
 ## 9. Límites y continuidad
 

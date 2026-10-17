@@ -6,11 +6,14 @@ import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 
 import type { Database } from "../src/lib/supabase/types/database.types";
+import { LOCAL_DEMO_ENV_FILE } from "./constants/local-environment";
+import { requireLocalTestEnvironment } from "./utils/require-local-test-environment";
 
 async function main() {
   loadEnvConfig(process.cwd());
   const demo = process.argv.includes("--demo");
-  const destination = demo ? ".env.h02-demo.local" : ".env.bootstrap.local";
+  if (demo) requireLocalTestEnvironment();
+  const destination = demo ? LOCAL_DEMO_ENV_FILE : ".env.bootstrap.local";
   const admin = createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
     process.env.SUPABASE_SECRET_KEY ?? "",

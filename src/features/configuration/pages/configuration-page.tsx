@@ -11,10 +11,14 @@ import { loadDirectory } from "@/features/access/repositories/access.repository"
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 import { ParametersPanel } from "@/features/configuration/components/parameters-panel";
 import { RolesPanel } from "@/features/configuration/components/roles-panel";
+import { CatalogPanel } from "@/features/documents/components/catalog-panel";
+import { RulesPanel } from "@/features/documents/components/rules-panel";
+import { WhatsappPanel } from "@/features/notifications/components/whatsapp-panel";
 import { useDataScope } from "@/lib/query/hooks/use-data-scope";
 import { createScopedQueryKey } from "@/lib/query/utils/query-keys";
 
 const TABS = [
+  { id: "whatsapp", label: "WhatsApp" },
   { id: "catalogo", label: "Catálogo" },
   { id: "reglas", label: "Reglas" },
   { id: "roles", label: "Roles y permisos" },
@@ -98,17 +102,9 @@ export function ConfigurationPage() {
           </Link>
         </section>
       )}
-      {(tab === "catalogo" || tab === "reglas") && (
-        <ResourceState
-          description="El catálogo y las reglas documentales se implementan en los hitos H03 y H04. Ya puedes configurar roles, responsables y parámetros."
-          kind="empty"
-          title={
-            tab === "catalogo"
-              ? "Catálogo documental pendiente"
-              : "Reglas documentales pendientes"
-          }
-        />
-      )}
+      {tab === "catalogo" && <CatalogPanel />}
+      {tab === "reglas" && <RulesPanel />}
+      {tab === "whatsapp" && <WhatsappPanel />}
     </div>
   );
 }

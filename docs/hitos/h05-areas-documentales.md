@@ -1,6 +1,6 @@
 # H05 — Tres áreas documentales
 
-**Estado:** pendiente. **Depende de:** [H04](h04-motor-documental.md). **Habilita:** [H06](h06-actividades-notificaciones.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
+**Estado:** implementado y validado técnicamente en Docker local el 16/10/2026; esquema publicado en Cloud sin fixtures. Aceptación formal de producto pendiente. **Depende de:** [H04](h04-motor-documental.md). **Habilita:** [H06](h06-actividades-notificaciones.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
 
 <a id="objetivo"></a>
 ## 1. Objetivo
@@ -131,20 +131,24 @@ Además de CA15, repetir la muestra pertinente de CA06–CA11, CA13–CA14, CA27
 <a id="definition-of-done"></a>
 ## 8. Definition of Done
 
-- [ ] H05-RF01–H05-RF16 y H05-RT01–H05-RT13 tienen evidencia de las tres áreas y expediente.
-- [ ] Catálogo de partida está disponible/editable y plazos/responsables se configuran antes de activar.
-- [ ] Tributario y Laboral general utilizan el mismo motor y revisión de posiciones.
-- [ ] Ficha única, salario/moneda y etapas cumplen las restricciones del diccionario.
-- [ ] Registro/edición/ingreso/cese funcionan por capacidad `workers.manage`, con auditoría e idempotencia.
-- [ ] No se admite superposición ni dos etapas abiertas por trabajador.
-- [ ] Ingreso previo al control, periodo parcial y cese anterior al control generan únicamente lo acordado.
-- [ ] Cese conserva obligaciones/archivos y su evento no se duplica al reintentar.
-- [ ] Reingreso crea otra etapa y no reutiliza documentos de cese de la anterior.
-- [ ] Selector histórico y enlaces respetan empresa/trabajador/etapa; carga/revisión/corrección/reapertura funcionan en destinos laborales.
-- [ ] Soft delete/restauración conserva historia e identidad y no equivale a cese/reingreso.
-- [ ] Remuneraciones/exámenes usan acceso laboral sin permiso adicional y no se incluyen en avisos/logs sensibles.
-- [ ] Migraciones, tipos, contratos, CA15 y regresión pertinente están entregados; enforcement directo permanece para H08.
-- [ ] Definition of Done común satisfecha y obligaciones de las tres áreas listas para H06.
+- [x] H05-RF01–H05-RF16 y H05-RT01–H05-RT13 tienen evidencia de las tres áreas y expediente.
+- [x] Catálogo de partida está disponible/editable y plazos/responsables se configuran antes de activar.
+- [x] Tributario y Laboral general utilizan el mismo motor y revisión de posiciones.
+- [x] Ficha única, salario/moneda y etapas cumplen las restricciones del diccionario.
+- [x] Registro/edición/ingreso/cese funcionan por capacidad `workers.manage`, con auditoría e idempotencia.
+- [x] No se admite superposición ni dos etapas abiertas por trabajador.
+- [x] Ingreso previo al control, periodo parcial y cese anterior al control generan únicamente lo acordado.
+- [x] Cese conserva obligaciones/archivos y su evento no se duplica al reintentar.
+- [x] Reingreso crea otra etapa y no reutiliza documentos de cese de la anterior.
+- [x] Selector histórico y enlaces respetan empresa/trabajador/etapa; carga/revisión/corrección/reapertura funcionan en destinos laborales.
+- [x] Soft delete/restauración conserva historia e identidad y no equivale a cese/reingreso.
+- [x] Remuneraciones/exámenes usan acceso laboral sin permiso adicional y no se incluyen en avisos/logs sensibles.
+- [x] Migraciones, tipos, contratos, CA15 y regresión pertinente están entregados; enforcement directo permanece para H08.
+- [x] Controles técnicos de la Definition of Done común satisfechos; obligaciones de las tres áreas listas para H06.
+
+- [ ] Aceptación formal del responsable de producto, registrada por separado de la validación técnica.
+
+Evidencias y trazabilidad: [validación H05](evidencias/h05.md). Contratos, límites y operación: [expediente laboral](../expediente-laboral.md).
 
 ## 9. Límites y continuidad
 

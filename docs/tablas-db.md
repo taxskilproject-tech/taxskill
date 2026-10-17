@@ -1224,6 +1224,7 @@ Ficha del trabajador dentro de una empresa; etapas laborales separadas.
 | `phone` | `text` | Sí | — | — | Contacto. |
 | `address` | `text` | Sí | — | — | Dirección. |
 | `notes` | `text` | Sí | — | — | Observaciones; no almacenar diagnósticos en avisos. |
+| `operation_pauses` | `jsonb` | No | [] | — | Intervalos de pausa de generación por eliminación lógica, contrato J02. Incorporado en H05. |
 | `created_at` | `timestamptz` | No | now() | — | Creación registrada en UTC. |
 | `created_by` | `uuid` | Sí | NULL | FK → profiles.user_id; RESTRICT / NO ACTION | Autor de creación; NULL para trabajo identificado de sistema. |
 | `updated_at` | `timestamptz` | No | now() | — | Última modificación; operación/trigger lo actualiza. |
@@ -1238,7 +1239,7 @@ Ficha del trabajador dentro de una empresa; etapas laborales separadas.
 - UNIQUE (organization_id,id); FK compuestas del estudio según 1.2.
 - revision>=0; updated_at/updated_by se actualizan de forma confiable. Solo modificar los campos que este ciclo permite.
 - CHECK conjunto de deleted_at/deleted_by/deletion_reason y reglas de eliminación/restauración de la sección 2.
-- UNIQUE (organization_id,company_id,identity_type,identity_number), incluyendo eliminados.
+- UNIQUE (organization_id,company_id,identity_type,identity_number), incluyendo eliminados; índice canónico adicional sobre identificación sin espacios y en mayúsculas, incluso para filas anteriores a H05.
 - Nombres, apellidos e identificación no vacíos; DNI de 8 dígitos cuando identity_type=DNI.
 - Activo/cesado se deriva de employment_periods; soft delete no registra un cese ficticio.
 - La eliminación no borra periodos ni documentos; restaurar no inicia un reingreso.
@@ -1273,6 +1274,7 @@ Etapa laboral histórica, ingreso/cese y remuneración de referencia.
 | `contract_type` | `text` | Sí | — | — | Tipo de contrato configurado. |
 | `reference_salary` | `numeric(14,2)` | Sí | — | — | Remuneración de referencia; nunca se envía a n8n. |
 | `currency` | `char(3)` | No | 'PEN' | — | Moneda ISO de tres letras. |
+| `document_generation` | `jsonb` | No | {"schema_version":1,"hire":null,"termination":null,"reconcile":null} | — | Eventos/cursor laboral duraderos con CHECK de contrato J14; incorporado en H05. |
 | `created_at` | `timestamptz` | No | now() | — | Creación registrada en UTC. |
 | `created_by` | `uuid` | Sí | NULL | FK → profiles.user_id; RESTRICT / NO ACTION | Autor de creación; NULL para trabajo identificado de sistema. |
 | `updated_at` | `timestamptz` | No | now() | — | Última modificación; operación/trigger lo actualiza. |
@@ -1284,10 +1286,11 @@ Etapa laboral histórica, ingreso/cese y remuneración de referencia.
 - UNIQUE (organization_id,id); FK compuestas del estudio según 1.2.
 - revision>=0; updated_at/updated_by se actualizan de forma confiable. Solo modificar los campos que este ciclo permite.
 - UNIQUE (organization_id,worker_id,sequence_number); sequence_number>=1.
-- Un único periodo abierto por worker_id: UNIQUE parcial WHERE end_date IS NULL. Impedir superposición histórica mediante validación transaccional.
+- Un único periodo abierto por worker_id: UNIQUE parcial WHERE end_date IS NULL. H05 impide superposición con trigger y bloqueo del trabajador; rangos de fechas inclusivos.
 - end_date>=start_date; end_date y termination_reason se establecen conjuntamente; salario NULL o >=0.
 - (organization_id,company_id,worker_id) corresponde a workers. El reingreso crea otro id/secuencia.
 - No soft delete ni borrado: corregir datos con auditoría, registrar cese y conservar todas las etapas.
+- H05 bloquea DELETE físico con trigger; empresa/trabajador/secuencia son inmutables. La lectura RPC serializa remuneración como texto decimal exacto, sin cambiar su tipo PostgreSQL. Moneda CHECK de tres letras mayúsculas.
 
 **Índices:**
 
@@ -1361,7 +1364,7 @@ Regla estable de generación, destino, responsables y avance.
 | `active` | `boolean` | No | true | — | Generación habilitada. |
 | `inherit_responsible` | `boolean` | No | true | — | Usar configuración de empresa/módulo. |
 | `delivery_responsible_id` | `uuid` | Sí | NULL | FK → profiles.user_id; RESTRICT / NO ACTION | Responsable explícito; obligatorio cuando no hereda. |
-| `current_version_id` | `uuid` | Sí | NULL | FK → rule_versions.id; RESTRICT / NO ACTION | Versión de configuración vigente; inicialmente NULL durante creación transaccional. |
+| `current_version_id` | `uuid` | Sí | NULL | FK → rule_versions.id; RESTRICT / NO ACTION | Cabecera de la última versión guardada, incluso si tiene vigencia futura; la efectiva se resuelve por fecha. NULL durante creación transaccional. |
 | `control_start_date` | `date` | No | — | — | Inicio de control de esta regla. |
 | `generation_cursor` | `jsonb` | No | Objeto J03 | — | Último avance y continuación de lotes, J03. |
 | `operation_pauses` | `jsonb` | No | [] | — | Pausas deliberadas, J02. |
@@ -1418,6 +1421,7 @@ Condiciones inmutables de una versión de configuración.
 | `max_file_bytes` | `bigint` | No | 20000000 | — | Límite máximo configurado por archivo. |
 | `deliverable_specs` | `jsonb` | No | — | — | Posiciones requeridas, con límites y formatos, J04. |
 | `applicability_conditions` | `jsonb` | No | Objeto J05 | — | Condiciones tipadas de aplicación, J05. |
+| `configuration_snapshot` | `jsonb` | No | Trigger de inserción | — | Cabecera congelada de esta versión: `schema_version: 1`, `title: text`, `description: text/null`, `inherit_responsible: boolean`, `delivery_responsible_id: uuid/null`. Incorporado en H04. |
 | `created_at` | `timestamptz` | No | now() | — | Creación registrada en UTC. |
 | `created_by` | `uuid` | Sí | NULL | FK → profiles.user_id; RESTRICT / NO ACTION | Autor de creación; NULL para trabajo identificado de sistema. |
 
@@ -1429,6 +1433,7 @@ Condiciones inmutables de una versión de configuración.
 - deadline_offset_days admite desplazamiento negativo o positivo configurado; advertir plazo ya pasado, sin alterarlo.
 - deliverable_specs array no vacío, códigos/posiciones únicos; todos los slots son requeridos. is_required indica si la obligación participa en el denominador.
 - Vigencia siguiente ciclo no iniciado, o fecha posterior explícita; filas no se modifican ni eliminan. Nueva configuración crea otra versión.
+- `configuration_snapshot` conserva título, descripción y política de asignación aunque cambie la cabecera de la regla durante un lote. Si hereda responsable, la identidad se resuelve en la configuración de empresa/módulo al emitir y se congela en la obligación. La migración H04 completa solo esta columna nueva para versiones H03; conserva sus campos históricos y restablece inmediatamente la protección de historial.
 
 **Índices:**
 
@@ -1638,6 +1643,9 @@ Reserva y recuperación entre transferencia, validación y confirmación.
 | `validation_result` | `jsonb` | Sí | — | — | Resultado saneado de validación, J07. |
 | `confirmed_version_id` | `uuid` | Sí | NULL | FK → document_versions.id; RESTRICT / NO ACTION | Versión ya confirmada una sola vez. |
 | `error_code` | `text` | Sí | — | — | Código explicable de fallo. |
+| `validation_token` | `uuid` | Sí | NULL | — | BASE TÉCNICA H03: identificador de ejecución para impedir confirmaciones de un validador sustituido; requerido solo en validating. |
+| `validation_lease_until` | `timestamptz` | Sí | NULL | — | BASE TÉCNICA H03: reserva de ejecución de dos minutos; permite retomar tras caída del worker. |
+| `staging_cleaned_at` | `timestamptz` | Sí | NULL | — | BASE TÉCNICA H03: limpieza de recepción completada; conserva la intención y evita repetir lotes ya tratados. |
 | `created_at` | `timestamptz` | No | now() | — | Creación registrada en UTC. |
 | `created_by` | `uuid` | Sí | NULL | FK → profiles.user_id; RESTRICT / NO ACTION | Autor de creación; NULL para trabajo identificado de sistema. |
 | `updated_at` | `timestamptz` | No | now() | — | Última modificación; operación/trigger lo actualiza. |
@@ -1654,6 +1662,7 @@ Reserva y recuperación entre transferencia, validación y confirmación.
 - La versión final usa reserved_version_id; no FK a Storage ni a versión inexistente.
 - No borrar metadatos al limpiar recepción. Expiración no elimina una versión; temporales solo se limpian sin versión/finalización activa.
 - No aplicar TTL destructivo a una validación en curso: worker registra progreso o resuelve incidencia.
+- H03 renueva una validación abandonada con otro token al vencer su reserva de ejecución. La limpieza horaria procesa hasta 100 intenciones vencidas y sin versión confirmada; nunca reclama validating ni elimina objetos finales. Un temporal eliminado conserva metadatos y staging_cleaned_at.
 
 **Índices:**
 
@@ -1842,6 +1851,8 @@ Resumen diario congelado por destinatario y seguimiento de entrega.
 | `local_date` | `date` | No | — | — | Día de preparación en America/Lima. |
 | `delivery_id` | `uuid` | No | gen_random_uuid() | — | Identificador externo estable para n8n. |
 | `payload` | `jsonb` | No | — | — | Resumen congelado versionado, J09. |
+| `outbound_state` | `jsonb` | No | {} | — | Reserva durable de lote/lease y transporte, J09a. |
+| `gateway_state` | `jsonb` | No | {} | — | Claim previo al proveedor y receipt guardado, J09b. |
 | `status` | `text` | No | 'pending' | — | pending, accepted, sent, delivered, failed, unknown. |
 | `http_attempt_count` | `integer` | No | 0 | — | Intentos HTTP de salida. |
 | `last_attempt_at` | `timestamptz` | Sí | — | — | Último intento. |
@@ -1909,7 +1920,7 @@ Registro inmutable de salida HTTP y callbacks del resumen.
 - UNIQUE (organization_id,receipt_id) WHERE receipt_id IS NOT NULL; cada callback persiste antes de actualizar digest.
 - outbound exige batch_id no NULL y receipt_id NULL; callback exige receipt_id no NULL y batch_id NULL. attempt_number>=1; salida<=3.
 - CHECK provider_status NULL o IN (sent,delivered,failed,unknown); callback exige estado no NULL. http_status NULL o 100–599; duration_ms NULL o >=0; error_message máximo 300 caracteres. Sin cabeceras, tokens ni respuestas completas.
-- Un lote de 50 genera una fila por digest afectado con mismo batch_id; se conserva asociación sin tabla 30.
+- Un lote de hasta 50 agrega, por digest e intento HTTP, una fila `reserved` antes de enviar y una `finished` al cerrar, con mismo batch_id y attempt_id. UNIQUE parcial por digest/número/fase. Se conserva asociación sin tabla 30; dos fases no son dos envíos.
 - Sin UPDATE/DELETE/soft delete; repetir callback devuelve resultado existente sin nuevo evento.
 
 **Índices:**
@@ -2049,8 +2060,19 @@ Intervalos ordenados y no superpuestos; resumed_on>=paused_from. Registrar fecha
 | processing_occurrence | string o NULL | Ocurrencia parcial en curso; no adelantar last_completed antes de terminar. |
 | next_destination_key | string o NULL | Continuación estable de destinos, independiente de paginación de interfaz. |
 | last_generated_at | instante UTC o NULL | Momento de avance confirmado. |
+| last_completed_end | date ISO o NULL | Cierre del último periodo completado o excluido administrativamente; siguiente referencia = cierre + 1. |
+| processing_reference_date | date ISO o NULL | Referencia fijada de la ocurrencia parcial. |
+| processing_started_at | instante UTC o NULL | Fija el conjunto de etapas laborales existentes al iniciar el lote. |
+| last_attempt_at | instante UTC o NULL | Último intento, incluidos errores. |
+| last_error | código de error o NULL | Error sanitizado; nunca SQL, credenciales ni datos del archivo. |
+| last_batch_count | integer no negativo | Obligaciones nuevas del último lote/intento correcto. |
+| has_more | boolean | Queda continuación por destinos o ciclos. |
+| warning | text o NULL | Advertencia de vencimiento original ya pasado. |
+| type_pauses | array J02 | Pausas del tipo documental, independientes de las pausas propias de la regla. |
 
 DEFAULT: todos los valores NULL salvo schema_version=1. Cursor y lote se confirman en transacción; un reintento sigue usando la clave única de obligación. Cambio de configuración resuelve la vigencia desde rule_versions; no usa el cursor para regenerar lo ya emitido.
+
+Las claves adicionales H04 aparecen al utilizarlas; son bases técnicas del motor, no configuraciones editables desde el navegador. Un error revierte el lote y conserva continuación/versión confirmadas; solo actualiza intento/error fuera del bloque revertido. Un lote parcial se termina con su versión fijada al reactivar, antes de avanzar a las ocurrencias no iniciadas. Las pausas excluyen estas últimas; no dejan incompleto un lote ya confirmado parcialmente. Los eventos actualizan resultado/intento sin mover el cursor del calendario. Ver [contratos H04](motor-documental.md).
 
 ```json
 {"schema_version":1,"rule_version_id":null,"last_completed_occurrence":null,"processing_occurrence":null,"next_destination_key":null,"last_generated_at":null}
@@ -2093,6 +2115,7 @@ DEFAULT {"schema_version":1,"employment_stage":"any","event_types":[],"terminati
 | allowed_formats / max_file_bytes | string[] / integer | Límites generales heredados. |
 | deliverables | object[] | Copia J04; fuente de creación y validación de cada slot. |
 | applicability_conditions | object | Copia J05. |
+| employment_event | object opcional | Solo en emisión por adaptador laboral H05: `event_id` UUID, `event_type` worker_hired/worker_terminated/NULL, `occurred_on` fecha real y `requested_on` fecha civil de referencia. Sin salario ni notas. |
 
 Para adicional única manual, IDs de origen y version_number son NULL; recurrence.frequency=unica y anchor_date/occurrence/plazo describen la solicitud. Guardar límites y slots igualmente. Validar igualdad con columnas de origen al crear; snapshot no cambia después. No incluir contraseñas, tokens, remuneraciones ni contenido de archivos.
 
@@ -2114,9 +2137,17 @@ Cada item: obligation_id (UUID), notification_event_id (UUID o NULL), category (
 
 El lote exterior añade batch_id, event_type=whatsapp.digest.batch y generated_at; no altera delivery_id ni contenido congelado al reintentar. Revalidar destinatario/permiso/pertinencia antes de preparar. Si un envío pendiente deja de ser pertinente antes de aceptarse, no enviarlo; conservar registro e incidencia/caducidad.
 
+### J09a — whatsapp_digests.outbound_state
+
+Objeto técnico, DEFAULT `{}` antes de reservar. `batch_id` UUID y `generated_at` timestamptz congelados identifican el lote; `lease_id` UUID y `lease_expires_at` timestamptz coordinan al dispatcher; `retryable` boolean permite continuación limitada; `attempt_id` UUID identifica la última reserva; `last_transport_outcome` es responded/timeout/connection_error al cerrar. Repetir conserva lote, contenido e identidad de entrega. Lease inicial 60 s; máximo tres reservas HTTP. Solo operaciones de sistema, sin secretos ni payload externo adicional.
+
+### J09b — whatsapp_digests.gateway_state
+
+Objeto técnico, DEFAULT `{}` antes del proveedor. La primera reserva establece `claim_id` UUID, `claimed_at` timestamptz, `receipt_id` UUID estable y `receipt=NULL`. `receipt` se completa con objeto estricto 1.0: schema_version, receipt_id, delivery_id, status, occurred_at y provider_message_id/error_code opcionales. Solo sent/delivered con evidencia positiva del proveedor. Se compara el digest congelado antes del primer claim; una repetición recupera el receipt o queda pendiente, sin otro envío. No almacenar teléfonos/textos otra vez, tokens ni cabeceras. Reiniciar n8n conserva este estado en PostgreSQL.
+
 ### J10 — integration_attempts.result
 
-Objeto saneado, DEFAULT {}. Claves permitidas: accepted (boolean), transport_outcome (responded,timeout,connection_error), confirmed_by (n8n,provider), provider_status (estado admitido), error_code (string). http_status/duration/provider_message_id/occurred_at están en columnas. No guardar respuesta externa completa ni cabeceras Authorization. No considerar un accepted de n8n evidencia de delivered.
+Objeto saneado, DEFAULT {}. Claves permitidas: phase (reserved/finished, solo outbound), attempt_id (UUID común de ambas fases), accepted (boolean), transport_outcome (responded,timeout,connection_error), confirmed_by (n8n,provider), applied (boolean de callback), provider_status (estado admitido), error_code (string). http_status/duration/provider_message_id/occurred_at están en columnas. No guardar respuesta externa completa ni cabeceras Authorization. No considerar un accepted de n8n evidencia de delivered. Ver [contratos H06](actividades-notificaciones.md).
 
 ### J11 — audit_events.before_values / after_values
 
@@ -2131,6 +2162,25 @@ DEFAULT {}. Claves admitidas: source (app,rpc,edge,cron,restore), changed_fields
 ### J13 — operation_requests.result
 
 Objeto o NULL. Claves permitidas: schema_version=1, resource_id,user_id,version_id,upload_intent_id (UUID cuando aplican), revision (integer>=0), status (estado del contrato), error_code,message (saneados). Incluir solo los campos del contrato concreto. El resultado reusable no contiene contraseña, JWT, clave secreta, input_hash ni URL firmada caducable.
+
+### J14 — employment_periods.document_generation
+
+Objeto estricto: `schema_version:1`, `hire`, `termination`, `reconcile`; cada fase es NULL o el objeto siguiente. DEFAULT con las tres fases NULL. El CHECK valida claves, tipos y valores del contrato.
+
+| Clave por fase | Tipo lógico | Regla |
+|---|---|---|
+| event_id | UUID | Estable por evento. Ingreso usa ID de etapa; cese conserva otro UUID. |
+| event_type | string o NULL | worker_hired, worker_terminated; NULL para reconciliación. |
+| occurred_on | date ISO | Fecha laboral real o día de reconciliación. |
+| reference_date | date ISO | Referencia del calendario/plazo; ingreso antiguo se solicita actualmente. |
+| requested_at | timestamptz ISO | Congela el conjunto de reglas consideradas en esa solicitud. |
+| last_rule_id | UUID o NULL | Cursor de reglas ya examinadas; NULL al comenzar. |
+| status | string | pending, failed, completed, skipped. |
+| last_error | string o NULL | Código seguro; nunca texto libre de excepción ni datos privados. |
+| last_attempt_at | timestamptz ISO o NULL | Último intento; ordena continuación sin dejar expedientes nuevos detrás de fallos repetidos. |
+| generated_count | integer >=0 | Obligaciones nuevas de lotes confirmados de esa fase. |
+
+Los lotes fallidos no avanzan el cursor ni sus recuentos. Se conservan lotes anteriores y el cambio laboral; el trabajo de sistema reanuda sin repetir el alta/cese. Las correcciones no alteran los snapshots emitidos. Ver [contrato laboral](expediente-laboral.md#5-eventos-y-generación-recuperable).
 
 ## 6. Estados persistidos y cálculos derivados
 
@@ -2152,10 +2202,10 @@ Documentary y additional usan denominadores separados. No aplica/cancelled y obl
 - Cada FK visible en el E-R existe en el diccionario; los campos compuestos añaden contexto de estudio/empresa/entregable.
 - Soft delete en las 12 tablas administrables; versiones, revisiones y auditoría sin borrado.
 - Casos a comprobar al implementar: misma empresa/RUC eliminada y restaurada, trabajador con cese/reingreso, padre eliminado con hijos conservados, última cuenta administradora, sesión revocada, generación repetida, restauración sin backlog deliberado, dos revisores, intención reintentada y callback repetido.
-- No ejecutar DDL/RLS ni presentar este modelo como esquema ya desplegado.
+- El diseño completo sigue siendo el objetivo: H01–H05 implementan una parte mediante migraciones. Consultar las evidencias de cada hito para conocer qué está aplicado; este diccionario no acredita RLS ni publicación completa.
 
 ## 8. Referencias
 
 Las reglas funcionales provienen de los tres documentos y de la conversación. Capacidades técnicas consultadas: [restricciones PostgreSQL](https://www.postgresql.org/docs/current/ddl-constraints.html), [índices parciales](https://www.postgresql.org/docs/current/indexes-partial.html), [sintaxis E-R Mermaid](https://mermaid.js.org/syntax/entityRelationshipDiagram.html) y referencias Supabase del diseño central.
 
-Los CHECK, índices, triggers y RPC descritos son especificación para una futura migración, no código aplicado ni prueba del aislamiento de producción.
+Las restricciones del alcance H01–H05 tienen migraciones y evidencia asociadas; el resto permanece como especificación. La protección universal de accesos directos y Storage sigue pendiente de H08.

@@ -6,6 +6,7 @@ import { QueryState } from "@/features/access/components/query-state";
 import { loadMemberAccess } from "@/features/access/repositories/access.repository";
 import type { UserDetailProps } from "@/features/access/types/access-ui.types";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
+import { WhatsappContactForm } from "@/features/notifications/components/whatsapp-contact-form";
 import { AccountControls } from "@/features/users/components/account-controls";
 import { GrantList } from "@/features/users/components/grant-list";
 import { MembershipForm } from "@/features/users/components/membership-form";
@@ -48,6 +49,14 @@ export function UserDetail({ user, directory, onChanged }: UserDetailProps) {
         onChanged={changed}
         user={user}
       />
+      {!user.profile.deleted_at && (
+        <WhatsappContactForm
+          directory={directory}
+          key={`whatsapp:${user.profile.revision}`}
+          onChanged={changed}
+          user={user}
+        />
+      )}
       <QueryState
         error={access.error}
         loading={access.isPending}

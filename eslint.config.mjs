@@ -10,9 +10,11 @@ const eslintConfig = defineConfig([
     ".next/**",
     ".yarn-cache/**",
     "coverage/**",
+    "test-results/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "public/pdf.worker.min.mjs",
     "src/lib/supabase/types/database.types.ts",
   ]),
   {

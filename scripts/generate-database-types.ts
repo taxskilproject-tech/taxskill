@@ -4,7 +4,7 @@ import { dirname, resolve } from "node:path";
 import { runSupabase } from "./utils/run-supabase";
 
 const allowedTargets = ["--linked", "--local"];
-const target = process.argv[2] ?? "--linked";
+const target = process.argv[2] ?? "--local";
 
 if (!allowedTargets.includes(target) || process.argv.length > 3) {
   throw new Error("Usa --linked o --local para generar los tipos.");
@@ -29,7 +29,8 @@ const destination = resolve("src/lib/supabase/types/database.types.ts");
 mkdirSync(dirname(destination), { recursive: true });
 writeFileSync(
   destination,
-  "// Generado con yarn db:types. No editar manualmente.\n" + generated,
+  "// Generado con yarn db:types. No editar manualmente.\n" +
+    generated.replace(/[ \t]+(?=\r?$)/gm, ""),
   "utf8",
 );
 console.info(

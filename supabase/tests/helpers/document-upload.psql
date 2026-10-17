@@ -1,0 +1,9 @@
+create function pg_temp.confirm(intent uuid,actor uuid,sid uuid) returns jsonb language plpgsql as $$
+declare previous text := current_setting('request.jwt.claims'); claim jsonb; result jsonb;
+begin
+  perform set_config('request.jwt.claims','{"role":"service_role"}',true);
+  claim := public.h03_claim_upload(intent,actor,sid);
+  result := public.h03_confirm_upload(intent,actor,sid,(claim->'intent'->>'validation_token')::uuid,
+    jsonb_build_object('schema_version',1,'status','accepted','actual_bytes',200,'actual_mime','application/pdf','extension','pdf','sha256',repeat('a',64),'validated_at',now(),'error_code',null,'validator_version','sql-fixture','checks',jsonb_build_object('size',true,'signature',true,'office_container',null)));
+  perform set_config('request.jwt.claims',previous,true); return result;
+end $$;

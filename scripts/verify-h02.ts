@@ -1,7 +1,6 @@
 import { randomBytes, randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { parseEnv } from "node:util";
-import { loadEnvConfig } from "@next/env";
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
@@ -9,17 +8,23 @@ import { z } from "zod";
 import { commandResultSchema } from "../src/domain/access/contracts/access.schema";
 import { sessionContextSchema } from "../src/features/auth/contracts/session.schema";
 import type { Database, Json } from "../src/lib/supabase/types/database.types";
+import {
+  LOCAL_DEMO_ENV_FILE,
+  LOCAL_H02_FIXTURES_FILE,
+  LOCAL_H02_RECOVERY_FILE,
+  LOCAL_TEST_RESULTS_DIR,
+} from "./constants/local-environment";
 import type { DemoIdentity, HttpSession } from "./types/h02.types";
+import { requireLocalTestEnvironment } from "./utils/require-local-test-environment";
 
-loadEnvConfig(process.cwd());
+const url = requireLocalTestEnvironment();
 const baseUrl = "http://127.0.0.1:3001";
 const demo = z
   .object({
     BOOTSTRAP_EMAIL: z.email(),
     BOOTSTRAP_PASSWORD: z.string().min(12),
   })
-  .parse(parseEnv(readFileSync(".env.h02-demo.local", "utf8")));
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  .parse(parseEnv(readFileSync(LOCAL_DEMO_ENV_FILE, "utf8")));
 const publicKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "";
 const admin = createClient<Database>(
   url,
@@ -103,7 +108,7 @@ async function command(
   return completed(result.data);
 }
 function fixtures(): DemoIdentity[] {
-  const path = "test-results/h02-fixtures.json";
+  const path = LOCAL_H02_FIXTURES_FILE;
   if (existsSync(path))
     return z
       .array(
@@ -130,12 +135,27 @@ function fixtures(): DemoIdentity[] {
     memberType: item.type,
     roleCode: item.code,
   }));
-  mkdirSync("test-results", { recursive: true });
+  mkdirSync(LOCAL_TEST_RESULTS_DIR, { recursive: true });
   writeFileSync(path, JSON.stringify(entries), { flag: "wx" });
   return entries;
 }
 
+async function verifyPublicSignupDisabled() {
+  const client = createClient<Database>(url, publicKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const result = await client.auth.signUp({
+    email: `self-register-blocked-${randomUUID()}@example.test`,
+    password: randomBytes(24).toString("base64url"),
+  });
+  expect(
+    result.error?.code === "signup_disabled" && !result.data.user,
+    "registro público deshabilitado con proveedor de contraseña activo",
+  );
+}
+
 async function main() {
+  await verifyPublicSignupDisabled();
   const actor = session();
   const context = await login(
     actor,
@@ -366,7 +386,7 @@ async function main() {
     "último administrador protegido en endpoint",
   );
   console.info(
-    "H02 live: perfiles contador/supervisor/cliente, altas sin correo, reintentos, CSRF, habilitación, contraseña y sesiones verificados. Credenciales solo en test-results/h02-fixtures.json.",
+    "H02 local: perfiles, reintentos, CSRF y sesiones verificados. Credenciales solo en test-results/local/h02-fixtures.json.",
   );
 }
 
@@ -432,7 +452,7 @@ async function verifyRecovery(
   org: string,
   companyId: string,
 ) {
-  const path = "test-results/h02-recovery.json";
+  const path = LOCAL_H02_RECOVERY_FILE;
   const schema = z.object({
     email: z.email(),
     password: z.string(),

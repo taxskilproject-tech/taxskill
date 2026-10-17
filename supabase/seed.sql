@@ -1,3 +1,4 @@
+-- SOLO DOCKER LOCAL. No ejecutar seeds ni pruebas contra Supabase Cloud.
 -- H02: Auth se siembra mediante Admin SDK, nunca con contraseñas en SQL.
 -- Tras aplicar migraciones: yarn seed:demo (una vez) y yarn test:h02:live.
 -- El segundo comando necesita la app local en 127.0.0.1:3001.
