@@ -1,6 +1,6 @@
 # Cierre de observaciones previo a H08
 
-**Fecha:** 17 de octubre de 2026. **Estado:** REV-01, REV-02 y REV-03 corregidas y validadas en Docker local. Publicación de la migración correctiva en Cloud pendiente de autorización específica exigida por la revisión automática. H08 continúa pendiente.
+**Fecha:** 17 de octubre de 2026. **Estado:** REV-01, REV-02 y REV-03 corregidas y validadas en Docker local. Migración correctiva publicada en Cloud con autorización específica del usuario; 56 migraciones coincidentes y 13 huellas históricas conservadas. Las observaciones quedan cerradas y la base permite continuar con H08, que permanece pendiente.
 
 Se conserva la [revisión inicial](revision-pre-h08.md) para consultar los defectos, sus requisitos y la reproducción anterior. Esta evidencia registra su corrección; no acredita todavía seguridad ni operación productiva de H08.
 
@@ -40,7 +40,7 @@ No se añadieron API routes, endpoints de cancelación, tablas de exportaciones 
 | `yarn test:h07:live` | PASS: volumen de referencia, consultas autenticadas, exportaciones completas de 1.000 filas y auditoría. |
 | Instalación desde cero | Proyecto Docker aislado `tax-skill-h07-fixes-clean`, puertos 54510–54519: **56 migraciones completas** y las seis suites SQL PASS. Detenido después conservando sus volúmenes; el proyecto local principal sigue activo. |
 | Actualización incremental | La migración se aplicó sobre el esquema local previo de 55 versiones y sus datos sintéticos conservados. Las consultas de auditoría no reescriben eventos y la prueba contrasta su huella antes/después. |
-| Preparación Cloud | Dry-run: solo `20261017164155` pendiente; sin seeds ni roles. Inventario de solo lectura y huellas de 13 conjuntos históricos guardados antes de publicar. La ejecución de publicación fue rechazada antes de iniciarse; Cloud conserva 55 migraciones. |
+| Publicación Cloud | Tras autorización expresa, se aplicó únicamente `20261017164155`, sin seeds ni roles. Inventario: 56 migraciones, 29 tablas y el nuevo resolver utilizado por el visor. Lint remoto PASS; 13/13 huellas históricas iguales; cero jobs de WhatsApp activados. Dry-run final sin pendientes. |
 | Revisión Git/secretos | Se comprobaron los archivos candidatos contra los valores privados de los entornos local/Cloud, sin imprimirlos. Los archivos de entorno, diagnósticos y fixtures ejecutados permanecen ignorados; se versionan código, migraciones, contratos y evidencia sintética. |
 
 La instalación aislada no utilizó Cloud, conexiones de otro proyecto ni archivos de credenciales reales. No se enviaron avisos productivos ni se activaron jobs remotos durante estas comprobaciones. La validación visual previa se conserva como histórica; esta corrección verifica navegación y feedback mediante renderizado y pruebas de interacción de los controles existentes.
@@ -60,14 +60,16 @@ Generación de 1.000 filas: Excel aproximadamente **461 ms** y PDF **1.315 ms**.
 
 ## 4. Publicación y base Git
 
-El código y la migración están listos para revisar/publicar. La revisión automática exige autorización explícita para aplicar esta migración adicional al Supabase Cloud real `gzwrqvqofcrdjvzoblaz`; el permiso anterior correspondía a las ocho migraciones originales de H07.
+La primera solicitud de publicación fue rechazada antes de ejecutarse porque la autorización previa correspondía a las ocho migraciones originales. Posteriormente, el usuario autorizó expresamente publicar únicamente `20261017164155_h07_audit_resource_scope.sql` en Supabase Cloud `gzwrqvqofcrdjvzoblaz`, sin datos ficticios, borrados ni jobs.
 
-Después de recibirla, el cierre remoto debe comprobar: 56 versiones coincidentes, visor utilizando el nuevo resolver, lint sin errores, 13 huellas históricas iguales y ningún job de WhatsApp activado. No ejecutar pruebas con fixtures en Cloud.
+Con esa autorización se ejecutó `supabase db push --linked --yes --output-format json`. El resultado contiene una sola migración y cero seeds/roles. La comprobación posterior confirmó **56 versiones coincidentes**, `private.h07_audit_scoped` presente y utilizado por el visor, lint `public`/`private` sin errores, **13 huellas históricas idénticas** y cero jobs `h06-notifications-dispatch`. Un dry-run posterior confirmó `upToDate: true`, sin migraciones pendientes. Se mantienen 29 tablas públicas y RLS diferido a H08, sin alterar ese alcance.
 
-El cierre se registra junto con el código completo de H03–H07 en la rama existente `codex/h02-acceso-empresas`. Los resultados locales ejecutados y los archivos necesarios para reproducirlos quedan versionados, sin secretos. La versión concreta se obtiene del commit que contiene esta evidencia; no se atribuye al antiguo commit H02.
+[Inventario sanitizado de publicación](h07-correcciones-cloud.json). Los resultados completos del CLI y las huellas están ignorados en `test-results/revision-pre-h08/approved-deploy-*`; no contienen fixtures nuevos de Cloud. No se realizaron pruebas de integración ni SQL con datos ficticios en Cloud: las verificaciones posteriores fueron de solo lectura.
+
+El código completo de H03–H07 y las tres correcciones están publicados en GitHub en el commit `dc324407c3cf2099d9dde808210f97818c1a28b4`, rama `codex/h02-acceso-empresas`. Esta actualización documental registra la publicación remota y sus comprobaciones en el commit que contiene este archivo. Los archivos necesarios para reproducir las pruebas locales y su evidencia quedan versionados, sin secretos ni documentos personales reales.
 
 ## 5. Continuidad
 
-Las tres observaciones funcionales están resueltas localmente. Para completar la entrega remota falta publicar exclusivamente la migración correctiva con la autorización requerida y verificar el resultado. Se puede preparar H08 desde esta base; su implementación conserva el alcance de [H08 — Preparación para producción](../h08-preparacion-produccion.md).
+Las tres observaciones funcionales y la entrega correctiva remota están cerradas. La base está lista para comenzar [H08 — Preparación para producción](../h08-preparacion-produccion.md).
 
 El piloto real sigue condicionado a RLS/privilegios/sesiones, Storage, respaldos/restauración, monitoreo, configuración productiva, canal WhatsApp y aceptación del equipo. Esta corrección no cierra esos requisitos.

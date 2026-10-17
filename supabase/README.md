@@ -1,6 +1,6 @@
 # Migraciones de Supabase
 
-H01–H07 incorporan 56 migraciones y 29 tablas públicas. Local tiene 56; Cloud conserva 55 hasta `20261017002700`, pendiente de autorización específica para publicar `20261017164155_h07_audit_resource_scope.sql`. Las tres observaciones funcionales están [corregidas y validadas localmente](../docs/hitos/evidencias/h07-correcciones.md). RLS permanece pendiente de H08/T01.
+H01–H07 incorporan 56 migraciones y 29 tablas públicas. Local y Cloud están sincronizados hasta `20261017164155_h07_audit_resource_scope.sql`, publicada con autorización específica y 13 huellas históricas conservadas. Las tres observaciones funcionales están [corregidas y cerradas](../docs/hitos/evidencias/h07-correcciones.md). RLS permanece pendiente de H08/T01.
 
 Crea cada cambio con `yarn db:new nombre_del_cambio`. Los archivos SQL se guardan en `supabase/migrations/` y se versionan. Una migración puede agrupar tablas, restricciones y funciones de una misma capacidad; respeta las dependencias.
 

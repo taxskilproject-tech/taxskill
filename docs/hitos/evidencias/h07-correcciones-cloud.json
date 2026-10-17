@@ -1,0 +1,76 @@
+{
+  "checked_at_utc": "2026-10-17T17:12:39.5438480+00:00",
+  "project_ref": "gzwrqvqofcrdjvzoblaz",
+  "migration": "20261017164155_h07_audit_resource_scope.sql",
+  "authorization": "Autorización específica del usuario para publicar únicamente esta corrección",
+  "migrations_before": 55,
+  "migrations_after": 56,
+  "local_remote_versions_match": true,
+  "public_tables": 29,
+  "rls_enabled_tables": 0,
+  "audit_scope_resolver_present": true,
+  "audit_query_uses_resolver": true,
+  "whatsapp_dispatch_jobs": 0,
+  "history_checks": [
+    {
+      "table": "audit_events",
+      "unchanged": true
+    },
+    {
+      "table": "deliverables",
+      "unchanged": true
+    },
+    {
+      "table": "document_versions",
+      "unchanged": true
+    },
+    {
+      "table": "employment_periods",
+      "unchanged": true
+    },
+    {
+      "table": "notification_events",
+      "unchanged": true
+    },
+    {
+      "table": "notifications",
+      "unchanged": true
+    },
+    {
+      "table": "obligations",
+      "unchanged": true
+    },
+    {
+      "table": "requirement_rules",
+      "unchanged": true
+    },
+    {
+      "table": "review_events",
+      "unchanged": true
+    },
+    {
+      "table": "rule_versions",
+      "unchanged": true
+    },
+    {
+      "table": "submission_cycles",
+      "unchanged": true
+    },
+    {
+      "table": "upload_intents",
+      "unchanged": true
+    },
+    {
+      "table": "workers",
+      "unchanged": true
+    }
+  ],
+  "lint_schemas": [
+    "public",
+    "private"
+  ],
+  "lint_result": "PASS",
+  "final_dry_run_up_to_date": true,
+  "synthetic_cloud_writes": false,
+  "new_seed_or_role_scripts": false
+}

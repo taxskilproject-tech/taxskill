@@ -1,6 +1,6 @@
 # Supervisión, búsqueda y reportes · H07
 
-Implementado el 17 de octubre de 2026. Ocho migraciones originales publicadas con autorización expresa; una migración correctiva adicional validada en Docker espera autorización de publicación. Local tiene 56 y Cloud 55, sin fixtures remotos. Ver [cierre de observaciones](hitos/evidencias/h07-correcciones.md), [hito y requisitos](hitos/h07-supervision-reportes.md), [evidencia inicial](hitos/evidencias/h07.md), [entornos](desarrollo.md) y [H08](hitos/h08-preparacion-produccion.md).
+Implementado el 17 de octubre de 2026. Ocho migraciones originales y una migración correctiva adicional publicadas con autorización expresa, con validación en Docker e historia conservada. Local y Cloud tienen 56 migraciones, sin fixtures remotos. Ver [cierre de observaciones](hitos/evidencias/h07-correcciones.md), [hito y requisitos](hitos/h07-supervision-reportes.md), [evidencia inicial](hitos/evidencias/h07.md), [entornos](desarrollo.md) y [H08](hitos/h08-preparacion-produccion.md).
 
 ## Recorridos
 

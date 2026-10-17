@@ -1,6 +1,6 @@
 # Revisión previa a H08
 
-**Fecha:** 17 de octubre de 2026. **Revisión inicial:** se encontraron tres defectos funcionales de H07, descritos abajo como registro histórico. **Seguimiento:** los tres están corregidos y validados localmente; consultar [cierre de observaciones](h07-correcciones.md). La publicación de la migración correctiva en Cloud espera autorización específica. H08 y las condiciones de su piloto continúan pendientes.
+**Fecha:** 17 de octubre de 2026. **Revisión inicial:** se encontraron tres defectos funcionales de H07, descritos abajo como registro histórico. **Seguimiento:** los tres están corregidos y validados; consultar [cierre de observaciones](h07-correcciones.md). La migración correctiva se publicó con autorización específica: 56 versiones coincidentes y 13 huellas históricas conservadas. H08 y las condiciones de su piloto continúan pendientes.
 
 Fuentes: [reglas del agente](../../../.agents/rules.md), [entornos](../../desarrollo.md), [índice de hitos](../README.md), [requisitos H07](../h07-supervision-reportes.md), [evidencia anterior H07](h07.md), [requisitos H08](../h08-preparacion-produccion.md) y contratos/modelos referenciados por esos documentos.
 
@@ -125,4 +125,4 @@ Se detectaron afirmaciones desactualizadas en el estado inicial del diseño téc
 4. Implementar H08 comenzando por el inventario y la matriz de acceso, después privilegios/RLS/sesiones y su regresión local; continuar con operación, recuperación y configuración productiva.
 5. Aplicar cambios en Cloud con el alcance autorizado y realizar el piloto cuando las condiciones de H08 estén acreditadas.
 
-**Seguimiento actual:** REV-01–REV-03 están corregidas y sus escenarios pasaron. El [cierre](h07-correcciones.md) identifica la publicación correctiva pendiente y las condiciones que pertenecen a H08. El dictamen y los recuentos anteriores describen la revisión inicial.
+**Seguimiento actual:** REV-01–REV-03 están corregidas y sus escenarios pasaron; la publicación correctiva está verificada. El [cierre](h07-correcciones.md) acredita la base para comenzar H08 y distingue las condiciones que pertenecen a ese último hito. El dictamen y los recuentos anteriores describen la revisión inicial.

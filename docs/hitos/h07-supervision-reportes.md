@@ -1,6 +1,6 @@
 # H07 — Supervisión y reportes
 
-**Estado:** implementado; las tres observaciones previas a H08 están [corregidas y validadas en Docker](evidencias/h07-correcciones.md). La migración correctiva adicional espera autorización específica para Cloud: 56 versiones locales y 55 remotas. Las ocho migraciones originales H07 ya estaban publicadas con autorización, historia conservada y sin fixtures remotos. [Evidencias iniciales](evidencias/h07.md) y [contratos](../supervision-reportes.md). Aceptación formal de producto independiente. **Depende de:** [H06](h06-actividades-notificaciones.md). **Habilita:** [H08](h08-preparacion-produccion.md) tras completar la entrega correctiva. Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
+**Estado:** implementado; las tres observaciones previas a H08 están [corregidas y cerradas](evidencias/h07-correcciones.md). La migración correctiva adicional se publicó con autorización específica: 56 versiones coincidentes en local/Cloud y 13 huellas históricas conservadas. Las ocho migraciones originales H07 conservan su publicación e historia, sin fixtures remotos. [Evidencias iniciales](evidencias/h07.md) y [contratos](../supervision-reportes.md). Aceptación formal de producto independiente. **Depende de:** [H06](h06-actividades-notificaciones.md). **Habilita:** [H08](h08-preparacion-produccion.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
 
 <a id="objetivo"></a>
 ## 1. Objetivo
@@ -145,7 +145,7 @@ Conservar ejemplos de Excel/PDF generados exclusivamente con datos ficticios, fi
 - [x] Medición sintética de capacidad/P95 y estimación de consumo están documentadas con ajustes pendientes identificados.
 - [x] Estados, Atomic Design y cambio de contexto están verificados.
 - [x] CA17, CA23–CA24 funcionales, CA30 y regresión pertinente tienen evidencia, incluidos los casos afectados por REV-01–REV-03. Seguridad efectiva y ajuste productivo pendientes H08.
-- [ ] Completar publicación correctiva autorizada en Cloud y verificar su inventario/historia. Contratos, tipos, documentación y pruebas locales ya preparados para H08.
+- [x] Publicación correctiva autorizada en Cloud verificada: 56 migraciones coincidentes, resolver activo, lint sin errores y 13 huellas históricas conservadas. Contratos, tipos, documentación, base Git y pruebas locales preparados para H08.
 
 ## 9. Límites y continuidad
 
