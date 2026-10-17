@@ -3,7 +3,7 @@
 - **Versión:** 1.1
 - **Fecha:** 10 de octubre de 2026
 - **Proyecto:** tax-skill / SGD Contable
-- **Estado actualizado al 17 de octubre de 2026:** H01–H07 implementados, observaciones corregidas y migración correctiva publicada con autorización e historia conservada. Preparación productiva H08 pendiente. Ver [cierre de observaciones](hitos/evidencias/h07-correcciones.md).
+- **Estado actualizado al 17 de octubre de 2026:** H01–H07 implementados y REV-01–REV-03 cerradas con migración publicada e historia conservada. La [revisión complementaria](hitos/evidencias/revision-final-pre-h08.md) identifica REV-04–REV-05 pendientes. Preparación productiva H08 pendiente.
 - **Operación inicial:** un estudio contable en Perú, zona horaria America/Lima.
 
 ### Índice

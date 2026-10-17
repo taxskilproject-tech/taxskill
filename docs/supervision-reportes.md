@@ -2,6 +2,8 @@
 
 Implementado el 17 de octubre de 2026. Ocho migraciones originales y una migración correctiva adicional publicadas con autorización expresa, con validación en Docker e historia conservada. Local y Cloud tienen 56 migraciones, sin fixtures remotos. Ver [cierre de observaciones](hitos/evidencias/h07-correcciones.md), [hito y requisitos](hitos/h07-supervision-reportes.md), [evidencia inicial](hitos/evidencias/h07.md), [entornos](desarrollo.md) y [H08](hitos/h08-preparacion-produccion.md).
 
+La [revisión complementaria](hitos/evidencias/revision-final-pre-h08.md) deja dos casos pendientes de los contratos de abajo: navegación de indicadores que sustituye filtros y mensajes de exportación que permanecen al cambiar a un resultado en caché. REV-01–REV-03 conservan su cierre.
+
 ## Recorridos
 
 | Ruta | Función |

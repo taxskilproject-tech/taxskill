@@ -1,6 +1,6 @@
 # H07 — Supervisión y reportes
 
-**Estado:** implementado; las tres observaciones previas a H08 están [corregidas y cerradas](evidencias/h07-correcciones.md). La migración correctiva adicional se publicó con autorización específica: 56 versiones coincidentes en local/Cloud y 13 huellas históricas conservadas. Las ocho migraciones originales H07 conservan su publicación e historia, sin fixtures remotos. [Evidencias iniciales](evidencias/h07.md) y [contratos](../supervision-reportes.md). Aceptación formal de producto independiente. **Depende de:** [H06](h06-actividades-notificaciones.md). **Habilita:** [H08](h08-preparacion-produccion.md). Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
+**Estado:** implementado; REV-01–REV-03 están [corregidas y cerradas](evidencias/h07-correcciones.md). La [revisión complementaria](evidencias/revision-final-pre-h08.md) confirma dos casos adicionales pendientes: filtros de indicadores y feedback de exportación con caché (REV-04–REV-05). La migración correctiva publicada conserva 56 versiones coincidentes y 13 huellas históricas. Sin fixtures remotos. [Evidencias iniciales](evidencias/h07.md) y [contratos](../supervision-reportes.md). Aceptación formal de producto independiente. **Depende de:** [H06](h06-actividades-notificaciones.md). **Habilita:** [H08](h08-preparacion-produccion.md) tras cerrar los pendientes funcionales. Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
 
 <a id="objetivo"></a>
 ## 1. Objetivo
@@ -131,8 +131,8 @@ Conservar ejemplos de Excel/PDF generados exclusivamente con datos ficticios, fi
 <a id="definition-of-done"></a>
 ## 8. Definition of Done
 
-- [x] H07-RF01–H07-RF15 y H07-RT01–H07-RT13 tienen evidencia y entregables. REV-01–REV-03 corregidas y validadas en el [cierre](evidencias/h07-correcciones.md).
-- [x] Dashboard muestra unidades correctas y navegación a recursos/listados existentes, conservando el recurso de origen con permisos distintos por empresa/módulo (REV-02).
+- [ ] H07-RF01–H07-RF15 y H07-RT01–H07-RT13 tienen evidencia completa. REV-01–REV-03 cerradas; REV-04–REV-05 pendientes según la [revisión complementaria](evidencias/revision-final-pre-h08.md).
+- [ ] Navegación desde indicadores conserva el universo filtrado. El recurso de origen y permisos distintos están corregidos; falta evitar sustituir los filtros del resultado (REV-04).
 - [x] Cumplimiento usa exigibles/aprobadas y global ponderado; vacío muestra “Sin obligaciones”.
 - [x] Adicionales están separadas y las internas no contaminan métricas de empresas.
 - [x] Búsqueda por metadatos funciona con filtros/paginación y sin OCR ni descargas anticipadas.
@@ -143,9 +143,10 @@ Conservar ejemplos de Excel/PDF generados exclusivamente con datos ficticios, fi
 - [x] Filtros de auditoría incluyen revisiones, descargas y eventos laborales mediante el ámbito correcto del recurso (REV-01).
 - [x] Consulta histórica distingue eliminados sin alterar unicidad ni resultados conservados.
 - [x] Medición sintética de capacidad/P95 y estimación de consumo están documentadas con ajustes pendientes identificados.
-- [x] Estados, Atomic Design y cambio de contexto están verificados.
+- [ ] Estados, Atomic Design y cambio de contexto están completamente verificados. Arquitectura PASS; falta limpiar el feedback anterior al cambiar a un resultado en caché (REV-05).
 - [x] CA17, CA23–CA24 funcionales, CA30 y regresión pertinente tienen evidencia, incluidos los casos afectados por REV-01–REV-03. Seguridad efectiva y ajuste productivo pendientes H08.
 - [x] Publicación correctiva autorizada en Cloud verificada: 56 migraciones coincidentes, resolver activo, lint sin errores y 13 huellas históricas conservadas. Contratos, tipos, documentación, base Git y pruebas locales preparados para H08.
+- [ ] REV-04–REV-05 corregidas y verificadas antes de aceptar la conformidad funcional completa de H07.
 
 ## 9. Límites y continuidad
 
