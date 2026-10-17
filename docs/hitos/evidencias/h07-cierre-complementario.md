@@ -49,6 +49,8 @@ Después de exportar 185 obligaciones y volver a Observaciones ya consultado, el
 
 ## 5. Publicación y continuidad
 
-Publicar la migración antes de desplegar el frontend que envía `indicators`. El dry-run identifica exclusivamente `20261017175617_h07_indicator_intersections.sql`, sin seeds ni roles. Se guardaron las 13 huellas históricas y el inventario remoto mediante consultas de solo lectura.
+El código y la evidencia están publicados en GitHub, rama `codex/h02-acceso-empresas`, commit `7b18e83`. Publicar la migración antes de desplegar el frontend que envía `indicators`. El dry-run identifica exclusivamente `20261017175617_h07_indicator_intersections.sql`, sin seeds ni roles. Se guardaron las 13 huellas históricas y el inventario remoto mediante consultas de solo lectura.
+
+**Publicación no ejecutada:** la revisión automática rechazó aplicar esta migración nueva al entorno real porque la autorización anterior correspondía específicamente a `20261017164155`, no a esta corrección. Es necesaria la autorización explícita del usuario para publicar únicamente `20261017175617_h07_indicator_intersections.sql` en `gzwrqvqofcrdjvzoblaz`. No se intentó otra vía ni se modificó el historial remoto. Tras autorización, comprobar 57 versiones coincidentes, las 13 huellas sin cambios, el helper privado, el lint y cero jobs nuevos antes de registrar el cierre remoto.
 
 Ambas observaciones están cerradas funcionalmente en local. Completar la publicación y comprobar las huellas permitirá registrar la base sincronizada para [H08](../h08-preparacion-produccion.md). RLS/privilegios/sesiones, Storage, respaldos/restauración, monitoreo, dominio, secretos y canal productivo siguen siendo alcance de H08. Esta corrección no implementa esos controles ni realiza un piloto real.
