@@ -60,6 +60,26 @@ it("preserves whitelisted filters on navigation return", () => {
     parseReportFilters(new URLSearchParams(serializeReportFilters(filters))),
   ).toEqual(filters);
 });
+it("round trips combined indicators and rejects unsupported predicates", () => {
+  const filters = reportFiltersSchema.parse({
+    report: "observed",
+    indicators: ["review", "pending", "review"],
+  });
+  expect(filters.indicators).toEqual(["pending", "review"]);
+  expect(
+    parseReportFilters(new URLSearchParams(serializeReportFilters(filters))),
+  ).toEqual(filters);
+  expect(serializeReportFilters(reportFiltersSchema.parse({}))).toBe("");
+  expect(() =>
+    parseReportFilters(new URLSearchParams("indicators=review,sql")),
+  ).toThrow();
+  expect(reportFiltersSchema.safeParse({ indicators: "review" }).success).toBe(
+    false,
+  );
+  expect(reportFiltersSchema.safeParse({ indicators: [null] }).success).toBe(
+    false,
+  );
+});
 it("writes strings, typed numbers and typed dates with no formula cells", async () => {
   const file = await generateExcel({
     ...reportingPayload,

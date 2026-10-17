@@ -4,12 +4,33 @@ create extension if not exists pgtap with schema extensions;
 select extensions.no_plan();
 create function pg_temp.expect(value boolean,label text) returns void language plpgsql as $$ begin if value is distinct from true then raise exception 'H07: %',label; end if; end $$;
 create function pg_temp.command(org uuid,op text,input jsonb) returns jsonb language plpgsql as $$ declare r jsonb; begin r:=public.h03_command(org,gen_random_uuid(),op,input); if r->>'ok'<>'true' then raise exception 'H07 %: %',op,r; end if; return r->'data'; end $$;
+create function pg_temp.check_drilldown(org uuid,filters jsonb) returns void language plpgsql as $$
+declare original jsonb; narrowed jsonb; criterion text; expected integer; upcoming integer;
+begin
+  original:=public.h07_query(org,'report',filters||'{"pageSize":500}');
+  perform pg_temp.expect(original->>'ok'='true','base query admitted');
+  select coalesce((settings->>'upcoming_days')::integer,7) into upcoming from public.organizations where id=org;
+  foreach criterion in array array['pending','review','observed','overdue','upcoming'] loop
+    narrowed:=public.h07_query(org,'report',filters||jsonb_build_object('pageSize',500,'indicators',coalesce(filters->'indicators','[]'::jsonb)||jsonb_build_array(criterion)));
+    select count(*) into expected from jsonb_array_elements(original->'data'->'rows') r
+    where case criterion
+      when 'pending' then r->>'disposition'='active' and r->>'state'<>'aprobado'
+      when 'review' then r->>'disposition'='active' and (r->>'review_files')::integer>0
+      when 'observed' then r->>'disposition'='active' and (r->>'observed_count')::integer>0
+      when 'overdue' then (r->>'overdue')::boolean
+      when 'upcoming' then r->>'disposition'='active' and (r->>'operational_due_date')::date between (now() at time zone 'America/Lima')::date and (now() at time zone 'America/Lima')::date+upcoming
+    end;
+    perform pg_temp.expect(narrowed->>'ok'='true' and (narrowed->'data'->>'count')::integer=expected,'drilldown count intersects '||criterion||' with '||filters::text);
+    perform pg_temp.expect(not exists(select 1 from jsonb_array_elements(narrowed->'data'->'rows') r
+      where not exists(select 1 from jsonb_array_elements(original->'data'->'rows') source where source->>'id'=r->>'id')),'drilldown never widens the original result');
+  end loop;
+end $$;
 \ir helpers/document-upload.psql
 do $$
 declare org uuid:=gen_random_uuid(); actor uuid:=gen_random_uuid(); limited uuid:=gen_random_uuid(); sid uuid:=gen_random_uuid(); company uuid; other_company uuid; dtype uuid; member uuid; role_id uuid;
   rule uuid; obligation uuid; first_obligation uuid; partial_obligation uuid; input jsonb; result jsonb; exported jsonb; slot public.deliverables; cycle uuid; intent uuid;
   today date:=(now() at time zone 'America/Lima')::date; req uuid:=gen_random_uuid(); initial_hash text;
-  audit_grant uuid; expected_reviews integer; history_hash text;
+  audit_grant uuid; expected_reviews integer; history_hash text; report_kind text; prior_indicator text;
 begin
   insert into auth.users(id,email) values(actor,'h07-'||actor||'@example.test'),(limited,'h07-'||limited||'@example.test');
   insert into public.profiles(user_id,email,full_name,provisioning_status) select id,email,'H07 SQL fixture','ready' from auth.users where id in (actor,limited);
@@ -55,6 +76,11 @@ begin
   perform pg_temp.expect((public.h07_query(org,'dashboard','{}')->'data'->'metrics')=result->'data'->'metrics','dashboard and reports reconcile');
   perform pg_temp.expect((public.h07_query(org,'documents','{"q":"H07-document"}')->'data'->>'count')='4','filename metadata search across versions');
   perform pg_temp.expect((public.h07_query(org,'report','{"indicator":"review"}')->'data'->>'count')='1','indicator drilldown preserves units');
+  perform pg_temp.check_drilldown(org,'{"report":"observed"}');
+  perform pg_temp.expect(public.h07_query(org,'report','{"indicators":"review"}')->'error'->>'code'='VALIDATION_ERROR','indicator string rejected');
+  perform pg_temp.expect(public.h07_query(org,'report','{"indicators":[null]}')->'error'->>'code'='VALIDATION_ERROR','null indicator rejected');
+  perform pg_temp.expect(public.h07_query(org,'report','{"indicators":["sql"]}')->'error'->>'code'='VALIDATION_ERROR','unknown predicate rejected');
+  perform pg_temp.expect(public.h07_query(org,'report','{"indicators":["review","review","review","review","review","review"]}')->'error'->>'code'='VALIDATION_ERROR','oversized predicate array rejected');
   exported:=public.h07_export(org,req,'start','{"format":"xlsx","filters":{}}');
   perform pg_temp.expect(exported->>'ok'='true' and exported->'data'->>'count'='13','export start derives actual count');
   perform pg_temp.expect(public.h07_export(org,req,'start','{"format":"xlsx","filters":{}}')=exported,'idempotent export reservation');
@@ -123,6 +149,37 @@ begin
   update public.profiles set enabled=false where user_id=limited;
   perform set_config('request.jwt.claims',jsonb_build_object('sub',limited,'role','authenticated','session_id',gen_random_uuid())::text,true);
   perform pg_temp.expect(public.h07_query(org,'dashboard','{}')->'error'->>'code'='FORBIDDEN','disabled account rejected');
+  -- Mixed file states in one obligation, plus the existing pending/approved/waived/cancelled examples.
+  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',sid)::text,true);
+  rule:=(pg_temp.command(org,'ConfigureRequirement',jsonb_build_object('document_type_id',dtype,'company_id',other_company,'title','H07 mixed review/observed','deadline_offset_days',7,'is_required',true,
+    'allowed_formats','["pdf"]'::jsonb,'max_file_bytes',20000000,'deliverable_specs','[{"position_code":"a","label":"A","display_order":1,"allowed_formats":["pdf"],"max_file_bytes":20000000},{"position_code":"b","label":"B","display_order":2,"allowed_formats":["pdf"],"max_file_bytes":20000000}]'::jsonb))->>'resource_id')::uuid;
+  obligation:=(pg_temp.command(org,'GenerateMonthly',jsonb_build_object('rule_id',rule))->>'resource_id')::uuid;
+  for slot in select * from public.deliverables where obligation_id=obligation order by display_order loop
+    select id into cycle from public.submission_cycles where deliverable_id=slot.id and state='open';
+    intent:=(pg_temp.command(org,'CreateUploadIntent',jsonb_build_object('deliverable_id',slot.id,'cycle_id',cycle,'expected_revision',slot.revision,'original_name','H07-mixed.pdf','declared_bytes',200,'declared_mime','application/pdf'))->>'resource_id')::uuid;
+    perform pg_temp.confirm(intent,actor,sid);
+    select * into slot from public.deliverables where id=slot.id;
+    if slot.display_order=1 then
+      perform pg_temp.command(org,'ObserveVersion',jsonb_build_object('deliverable_id',slot.id,'version_id',slot.current_version_id,'expected_revision',slot.revision,'comment','H07 intersection fixture','new_due_date',today+2));
+    end if;
+  end loop;
+  perform pg_temp.expect(public.h07_query(org,'report','{"indicators":["observed","review"]}')->'data'->>'count'='1','review and observation may belong to different files of the same obligation');
+  foreach report_kind in array array['detail','compliance','pending','deadlines','observed','period'] loop
+    perform pg_temp.check_drilldown(org,jsonb_build_object('report',report_kind));
+    foreach prior_indicator in array array['review','overdue','upcoming','observed'] loop
+      perform pg_temp.check_drilldown(org,jsonb_build_object('report',report_kind,'indicator',prior_indicator,'company_id',other_company,'module','tributario','period',to_char(today,'YYYY-MM')));
+    end loop;
+  end loop;
+  result:=public.h07_export(org,gen_random_uuid(),'start','{"format":"xlsx","filters":{"report":"observed","indicators":["pending","review"]}}');
+  perform pg_temp.expect(result->>'ok'='true' and result->'data'->>'count'='1' and result->'data'->'filters'->'indicators'='["pending","review"]'::jsonb,'export reservation keeps intersected report filters');
+  update public.profiles set enabled=true where user_id=limited;
+  update public.access_grants set deleted_at=null,deleted_by=null,deletion_reason=null where id=audit_grant;
+  perform set_config('request.jwt.claims',jsonb_build_object('sub',limited,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.check_drilldown(org,jsonb_build_object('company_id',company,'module','tributario','report','observed'));
+  perform pg_temp.expect(public.h07_query(org,'report',jsonb_build_object('company_id',other_company,'indicators','["review","observed"]'::jsonb))->'data'->>'count'='0','combined indicators never grant another company');
+  insert into public.grant_permission_overrides(organization_id,grant_id,permission_id,allowed)
+    select org,audit_grant,id,false from public.permissions where organization_id=org and action='reports.view';
+  perform pg_temp.expect(not exists(select 1 from private.h07_rows(org,limited,jsonb_build_object('company_id',company),'reports.export')),'export still requires both view and export permissions');
 end $$;
 select extensions.pass('H07 reconciliation, review, exports, history, metadata and audit contracts');
 select * from extensions.finish();

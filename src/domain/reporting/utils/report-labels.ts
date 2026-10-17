@@ -28,6 +28,7 @@ export function periodLabel(key: string, start: string): string {
 }
 const FILTER_LABELS: Readonly<Record<keyof ReportFilters, string>> = {
   indicator: "Indicador",
+  indicators: "Indicadores (todos)",
   company_id: "Empresa",
   scope: "Alcance",
   module: "Área",
@@ -76,12 +77,15 @@ export function filterSummary(payload: ExportPayload): string {
       ([key, value]) =>
         value !== undefined &&
         value !== "" &&
+        (!Array.isArray(value) || value.length > 0) &&
         key !== "page" &&
         key !== "pageSize",
     )
     .map(([key, value]) => {
-      const translated =
-        FILTER_VALUES[String(value)] ?? stateLabel(moduleLabel(String(value)));
+      const translated = Array.isArray(value)
+        ? value.map((item) => FILTER_VALUES[item] ?? item).join(" + ")
+        : (FILTER_VALUES[String(value)] ??
+          stateLabel(moduleLabel(String(value))));
       const company =
         key === "company_id"
           ? payload.rows.find((row) => row.company_id === value)?.company_name

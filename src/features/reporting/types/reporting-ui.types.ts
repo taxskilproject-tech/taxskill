@@ -1,6 +1,7 @@
 import type {
   ReportFilterName,
   ReportFilters,
+  ReportIndicator,
   ReportMetrics,
   ReportResult,
   ReportRow,
@@ -16,6 +17,15 @@ export interface ReportMetricsProps {
   filters: ReportFilters;
   mode: ReportingPageProps["mode"];
 }
+export interface ReportIndicatorDefinition {
+  indicator: ReportIndicator;
+  label: string;
+  metric: keyof ReportMetrics;
+}
+export type ActiveReportIndicatorsProps = Pick<
+  ReportMetricsProps,
+  "filters" | "mode"
+>;
 export interface ReportTableProps {
   rows: ReportRow[];
   origin: string;

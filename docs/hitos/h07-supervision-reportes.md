@@ -1,6 +1,6 @@
 # H07 — Supervisión y reportes
 
-**Estado:** implementado; REV-01–REV-03 están [corregidas y cerradas](evidencias/h07-correcciones.md). La [revisión complementaria](evidencias/revision-final-pre-h08.md) confirma dos casos adicionales pendientes: filtros de indicadores y feedback de exportación con caché (REV-04–REV-05). La migración correctiva publicada conserva 56 versiones coincidentes y 13 huellas históricas. Sin fixtures remotos. [Evidencias iniciales](evidencias/h07.md) y [contratos](../supervision-reportes.md). Aceptación formal de producto independiente. **Depende de:** [H06](h06-actividades-notificaciones.md). **Habilita:** [H08](h08-preparacion-produccion.md) tras cerrar los pendientes funcionales. Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
+**Estado:** implementado; REV-01–REV-03 [cerradas y publicadas](evidencias/h07-correcciones.md), REV-04–REV-05 [corregidas y verificadas en Docker](evidencias/h07-cierre-complementario.md). Local 57 / Cloud 56; pendiente publicar la nueva migración antes del frontend. Sin fixtures remotos. [Evidencias iniciales](evidencias/h07.md) y [contratos](../supervision-reportes.md). Aceptación formal independiente. **Depende de:** [H06](h06-actividades-notificaciones.md). **Habilita:** [H08](h08-preparacion-produccion.md) tras completar la sincronización. Aplican las [reglas](README.md#3-reglas-transversales-obligatorias) y la [Definition of Done común](README.md#4-definition-of-done-comun).
 
 <a id="objetivo"></a>
 ## 1. Objetivo
@@ -131,8 +131,8 @@ Conservar ejemplos de Excel/PDF generados exclusivamente con datos ficticios, fi
 <a id="definition-of-done"></a>
 ## 8. Definition of Done
 
-- [ ] H07-RF01–H07-RF15 y H07-RT01–H07-RT13 tienen evidencia completa. REV-01–REV-03 cerradas; REV-04–REV-05 pendientes según la [revisión complementaria](evidencias/revision-final-pre-h08.md).
-- [ ] Navegación desde indicadores conserva el universo filtrado. El recurso de origen y permisos distintos están corregidos; falta evitar sustituir los filtros del resultado (REV-04).
+- [x] H07-RF01–H07-RF15 y H07-RT01–H07-RT13 tienen evidencia funcional; REV-01–REV-05 corregidas según ambos cierres. Seguridad y operación productiva permanecen en H08.
+- [x] Navegación de indicadores conserva recurso, permisos y universo mediante intersección de reporte, criterios previos y demás filtros (REV-02 y REV-04).
 - [x] Cumplimiento usa exigibles/aprobadas y global ponderado; vacío muestra “Sin obligaciones”.
 - [x] Adicionales están separadas y las internas no contaminan métricas de empresas.
 - [x] Búsqueda por metadatos funciona con filtros/paginación y sin OCR ni descargas anticipadas.
@@ -143,10 +143,11 @@ Conservar ejemplos de Excel/PDF generados exclusivamente con datos ficticios, fi
 - [x] Filtros de auditoría incluyen revisiones, descargas y eventos laborales mediante el ámbito correcto del recurso (REV-01).
 - [x] Consulta histórica distingue eliminados sin alterar unicidad ni resultados conservados.
 - [x] Medición sintética de capacidad/P95 y estimación de consumo están documentadas con ajustes pendientes identificados.
-- [ ] Estados, Atomic Design y cambio de contexto están completamente verificados. Arquitectura PASS; falta limpiar el feedback anterior al cambiar a un resultado en caché (REV-05).
+- [x] Arquitectura y estados pertinentes verificados; feedback de exportación descartado al cambiar identidad incluso con caché y retorno A → B → A (REV-05).
 - [x] CA17, CA23–CA24 funcionales, CA30 y regresión pertinente tienen evidencia, incluidos los casos afectados por REV-01–REV-03. Seguridad efectiva y ajuste productivo pendientes H08.
 - [x] Publicación correctiva autorizada en Cloud verificada: 56 migraciones coincidentes, resolver activo, lint sin errores y 13 huellas históricas conservadas. Contratos, tipos, documentación, base Git y pruebas locales preparados para H08.
-- [ ] REV-04–REV-05 corregidas y verificadas antes de aceptar la conformidad funcional completa de H07.
+- [x] REV-04–REV-05 corregidas y verificadas en pruebas, SQL y navegador local; [cierre complementario](evidencias/h07-cierre-complementario.md).
+- [ ] Migración `20261017175617` publicada y base local/Cloud sincronizada antes de desplegar el frontend actualizado.
 
 ## 9. Límites y continuidad
 

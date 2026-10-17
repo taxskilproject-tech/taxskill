@@ -70,6 +70,6 @@ El código completo de H03–H07 y las tres correcciones están publicados en Gi
 
 ## 5. Continuidad
 
-REV-01–REV-03 y su entrega correctiva remota están cerradas. La [revisión complementaria](revision-final-pre-h08.md) registra dos casos adicionales que deben resolverse antes de aceptar la base funcional completa para [H08 — Preparación para producción](../h08-preparacion-produccion.md).
+REV-01–REV-03 y su entrega correctiva remota están cerradas. Los dos casos de la [revisión complementaria](revision-final-pre-h08.md) están [corregidos y verificados en Docker](h07-cierre-complementario.md); su publicación adicional se registra por separado antes de consolidar la base de [H08](../h08-preparacion-produccion.md).
 
 El piloto real sigue condicionado a RLS/privilegios/sesiones, Storage, respaldos/restauración, monitoreo, configuración productiva, canal WhatsApp y aceptación del equipo. Esta corrección no cierra esos requisitos.

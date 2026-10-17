@@ -9,7 +9,13 @@ import type {
 
 export interface ExportRun {
   controller: AbortController;
+  discarded: boolean;
   identity: string;
+}
+export interface ExportFeedback {
+  identity: string;
+  progress: string;
+  error: string;
 }
 export interface FetchReportPagesOptions {
   receipt: ExportReceipt;

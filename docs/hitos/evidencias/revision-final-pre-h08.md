@@ -1,5 +1,7 @@
 # Revisión complementaria antes de H08
 
+**Seguimiento:** REV-04–REV-05 están corregidas y verificadas localmente en el [cierre complementario](h07-cierre-complementario.md). El resultado y las reproducciones siguientes describen la revisión previa; la publicación adicional se registra en el cierre.
+
 **Fecha:** 17 de octubre de 2026. **Código revisado:** `661a6eb457311d2581c13e22da3435f539e6eff0` (cierre documental de la implementación `dc32440`). **Resultado:** las tres correcciones anteriores siguen verificadas; se encontraron dos casos adicionales de consistencia en H07. Se recomienda resolver REV-04 y REV-05 antes de aceptar H07 como completamente conforme y continuar con H08.
 
 Referencias: [requisitos H07](../h07-supervision-reportes.md), [cierre REV-01–REV-03](h07-correcciones.md), [índice](../README.md), [H08](../h08-preparacion-produccion.md), [entornos](../../desarrollo.md) y [reglas](../../../.agents/rules.md).

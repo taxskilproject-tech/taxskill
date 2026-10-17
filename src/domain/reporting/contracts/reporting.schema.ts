@@ -1,8 +1,21 @@
 import { z } from "zod";
 
+export const reportIndicatorSchema = z.enum([
+  "pending",
+  "review",
+  "overdue",
+  "upcoming",
+  "observed",
+]);
+
 export const reportFiltersSchema = z
   .object({
     indicator: z.enum(["review", "overdue", "upcoming", "observed"]).optional(),
+    indicators: z
+      .array(reportIndicatorSchema)
+      .max(5)
+      .default([])
+      .transform((values) => [...new Set(values)].sort()),
     company_id: z.uuid().optional(),
     scope: z.enum(["all", "company", "internal"]).default("all"),
     module: z

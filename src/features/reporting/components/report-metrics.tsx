@@ -5,44 +5,27 @@ import {
   compliance,
   serializeReportFilters,
 } from "@/domain/reporting/utils/report-filters";
+import { addReportIndicator } from "@/domain/reporting/utils/report-indicators";
+import { ActiveReportIndicators } from "@/features/reporting/components/active-report-indicators";
+import { REPORT_INDICATORS } from "@/features/reporting/constants/report-indicators";
 import type { ReportMetricsProps } from "@/features/reporting/types/reporting-ui.types";
 
 export function ReportMetrics({ metrics, filters, mode }: ReportMetricsProps) {
-  const base = { ...filters, page: 1 };
   const destination = mode === "report" ? "/reportes" : "/dashboard";
   const cards = [
     { label: "Empresas activas", value: metrics.companies, href: "/empresas" },
-    {
-      label: "Obligaciones pendientes de aprobación",
-      value: metrics.pending,
-      href: `${destination}?${serializeReportFilters({ ...base, report: "pending" })}`,
-    },
-    {
-      label: "Archivos por revisar",
-      value: metrics.review_files,
-      href: `${destination}?${serializeReportFilters({ ...base, indicator: "review" })}`,
-    },
-    {
-      label: "Archivos observados",
-      value: metrics.observed_files,
-      href: `${destination}?${serializeReportFilters({ ...base, indicator: "observed" })}`,
-    },
-    {
-      label: "Obligaciones con entrega vencida",
-      value: metrics.overdue,
-      href: `${destination}?${serializeReportFilters({ ...base, indicator: "overdue" })}`,
-    },
-    {
-      label: "Obligaciones con próxima entrega",
-      value: metrics.upcoming,
-      href: `${destination}?${serializeReportFilters({ ...base, indicator: "upcoming" })}`,
-    },
+    ...REPORT_INDICATORS.map((item) => ({
+      label: item.label,
+      value: metrics[item.metric],
+      href: `${destination}?${serializeReportFilters(addReportIndicator(filters, item.indicator))}`,
+    })),
   ];
   return (
     <section
       aria-label="Indicadores del alcance consultado"
       className="space-y-4"
     >
+      <ActiveReportIndicators filters={filters} mode={mode} />
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {cards.map((card) => (
           <Link

@@ -125,4 +125,4 @@ Se detectaron afirmaciones desactualizadas en el estado inicial del diseño téc
 4. Implementar H08 comenzando por el inventario y la matriz de acceso, después privilegios/RLS/sesiones y su regresión local; continuar con operación, recuperación y configuración productiva.
 5. Aplicar cambios en Cloud con el alcance autorizado y realizar el piloto cuando las condiciones de H08 estén acreditadas.
 
-**Seguimiento de REV-01–REV-03:** están corregidas y sus escenarios pasaron; su publicación correctiva está verificada. La [revisión complementaria posterior](revision-final-pre-h08.md) registra REV-04–REV-05 pendientes y el dictamen vigente para continuar con H08. El dictamen y los recuentos anteriores describen la revisión inicial.
+**Seguimiento:** REV-01–REV-03 cerradas y publicadas. REV-04–REV-05 de la [revisión complementaria](revision-final-pre-h08.md) están [corregidas y verificadas en Docker](h07-cierre-complementario.md); el cierre registra su publicación adicional y la continuidad de H08. El dictamen y los recuentos anteriores describen la revisión inicial.

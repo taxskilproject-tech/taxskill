@@ -1,8 +1,8 @@
 # Supervisión, búsqueda y reportes · H07
 
-Implementado el 17 de octubre de 2026. Ocho migraciones originales y una migración correctiva adicional publicadas con autorización expresa, con validación en Docker e historia conservada. Local y Cloud tienen 56 migraciones, sin fixtures remotos. Ver [cierre de observaciones](hitos/evidencias/h07-correcciones.md), [hito y requisitos](hitos/h07-supervision-reportes.md), [evidencia inicial](hitos/evidencias/h07.md), [entornos](desarrollo.md) y [H08](hitos/h08-preparacion-produccion.md).
+Implementado el 17 de octubre de 2026. Ocho migraciones originales y la corrección de auditoría publicadas con autorización expresa e historia conservada. La corrección de indicadores deja 57 versiones locales / 56 en Cloud, pendiente de publicación antes de este frontend. Sin fixtures remotos. Ver [cierre anterior](hitos/evidencias/h07-correcciones.md), [cierre complementario](hitos/evidencias/h07-cierre-complementario.md), [hito](hitos/h07-supervision-reportes.md), [evidencia inicial](hitos/evidencias/h07.md), [entornos](desarrollo.md) y [H08](hitos/h08-preparacion-produccion.md).
 
-La [revisión complementaria](hitos/evidencias/revision-final-pre-h08.md) deja dos casos pendientes de los contratos de abajo: navegación de indicadores que sustituye filtros y mensajes de exportación que permanecen al cambiar a un resultado en caché. REV-01–REV-03 conservan su cierre.
+El [cierre complementario](hitos/evidencias/h07-cierre-complementario.md) corrige REV-04–REV-05: indicadores por intersección y feedback de exportación ligado a su identidad. Verifica los casos de la [revisión anterior](hitos/evidencias/revision-final-pre-h08.md) en Docker. Publicación adicional pendiente; REV-01–REV-03 conservan su cierre.
 
 ## Recorridos
 
@@ -17,6 +17,8 @@ La [revisión complementaria](hitos/evidencias/revision-final-pre-h08.md) deja d
 La empresa del selector delimita el contexto; un parámetro URL no otorga autorización. Los filtros y `returnTo` sobreviven al recorrido documento → detalle → listado. Los formularios adicionales no introducen rutas.
 
 Los indicadores abren el listado de su recurso de origen: dashboard mantiene `view`, reportes mantiene `reports.view`. Los permisos de otra empresa o módulo no cambian ese destino ni reducen el universo al pasar entre pantallas.
+
+Cada clic añade un criterio y reinicia únicamente la página. `indicators` es un array JSON de hasta cinco valores (`pending`, `review`, `observed`, `overdue`, `upcoming`) combinados mediante AND, además del reporte y otros filtros. URL: `indicators=pending,review`. Se validan, deduplican y ordenan; el antiguo `indicator` sigue admitido como condición adicional. Los criterios activos se muestran y pueden quitarse individualmente. Las métricas de archivos abren sus obligaciones conservando las unidades. Requiere la migración `20261017175617_h07_indicator_intersections.sql` antes de publicar este frontend.
 
 ## Unidades y fórmulas
 
@@ -53,6 +55,8 @@ Los lotes no constituyen una transacción de lectura única: se informa momento 
 El registro remoto propaga cancelación y limita cada espera normal a 10 segundos. Al interrumpirse, se concilia con el mismo UUID: replay de `start`, cierre si seguía en curso y comprobación adicional si se perdió la respuesta de cierre; cada espera de conciliación admite 3 segundos. Una operación terminal no se sobrescribe. Si no se confirma el resultado, se libera el loading y se informa la referencia para conciliación, sin descargar ni afirmar que cancelar HTTP revirtió el servidor. Si ya se había confirmado `generated`, la interfaz explica que se preparó el archivo pero no se descargó. “Cancelando…” permanece visible y deshabilitado durante este proceso.
 
 Excel usa celdas de texto explícitas para RUC/identificación, números reales para cantidades y fechas civiles con formato. Neutraliza prefijos `= + - @`, variantes de compatibilidad y prefijos invisibles. No genera fórmulas. Incluye detalle y hoja de resumen con alcance, filtros, unidades y agrupaciones.
+
+El progreso/error queda ligado a usuario, estudio, permisos, empresa y filtros. Cambiar esa identidad descarta también mensajes ya finalizados con consultas en caché; volver a la identidad anterior no los recupera. Una operación abortada por cambio de contexto permanece descartada aunque posteriormente vuelva ese contexto; no publica callbacks tardíos ni descarga archivos. La conciliación anterior mantiene los controles bloqueados hasta finalizar.
 
 PDF usa A4 horizontal, cabeceras/pies repetidos, ajuste de texto y continuidad de filas extensas. Incluye filtros, momentos de Lima, conteo y unidades. Las fuentes estándar conservan español; otros caracteres aparecen como `[U+XXXX]`, sin descartarlos silenciosamente. No es un PDF etiquetado para accesibilidad: mejorar ese formato sigue siendo una mejora posterior.
 

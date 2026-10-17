@@ -4,12 +4,14 @@ import type {
   exportReceiptSchema,
   reportFiltersSchema,
   reportGroupSchema,
+  reportIndicatorSchema,
   reportMetricsSchema,
   reportResultSchema,
   reportRowSchema,
 } from "@/domain/reporting/contracts/reporting.schema";
 
 export type ReportFilters = z.infer<typeof reportFiltersSchema>;
+export type ReportIndicator = z.infer<typeof reportIndicatorSchema>;
 export type ReportFilterName = keyof ReportFilters;
 export type ReportRow = z.infer<typeof reportRowSchema>;
 export type ReportGroup = z.infer<typeof reportGroupSchema>;

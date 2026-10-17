@@ -16,7 +16,10 @@ export interface DataScope {
 }
 
 export type QueryFilters = Readonly<
-  Record<string, string | number | boolean | null | undefined>
+  Record<
+    string,
+    string | number | boolean | readonly string[] | null | undefined
+  >
 >;
 
 export type ScopedQueryKey = readonly ["scope", string, string, QueryFilters];

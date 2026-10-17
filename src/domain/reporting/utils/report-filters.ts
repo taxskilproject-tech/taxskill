@@ -6,6 +6,7 @@ export function parseReportFilters(parameters: URLSearchParams): ReportFilters {
   delete raw.returnTo;
   return reportFiltersSchema.parse({
     ...raw,
+    indicators: raw.indicators ? raw.indicators.split(",") : [],
     include_deleted: raw.include_deleted === "true",
   });
 }
@@ -16,6 +17,7 @@ export function serializeReportFilters(filters: ReportFilters): string {
     ([key, value]) =>
       value !== undefined &&
       value !== "" &&
+      (!Array.isArray(value) || value.length > 0) &&
       value !== Reflect.get(defaults, key),
   );
   return new URLSearchParams(
