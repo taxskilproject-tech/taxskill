@@ -43,7 +43,7 @@ Las evidencias históricas mantienen sus fechas y límites; las verificaciones a
 | Vercel | Usuario confirma proyecto importado y gestiona la publicación. Recibió clasificación de las seis variables. Última comprobación del dominio: `DEPLOYMENT_NOT_FOUND`. | Importar `.env.vercel` como Production, asignar Config/Secret según [tabla](../../variables-entorno.md#importación-en-vercel), redesplegar y verificar dominio/endpoints. No se requiere entregar sesión Vercel al agente. |
 | Administrador real | **Creado** Josmel, habilitado/listo. Login confiable y cierre de la sesión de comprobación correctos. Contraseña solo en `.envs/cloud/bootstrap.env`, ignorado. | Aprovisionamiento cerrado. Contacto de Josmel queda vacío por indicación del usuario; se actualizará después en Usuarios. |
 | Respaldo | Usuario eligió **Supabase Storage temporal**, aplazando el proveedor externo. Bucket privado `system-backups` creado, cifrado/copia incremental/descarga/restore comprobados en Docker. Intento real falló por faltar CA Supabase; no hay copia productiva confirmada. | Instalar CA/conexión verificadas, ejecutar copia y ensayo real. No reducir TLS. Custodiar clave fuera del mismo proyecto. [Opciones externas aplazadas](../../respaldos-opciones.md). |
-| n8n/WhatsApp | Usuario autorizó el destino de prueba y las credenciales separadas. Webhook, gateway Supabase y receipt preparados en n8n. Credencial Evolution pendiente de que el usuario introduzca su clave vigente en el formulario privado. | Completar clave, publicar y comprobar el envío autorizado sin inventar obligaciones en Cloud; recorrido de digest/replay/receipt se verifica con datos reales configurados. `sent` no equivale a `delivered`. |
+| n8n/WhatsApp | Cuatro credenciales separadas configuradas; la clave Evolution proporcionada por el usuario se guardó exclusivamente en la credencial privada y quedó vinculada al nodo. Publish bloqueado por revisión automática: confirmación específica solicitada. | Autorizar publicación/activación y comprobar el envío autorizado sin inventar obligaciones en Cloud; recorrido de digest/replay/receipt con datos reales configurados. `sent` no equivale a `delivered`. |
 | Programación y monitor | Implementados, sin habilitar automatización productiva. Solo permanece el cleanup que ya existía. | Después de copia/ensayo y canal correctos, habilitar programación y comprobar horarios Lima, progreso y recepción de alertas por el responsable real. |
 | Piloto y aceptación | Sin estudio/usuarios autorizados ni aplicación publicada; no hay piloto productivo ni medición de capacidad objetivo. | Producto configura empresas/reglas/responsables, ejecuta recorridos por perfil, revisión móvil efectiva y acepta resultados/objetivos de recuperación. |
 
@@ -52,7 +52,7 @@ No se necesita volver a implementar H01–H07 para resolver estas dependencias. 
 ## Continuación segura
 
 1. Auth/Edge y administrador real ya están disponibles. Usuario completa variables y redespliegue Vercel.
-2. Completar clave Evolution en el formulario n8n y CA/conexión del ejecutor de respaldo sin enviar secretos por chat.
+2. Resolver la confirmación de publicación n8n y completar CA/conexión del ejecutor de respaldo. La clave Evolution ya está guardada y no se versiona.
 3. Completar copia temporal en Storage y ensayo, publicar el canal y verificar los contratos con datos autorizados. La independencia externa queda aplazada por elección del usuario.
 4. Activar jobs/monitor, ejecutar el piloto y registrar aceptación de producto y versión publicada.
 
@@ -63,3 +63,7 @@ Todos los datos sintéticos, SQL de prueba y suites de integración continúan e
 La confirmación del usuario resolvió los rechazos previos de Auth/Edge; no se eludieron. Se verificó el ingreso real, admisión del hook de contraseña y salida de la sesión del operador, sin almacenar JWT. La copia en Storage del mismo proyecto es una decisión provisional explícita: no se presenta como independencia frente a pérdida del proyecto.
 
 Regresión ampliada: **247 pruebas en 31 archivos**, TypeScript, ESLint y arquitectura aprobados. Ensayo de copia local más Storage, reutilización incremental, descarga completa y restore aislado aprobado en **151,40 s**; 64 migraciones, 13 huellas históricas, un objeto real de 883 bytes y sesiones/jobs inactivos tras recuperar. No es una medición de capacidad productiva.
+
+### Corrección del instalador Vercel
+
+El deployment Vercel observado utilizaba Yarn global 1.22.19 y fallaba contra `engines.yarn=1.22.22`. Se añadió `vercel.json` con instalación `corepack yarn install --frozen-lockfile` y compilación `corepack yarn build`, usando el `packageManager` ya fijado. Verificación local: Corepack selecciona 1.22.22, instalación offline/frozen correcta y build de producción aprobado en 34,19 s. No se alteró `yarn.lock`, no se ignoraron engines ni se añadieron variables. Es necesario desplegar el commit que incluye esta corrección.

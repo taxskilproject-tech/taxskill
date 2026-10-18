@@ -14,6 +14,12 @@ H01 y H02 aportan la base, acceso y administración. H03 añade el primer recorr
 
 Los tipos de Node corresponden a la rama 22. jsdom está fijado en 26.1.0 para funcionar con el Node instalado; no se ignoraron comprobaciones de engine.
 
+### Versión de Yarn en Vercel
+
+`vercel.json` ejecuta `corepack yarn install --frozen-lockfile` y `corepack yarn build`. Corepack utiliza `packageManager: yarn@1.22.22`, también fijado en `engines.yarn`; así el Yarn global 1.22.19 de la imagen Vercel no ejecuta la instalación del proyecto. La configuración del repositorio define ambos comandos, sin modificar el lockfile ni ignorar engines. [Configuración de comandos Vercel](https://vercel.com/docs/project-configuration/vercel-json).
+
+Después de publicar el commit, desplegar esa revisión; reintentar únicamente el deployment anterior conserva su configuración anterior. No requiere nuevas variables ni cambiar la clasificación Config/Secret de las seis variables existentes.
+
 ## 2. Incorporación de un desarrollador
 
 Desde la raíz del repositorio:
