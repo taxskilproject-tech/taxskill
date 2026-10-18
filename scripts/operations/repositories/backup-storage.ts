@@ -12,10 +12,10 @@ import {
   encryptBackup,
 } from "../utils/backup-crypto";
 import {
-  backupObjectKey,
-  independentObjectIndex,
-  publishBackupObject,
-} from "./independent-backup";
+  destinationObjectIndex,
+  destinationObjectPath,
+  publishDestinationObject,
+} from "./backup-destination";
 
 async function copyVersion(
   context: BackupContext,
@@ -34,10 +34,9 @@ async function copyVersion(
     sha256: version.sha256,
     mime: version.validated_mime,
   };
-  const storedSize =
-    context.mode === "cloud"
-      ? existing.get(backupObjectKey(context.key, version.sha256))
-      : undefined;
+  const storedSize = existing.size
+    ? existing.get(destinationObjectPath(context, version.sha256))
+    : undefined;
   if (storedSize === version.validated_bytes + BACKUP_ENVELOPE_BYTES)
     return object;
   if (storedSize !== undefined) throw new Error("INTEGRITY_FAILED");
@@ -52,12 +51,16 @@ async function copyVersion(
     bytes.length !== version.validated_bytes
   )
     throw new Error("INTEGRITY_FAILED");
-  if (!existsSync(join(directory, file)))
+  if (!existsSync(join(directory, file))) {
     writeFileSync(join(directory, file), encryptBackup(bytes, context.key), {
       flag: "wx",
     });
-  if (context.mode === "cloud")
-    publishBackupObject(join(directory, file), context.key, version.sha256);
+    await publishDestinationObject(
+      context,
+      join(directory, file),
+      version.sha256,
+    );
+  }
   return object;
 }
 export async function copyBackupObjects(
@@ -65,10 +68,7 @@ export async function copyBackupObjects(
   directory: string,
 ): Promise<BackupObject[]> {
   const objects: BackupObject[] = [];
-  const existing =
-    context.mode === "cloud"
-      ? independentObjectIndex(context.key)
-      : new Map<string, number>();
+  const existing = await destinationObjectIndex(context);
   let cursor: string | undefined;
   mkdirSync(join(directory, "objects"), { recursive: true });
   while (true) {

@@ -19,6 +19,7 @@ export const recoveryManifestSchema = z.object({
   id: z.uuid(),
   created_at: z.iso.datetime(),
   source: z.enum(["local", "gzwrqvqofcrdjvzoblaz"]),
+  backup_destination: z.enum(["local", "s3", "supabase-storage"]).optional(),
   database_sha256: hashSchema,
   migrations: z.array(z.string().regex(/^\d{14}$/)).min(57),
   objects: z.array(backupObjectSchema),

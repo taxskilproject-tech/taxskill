@@ -3,12 +3,15 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { recoveryManifestSchema } from "../contracts/recovery.schema";
+import {
+  backupDestination,
+  publishDestinationBackup,
+} from "../repositories/backup-destination";
 import { copyBackupObjects } from "../repositories/backup-storage";
 import {
   databaseMigrations,
   dumpDatabase,
 } from "../repositories/database-backup";
-import { publishIndependentBackup } from "../repositories/independent-backup";
 import type { BackupContext } from "../types/recovery.types";
 import { backupHash, encryptBackup } from "../utils/backup-crypto";
 
@@ -37,6 +40,7 @@ export async function createBackup(context: BackupContext): Promise<string> {
       id,
       created_at: new Date().toISOString(),
       source: context.mode === "local" ? "local" : "gzwrqvqofcrdjvzoblaz",
+      backup_destination: backupDestination(context),
       database_sha256: backupHash(database),
       migrations,
       objects,
@@ -47,7 +51,7 @@ export async function createBackup(context: BackupContext): Promise<string> {
       encryptBackup(manifestBytes, context.key),
       { flag: "wx" },
     );
-    if (context.mode === "cloud") publishIndependentBackup(directory, id);
+    await publishDestinationBackup(context, directory, id);
     const completed = await context.client.rpc("h08_record_recovery", {
       p_id: id,
       p_kind: "backup",

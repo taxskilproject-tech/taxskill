@@ -2,9 +2,9 @@
 
 Consultar [seguridad](seguridad-produccion.md), [desarrollo local](desarrollo.md), [H08](hitos/h08-preparacion-produccion.md) y [evidencias](hitos/evidencias/h08.md). Este runbook entrega procedimientos; las dependencias externas sin comprobar mantienen H08 abierto.
 
-La [organización de variables y exportación Vercel](variables-entorno.md) reemplaza los antiguos `.env` por hito. El webhook productivo confirmado es `https://n8n-n8n.ricijy.easypanel.host/webhook/taxskill-whatsapp-digest`. El 18/10/2026 se instalaron cinco variables Edge y se contrastaron sus huellas con `.envs/cloud/edge.env`; falta configurar las credenciales coincidentes en n8n y desplegar la función de notificaciones. Para elegir destino independiente, consultar [comparación económica B2/R2](respaldos-opciones.md).
+La [organización de variables y exportación Vercel](variables-entorno.md) reemplaza los antiguos `.env` por hito. El webhook productivo confirmado es `https://n8n-n8n.ricijy.easypanel.host/webhook/taxskill-whatsapp-digest`. Variables Edge instaladas, huellas contrastadas y ambas funciones publicadas; credenciales separadas n8n en configuración. Respaldo temporal en Supabase Storage por decisión del usuario; las [opciones externas](respaldos-opciones.md) se conservan para después.
 
-**Publicación comprobada:** las siete migraciones H08 ya están en Cloud; 64 versiones, 29 tablas públicas con RLS, 13 huellas históricas idénticas y lint remoto sin errores. No se crearon usuarios, datos ficticios ni jobs. El dominio Vercel devuelve `404 DEPLOYMENT_NOT_FOUND`; el navegador disponible solicita login para acceder al proyecto. Auth y despliegue Edge esperan autorización específica tras rechazo de la revisión automática. Ver [estado y dependencias](hitos/evidencias/cierre-hitos.md).
+**Publicación comprobada:** siete migraciones H08 en Cloud; 64 versiones, 29 tablas públicas con RLS, 13 huellas históricas idénticas durante la publicación y lint remoto sin errores. Con autorización posterior se aplicó Auth, se publicaron documentos v5/notificaciones v1 y se creó al administrador real Josmel. Login confiable y rechazo anónimo Edge comprobados. No se crearon datos ficticios ni jobs nuevos. El usuario gestiona Vercel y recibió la [clasificación Config/Secret](variables-entorno.md#importación-en-vercel); despliegue efectivo pendiente de verificar. Ver [estado y dependencias](hitos/evidencias/cierre-hitos.md).
 
 ## Recursos y configuración
 
@@ -18,6 +18,7 @@ Destino real Supabase: `gzwrqvqofcrdjvzoblaz`. Dominio comunicado: `https://taxs
 | Edge notificaciones | `APP_BASE_URL`, `H06_DISPATCH_SECRET`, `N8N_WEBHOOK_URL`, `N8N_WEBHOOK_TOKEN`. |
 | n8n | Credenciales de entrada, RPC de servicio, Evolution y receipts, separadas. Remitente en Evolution. |
 | Copias independientes | `SUPABASE_SECRET_KEY`, `H08_DATABASE_URL`, `H08_DATABASE_CA_CERT`, `H08_BACKUP_S3_URI`, `H08_BACKUP_ENCRYPTION_KEY` e identidad AWS limitada al prefijo autorizado. |
+| Copia temporal Supabase Storage | `H08_BACKUP_DESTINATION=supabase-storage`, servicio Cloud, conexión DB/CA y clave de cifrado. No requiere AWS ni `H08_BACKUP_S3_URI`. |
 | Monitor | URL del entorno, servicio privado y `H08_OPERATION_ORGANIZATION_ID`. |
 
 No compartir valores por chat, Git o capturas. Guardar cifrado y clave de recuperación en custodias distintas. Los contactos destinatarios ya se configuran en **Usuarios → detalle → Contacto para resumen WhatsApp**; no se crea otro directorio ni se incrustan en el workflow. La clave Evolution compartida anteriormente debe sustituirse en las credenciales de n8n.
@@ -38,6 +39,8 @@ No hay una migración que active jobs o proveedores. `h08_schedule_generation(tr
 
 ## Respaldo DB y archivos
 
+**Destino temporal confirmado:** Supabase Storage del mismo proyecto, bucket privado `system-backups`. No equivale a una copia independiente. La elección aplaza el proveedor externo, conservando cifrado y verificación de restauración. El bucket existe; el primer intento real falló al verificar TLS por faltar la CA Supabase. Se mantuvo `verify-full` y el registro operativo quedó fallido, sin marcar éxito ni activar jobs.
+
 Ejecutor independiente con Node 22, Yarn 1.22.22, Docker y AWS CLI. PostgreSQL se ejecuta con imagen compatible 17.11.0.003. Usar conexión directa Supabase o pooler **session** puerto 5432, del proyecto exacto; no transaction pooler 6543. Descargar la CA desde la configuración del proyecto, guardarla como archivo y usar `H08_DATABASE_CA_CERT`: el contenedor monta la CA de solo lectura y exige TLS `verify-full`.
 
 ```powershell
@@ -55,6 +58,20 @@ Cada archivo/manifiesto/DB se cifra con AES-256-GCM, IV aleatorio y tag autentic
 En Cloud, los objetos se conservan por hash y versión de clave: solo los nuevos requieren transferencia. Una reutilización comprueba existencia/tamaño cifrado; la restauración descifra y verifica el hash íntegro. El dump representa su snapshot PostgreSQL; pueden copiarse objetos confirmados durante el inventario posterior además de los de ese snapshot. Los finales son inmutables: no autorizar purgas físicas durante copias. No ejecutar migraciones en paralelo a un respaldo.
 
 S3 utiliza prefijo `runs/<id>/` para dump/manifiesto y `objects/<key-id>/<sha256>.enc` para archivos compartidos. Cifrado adicional S3 SSE y cuenta/bucket independiente del proyecto Supabase. El registro de éxito se escribe después de terminar la copia externa. Conservar versionado/recuperación del bucket y acceso del escritor sin permiso de borrado cuando sea posible.
+
+Con `supabase-storage` se usan esos mismos prefijos dentro de `system-backups`, servicio únicamente, `upsert:false` y cifrado AES-256-GCM local antes de subir. El bucket admite objetos cifrados `application/octet-stream` hasta 50 MB; si DB u objeto supera el límite efectivo, la copia falla explícitamente y debe ampliarse el plan o adaptar el particionado. No se presenta una copia parcial como correcta. No borrar el bucket ni aplicar caducidad a objetos compartidos por hash.
+
+Guardar la CA descargada desde **Supabase → Database → Settings → SSL Configuration** y completar conexión session/directa y ruta CA en la configuración privada. El cliente acepta `postgres` y la identidad temporal `cli_login_postgres` del CLI, únicamente para el proyecto autorizado, puerto 5432 y base `postgres`; una credencial temporal no sustituye la identidad de una programación permanente. [Verificación SSL oficial](https://supabase.com/docs/guides/platform/ssl-enforcement).
+
+```powershell
+# Variables explícitas del entorno real, sin cambiar .env.local (Docker).
+node --env-file=.envs/cloud/application.env --env-file=.envs/cloud/recovery.env --import tsx scripts/backup.ts --cloud
+
+# Descargar DB, manifiesto y objetos; verifica tag, tamaño y SHA-256.
+node --env-file=.envs/cloud/application.env --env-file=.envs/cloud/recovery.env --import tsx scripts/fetch-backup.ts <uuid-del-respaldo>
+```
+
+`backup:fetch` no exige una conexión DB disponible: descarga vía Storage y prepara una carpeta local completa para `restore:local`. Rechaza UUID, origen, manifiesto, clave o integridad incorrectos y no sobrescribe una descarga existente. El workflow de copias omite AWS/OIDC con `H08_BACKUP_DESTINATION=supabase-storage`; continúa desactivado hasta configurar secretos/CA y verificar la copia real.
 
 Objetivos iniciales: diario, RPO 24 h, RTO 8 h, retención 30 días. Configurar retención de `runs/` según política real y custodiar sus claves. **No aplicar expiración de 30 días a objetos compartidos**: una versión antigua puede seguir referenciada por un manifiesto vigente. Hasta implementar y verificar un recolector que contraste manifiestos retenidos, conservar `objects/` sin expiración automática. Rotar clave crea otro prefijo; conservar claves anteriores mientras existan copias dependientes. Destino, coste, Object Lock/versionado, retención efectiva y eliminación eventual requieren validación del operador; no se dan por configurados con este documento.
 

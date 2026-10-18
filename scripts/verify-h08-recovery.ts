@@ -13,8 +13,11 @@ import {
   startRecoveryProject,
 } from "./operations/repositories/recovery-project";
 import { restoreQuery } from "./operations/repositories/restore-database";
+import { storageBackupIndex } from "./operations/repositories/supabase-backup";
 import { createBackup } from "./operations/services/create-backup";
+import { fetchStorageBackup } from "./operations/services/fetch-storage-backup";
 import { restoreBackup } from "./operations/services/restore-backup";
+import type { BackupContext } from "./operations/types/recovery.types";
 import { backupHash } from "./operations/utils/backup-crypto";
 import { backupContext } from "./operations/utils/backup-environment";
 import { historyFingerprintSql } from "./operations/utils/history-fingerprint";
@@ -56,6 +59,10 @@ async function main() {
       client: fixture.admin,
       container: sourceDatabase.container,
     };
+    const storageContext: BackupContext = {
+      ...context,
+      destination: "supabase-storage",
+    };
     const before = databaseProcess(
       "local",
       "psql",
@@ -66,7 +73,16 @@ async function main() {
       .toString("utf8")
       .trim();
     const backupStart = performance.now();
-    const directory = await createBackup(context);
+    await createBackup(context);
+    const storedDirectory = await createBackup(storageContext);
+    const storageRunId = storedDirectory.split(/[\\/]/).at(-1);
+    if (!storageRunId) throw new Error("Falta el identificador del respaldo.");
+    const firstIndex = await storageBackupIndex(storageContext);
+    await createBackup(storageContext);
+    const secondIndex = await storageBackupIndex(storageContext);
+    if (JSON.stringify([...firstIndex]) !== JSON.stringify([...secondIndex]))
+      throw new Error("La copia incremental duplicó objetos compartidos.");
+    const directory = await fetchStorageBackup(storageContext, storageRunId);
     await fixture.client.auth.signOut({ scope: "local" });
     const backupMs = performance.now() - backupStart;
     const restoreStart = performance.now();
@@ -143,6 +159,8 @@ async function main() {
     await client.auth.signOut({ scope: "local" });
     const evidence = {
       passed: true,
+      storage_backup_fetched: true,
+      storage_incremental: true,
       target: "Dos proyectos Docker aislados",
       backup_ms: backupMs,
       recovery_ms: performance.now() - restoreStart,

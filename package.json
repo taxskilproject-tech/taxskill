@@ -51,6 +51,7 @@
     "test:h08:live": "tsx scripts/verify-h08.ts",
     "backup:local": "tsx scripts/backup.ts --local",
     "backup:cloud": "tsx scripts/backup.ts --cloud",
+    "backup:fetch": "tsx scripts/fetch-backup.ts",
     "restore:local": "tsx scripts/restore-local.ts",
     "test:h08:recovery": "tsx scripts/verify-h08-recovery.ts",
     "ops:check": "tsx scripts/check-operations.ts",

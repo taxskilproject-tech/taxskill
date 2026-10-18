@@ -8,6 +8,12 @@ import type {
 import type { recoveryManifestSchema } from "../contracts/recovery.schema";
 
 export type BackupMode = "local" | "cloud";
+export type BackupDestination = "local" | "s3" | "supabase-storage";
+export interface StoredBackupObject {
+  name: string;
+  metadata?: unknown;
+}
+export type BackupIndexEntry = readonly [string, number];
 export type RecoveryManifest = z.infer<typeof recoveryManifestSchema>;
 export type BackupObject = RecoveryManifest["objects"][number];
 export type BackupVersion = Pick<
@@ -20,6 +26,7 @@ export type BackupVersion = Pick<
 >;
 export interface BackupContext {
   mode: BackupMode;
+  destination?: BackupDestination;
   key: string;
   client: SupabaseClient<Database>;
   directory: string;

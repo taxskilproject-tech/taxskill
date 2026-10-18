@@ -16,10 +16,12 @@ Organización consolidada el 18 de octubre de 2026 por indicación del usuario. 
 │   └── recovery.env                  # Clave de copias del ensayo local
 └── cloud/
     ├── application.env               # URL/credenciales/HMAC de la app real
-    └── edge.env                      # Mantenimiento y transporte productivos
+    ├── bootstrap.env                 # Administrador real y contraseña privada
+    ├── edge.env                      # Mantenimiento y transporte productivos
+    └── recovery.env                  # Destino y clave privada del respaldo real
 ```
 
-El bootstrap real usa `.envs/cloud/bootstrap.env` cuando el operador lo prepare; no se genera con una cuenta ficticia. No se creó un archivo de backup productivo con credenciales vacías: se prepara al elegir proveedor/destino. Los nombres de variables `H03_`, `H06_`, `H08_` se conservan donde forman parte de contratos ya implementados; sus archivos ya no se organizan por hito.
+El bootstrap real usa `.envs/cloud/bootstrap.env`: Josmel fue aprovisionado con la identidad indicada por el usuario, contraseña privada y sin correo de confirmación. `.envs/cloud/recovery.env` conserva una clave propia estable y `H08_BACKUP_DESTINATION=supabase-storage`, destino temporal elegido por el usuario. Faltan conexión permanente/CA para automatizar la copia real. Los nombres de variables `H03_`, `H06_`, `H08_` se conservan donde forman parte de contratos ya implementados; sus archivos ya no se organizan por hito.
 
 Next.js carga `.env.local` para desarrollo. `.env.vercel` y los archivos de `.envs/` no se cargan automáticamente: así una exportación productiva no cambia el destino Docker de las pruebas. Los scripts usan rutas compartidas en `scripts/constants/environment-files.ts`.
 
@@ -27,16 +29,16 @@ Next.js carga `.env.local` para desarrollo. `.env.vercel` y los archivos de `.en
 
 El archivo **`.env.vercel` de la raíz** contiene seis valores completos de la aplicación real:
 
-| Variable | Uso |
-|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | URL Cloud del proyecto real. |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Clave pública de ese mismo proyecto. |
-| `SUPABASE_SECRET_KEY` | Exclusivamente servidor/Auth Admin. |
-| `IDEMPOTENCY_HMAC_KEY` | Clave existente de solicitudes administrativas; se conserva. |
-| `APP_BASE_URL` | `https://taxskill.vercel.app`. |
-| `N8N_RECEIPT_TOKEN` | Autenticación del receptor de resultados. |
+| Variable | Tipo en Vercel | Uso |
+|---|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | **Config** | URL Cloud del proyecto real. |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | **Config** | Clave publicable de ese mismo proyecto; se usa en navegador. |
+| `SUPABASE_SECRET_KEY` | **Secret** | Exclusivamente servidor/Auth Admin. |
+| `IDEMPOTENCY_HMAC_KEY` | **Secret** | Clave existente de solicitudes administrativas; se conserva. |
+| `APP_BASE_URL` | **Config** | `https://taxskill.vercel.app`. |
+| `N8N_RECEIPT_TOKEN` | **Secret** | Autenticación del receptor de resultados. |
 
-En el proyecto Vercel, abrir **Settings → Environment Variables**, importar el contenido/archivo `.env.vercel` mediante la opción disponible y seleccionar **Production**. Conservar como secretas las tres variables privadas. Hacer un nuevo deployment para aplicar los valores; cambiar variables no actualiza deployments anteriores. [Referencia de Vercel](https://vercel.com/docs/environment-variables).
+En el proyecto Vercel, abrir **Settings → Environment Variables**, importar el contenido/archivo `.env.vercel` mediante la opción disponible y seleccionar **Production**. Comprobar el tipo de cada fila según la tabla; la importación dotenv no codifica la clasificación. Hacer un nuevo deployment para aplicar los valores; cambiar variables no actualiza deployments anteriores. Config conserva los valores legibles para miembros autorizados; Secret los mantiene ocultos tras guardar. [Tipos Config/Secret de Vercel](https://vercel.com/docs/environment-variables/sensitive-environment-variables).
 
 No utilizar estos valores productivos en previews de pruebas. El archivo contiene secretos reales y permanece ignorado por Git; se importa en la configuración privada del proyecto, sin subirlo como archivo público del sitio. Para regenerarlo después de una modificación deliberada de configuración privada:
 

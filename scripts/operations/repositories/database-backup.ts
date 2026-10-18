@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 import { z } from "zod";
 
 import type { BackupMode } from "../types/recovery.types";
+import { isAuthorizedBackupDatabase } from "../utils/backup-database-url";
 
 const POSTGRES_IMAGE = "public.ecr.aws/supabase/postgres:17.11.0.003";
 const MAX_DUMP_BYTES = 512 * 1024 * 1024;
@@ -35,18 +36,7 @@ export function databaseProcess(
   ];
   if (mode === "cloud") {
     const url = new URL(process.env.H08_DATABASE_URL ?? "");
-    const direct =
-      url.hostname === "db.gzwrqvqofcrdjvzoblaz.supabase.co" &&
-      url.username === "postgres";
-    const pooler =
-      url.hostname.endsWith(".pooler.supabase.com") &&
-      url.username === "postgres.gzwrqvqofcrdjvzoblaz";
-    if (
-      !["postgres:", "postgresql:"].includes(url.protocol) ||
-      !(direct || pooler) ||
-      (url.port && url.port !== "5432") ||
-      url.pathname !== "/postgres"
-    )
+    if (!isAuthorizedBackupDatabase(url))
       throw new Error("Conexión PostgreSQL productiva no autorizada.");
     const certificate = process.env.H08_DATABASE_CA_CERT;
     if (!certificate || !existsSync(certificate))

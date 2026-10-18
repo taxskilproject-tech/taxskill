@@ -26,6 +26,7 @@ jobs:
       - run: corepack enable && corepack prepare yarn@1.22.22 --activate
       - run: yarn install --frozen-lockfile
       - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        if: vars.H08_BACKUP_DESTINATION != 'supabase-storage'
         with:
           role-to-assume: ${{ vars.H08_BACKUP_AWS_ROLE }}
           aws-region: ${{ vars.H08_BACKUP_AWS_REGION }}
@@ -42,4 +43,5 @@ jobs:
           H08_DATABASE_URL: ${{ secrets.H08_DATABASE_URL }}
           H08_DATABASE_CA_CERT: ${{ runner.temp }}/taxskill-ca.crt
           H08_BACKUP_S3_URI: ${{ vars.H08_BACKUP_S3_URI }}
+          H08_BACKUP_DESTINATION: ${{ vars.H08_BACKUP_DESTINATION || 's3' }}
           H08_BACKUP_ENCRYPTION_KEY: ${{ secrets.H08_BACKUP_ENCRYPTION_KEY }}

@@ -21,15 +21,15 @@ Los casilleros de aceptación formal que permanecen en H02–H05 corresponden a 
 
 ## Verificación consolidada
 
-- `yarn verify`: TypeScript, ESLint, arquitectura y **232 pruebas en 29 archivos** aprobados.
-- `yarn build`: build de producción correcto, 19 entradas estáticas, Proxy y cuatro API routes; última ejecución en **27,47 s**.
+- `yarn verify`: TypeScript, ESLint, arquitectura y **247 pruebas en 31 archivos** aprobados; última ejecución en 117,26 s.
+- `yarn build`: build de producción correcto, 19 entradas estáticas, Proxy y cuatro API routes; última ejecución en **19,26 s**.
 - `yarn check:bundle`: secretos administrativos/HMAC/integraciones ausentes del bundle público.
 - Docker limpio: **64 migraciones**, siete suites SQL y **78 casos pgTAP**; H08 live **28 comprobaciones** y H03 live **59**.
 - Recuperación Docker aislada: DB cifrada, relaciones, **13 huellas históricas**, objeto real de 883 bytes, sesión previa revocada y login nuevo correcto. No acredita el volumen ni RTO productivo.
 - Cloud: **64 migraciones**, **29 tablas públicas con RLS**, lint sin errores y **13 huellas antes/después idénticas**. Cero usuarios, organizaciones, perfiles y versiones antes/después; ningún fixture remoto.
 - Cinco variables Edge instaladas y contrastadas por huella; cleanup previo conservado. No se activaron jobs de generación o WhatsApp.
 - Panel operativo comprobado en escritorio contra Docker, incluidos actualización y alertas. [Captura](capturas/h08/operacion-escritorio.png). La capacidad de viewport del navegador no aplicó el tamaño móvil: validación móvil H08 pendiente.
-- Revisión final del repositorio: 634 archivos candidatos contrastados con 20 valores secretos configurados, sin coincidencias; 483 destinos de enlaces Markdown locales comprobados, sin archivos ausentes. No acredita cada ancla ni los enlaces externos. `.env.vercel`, `.envs/` y resultados privados permanecen ignorados por Git.
+- Revisión final del repositorio: 643 archivos candidatos contrastados con 22 valores secretos configurados, sin coincidencias; 486 destinos de enlaces Markdown locales comprobados, sin archivos ausentes. No acredita cada ancla ni los enlaces externos. `.env.vercel`, `.envs/` y resultados privados permanecen ignorados por Git.
 
 Las evidencias históricas mantienen sus fechas y límites; las verificaciones anteriores no se atribuyen todas a una nueva ejecución en esta revisión.
 
@@ -38,12 +38,12 @@ Las evidencias históricas mantienen sus fechas y límites; las verificaciones a
 
 | Pendiente | Estado concreto | Responsable / condición para cerrarlo |
 |---|---|---|
-| Auth Cloud | Configuración preparada y diff revisado; **no aplicada**. La revisión automática exige autorización específica para dominio, registro, contraseña, confirmación y hooks. | Usuario autoriza el cambio solicitado; agente aplica el subconjunto y verifica configuración efectiva. |
-| Edge Cloud | Documentos existe como versión 4 con autenticación propia; notificaciones aún no está publicada. Despliegue bloqueado por revisión automática por `verify_jwt=false`. | Usuario autoriza las dos funciones con autenticación propia; agente publica, conserva secretos y verifica inventario. |
-| Vercel | `https://taxskill.vercel.app/` devuelve **404 `DEPLOYMENT_NOT_FOUND`**. El proyecto requiere login en el navegador disponible. | Usuario habilita sesión/acceso al proyecto; importar `.env.vercel`, publicar commit compatible y comprobar dominio, sesión y endpoints. No compartir claves por chat. |
-| Administrador real | Cloud no tiene usuarios ni estudio. No se dispone de nombre/correo del administrador real. | Usuario proporciona identidad y nombre del estudio; contraseña mediante configuración privada. Bootstrap una vez y comprobar su cierre. |
-| Respaldo independiente | No hay bucket elegido/configurado, conexión DB/CA ni custodia externa de clave. Implementación actual usa AWS S3; B2/R2 requieren adaptar endpoint/autenticación al elegir proveedor. | Usuario indica destino/cuenta/bucket; configurar identidad mínima, cifrado/retención, ejecutar copia externa y restaurarla en Docker aislado. [Opciones](../../respaldos-opciones.md). |
-| n8n/WhatsApp | Workflow y Production URL disponibles; tokens por instalar en las credenciales n8n, activación y prueba real pendientes. No se ha indicado destinatario autorizado. | Configurar cuatro credenciales separadas y número autorizado en Usuarios; comprobar envío, replay y receipt. `sent` no equivale a `delivered`. |
+| Auth Cloud | **Aplicado y comprobado** tras autorización: registro desactivado, contraseñas solo administrativas, sin confirmación por correo y hooks activos. Diff declarado restante: cero. | Cerrado el ajuste; nueve opciones remotas ajenas conservadas. Login real de Josmel admitido por el hook. |
+| Edge Cloud | **Publicadas**: documentos v5 y notificaciones v1, con autenticación propia. Llamadas anónimas devuelven 401. | Despliegue cerrado; recorridos con documentos reales corresponden al piloto. |
+| Vercel | Usuario confirma proyecto importado y gestiona la publicación. Recibió clasificación de las seis variables. Última comprobación del dominio: `DEPLOYMENT_NOT_FOUND`. | Importar `.env.vercel` como Production, asignar Config/Secret según [tabla](../../variables-entorno.md#importación-en-vercel), redesplegar y verificar dominio/endpoints. No se requiere entregar sesión Vercel al agente. |
+| Administrador real | **Creado** Josmel, habilitado/listo. Login confiable y cierre de la sesión de comprobación correctos. Contraseña solo en `.envs/cloud/bootstrap.env`, ignorado. | Aprovisionamiento cerrado. Contacto de Josmel queda vacío por indicación del usuario; se actualizará después en Usuarios. |
+| Respaldo | Usuario eligió **Supabase Storage temporal**, aplazando el proveedor externo. Bucket privado `system-backups` creado, cifrado/copia incremental/descarga/restore comprobados en Docker. Intento real falló por faltar CA Supabase; no hay copia productiva confirmada. | Instalar CA/conexión verificadas, ejecutar copia y ensayo real. No reducir TLS. Custodiar clave fuera del mismo proyecto. [Opciones externas aplazadas](../../respaldos-opciones.md). |
+| n8n/WhatsApp | Usuario autorizó el destino de prueba y las credenciales separadas. Webhook, gateway Supabase y receipt preparados en n8n. Credencial Evolution pendiente de que el usuario introduzca su clave vigente en el formulario privado. | Completar clave, publicar y comprobar el envío autorizado sin inventar obligaciones en Cloud; recorrido de digest/replay/receipt se verifica con datos reales configurados. `sent` no equivale a `delivered`. |
 | Programación y monitor | Implementados, sin habilitar automatización productiva. Solo permanece el cleanup que ya existía. | Después de copia/ensayo y canal correctos, habilitar programación y comprobar horarios Lima, progreso y recepción de alertas por el responsable real. |
 | Piloto y aceptación | Sin estudio/usuarios autorizados ni aplicación publicada; no hay piloto productivo ni medición de capacidad objetivo. | Producto configura empresas/reglas/responsables, ejecuta recorridos por perfil, revisión móvil efectiva y acepta resultados/objetivos de recuperación. |
 
@@ -51,9 +51,15 @@ No se necesita volver a implementar H01–H07 para resolver estas dependencias. 
 
 ## Continuación segura
 
-1. Resolver las autorizaciones Auth/Edge ya solicitadas y el acceso Vercel. No repetir operaciones rechazadas por otra vía.
-2. Configurar identidad real y recursos privados sin enviar contraseñas por chat.
-3. Completar backup independiente y ensayo, publicar la aplicación/canal y verificar los contratos con datos autorizados.
+1. Auth/Edge y administrador real ya están disponibles. Usuario completa variables y redespliegue Vercel.
+2. Completar clave Evolution en el formulario n8n y CA/conexión del ejecutor de respaldo sin enviar secretos por chat.
+3. Completar copia temporal en Storage y ensayo, publicar el canal y verificar los contratos con datos autorizados. La independencia externa queda aplazada por elección del usuario.
 4. Activar jobs/monitor, ejecutar el piloto y registrar aceptación de producto y versión publicada.
 
-Todos los datos sintéticos, SQL de prueba y suites de integración continúan exclusivamente en Docker. Los controles remotos de esta revisión fueron publicación autorizada de migraciones, configuración de secretos e inventarios/lint; no hubo seeds, mensajes reales ni purgas de datos.
+Todos los datos sintéticos, SQL de prueba y suites de integración continúan exclusivamente en Docker. En Cloud se publicaron migraciones/configuración/funciones autorizadas y se creó el administrador real. El respaldo real fallido permanece registrado; no hubo seeds, mensajes ni purgas de datos.
+
+## Continuación autorizada del 18 de octubre
+
+La confirmación del usuario resolvió los rechazos previos de Auth/Edge; no se eludieron. Se verificó el ingreso real, admisión del hook de contraseña y salida de la sesión del operador, sin almacenar JWT. La copia en Storage del mismo proyecto es una decisión provisional explícita: no se presenta como independencia frente a pérdida del proyecto.
+
+Regresión ampliada: **247 pruebas en 31 archivos**, TypeScript, ESLint y arquitectura aprobados. Ensayo de copia local más Storage, reutilización incremental, descarga completa y restore aislado aprobado en **151,40 s**; 64 migraciones, 13 huellas históricas, un objeto real de 883 bytes y sesiones/jobs inactivos tras recuperar. No es una medición de capacidad productiva.

@@ -37,6 +37,13 @@ export async function restoreBackup(
   mkdirSync(join(directory, "objects"), { recursive: true });
   for (const object of manifest.objects) {
     if (
+      manifest.backup_destination === "supabase-storage" &&
+      !existsSync(resolve(directory, object.file))
+    )
+      throw new Error(
+        "Descarga y verifica la copia completa con yarn backup:fetch antes de restaurar.",
+      );
+    if (
       manifest.source !== "local" &&
       !existsSync(resolve(directory, object.file))
     )

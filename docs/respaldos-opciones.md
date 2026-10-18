@@ -29,4 +29,10 @@ Bucket privado independiente de Supabase, copias cifradas antes de subirlas, cla
 
 El código H08 preparado usa AWS CLI/S3 y el workflow AWS usa OIDC. Para elegir B2 o R2 hay que adaptar y verificar endpoint S3, autenticación y opciones compatibles del proveedor; no se ha creado una cuenta, configurado un bucket o probado una copia remota. El flujo AWS/OIDC no se activa tal cual para B2/R2. La comparación tampoco sustituye el respaldo de archivos: el backup DB de Supabase no incluye sus bytes.
 
-La elección del proveedor/bucket, custodia de claves, retención efectiva y recuperación desde esa copia siguen como dependencias de publicación de H08.
+## Decisión temporal del usuario: Supabase Storage
+
+El 18/10/2026 el usuario eligió usar por ahora el Storage del mismo proyecto. Se añadió el destino `supabase-storage`, con bucket privado `system-backups`, archivos cifrados antes de subirlos, objetos incrementales por hash y manifiesto que identifica el destino. La clave permanece en configuración privada; el navegador no recibe acceso al bucket. Esta elección aplaza contratar almacenamiento externo: **una copia en el mismo proyecto comparte su riesgo de eliminación, indisponibilidad o pérdida de acceso**.
+
+Descarga íntegra mediante `backup:fetch` y restauración aislada comprobadas en Docker. El bucket productivo fue creado, pero la copia real no se completó: TLS `verify-full` rechazó la cadena sin la CA Supabase del proyecto. No se redujo la verificación SSL ni se registró éxito. Falta instalar la CA y una conexión/identidad adecuada para el ejecutor, ejecutar la copia y contrastar su recuperación. La retención de 30 días es una política propuesta; no se activó eliminación automática de objetos compartidos.
+
+El respaldo DB nativo de Supabase sigue sin incluir los bytes de Storage; este adaptador copia los objetos confirmados y los cifra por separado. [Limitación documentada por Supabase](https://supabase.com/docs/guides/platform/backups).

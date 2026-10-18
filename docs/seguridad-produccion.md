@@ -1,6 +1,6 @@
 # Seguridad de publicación · H08
 
-Implementación técnica de T01. Ver [H08](hitos/h08-preparacion-produccion.md), [operación](operacion-produccion.md), [evidencias](hitos/evidencias/h08.md) y [modelo](tablas-db.md). El 18/10/2026 se publicaron las siete migraciones en Cloud: 29 tablas públicas con RLS, 64 versiones y 13 huellas históricas conservadas. La matriz de accesos y recuperación está comprobada en Docker; la configuración productiva de Auth aún requiere autorización y aplicación. No iniciar uso real hasta instalar el hook de admisión: sin él las sesiones nuevas no quedan admitidas para operar.
+Implementación técnica de T01. Ver [H08](hitos/h08-preparacion-produccion.md), [operación](operacion-produccion.md), [evidencias](hitos/evidencias/h08.md) y [modelo](tablas-db.md). El 18/10/2026 se publicaron las siete migraciones en Cloud: 29 tablas públicas con RLS, 64 versiones y 13 huellas históricas conservadas durante esa publicación. Después de la autorización del usuario se aplicó Auth productivo, sin diferencias declaradas restantes y conservando nueve propiedades remotas ajenas. El administrador real Josmel ingresó correctamente y su sesión quedó admitida por el hook de contraseña; la sesión de comprobación se cerró. Ambas funciones Edge publicadas rechazan llamadas anónimas con HTTP 401.
 
 ## Identidad y sesiones
 
