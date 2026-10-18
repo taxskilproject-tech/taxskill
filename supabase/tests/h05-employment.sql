@@ -1,5 +1,6 @@
 -- Local Docker only: lifecycle fixtures never leave this rolled-back transaction.
 begin;
+\ir helpers/auth-session.psql
 create extension if not exists pgtap with schema extensions;
 select extensions.no_plan();
 create function pg_temp.expect(value boolean,label text) returns void language plpgsql as $$
@@ -31,7 +32,7 @@ begin
   insert into public.role_permissions(organization_id,role_id,permission_id) select v_org,v_role,id from public.permissions where organization_id=v_org;
   insert into public.access_grants(organization_id,member_id,scope,company_id,module,role_id) select v_org,v_actor_member,'company',v_company,m,v_role from unnest(array['tributario','laboral_general','laboral_trabajador']) m;
   insert into public.company_module_settings(organization_id,company_id,module,delivery_responsible_id) select v_org,v_company,m,v_client from unnest(array['tributario','laboral_general','laboral_trabajador']) m;
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',v_actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',v_actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
   perform pg_temp.expect((public.h02_context()->>'ok')::boolean,'administrator admitted');
   v_input:=jsonb_build_object('company_id',v_company,'title','H05 configuration','frequency','eventual','deadline_offset_days',3,'active',true,'allowed_formats',jsonb_build_array('pdf'),'max_file_bytes',20000000,
     'deliverable_specs','[{"position_code":"file_1","label":"Required document","display_order":1,"allowed_formats":["pdf"],"max_file_bytes":20000000}]'::jsonb);

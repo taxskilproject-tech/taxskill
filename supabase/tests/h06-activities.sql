@@ -1,5 +1,6 @@
 -- Fixtures and fault cases are local-only and rolled back.
 begin;
+\ir helpers/auth-session.psql
 create extension if not exists pgtap with schema extensions;
 select extensions.no_plan();
 create function pg_temp.expect(value boolean,label text) returns void language plpgsql as $$ begin if value is distinct from true then raise exception 'H06 acceptance: %',label; end if; end $$;
@@ -27,7 +28,7 @@ begin
   insert into public.roles(organization_id,code,name,audience) values(org,'h06_internal','Internal','internal') returning id into internal_role;
   insert into public.role_permissions(organization_id,role_id,permission_id) select org,internal_role,p.id from public.permissions p where p.organization_id=org;
   insert into public.access_grants(organization_id,member_id,scope,company_id,module,role_id) values(org,actor_member,'company',company,'actividades',internal_role),(org,actor_member,'organization',null,'actividades',internal_role);
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
   input:=jsonb_build_object('company_id',company,'title','H06 additional','description','Private description must not reach WhatsApp','delivery_responsible_id',client,'frequency','unica','due_date',today+7,'priority','alta','max_file_bytes',20000000,'allowed_formats','["pdf"]'::jsonb,
     'deliverable_specs','[{"position_code":"file_1","label":"Required file","display_order":1,"allowed_formats":["pdf"],"max_file_bytes":20000000}]'::jsonb);
   result:=public.h03_command(org,gen_random_uuid(),'CreateAdditionalActivity',input||'{"deliverable_specs":[]}');
@@ -58,7 +59,7 @@ begin
   result:=pg_temp.command(org,'RestoreDocumentEntity',jsonb_build_object('entity','requirement_rules','id',recurring,'expected_revision',(select revision from public.requirement_rules where id=recurring),'reason','Restore local rule'));
   perform pg_temp.expect((select deleted_at is null from public.requirement_rules where id=recurring),'additional rule restores with eligible parents and responsible');
   original:=(select snapshot from public.obligations where id=activity);
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',client,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',client,'role','authenticated','session_id',gen_random_uuid())::text,true);
   result:=public.h03_command(org,gen_random_uuid(),'CreateAdditionalActivity',input);
   perform pg_temp.expect(result->'error'->>'code'='FORBIDDEN','client cannot create additional');
   result:=public.h06_query(org,'activities','{"group":"all","pageSize":100}');
@@ -107,7 +108,7 @@ begin
   result:=pg_temp.command(org,'CreateUploadIntent',jsonb_build_object('deliverable_id',fixture_slot.id,'cycle_id',cycle,'expected_revision',fixture_slot.revision,'original_name','h06-observed.pdf','declared_bytes',200,'declared_mime','application/pdf'));
   fixture_intent:=(result->>'resource_id')::uuid;
   perform pg_temp.confirm(fixture_intent,client,((current_setting('request.jwt.claims')::jsonb)->>'session_id')::uuid);
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
   select * into fixture_slot from public.deliverables where id=fixture_slot.id;
   perform pg_temp.command(org,'ObserveVersion',jsonb_build_object('deliverable_id',fixture_slot.id,'version_id',fixture_slot.current_version_id,'expected_revision',fixture_slot.revision,'comment','Private observation fixture','new_due_date',today+7));
   select id into cycle from public.submission_cycles where deliverable_id=fixture_slot.id and state='open';
@@ -133,7 +134,7 @@ begin
   update public.submission_cycles set first_submitted_at=now(),state='submitted' where id=cycle;
   perform pg_temp.expect(not exists(select 1 from jsonb_array_elements(private.h06_digest_items(org,client,today+5,'https://app.example.test')) i where i->>'notification_event_id'=observed_event::text),'received correction excludes resolved observation');
   perform pg_temp.expect(not exists(select 1 from jsonb_array_elements(private.h06_digest_items(org,client,today+1,'https://app.example.test')) i where i->>'obligation_id'=activity::text),'received cycle stops reminders regardless of approval');
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
   update public.access_grants set active=false where organization_id=org and member_id=client_member;
   perform public.h06_run_deadlines(today);
   perform pg_temp.expect((select assignment_issue from public.obligations where id=activity),'removed permission is an assignment issue');

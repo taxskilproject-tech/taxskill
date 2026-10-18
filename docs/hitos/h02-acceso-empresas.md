@@ -129,7 +129,8 @@ Preparar CA01–CA05, CA24, CA28 y CA31–CA34. Conservar evidencia funcional y 
 - [x] Mutaciones críticas usan contratos, revisión esperada e idempotencia; tipos y migraciones son reproducibles.
 - [x] Auth Admin está aislado en servidor y los tres Route Handlers verifican actor/alcance.
 - [x] Queda explícitamente pendiente el enforcement global de RLS y sesiones de H08.
-- [ ] Demostración aceptada y Definition of Done común satisfecha; H03 puede comenzar con empresas/accesos disponibles.
+- [x] Dependencia técnica de H03 satisfecha: empresas/accesos disponibles, integración local y recorridos posteriores comprobados. Ver [registro de cierre](evidencias/cierre-hitos.md).
+- [ ] Aceptación formal de producto y Definition of Done común registradas, separadas de las pruebas técnicas.
 
 ## 9. Pendientes que no bloquean este cierre funcional
 

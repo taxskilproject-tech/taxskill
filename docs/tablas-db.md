@@ -155,6 +155,8 @@ erDiagram
         uuid id PK
         uuid organization_id FK
         uuid user_id FK
+        timestamptz authentication_verified_at
+        text authentication_method
         uuid created_by FK
         uuid updated_by FK
     }
@@ -510,6 +512,8 @@ erDiagram
         uuid organization_id FK
         uuid id PK
         uuid user_id FK
+        timestamptz authentication_verified_at
+        text authentication_method
     }
     COMPANIES {
         uuid organization_id FK
@@ -886,7 +890,7 @@ Membresía del usuario, perfil interno/cliente y administración del estudio.
 
 ### 4.4 app_sessions
 
-Registro técnico de admisión y revocación; enforcement pendiente T01.
+Registro técnico de admisión y revocación. H08 incorpora el registro Auth y la verificación por hook; consultar [seguridad](seguridad-produccion.md) y el estado de instalación local/Cloud en [evidencias](hitos/evidencias/h08.md).
 
 **Clasificación:** registro conservado con cambios controlados. **PK:** `id`. **Propietario:** organization_id.
 
@@ -897,6 +901,8 @@ Registro técnico de admisión y revocación; enforcement pendiente T01.
 | `user_id` | `uuid` | No | — | FK → profiles.user_id; RESTRICT / NO ACTION | Usuario de la sesión. |
 | `session_id` | `uuid` | No | — | — | session_id emitido por Auth; identificador verificado, sin FK al esquema interno de sesiones. |
 | `registered_at` | `timestamptz` | No | now() | — | Admisión confiable de la sesión. |
+| `authentication_verified_at` | `timestamptz` | Sí | NULL | — | Verificación confiable por Custom Access Token hook; fila Auth por sí sola no concede acceso. |
+| `authentication_method` | `text` | Sí | NULL | CHECK: `password` | Método admitido por el hook, nunca declarado libremente por navegador. |
 | `last_seen_at` | `timestamptz` | Sí | — | — | Última actividad registrada de forma acotada. |
 | `revoked_at` | `timestamptz` | Sí | — | — | Revocación explícita. |
 | `revocation_reason` | `text` | Sí | — | — | Motivo de revocación. |
@@ -913,7 +919,8 @@ Registro técnico de admisión y revocación; enforcement pendiente T01.
 - UNIQUE (organization_id,session_id); user_id debe tener membresía del estudio.
 - revoked_at y revocation_reason se establecen juntos; revocación posterior o igual al registro.
 - No restaurar una sesión revocada: una nueva autenticación produce otro session_id.
-- No almacenar JWT, refresh_token ni contraseñas; concretar registro confiable y filtros con T01.
+- `authentication_verified_at` y `authentication_method` son ambos NULL o ambos no NULL. Acceso exige verificación por contraseña y vigencia de perfil, membresía y sesión Auth.
+- No almacenar JWT, refresh_token ni contraseñas; admisión confiable implementada en H08, pendiente de activar/verificar en cada entorno productivo.
 
 **Índices:**
 

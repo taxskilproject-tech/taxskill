@@ -14,6 +14,7 @@ import { RolesPanel } from "@/features/configuration/components/roles-panel";
 import { CatalogPanel } from "@/features/documents/components/catalog-panel";
 import { RulesPanel } from "@/features/documents/components/rules-panel";
 import { WhatsappPanel } from "@/features/notifications/components/whatsapp-panel";
+import { OperationsPanel } from "@/features/operations/components/operations-panel";
 import { useDataScope } from "@/lib/query/hooks/use-data-scope";
 import { createScopedQueryKey } from "@/lib/query/utils/query-keys";
 
@@ -24,6 +25,7 @@ const TABS = [
   { id: "roles", label: "Roles y permisos" },
   { id: "responsables", label: "Responsables" },
   { id: "parametros", label: "Parámetros e historial" },
+  { id: "operacion", label: "Operación" },
 ];
 
 export function ConfigurationPage() {
@@ -105,6 +107,7 @@ export function ConfigurationPage() {
       {tab === "catalogo" && <CatalogPanel />}
       {tab === "reglas" && <RulesPanel />}
       {tab === "whatsapp" && <WhatsappPanel />}
+      {tab === "operacion" && <OperationsPanel />}
     </div>
   );
 }

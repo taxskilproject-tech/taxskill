@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 
 import type { Database } from "../../src/lib/supabase/types/database.types";
+import { CLOUD_APPLICATION_ENV_FILE } from "../constants/environment-files";
 import { runSupabase } from "../utils/run-supabase";
 
 const projectRef = "gzwrqvqofcrdjvzoblaz";
@@ -15,8 +16,8 @@ const identities = new Map([
   ["b209854d-29ff-4077-ae23-6ef79b8c2e94", "cliente.h02@example.test"],
   ["5794b31a-42e5-4ae8-9c3a-ca54c1da1045", "recuperacion.h02@example.test"],
 ]);
-const credentialPath = existsSync(".env.cloud.local")
-  ? ".env.cloud.local"
+const credentialPath = existsSync(CLOUD_APPLICATION_ENV_FILE)
+  ? CLOUD_APPLICATION_ENV_FILE
   : ".env.local";
 const credentials = parseEnv(readFileSync(credentialPath, "utf8"));
 if (

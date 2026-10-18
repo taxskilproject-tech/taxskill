@@ -3,6 +3,7 @@ export type OperationErrorCode =
   | "FORBIDDEN"
   | "NOT_FOUND"
   | "CONFLICT"
+  | "RATE_LIMITED"
   | "VALIDATION_ERROR"
   | "FILE_TOO_LARGE"
   | "FILE_INVALID"

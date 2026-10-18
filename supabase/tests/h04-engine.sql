@@ -1,5 +1,6 @@
 -- Synthetic fixtures exclusively in Docker TaxSkill. Always roll back.
 begin;
+\ir helpers/auth-session.psql
 create extension if not exists pgtap with schema extensions;
 select extensions.no_plan();
 select extensions.is(private.h04_calendar('diaria','2026-01-01')->>'key','2026-01-01','Daily civil key');
@@ -64,7 +65,7 @@ begin
   insert into public.role_permissions(organization_id,role_id,permission_id) select v_org,v_role,id from public.permissions where organization_id=v_org;
   insert into public.access_grants(organization_id,member_id,scope,company_id,module,role_id) select v_org,v_member,'company',v_company,m,v_role from unnest(array['tributario','laboral_general','laboral_trabajador']) m;
   insert into public.company_module_settings(organization_id,company_id,module,delivery_responsible_id) select v_org,v_company,m,v_client from unnest(array['tributario','laboral_general','laboral_trabajador']) m;
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',v_actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',v_actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
   perform pg_temp.expect((public.h02_context()->>'ok')::boolean,'actor admitted');
   v_type:=(pg_temp.command(v_org,'SaveDocumentType','{"code":"h04_company","name":"H04 Company","module":"tributario","suggested_formats":["pdf"],"active":true}')->>'resource_id')::uuid;
   v_worker_type:=(pg_temp.command(v_org,'SaveDocumentType','{"code":"h04_worker","name":"H04 Worker","module":"laboral_trabajador","suggested_formats":["pdf"],"active":true}')->>'resource_id')::uuid;

@@ -186,7 +186,7 @@ enable_anonymous_sign_ins = false
 # Allow/disallow testing manual linking of accounts
 enable_manual_linking = false
 # Passwords shorter than this value will be rejected as weak. Minimum 6, recommended 8 or more.
-minimum_password_length = 6
+minimum_password_length = 12
 # Passwords that do not meet the following requirements will be rejected as weak. Supported values
 # are: `letters_digits`, `lower_upper_letters_digits`, `lower_upper_letters_digits_symbols`
 password_requirements = ""
@@ -292,6 +292,15 @@ max_frequency = "5s"
 # [auth.hook.custom_access_token]
 # enabled = true
 # uri = "pg-functions://<database>/<schema>/<hook_name>"
+
+# H08: access recovery and account changes are administrative; do not send Auth email tokens.
+[auth.hook.send_email]
+enabled = true
+uri = "pg-functions://postgres/public/h08_block_auth_email"
+
+[auth.hook.custom_access_token]
+enabled = true
+uri = "pg-functions://postgres/public/h08_access_token_hook"
 
 # Configure one of the supported SMS providers: `twilio`, `twilio_verify`, `messagebird`, `textlocal`, `vonage`.
 [auth.sms.twilio]

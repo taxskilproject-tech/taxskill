@@ -6,6 +6,7 @@ import {
 } from "@/domain/integrations/contracts/whatsapp.schema";
 import { readReceiptBody } from "@/features/integrations/utils/read-receipt-body.server";
 import { verifyReceiptSecret } from "@/features/integrations/utils/verify-receipt-secret.server";
+import { enforceRateLimit } from "@/features/operations/repositories/rate-limit.server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin.server";
 import { asJson } from "@/lib/supabase/utils/as-json";
 
@@ -49,6 +50,7 @@ export async function handleReceipt(request: Request) {
         { error: "DEPENDENCY_UNAVAILABLE" },
         { status: 503, headers: HEADERS },
       );
+    await enforceRateLimit(client.data, "receipts", "taxskill:receipt-gateway");
     const response = await client.data.rpc("h06_receive_receipt", {
       p_receipt: asJson(parsed.data),
     });
@@ -77,6 +79,16 @@ export async function handleReceipt(request: Request) {
       );
     return Response.json(result.data, { headers: HEADERS });
   } catch (cause) {
+    if (
+      cause &&
+      typeof cause === "object" &&
+      "code" in cause &&
+      cause.code === "RATE_LIMITED"
+    )
+      return Response.json(
+        { error: "RATE_LIMITED" },
+        { status: 429, headers: { ...HEADERS, "Retry-After": "60" } },
+      );
     const tooLarge =
       cause instanceof Error && cause.message === "FILE_TOO_LARGE";
     const invalid =

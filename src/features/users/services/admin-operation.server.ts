@@ -69,9 +69,20 @@ async function performExternalOperation(
   if (stage.error) throw stage.error;
   if (envelope.operation === "SetUserPassword") {
     const input = passwordSchema.parse(envelope.input);
+    const identity = await client.auth.admin.getUserById(
+      entry.external_identity_id,
+    );
+    if (identity.error || !identity.data.user)
+      throw new Error("DEPENDENCY_UNAVAILABLE");
+    const metadata = identity.data.user.app_metadata;
+    // A completed Auth step survives a later SQL failure; retries only finish the same operation.
+    if (metadata.taxskill_password_request_id === entry.id) return;
     const result = await client.auth.admin.updateUserById(
       entry.external_identity_id,
-      { password: input.password },
+      {
+        password: input.password,
+        app_metadata: { ...metadata, taxskill_password_request_id: entry.id },
+      },
     );
     if (result.error) throw new Error("DEPENDENCY_UNAVAILABLE");
     return;

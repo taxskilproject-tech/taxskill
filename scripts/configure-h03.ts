@@ -5,7 +5,9 @@ import { loadEnvConfig } from "@next/env";
 import { createClient } from "@supabase/supabase-js";
 
 import { isLocalSupabaseUrl } from "../src/config/env/utils/is-local-supabase-url";
+import { CLOUD_EDGE_ENV_FILE } from "./constants/environment-files";
 import { LOCAL_H03_SECRET_FILE } from "./constants/local-environment";
+import { ensureEnvironmentDirectory } from "./utils/environment-file";
 
 loadEnvConfig(process.cwd());
 const admin = createClient(
@@ -15,7 +17,7 @@ const admin = createClient(
 );
 const secretPath = isLocalSupabaseUrl(process.env.NEXT_PUBLIC_SUPABASE_URL)
   ? LOCAL_H03_SECRET_FILE
-  : ".env.h03-operations.local";
+  : CLOUD_EDGE_ENV_FILE;
 async function main() {
   const existing = await admin.storage.listBuckets();
   if (existing.error) throw new Error("No se pudieron consultar los buckets.");
@@ -36,6 +38,7 @@ async function main() {
       previous.H03_CLEANUP_SECRET || randomBytes(32).toString("hex"),
     H03_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
   };
+  ensureEnvironmentDirectory(secretPath);
   writeFileSync(
     secretPath,
     Object.entries(functionEnvironment)

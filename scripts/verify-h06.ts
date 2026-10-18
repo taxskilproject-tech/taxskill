@@ -14,6 +14,7 @@ import type { WhatsappBatch } from "../src/domain/integrations/types/whatsapp.ty
 import { notificationListSchema } from "../src/domain/notifications/contracts/notification.schema";
 import { sessionContextSchema } from "../src/features/auth/contracts/session.schema";
 import type { Database, Json } from "../src/lib/supabase/types/database.types";
+import { LOCAL_EDGE_ENV_FILE } from "./constants/environment-files";
 import {
   LOCAL_DEMO_ENV_FILE,
   LOCAL_H02_FIXTURES_FILE,
@@ -36,7 +37,7 @@ const secrets = z
     N8N_WEBHOOK_TOKEN: z.string().min(32),
     N8N_RECEIPT_TOKEN: z.string().min(32),
   })
-  .parse(parseEnv(readFileSync(".env.h06-operations.docker.local", "utf8")));
+  .parse(parseEnv(readFileSync(LOCAL_EDGE_ENV_FILE, "utf8")));
 const bootstrap = z
   .object({ BOOTSTRAP_EMAIL: z.email(), BOOTSTRAP_PASSWORD: z.string() })
   .parse(parseEnv(readFileSync(LOCAL_DEMO_ENV_FILE, "utf8")));
@@ -478,7 +479,10 @@ async function main() {
   );
   let realtimeEvents = 0;
   const channel = client.client
-    .channel(`personal-notices:${org}:${client.context.profile.user_id}`)
+    .channel(
+      `personal-notices:${org}:${client.context.profile.user_id}:${client.context.session_id}`,
+      { config: { private: true } },
+    )
     .on("broadcast", { event: "changed" }, () => {
       realtimeEvents++;
     });

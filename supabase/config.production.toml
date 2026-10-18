@@ -1,0 +1,21 @@
+# Declarative subset only. Apply from an isolated CLI workdir after migrations.
+project_id = "tax-skill-production"
+
+[auth]
+site_url = "https://taxskill.vercel.app"
+additional_redirect_urls = ["https://taxskill.vercel.app"]
+enable_signup = false
+enable_anonymous_sign_ins = false
+minimum_password_length = 12
+
+[auth.email]
+enable_signup = true
+enable_confirmations = false
+
+[auth.hook.send_email]
+enabled = true
+uri = "pg-functions://postgres/public/h08_block_auth_email"
+
+[auth.hook.custom_access_token]
+enabled = true
+uri = "pg-functions://postgres/public/h08_access_token_hook"

@@ -1,0 +1,24 @@
+name: Validación del producto
+on:
+  pull_request:
+  push:
+    branches: [main, "codex/**"]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '22'
+          cache: yarn
+      - run: corepack enable && corepack prepare yarn@1.22.22 --activate
+      - run: yarn install --frozen-lockfile
+      - run: yarn verify
+      - run: yarn build
+      - run: yarn check:bundle

@@ -1,5 +1,7 @@
 # Workflow H06 · Resumen diario WhatsApp
 
+Para el endpoint Evolution indicado por el usuario, importar la [variante productiva H08](produccion/README.md). Mantiene el mismo contrato y deduplicación, añade respuesta temprana tras el claim y usa credenciales de n8n sin incrustar la clave. Activar solo una variante por path de webhook.
+
 Artefacto: [whatsapp-digest.workflow.json](whatsapp-digest.workflow.json). Contratos, estados y conciliación: [documentación H06](../../docs/actividades-notificaciones.md). Resultado de las pruebas: [evidencias](../../docs/hitos/evidencias/h06.md).
 
 ## Laboratorio reproducible
@@ -11,13 +13,13 @@ yarn env:local
 yarn h06:setup
 ```
 
-El setup genera `.env.h06-operations.docker.local`, `.env.h06-n8n.docker.local` y los archivos ignorados `test-results/local/h06-runtime/{credentials,workflow}.json`. Preserva los secretos en reintentos. El token de receipts se agrega a `.env.local`; reiniciar/compilar Next.js después de configurarlo.
+El setup conserva `.envs/local/edge.env`, `.envs/local/n8n.env` y los archivos ignorados `test-results/local/h06-runtime/{credentials,workflow}.json`. Preserva los secretos en reintentos. El token de receipts se agrega a `.env.local`; reiniciar/compilar Next.js después de configurarlo. Ver [organización de variables](../../docs/variables-entorno.md).
 
 El laboratorio se verificó con imagen oficial `docker.n8n.io/n8nio/n8n:2.0.0`, limitada a loopback y credenciales ficticias. Es una versión del laboratorio, no una selección productiva; H08 debe fijar una versión vigente compatible y verificar sus actualizaciones.
 
 ```powershell
 $h06N8nData = (Resolve-Path test-results/local/h06-n8n).Path
-docker run -d --name tax-skill-h06-n8n -p 127.0.0.1:5679:5678 --env-file .env.h06-n8n.docker.local --mount "type=bind,source=$h06N8nData,target=/home/node/.n8n" docker.n8n.io/n8nio/n8n:2.0.0
+docker run -d --name tax-skill-h06-n8n -p 127.0.0.1:5679:5678 --env-file .envs/local/n8n.env --mount "type=bind,source=$h06N8nData,target=/home/node/.n8n" docker.n8n.io/n8nio/n8n:2.0.0
 docker cp test-results/local/h06-runtime/credentials.json tax-skill-h06-n8n:/tmp/h06-credentials.json
 docker exec tax-skill-h06-n8n n8n import:credentials --input=/tmp/h06-credentials.json
 docker cp test-results/local/h06-runtime/workflow.json tax-skill-h06-n8n:/tmp/h06-workflow.json
@@ -30,7 +32,7 @@ Si el contenedor ya existe, usarlo con `docker start tax-skill-h06-n8n`; no crea
 En terminales independientes:
 
 ```powershell
-supabase functions serve --env-file .env.h06-operations.docker.local
+supabase functions serve --env-file .envs/local/edge.env
 yarn tsx scripts/fixtures/h06-provider.ts
 yarn build
 yarn start -p 3001

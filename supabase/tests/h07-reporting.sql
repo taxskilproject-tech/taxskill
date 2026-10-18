@@ -1,5 +1,6 @@
 -- Executed with --local only. Everything, including uploaded metadata, rolls back.
 begin;
+\ir helpers/auth-session.psql
 create extension if not exists pgtap with schema extensions;
 select extensions.no_plan();
 create function pg_temp.expect(value boolean,label text) returns void language plpgsql as $$ begin if value is distinct from true then raise exception 'H07: %',label; end if; end $$;
@@ -44,7 +45,7 @@ begin
   insert into public.role_permissions(organization_id,role_id,permission_id) select org,role_id,id from public.permissions where organization_id=org;
   insert into public.access_grants(organization_id,member_id,scope,company_id,module,role_id) values(org,member,'company',company,'tributario',role_id),(org,member,'company',other_company,'tributario',role_id);
   insert into public.company_module_settings(organization_id,company_id,module,delivery_responsible_id) values(org,company,'tributario',actor),(org,other_company,'tributario',actor);
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',sid)::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',sid)::text,true);
   dtype:=(pg_temp.command(org,'SaveDocumentType','{"code":"h07","name":"H07 PDT","module":"tributario","suggested_formats":["pdf"],"active":true}')->>'resource_id')::uuid;
   result:=public.h07_query(org,'dashboard','{}');
   perform pg_temp.expect(result->'data'->'metrics'->>'companies'='2' and result->'data'->'metrics'->>'required'='0','companies without obligations and empty denominator');
@@ -118,12 +119,12 @@ begin
   perform pg_temp.expect(public.h07_query(org,'audit',jsonb_build_object('company_id',company,'action','RequestDownload'))->'data'->>'count'='1','audit resolves historical downloads through version and deliverable');
   insert into public.access_grants(organization_id,member_id,scope,company_id,module,role_id)
     select org,id,'company',company,'tributario',role_id from public.organization_members where organization_id=org and user_id=limited returning id into audit_grant;
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',limited,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',limited,'role','authenticated','session_id',gen_random_uuid())::text,true);
   perform pg_temp.expect(public.h07_query(org,'audit',jsonb_build_object('company_id',company,'module','tributario','resource','deliverables'))->'data'->>'count'='3','authorized supervisor sees reviews with company/module filters');
   perform pg_temp.expect(public.h07_query(org,'audit',jsonb_build_object('company_id',company,'action','RequestDownload'))->'data'->>'count'='1','authorized supervisor sees historical download');
   perform pg_temp.expect(public.h07_query(org,'audit',jsonb_build_object('company_id',other_company))->'data'->>'count'='0','supervisor cannot see another company audit');
   perform pg_temp.expect(public.h07_query(org,'audit',jsonb_build_object('company_id',company,'module','laboral_general'))->'data'->>'count'='0','a grant in one module does not expose another');
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',sid)::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',sid)::text,true);
   update public.companies set deleted_at=now(),deleted_by=actor,deletion_reason='H07 audit history' where id=company;
   perform pg_temp.expect(public.h07_query(org,'audit',jsonb_build_object('company_id',company,'resource','deliverables'))->'data'->>'count'='0','deleted company audit excluded operationally');
   result:=public.h07_query(org,'audit',jsonb_build_object('company_id',company,'resource','deliverables','include_deleted',true));
@@ -140,17 +141,17 @@ begin
   perform pg_temp.expect(exists(select 1 from jsonb_array_elements(public.h07_query(org,'report','{"include_deleted":true}')->'data'->'rows') r where r->>'record_status'='deleted'),'deleted ancestor labelled without rewriting obligations');
   update public.companies set deleted_at=null,deleted_by=null,deletion_reason=null,status='active' where id=other_company;
   perform pg_temp.expect((public.h07_query(org,'report','{}')->'data'->>'fingerprint')=initial_hash,'restoration preserves historical documentary data');
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',limited,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',limited,'role','authenticated','session_id',gen_random_uuid())::text,true);
   perform pg_temp.expect(public.h07_query(org,'report','{"include_deleted":true}')->'error'->>'code'='FORBIDDEN','historical flag is not authorization');
   perform pg_temp.expect(public.h07_query(org,'report','{}')->'data'->>'count'='0','no grants means no visible report rows');
   perform pg_temp.expect(public.h07_export(org,gen_random_uuid(),'start','{"format":"xlsx","filters":{}}')->'error'->>'code'='FORBIDDEN','export permission required');
   perform pg_temp.expect(public.h07_query(org,'report','{"sql":"select secret"}')->'error'->>'code'='VALIDATION_ERROR','unknown filter rejected');
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',sid)::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',sid)::text,true);
   update public.profiles set enabled=false where user_id=limited;
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',limited,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',limited,'role','authenticated','session_id',gen_random_uuid())::text,true);
   perform pg_temp.expect(public.h07_query(org,'dashboard','{}')->'error'->>'code'='FORBIDDEN','disabled account rejected');
   -- Mixed file states in one obligation, plus the existing pending/approved/waived/cancelled examples.
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',sid)::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',sid)::text,true);
   rule:=(pg_temp.command(org,'ConfigureRequirement',jsonb_build_object('document_type_id',dtype,'company_id',other_company,'title','H07 mixed review/observed','deadline_offset_days',7,'is_required',true,
     'allowed_formats','["pdf"]'::jsonb,'max_file_bytes',20000000,'deliverable_specs','[{"position_code":"a","label":"A","display_order":1,"allowed_formats":["pdf"],"max_file_bytes":20000000},{"position_code":"b","label":"B","display_order":2,"allowed_formats":["pdf"],"max_file_bytes":20000000}]'::jsonb))->>'resource_id')::uuid;
   obligation:=(pg_temp.command(org,'GenerateMonthly',jsonb_build_object('rule_id',rule))->>'resource_id')::uuid;
@@ -174,7 +175,7 @@ begin
   perform pg_temp.expect(result->>'ok'='true' and result->'data'->>'count'='1' and result->'data'->'filters'->'indicators'='["pending","review"]'::jsonb,'export reservation keeps intersected report filters');
   update public.profiles set enabled=true where user_id=limited;
   update public.access_grants set deleted_at=null,deleted_by=null,deletion_reason=null where id=audit_grant;
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',limited,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',limited,'role','authenticated','session_id',gen_random_uuid())::text,true);
   perform pg_temp.check_drilldown(org,jsonb_build_object('company_id',company,'module','tributario','report','observed'));
   perform pg_temp.expect(public.h07_query(org,'report',jsonb_build_object('company_id',other_company,'indicators','["review","observed"]'::jsonb))->'data'->>'count'='0','combined indicators never grant another company');
   insert into public.grant_permission_overrides(organization_id,grant_id,permission_id,allowed)

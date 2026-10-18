@@ -6,14 +6,16 @@ import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 
 import type { Database } from "../src/lib/supabase/types/database.types";
+import { CLOUD_BOOTSTRAP_ENV_FILE } from "./constants/environment-files";
 import { LOCAL_DEMO_ENV_FILE } from "./constants/local-environment";
+import { ensureEnvironmentDirectory } from "./utils/environment-file";
 import { requireLocalTestEnvironment } from "./utils/require-local-test-environment";
 
 async function main() {
   loadEnvConfig(process.cwd());
   const demo = process.argv.includes("--demo");
   if (demo) requireLocalTestEnvironment();
-  const destination = demo ? LOCAL_DEMO_ENV_FILE : ".env.bootstrap.local";
+  const destination = demo ? LOCAL_DEMO_ENV_FILE : CLOUD_BOOTSTRAP_ENV_FILE;
   const admin = createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
     process.env.SUPABASE_SECRET_KEY ?? "",
@@ -27,6 +29,7 @@ async function main() {
       "Ya existe un estudio. El bootstrap inicial no se vuelve a ejecutar.",
     );
   if (demo && !existsSync(destination)) {
+    ensureEnvironmentDirectory(destination);
     const lines = [
       "BOOTSTRAP_EMAIL=admin.h02@example.test",
       "BOOTSTRAP_NAME=Administrador de demostración",
@@ -38,7 +41,7 @@ async function main() {
   }
   if (!existsSync(destination))
     throw new Error(
-      "Completa .env.bootstrap.local según docs/desarrollo.md antes de iniciar.",
+      "Completa .envs/cloud/bootstrap.env según docs/desarrollo.md antes de iniciar.",
     );
   const parsed = z
     .object({

@@ -7,14 +7,13 @@ import { loadEnvConfig } from "@next/env";
 import { z } from "zod";
 
 import { whatsappBatchSchema } from "../../src/domain/integrations/contracts/whatsapp.schema";
+import { LOCAL_EDGE_ENV_FILE } from "../constants/environment-files";
 import type { H06MockState } from "../types/h06.types";
 import { requireLocalTestEnvironment } from "../utils/require-local-test-environment";
 
 loadEnvConfig(process.cwd());
 requireLocalTestEnvironment();
-const secrets = parseEnv(
-  readFileSync(".env.h06-operations.docker.local", "utf8"),
-);
+const secrets = parseEnv(readFileSync(LOCAL_EDGE_ENV_FILE, "utf8"));
 const statePath = "test-results/local/h06-provider-state.json";
 const modeSchema = z.enum([
   "sent",

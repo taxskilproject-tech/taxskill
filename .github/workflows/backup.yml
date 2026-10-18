@@ -1,0 +1,45 @@
+name: Copia independiente de producción
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 7 * * *' # 02:00 America/Lima
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: production-backup
+  cancel-in-progress: false
+jobs:
+  backup:
+    if: vars.H08_BACKUP_ENABLED == 'true'
+    environment: production
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '22'
+          cache: yarn
+      - run: corepack enable && corepack prepare yarn@1.22.22 --activate
+      - run: yarn install --frozen-lockfile
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.H08_BACKUP_AWS_ROLE }}
+          aws-region: ${{ vars.H08_BACKUP_AWS_REGION }}
+      - name: Preparar CA sin imprimir su contenido
+        env:
+          H08_DATABASE_CA_CERT_PEM: ${{ secrets.H08_DATABASE_CA_CERT_PEM }}
+        run: |
+          umask 077
+          printf '%s' "$H08_DATABASE_CA_CERT_PEM" > "$RUNNER_TEMP/taxskill-ca.crt"
+      - run: yarn backup:cloud
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://gzwrqvqofcrdjvzoblaz.supabase.co
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          H08_DATABASE_URL: ${{ secrets.H08_DATABASE_URL }}
+          H08_DATABASE_CA_CERT: ${{ runner.temp }}/taxskill-ca.crt
+          H08_BACKUP_S3_URI: ${{ vars.H08_BACKUP_S3_URI }}
+          H08_BACKUP_ENCRYPTION_KEY: ${{ secrets.H08_BACKUP_ENCRYPTION_KEY }}

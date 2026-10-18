@@ -14,6 +14,7 @@ import {
 } from "@/domain/common/utils/normalize-operation-error";
 import { failure, success } from "@/domain/common/utils/operation-result";
 import { sessionContextSchema } from "@/features/auth/contracts/session.schema";
+import { enforceRateLimit } from "@/features/operations/repositories/rate-limit.server";
 import { executeAdminOperation } from "@/features/users/services/admin-operation.server";
 import { fingerprintInput } from "@/features/users/services/fingerprint.server";
 import type { AdminRouteInput } from "@/features/users/types/admin.types";
@@ -116,6 +117,7 @@ export async function handleAdminRoute({
     );
     const admin = createSupabaseAdminClient();
     if (!admin.ok) throw admin.error;
+    await enforceRateLimit(admin.data, "admin", verified.data.user.id);
     const result = await executeAdminOperation({
       client: admin.data,
       envelope,

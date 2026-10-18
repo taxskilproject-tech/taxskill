@@ -1,5 +1,6 @@
 -- Synthetic fixtures: Docker/local ONLY, via yarn test:h02:sql. Never --linked.
 begin;
+\ir helpers/auth-session.psql
 create extension if not exists pgtap with schema extensions;
 select extensions.plan(1);
 create function pg_temp.expect(value boolean, label text) returns void language plpgsql as $$
@@ -18,7 +19,7 @@ begin
   insert into public.roles(organization_id,code,name,audience) values(org,'internal','Internal','internal') returning id into internal_role;
   insert into public.roles(organization_id,code,name,audience) values(org,'client','Client','client') returning id into client_role;
   insert into public.permissions(organization_id,module,action,description) values(org,'tributario','view','View'),(org,'tributario','upload','Upload'),(org,'tributario','approve','Approve');
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
   result := public.h02_context();
   perform pg_temp.expect((result->>'ok')::boolean,'session admission');
   original_input := '{"ruc":"20999999991","legal_name":"SQL company","status":"active","control_start_date":"2026-10-01"}';

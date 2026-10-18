@@ -4,23 +4,35 @@ import { parseEnv } from "node:util";
 import { loadEnvConfig } from "@next/env";
 import { createClient } from "@supabase/supabase-js";
 
+import {
+  LOCAL_EDGE_ENV_FILE,
+  LOCAL_N8N_ENV_FILE,
+} from "./constants/environment-files";
+import { ensureEnvironmentDirectory } from "./utils/environment-file";
 import { requireLocalTestEnvironment } from "./utils/require-local-test-environment";
 
 loadEnvConfig(process.cwd());
 requireLocalTestEnvironment();
 if (process.argv.slice(2).some((argument) => argument !== "--schedule"))
   throw new Error("Solo se admite --schedule en Docker local.");
-const secretsPath = ".env.h06-operations.docker.local";
+const secretsPath = LOCAL_EDGE_ENV_FILE;
 const previous = existsSync(secretsPath)
   ? parseEnv(readFileSync(secretsPath, "utf8"))
   : {};
-const h03 = existsSync(".env.h03-operations.docker.local")
-  ? parseEnv(readFileSync(".env.h03-operations.docker.local", "utf8"))
+const previousN8n = existsSync(LOCAL_N8N_ENV_FILE)
+  ? parseEnv(readFileSync(LOCAL_N8N_ENV_FILE, "utf8"))
   : {};
+const edgePrevious = Object.fromEntries(
+  Object.entries(previous).filter(([name]) => name !== "N8N_ENCRYPTION_KEY"),
+);
+const n8nEncryptionKey =
+  previousN8n.N8N_ENCRYPTION_KEY ||
+  previous.N8N_ENCRYPTION_KEY ||
+  randomBytes(32).toString("hex");
 const secret = (name: string) =>
   previous[name] || randomBytes(32).toString("hex");
 const environment = {
-  ...h03,
+  ...edgePrevious,
   APP_BASE_URL: "https://app.example.test",
   H06_DISPATCH_SECRET: secret("H06_DISPATCH_SECRET"),
   N8N_WEBHOOK_TOKEN: secret("N8N_WEBHOOK_TOKEN"),
@@ -29,9 +41,9 @@ const environment = {
     process.env.N8N_RECEIPT_TOKEN ||
     randomBytes(32).toString("hex"),
   H06_PROVIDER_TOKEN: secret("H06_PROVIDER_TOKEN"),
-  N8N_ENCRYPTION_KEY: secret("N8N_ENCRYPTION_KEY"),
   N8N_WEBHOOK_URL: "http://host.docker.internal:5680/dispatch",
 };
+ensureEnvironmentDirectory(secretsPath);
 writeFileSync(
   secretsPath,
   Object.entries(environment)
@@ -118,7 +130,7 @@ writeFileSync(
   JSON.stringify(credentials),
 );
 const n8nEnvironment = {
-  N8N_ENCRYPTION_KEY: environment.N8N_ENCRYPTION_KEY,
+  N8N_ENCRYPTION_KEY: n8nEncryptionKey,
   N8N_HOST: "127.0.0.1",
   N8N_PORT: "5678",
   N8N_PROTOCOL: "http",
@@ -135,7 +147,7 @@ const n8nEnvironment = {
   N8N_BLOCK_ENV_ACCESS_IN_NODE: "true",
 };
 writeFileSync(
-  ".env.h06-n8n.docker.local",
+  LOCAL_N8N_ENV_FILE,
   Object.entries(n8nEnvironment)
     .map(([name, value]) => `${name}=${value}`)
     .join("\n") + "\n",
@@ -154,7 +166,7 @@ async function main() {
     if (result.error) throw new Error("No se pudo programar H06 local.");
   }
   console.info(
-    "Configuración H06 Docker preparada. Workflow y credenciales locales en test-results; no se imprimen secretos. Reinicia Next.js y sirve Edge con .env.h06-operations.docker.local.",
+    "Configuración Docker preparada. Workflow y credenciales locales en test-results; no se imprimen secretos. Reinicia Next.js y sirve Edge con .envs/local/edge.env.",
   );
 }
 main().catch(() => {

@@ -6,6 +6,7 @@ import {
 } from "@/domain/access/contracts/access.schema";
 
 export const sessionContextSchema = z.object({
+  session_id: z.uuid(),
   profile: z.object({
     user_id: z.uuid(),
     full_name: z.string(),

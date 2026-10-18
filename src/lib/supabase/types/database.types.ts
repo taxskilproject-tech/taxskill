@@ -87,13 +87,13 @@ isOneToOne: false
                   ]
                 },"app_sessions": {
                   Row: {
-                    "created_at": string,"created_by": string | null,"id": string,"last_seen_at": string | null,"organization_id": string,"registered_at": string,"revision": number,"revocation_reason": string | null,"revoked_at": string | null,"session_id": string,"updated_at": string,"updated_by": string | null,"user_id": string
+                    "authentication_method": string | null,"authentication_verified_at": string | null,"created_at": string,"created_by": string | null,"id": string,"last_seen_at": string | null,"organization_id": string,"registered_at": string,"revision": number,"revocation_reason": string | null,"revoked_at": string | null,"session_id": string,"updated_at": string,"updated_by": string | null,"user_id": string
                   }
                   Insert: {
-                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"last_seen_at"?: string | null,"organization_id": string,"registered_at"?: string,"revision"?: number,"revocation_reason"?: string | null,"revoked_at"?: string | null,"session_id": string,"updated_at"?: string,"updated_by"?: string | null,"user_id": string
+                    "authentication_method"?: string | null,"authentication_verified_at"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"last_seen_at"?: string | null,"organization_id": string,"registered_at"?: string,"revision"?: number,"revocation_reason"?: string | null,"revoked_at"?: string | null,"session_id": string,"updated_at"?: string,"updated_by"?: string | null,"user_id": string
                   }
                   Update: {
-                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"last_seen_at"?: string | null,"organization_id"?: string,"registered_at"?: string,"revision"?: number,"revocation_reason"?: string | null,"revoked_at"?: string | null,"session_id"?: string,"updated_at"?: string,"updated_by"?: string | null,"user_id"?: string
+                    "authentication_method"?: string | null,"authentication_verified_at"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"last_seen_at"?: string | null,"organization_id"?: string,"registered_at"?: string,"revision"?: number,"revocation_reason"?: string | null,"revoked_at"?: string | null,"session_id"?: string,"updated_at"?: string,"updated_by"?: string | null,"user_id"?: string
                   }
                   Relationships: [
                     {
@@ -1905,6 +1905,27 @@ isOneToOne: false
                            },
 "h07_query":
 { Args: { "p_input"?: Json,"p_organization_id": string,"p_resource": string }; Returns: Json
+                           },
+"h08_access_token_hook":
+{ Args: { "event": Json }; Returns: Json
+                           },
+"h08_block_auth_email":
+{ Args: { "event": Json }; Returns: Json
+                           },
+"h08_consume_rate_limit":
+{ Args: { "p_bucket": string,"p_key_hash": string,"p_limit": number,"p_seconds": number }; Returns: boolean
+                           },
+"h08_generation_tick":
+{ Args: Record<PropertyKey, never>; Returns: Json
+                           },
+"h08_health":
+{ Args: { "p_organization_id": string }; Returns: Json
+                           },
+"h08_record_recovery":
+{ Args: { "p_error_code"?: string,"p_id": string,"p_kind": string,"p_manifest_sha256"?: string,"p_object_count"?: number,"p_status": string,"p_verified_bytes"?: number }; Returns: undefined
+                           },
+"h08_schedule_generation":
+{ Args: { "p_enabled"?: boolean }; Returns: undefined
                            }
           }
           Enums: {

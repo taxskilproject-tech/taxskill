@@ -107,7 +107,7 @@ Relaciona CA31, CA32 y CA33; establece las bases de CA27 y CA34 para sus recorri
 - [x] Los estados y controles comunes mínimos pasan la verificación de accesibilidad pertinente.
 - [x] Build, tipos, lint, arquitectura y 40 pruebas pasan; ajuste de Tailwind/PostCSS documentado.
 - [x] T01 sigue señalado como pendiente de H08 y no se utiliza información real para acreditar aislamiento.
-- [ ] El equipo dispone de los entregables y puede iniciar H02; aplica además la Definition of Done común.
+- [x] Entregables disponibles en el repositorio y dependencia técnica satisfecha: H02–H07 ya implementados y comprobados. Ver [registro de cierre](evidencias/cierre-hitos.md); la aceptación productiva común se registra en H08.
 
 ## 9. Límites y continuidad
 

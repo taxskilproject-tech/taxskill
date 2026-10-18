@@ -1,5 +1,6 @@
 -- Synthetic fixtures: Docker/local ONLY, via yarn test:h03:sql. Never --linked.
 begin;
+\ir helpers/auth-session.psql
 create extension if not exists pgtap with schema extensions;
 select extensions.plan(1);
 create function pg_temp.expect(value boolean,label text) returns void language plpgsql as $$
@@ -28,10 +29,10 @@ begin
   insert into public.role_permissions(organization_id,role_id,permission_id) select org,internal_role,id from public.permissions where organization_id=org and action in ('view','download','approve','observe','reopen','waive');
   insert into public.access_grants(organization_id,member_id,scope,company_id,module,role_id) values(org,client_member,'company',company,'tributario',client_role),(org,reviewer_member,'company',company,'tributario',internal_role);
   insert into public.company_module_settings(organization_id,company_id,module,delivery_responsible_id) values(org,company,'tributario',client_user);
-  perform set_config('request.jwt.claims','{"role":"service_role"}',true);
+  perform pg_temp.authenticate('{"role":"service_role"}',true);
   begin perform public.h02_admin_prepare(org,actor,gen_random_uuid(),'SetUserEnabled',repeat('b',64),actor); raise exception 'Self-disable accepted'; exception when raise_exception then if sqlerrm<>'FORBIDDEN' then raise; end if; end;
   perform pg_temp.expect((select enabled from public.profiles where user_id=actor),'H02 self-disable rejected before staging');
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
   dtype := (pg_temp.command(org,'SaveDocumentType','{"code":"pdt-test","name":"PDT test","module":"tributario","suggested_formats":["pdf"],"active":true}')->>'resource_id')::uuid;
   input:=jsonb_build_object('document_type_id',dtype,'company_id',company,'title','PDT two files','deadline_offset_days',0,'allowed_formats',jsonb_build_array('pdf'),'max_file_bytes',20000000,'deliverable_specs',
     '[{"position_code":"pdt_1","label":"PDT first","display_order":1,"allowed_formats":["pdf"],"max_file_bytes":20000000},{"position_code":"pdt_2","label":"PDT second","display_order":2,"allowed_formats":["pdf"],"max_file_bytes":20000000}]'::jsonb);
@@ -43,7 +44,7 @@ begin
   perform pg_temp.expect((select count(*)=2 from public.deliverables where obligation_id=obligation),'two positions');
   select * into first_slot from public.deliverables where obligation_id=obligation and display_order=1;
   select * into second_slot from public.deliverables where obligation_id=obligation and display_order=2;
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',client_user,'role','authenticated','session_id',client_sid)::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',client_user,'role','authenticated','session_id',client_sid)::text,true);
   input:=jsonb_build_object('deliverable_id',first_slot.id,'cycle_id',(select id from public.submission_cycles where deliverable_id=first_slot.id and state='open'),'expected_revision',0,'original_name','first.pdf','declared_bytes',200,'declared_mime','application/octet-stream');
   intent1:=(pg_temp.command(org,'CreateUploadIntent',input,req)->>'resource_id')::uuid;
   result:=public.h03_command(org,gen_random_uuid(),'CreateUploadIntent',input||'{"declared_bytes":20000001}');
@@ -64,7 +65,7 @@ begin
   select * into second_slot from public.deliverables where id=second_slot.id;
   result:=public.h03_command(org,gen_random_uuid(),'ApproveVersion',jsonb_build_object('deliverable_id',first_slot.id,'version_id',first_slot.current_version_id,'expected_revision',first_slot.revision));
   perform pg_temp.expect(result->'error'->>'code'='NOT_FOUND','client cannot approve');
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',reviewer,'role','authenticated','session_id',reviewer_sid)::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',reviewer,'role','authenticated','session_id',reviewer_sid)::text,true);
   input:=jsonb_build_object('deliverable_id',first_slot.id,'version_id',first_slot.current_version_id,'expected_revision',first_slot.revision);
   perform pg_temp.command(org,'ApproveVersion',input);
   result:=public.h03_command(org,gen_random_uuid(),'ApproveVersion',input);
@@ -81,11 +82,11 @@ begin
   perform pg_temp.expect((select state='closed' and first_submitted_at is not null from public.submission_cycles where deliverable_id=second_slot.id and cycle_number=1),'observation preserves original cycle');
   perform pg_temp.expect((select reason='correction' and first_submitted_at is null from public.submission_cycles where deliverable_id=second_slot.id and cycle_number=2),'new correction cycle');
   select * into second_slot from public.deliverables where id=second_slot.id;
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',client_user,'role','authenticated','session_id',client_sid)::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',client_user,'role','authenticated','session_id',client_sid)::text,true);
   correction:=(pg_temp.command(org,'CreateUploadIntent',jsonb_build_object('deliverable_id',second_slot.id,'cycle_id',(select id from public.submission_cycles where deliverable_id=second_slot.id and state='open'),'expected_revision',second_slot.revision,'original_name','correction.pdf','declared_bytes',200,'declared_mime','application/pdf'))->>'resource_id')::uuid;
   perform pg_temp.confirm(correction,client_user,client_sid);
   select * into second_slot from public.deliverables where id=second_slot.id;
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',reviewer,'role','authenticated','session_id',reviewer_sid)::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',reviewer,'role','authenticated','session_id',reviewer_sid)::text,true);
   perform pg_temp.command(org,'ApproveVersion',jsonb_build_object('deliverable_id',second_slot.id,'version_id',second_slot.current_version_id,'expected_revision',second_slot.revision));
   perform pg_temp.expect((select aggregate_state='aprobado' and approved_count=2 from public.h03_obligation_summary where id=obligation),'complete after individual approvals');
   select * into first_slot from public.deliverables where id=first_slot.id;
@@ -105,19 +106,19 @@ begin
       now()-interval '26 hours',now()-interval '2 hours',case when new_id=validating_intent then 'validating' else 'reserved' end,
       case when new_id=validating_intent then gen_random_uuid() end,case when new_id=validating_intent then now()+interval '2 minutes' end
     from public.upload_intents cross join unnest(array[expired_intent,validating_intent]) new_id where id=intent2;
-  previous_claims:=current_setting('request.jwt.claims'); perform set_config('request.jwt.claims','{"role":"service_role"}',true);
+  previous_claims:=current_setting('request.jwt.claims'); perform pg_temp.authenticate('{"role":"service_role"}',true);
   perform public.h03_expire_uploads();
   perform pg_temp.expect((select state='expired' and confirmed_version_id is null from public.upload_intents where id=expired_intent),'expired staging retained as metadata');
   perform pg_temp.expect((select state='validating' from public.upload_intents where id=validating_intent),'active validator excluded from cleanup');
   perform pg_temp.expect((select state='ready' from public.upload_intents where id=intent2),'confirmed version excluded from cleanup');
-  perform set_config('request.jwt.claims',previous_claims,true);
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(previous_claims,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
   cancel_rule := (pg_temp.command(org,'ConfigureRequirement',requirement_input||'{"title":"Cancellation fixture"}')->>'resource_id')::uuid;
   cancelled_obligation := (pg_temp.command(org,'GenerateMonthly',jsonb_build_object('rule_id',cancel_rule))->>'resource_id')::uuid;
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',client_user,'role','authenticated','session_id',client_sid)::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',client_user,'role','authenticated','session_id',client_sid)::text,true);
   result := public.h03_command(org,gen_random_uuid(),'CancelObligation',jsonb_build_object('obligation_id',cancelled_obligation,'expected_revision',0,'reason','Client cannot cancel'));
   perform pg_temp.expect(result->'error'->>'code'='FORBIDDEN','cancellation requires administrator');
-  perform set_config('request.jwt.claims',jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
+  perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
   perform pg_temp.command(org,'CancelObligation',jsonb_build_object('obligation_id',cancelled_obligation,'expected_revision',0,'reason','Generated as a synthetic cancellation fixture'));
   perform pg_temp.expect((select disposition='cancelled' from public.obligations where id=cancelled_obligation),'audited cancellation preserves obligation');
   perform pg_temp.command(org,'DeleteDocumentEntity',jsonb_build_object('entity','requirement_rules','id',cancel_rule,'expected_revision',1,'reason','Delete rule fixture'));

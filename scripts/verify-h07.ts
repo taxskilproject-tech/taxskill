@@ -14,13 +14,14 @@ import {
 import { generateExcel } from "../src/features/reporting/services/excel-report";
 import { generatePdf } from "../src/features/reporting/services/pdf-report";
 import type { Database } from "../src/lib/supabase/types/database.types";
+import { LOCAL_BOOTSTRAP_ENV_FILE } from "./constants/environment-files";
 import { requireLocalTestEnvironment } from "./utils/require-local-test-environment";
 
 async function main() {
   const url = requireLocalTestEnvironment();
   const bootstrap = z
     .object({ BOOTSTRAP_EMAIL: z.email(), BOOTSTRAP_PASSWORD: z.string() })
-    .parse(parseEnv(readFileSync(".env.h02-demo.docker.local", "utf8")));
+    .parse(parseEnv(readFileSync(LOCAL_BOOTSTRAP_ENV_FILE, "utf8")));
   const client = createClient<Database>(
     url,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "",

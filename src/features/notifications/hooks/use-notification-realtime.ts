@@ -14,7 +14,8 @@ export function useNotificationRealtime() {
     const client = requireBrowserClient();
     const channel = client
       .channel(
-        `personal-notices:${context.organization.id}:${context.profile.user_id}`,
+        `personal-notices:${context.organization.id}:${context.profile.user_id}:${context.session_id}`,
+        { config: { private: true } },
       )
       .on("broadcast", { event: "changed" }, () => {
         void cache.invalidateQueries({
@@ -41,6 +42,12 @@ export function useNotificationRealtime() {
         })
         .catch(() => console.error("Falló el cierre del canal de avisos."));
     };
-  }, [cache, context.organization.id, context.profile.user_id, scope]);
+  }, [
+    cache,
+    context.organization.id,
+    context.profile.user_id,
+    context.session_id,
+    scope,
+  ]);
   return error;
 }

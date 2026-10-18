@@ -31,7 +31,7 @@ TaxSkill reserva los puertos 54330–54339 y el inspector Edge 8183 para coexist
 
 La agregación opcional de logs de Studio (`analytics`) está desactivada localmente: esta combinación de CLI y Docker Windows intentaba acceder a `host.docker.internal:2375`, provocando un bucle de reinicio de Vector. Se conservan `audit_events` y la consulta directa con `docker logs`; no habilitar acceso Docker TCP sin autenticación para usar ese panel. El monitoreo de publicación se resuelve por separado en H08.
 
-`yarn env:local` obtiene la configuración del CLI local sin imprimir secretos. Antes de sustituir una conexión remota conserva su contenido en `.env.cloud.local`, ignorado por Git; nunca sobrescribe un respaldo diferente. Si Supabase local no está disponible, no modifica `.env.local`. Las credenciales locales proceden del contenedor, con una clave HMAC propia.
+`yarn env:local` obtiene la configuración del CLI local sin imprimir secretos. Antes de sustituir una conexión remota conserva su contenido en `.envs/cloud/application.env`, ignorado por Git; nunca sobrescribe un respaldo diferente. Si Supabase local no está disponible, no modifica `.env.local`. Las credenciales locales proceden del contenedor, con una clave HMAC propia.
 
 `yarn env:setup <project-ref>` y `yarn env:admin <project-ref>` son configuraciones explícitas para operar con el proyecto Cloud real. No habilitan seeds ni pruebas ficticias. La vinculación del CLI se conserva en `supabase/.temp/`; los comandos de prueba SQL fuerzan `--local` independientemente de ese vínculo.
 
@@ -47,6 +47,8 @@ El ajuste sobrevivió a dos reinicios autorizados, incluido un arranque en frío
 
 ## 3. Entornos y secretos
 
+La [guía de variables](variables-entorno.md) describe la consolidación por entorno/servicio y el archivo `.env.vercel` listo para importación privada. Los antiguos archivos por hito ya se retiraron; sus referencias en evidencias anteriores son históricas.
+
 | Configuración | Ejecutor | Situación |
 |---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | Navegador. | URL pública del proyecto configurada localmente. |
@@ -57,7 +59,7 @@ El ajuste sobrevivió a dos reinicios autorizados, incluido un arranque en frío
 | `N8N_WEBHOOK_URL` y `N8N_WEBHOOK_TOKEN` | Edge de resumen diario. | H06/H08; no se leen desde presentación. |
 | `N8N_RECEIPT_TOKEN` | Receptor Next.js. | H06; secreto diferente del de salida. |
 
-`.env.example` solo contiene nombres y valores vacíos. `.env.local` y `.env.cloud.local` están excluidos de Git. El desarrollo con fixtures usa Docker local; un preview tampoco debe generar datos ficticios en el proyecto Cloud real. Las variables públicas quedan incorporadas en el build: reiniciar desarrollo y recompilar antes de servir una compilación de otro entorno.
+`.env.example` solo contiene nombres y valores vacíos. `.env.local` y `.envs/cloud/application.env` están excluidos de Git. El desarrollo con fixtures usa Docker local; un preview tampoco debe generar datos ficticios en el proyecto Cloud real. Las variables públicas quedan incorporadas en el build: reiniciar desarrollo y recompilar antes de servir una compilación de otro entorno.
 
 Los validadores devuelven errores sin incluir valores recibidos. Los adaptadores se inicializan cuando se necesitan, de modo que faltar una credencial administrativa no rompe el build público de H01.
 
@@ -154,7 +156,7 @@ Para un cambio DB de H02 en adelante: crear migración → aplicar sobre base lo
 
 El motor Docker no estaba activo durante las primeras verificaciones y se utilizó incorrectamente el Cloud compartido para fixtures H02/H03. Esos datos remotos se eliminaron por instrucción del usuario y sus credenciales históricas ya no funcionan. El 16 de octubre se recuperó Docker y se completaron una base limpia, la actualización con datos H02 → H03 y la integración local; consultar la [evidencia vigente](hitos/evidencias/validacion-local-h02-h03.md). No repetir fixtures en Cloud.
 
-RLS y exposición definitiva de tablas/vistas/RPC/Storage permanecen en H08/T01. Filtros y caché de H01 no acreditan aislamiento de datos.
+H08/T01 implementa RLS, privilegios, sesiones confiables, Storage y canales privados en migraciones locales. Consultar [seguridad](seguridad-produccion.md), [operación](operacion-produccion.md) y [evidencias H08](hitos/evidencias/h08.md) para distinguir lo comprobado de la activación productiva pendiente. Filtros y caché de H01 no acreditan por sí solos aislamiento de datos.
 
 ## 9. Verificaciones
 
@@ -207,11 +209,11 @@ yarn test:h02:sql
 yarn db:lint
 ```
 
-`env:admin` conserva la configuración pública y añade únicamente las claves privadas que falten. No imprime valores y comprueba que el project-ref coincida. Nunca copiar `.env.local`, `.env.h02-demo.local`, `.env.bootstrap.local` ni `test-results/` a Git, evidencias o chats.
+`env:admin` conserva la configuración pública y añade únicamente las claves privadas que falten. No imprime valores y comprueba que el project-ref coincida. Nunca copiar `.env.local`, `.env.vercel`, `.envs/cloud/bootstrap.env` ni `test-results/` a Git, evidencias o chats.
 
-El administrador ficticio es `admin.h02@example.test`; su contraseña local queda exclusivamente en `.env.h02-demo.docker.local`. Las otras cuentas locales están en `test-results/local/h02-fixtures.json` y `test-results/local/h02-recovery.json`. No reutilizar los archivos históricos de Cloud. `seed:demo`, `test:h02:live` y `test:h03:live` rechazan cualquier destino que no sea loopback HTTP, puerto 54331, antes de contactar Supabase. Las pruebas SQL independientes fuerzan `--local` y hacen rollback de sus fixtures.
+El administrador ficticio es `admin.h02@example.test`; su contraseña local queda exclusivamente en `.envs/local/bootstrap.env`. Las otras cuentas locales están en `test-results/local/h02-fixtures.json` y `test-results/local/h02-recovery.json`. No reutilizar los archivos históricos de Cloud. `seed:demo`, `test:h02:live` y `test:h03:live` rechazan cualquier destino que no sea loopback HTTP, puerto 54331, antes de contactar Supabase. Las pruebas SQL independientes fuerzan `--local` y hacen rollback de sus fixtures.
 
-Para una instalación nueva con administrador elegido por el estudio, crear localmente `.env.bootstrap.local` con `BOOTSTRAP_EMAIL`, `BOOTSTRAP_NAME` y `BOOTSTRAP_PASSWORD` (mínimo 12 caracteres), y ejecutar `yarn auth:bootstrap`. El script agrega/conserva `BOOTSTRAP_USER_ID` para reintentos. No acepta crear otro estudio si ya existe uno; no ofrece un endpoint público. Auth confirma el correo administrativamente y el bootstrap crea organización, membresía, catálogo y tres plantillas de rol en una transacción. La facultad administrativa no concede permisos documentales: asignarlos explícitamente cuando corresponda.
+Para una instalación nueva con administrador elegido por el estudio, crear localmente `.envs/cloud/bootstrap.env` con `BOOTSTRAP_EMAIL`, `BOOTSTRAP_NAME` y `BOOTSTRAP_PASSWORD` (mínimo 12 caracteres), y ejecutar `yarn auth:bootstrap`. El script agrega/conserva `BOOTSTRAP_USER_ID` para reintentos. No acepta crear otro estudio si ya existe uno; no ofrece un endpoint público. Auth confirma el correo administrativamente y el bootstrap crea organización, membresía, catálogo y tres plantillas de rol en una transacción. La facultad administrativa no concede permisos documentales: asignarlos explícitamente cuando corresponda.
 
 En una base ya inicializada, las cuentas siguientes se crean desde `/usuarios`. El administrador distribuye la contraseña mediante el procedimiento externo del estudio. No hay registro, recuperación por correo ni edición propia de contraseña en la UI.
 
@@ -251,7 +253,7 @@ yarn db:types --local
 yarn h03:setup
 
 # Otra terminal: mantener el servicio local de Edge en ejecución.
-supabase functions serve document-operations --env-file .env.h03-operations.docker.local
+supabase functions serve document-operations --env-file .envs/local/edge.env
 
 # En la terminal de verificaciones:
 yarn verify
@@ -263,7 +265,7 @@ yarn test:h03:sql
 yarn test:h03:live
 ```
 
-`h03:setup` usa la conexión configurada; antes de ejecutarlo para pruebas debe haberse completado `env:local`. Crea los buckets privados y guarda la credencial local junto con `H03_PUBLIC_SUPABASE_URL` en `.env.h03-operations.docker.local`, ignorado por Git. Conserva la credencial existente al repetirlo. La URL pública permite que las descargas firmadas usen 54331, mientras Edge accede internamente a `kong:8000`. Reiniciar `functions serve` después de cambiar ese archivo. La credencial Cloud histórica queda separada en `.env.h03-operations.local`; esta validación no la modificó ni desplegó funciones remotas. No imprimir, compartir ni versionar esos archivos. La reserva de ejecución de validación dura dos minutos y la vigencia de recepción 24 horas.
+`h03:setup` usa la conexión configurada; antes de ejecutarlo para pruebas debe haberse completado `env:local`. Crea los buckets privados y guarda la credencial local junto con `H03_PUBLIC_SUPABASE_URL` en `.envs/local/edge.env`, ignorado por Git. Conserva la credencial existente al repetirlo. La URL pública permite que las descargas firmadas usen 54331, mientras Edge accede internamente a `kong:8000`. Reiniciar `functions serve` después de cambiar ese archivo. La credencial Cloud histórica queda separada en `.envs/cloud/edge.env`; esta validación no la modificó ni desplegó funciones remotas. No imprimir, compartir ni versionar esos archivos. La reserva de ejecución de validación dura dos minutos y la vigencia de recepción 24 horas.
 
 No ejecutar `--schedule` para este recorrido local: el job de publicación requiere una URL alcanzable desde su ejecutor y configuración propia del entorno. La integración llama directamente a la limpieza de Edge local para comprobar el TTL. No se da por probada la programación Cloud al repetir una prueba local.
 
@@ -346,7 +348,7 @@ yarn db:types --local
 yarn h06:setup
 ```
 
-El setup conserva secretos locales existentes y genera archivos ignorados de Edge/n8n; añade el token de receipts a `.env.local`. Importar las credenciales/workflow y publicarlos en la instancia n8n **local** siguiendo su guía; después servir Edge con `.env.h06-operations.docker.local`, iniciar `scripts/fixtures/h06-provider.ts`, compilar y reiniciar Next en 3001.
+El setup conserva secretos locales existentes y genera archivos ignorados de Edge/n8n; añade el token de receipts a `.env.local`. Importar las credenciales/workflow y publicarlos en la instancia n8n **local** siguiendo su guía; después servir Edge con `.envs/local/edge.env`, iniciar `scripts/fixtures/h06-provider.ts`, compilar y reiniciar Next en 3001.
 
 ```powershell
 yarn test:h06:sql

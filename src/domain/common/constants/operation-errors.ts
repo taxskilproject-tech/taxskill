@@ -14,6 +14,8 @@ export const OPERATION_MESSAGES: Readonly<Record<OperationErrorCode, string>> =
     STORAGE_LIMIT_INCOMPATIBLE:
       "El almacenamiento no admite el tamaño configurado para esta obligación. Consulta al administrador; las condiciones históricas se conservan.",
     FORBIDDEN: "No tienes permiso para realizar esta acción.",
+    RATE_LIMITED:
+      "Se alcanzó el límite de solicitudes. Espera un minuto antes de reintentar.",
     NOT_FOUND: "El recurso no está disponible.",
     UNAUTHENTICATED: "Inicia sesión para continuar.",
     VALIDATION_ERROR: "Revisa los datos indicados.",
@@ -29,6 +31,7 @@ export const OPERATION_HTTP_STATUS: Readonly<
   FILE_MISSING: 422,
   STORAGE_LIMIT_INCOMPATIBLE: 503,
   FORBIDDEN: 403,
+  RATE_LIMITED: 429,
   NOT_FOUND: 404,
   UNAUTHENTICATED: 401,
   VALIDATION_ERROR: 422,
