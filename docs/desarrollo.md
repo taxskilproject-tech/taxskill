@@ -39,6 +39,12 @@ La aplicación muestra los problemas de configuración de forma explícita. Rein
 
 H01–H07 usan datos sintéticos únicamente en Docker local. Las ejecuciones anteriores de H02/H03 usaron incorrectamente el proyecto Cloud compartido: están registradas como evidencia histórica y deben repetirse en local. No se considera ese proyecto un entorno de desarrollo.
 
+### Telemetría de Docker Desktop en Windows
+
+El 17 de octubre de 2026 se corrigió en la máquina local la recurrencia del fallo OTel `userAnalyticsOtlpHttp.sock`, con el [registro de comprobaciones](hitos/evidencias/revalidacion-base-h08.md#3-incidencia-del-entorno-resuelta-telemetría-de-docker). Se dejó `analyticsEnabled=false` en `%APPDATA%\Docker\settings.json` de Docker Desktop 4.31.1 y una copia íntegra previa junto al original. Este es el ajuste de estadísticas de Docker, separado del contenedor `analytics` de Supabase descrito arriba. [Referencia oficial de la opción](https://docs.docker.com/desktop/enterprise/hardened-desktop/settings-management/settings-reference/).
+
+El ajuste sobrevivió a dos reinicios autorizados, incluido un arranque en frío, sin volver a retirar el socket. Se restablecieron los contenedores previamente activos y se conservó el inventario de volúmenes. Los respaldos personales de configuración no se copian al proyecto ni se versionan. Mantener ese ajuste al preparar esta máquina; si una actualización cambia el comportamiento, revisar el nuevo error antes de intervenir. La evidencia no garantiza el comportamiento de otras versiones de Docker.
+
 ## 3. Entornos y secretos
 
 | Configuración | Ejecutor | Situación |

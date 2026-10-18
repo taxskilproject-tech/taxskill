@@ -4,6 +4,8 @@
 
 Este índice desarrolla los ocho hitos de [Hitos de implementación](../hitos-implementacion.md). El equipo debe trabajar por recorridos completos: contrato, migración necesaria, persistencia, acceso a datos, presentación y demostración. No es necesario terminar las 29 tablas para comenzar la interfaz ni crear una migración independiente por tabla.
 
+La [revalidación de entrada a H08](evidencias/revalidacion-base-h08.md) confirma la base actual, distingue pruebas nuevas de evidencias anteriores y registra el ajuste persistente de telemetría de Docker comprobado con dos reinicios.
+
 ## 1. Orden y entregas
 
 | Hito | Resultado que debe poder demostrarse | Dependencia |
