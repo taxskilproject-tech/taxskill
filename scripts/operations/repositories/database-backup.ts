@@ -99,6 +99,7 @@ export function dumpDatabase(mode: BackupMode, container?: string): Buffer {
       "--data-only",
       "--no-owner",
       "--no-acl",
+      ...(mode === "cloud" ? ["--role=postgres"] : []),
       "--table=public.*",
       "--table=auth.users",
       "--table=auth.identities",
@@ -116,8 +117,10 @@ export function databaseMigrations(
     mode,
     "psql",
     [
-      "-Atc",
-      "select coalesce(jsonb_agg(version order by version),'[]') from supabase_migrations.schema_migrations",
+      "-qAtc",
+      // A session pooler may ignore startup PGOPTIONS; assume the CLI role explicitly.
+      (mode === "cloud" ? "set role postgres; " : "") +
+        "select coalesce(jsonb_agg(version order by version),'[]') from supabase_migrations.schema_migrations",
     ],
     undefined,
     container,

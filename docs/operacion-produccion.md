@@ -2,13 +2,13 @@
 
 Consultar [seguridad](seguridad-produccion.md), [desarrollo local](desarrollo.md), [H08](hitos/h08-preparacion-produccion.md) y [evidencias](hitos/evidencias/h08.md). Este runbook entrega procedimientos; las dependencias externas sin comprobar mantienen H08 abierto.
 
-La [organización de variables y exportación Vercel](variables-entorno.md) reemplaza los antiguos `.env` por hito. El webhook productivo confirmado es `https://n8n-n8n.ricijy.easypanel.host/webhook/taxskill-whatsapp-digest`. Variables Edge instaladas, huellas contrastadas y ambas funciones publicadas; credenciales separadas n8n en configuración. Respaldo temporal en Supabase Storage por decisión del usuario; las [opciones externas](respaldos-opciones.md) se conservan para después.
+La [organización de variables y exportación Vercel](variables-entorno.md) reemplaza los antiguos `.env` por hito. El webhook productivo publicado es `https://n8n-n8n.ricijy.easypanel.host/webhook/taxskill-whatsapp-digest`. Variables Edge instaladas, huellas contrastadas y ambas funciones publicadas; cuatro credenciales separadas n8n guardadas y vinculadas. Respaldo temporal en Supabase Storage por decisión del usuario; las [opciones externas](respaldos-opciones.md) se conservan para después.
 
-**Publicación comprobada:** siete migraciones H08 en Cloud; 64 versiones, 29 tablas públicas con RLS, 13 huellas históricas idénticas durante la publicación y lint remoto sin errores. Con autorización posterior se aplicó Auth, se publicaron documentos v5/notificaciones v1 y se creó al administrador real Josmel. Login confiable y rechazo anónimo Edge comprobados. No se crearon datos ficticios ni jobs nuevos. El usuario gestiona Vercel y recibió la [clasificación Config/Secret](variables-entorno.md#importación-en-vercel); despliegue efectivo pendiente de verificar. Ver [estado y dependencias](hitos/evidencias/cierre-hitos.md).
+**Publicación comprobada:** siete migraciones H08 en Cloud; 64 versiones, 29 tablas públicas con RLS, 13 huellas históricas idénticas durante la publicación y lint remoto sin errores. Con autorización posterior se aplicó Auth, se publicaron documentos v5/notificaciones v1 y se creó al administrador real Josmel. Vercel desplegó `2618846` en Production con estado **Ready** y login visible en el dominio real; n8n publicó la versión **H08 · Canal autenticado TaxSkill**. Peticiones sin credenciales: Edge/receipts **401**, webhook n8n **403**. No se crearon datos ficticios ni jobs nuevos. Ver [estado y dependencias](hitos/evidencias/cierre-hitos.md).
 
 ## Recursos y configuración
 
-Destino real Supabase: `gzwrqvqofcrdjvzoblaz`. Dominio comunicado: `https://taxskill.vercel.app`. Confirmar despliegue y HTTPS efectivos antes de usarlo en mensajes; comunicar una URL no acredita que esté sirviendo esta versión. Todos los fixtures, seeds y pruebas SQL/integración permanecen en Docker. Preview necesita otro proyecto Supabase y variables independientes; no apuntarlo a producción para pruebas.
+Destino real Supabase: `gzwrqvqofcrdjvzoblaz`. Dominio HTTPS comprobado: `https://taxskill.vercel.app`, con redirección a `/login`. Falta el recorrido autenticado por perfiles en ese despliegue; ver la [evidencia](hitos/evidencias/h08.md). Todos los fixtures, seeds y pruebas SQL/integración permanecen en Docker. Preview necesita otro proyecto Supabase y variables independientes; no apuntarlo a producción para pruebas.
 
 | Ejecutor | Configuración privada/pública necesaria |
 |---|---|
@@ -21,7 +21,7 @@ Destino real Supabase: `gzwrqvqofcrdjvzoblaz`. Dominio comunicado: `https://taxs
 | Copia temporal Supabase Storage | `H08_BACKUP_DESTINATION=supabase-storage`, servicio Cloud, conexión DB/CA y clave de cifrado. No requiere AWS ni `H08_BACKUP_S3_URI`. |
 | Monitor | URL del entorno, servicio privado y `H08_OPERATION_ORGANIZATION_ID`. |
 
-No compartir valores por chat, Git o capturas. Guardar cifrado y clave de recuperación en custodias distintas. Los contactos destinatarios ya se configuran en **Usuarios → detalle → Contacto para resumen WhatsApp**; no se crea otro directorio ni se incrustan en el workflow. La clave Evolution compartida anteriormente debe sustituirse en las credenciales de n8n.
+No compartir valores por chat, Git o capturas. Guardar cifrado y clave de recuperación en custodias distintas. Los contactos destinatarios ya se configuran en **Usuarios → detalle → Contacto para resumen WhatsApp**; no se crea otro directorio ni se incrustan en el workflow. La clave Evolution proporcionada se guardó únicamente en la credencial privada n8n limitada al dominio del proveedor.
 
 ## Publicación compatible
 
@@ -39,7 +39,7 @@ No hay una migración que active jobs o proveedores. `h08_schedule_generation(tr
 
 ## Respaldo DB y archivos
 
-**Destino temporal confirmado:** Supabase Storage del mismo proyecto, bucket privado `system-backups`. No equivale a una copia independiente. La elección aplaza el proveedor externo, conservando cifrado y verificación de restauración. El bucket existe; el primer intento real falló al verificar TLS por faltar la CA Supabase. Se mantuvo `verify-full` y el registro operativo quedó fallido, sin marcar éxito ni activar jobs.
+**Destino temporal confirmado:** Supabase Storage del mismo proyecto, bucket privado `system-backups`. No equivale a una copia independiente. La elección aplaza el proveedor externo, conservando cifrado y verificación de restauración. Tras conservar los intentos fallidos y corregir CA/rol de conexión, se completó la copia real **ffe0c353-a303-4499-8189-57dbd8362eeb** y su descarga/restauración aislada: 64 migraciones, 13 huellas coincidentes y login nuevo correcto en **54,38 s**. Registro de recuperación **c0753bb3-d484-4d96-95cd-b323dd89a606**. Cero documentos actuales; no es medición de RTO al volumen objetivo. Se mantuvo `verify-full` y no se activaron jobs. [Evidencia](hitos/evidencias/h08.md).
 
 Ejecutor independiente con Node 22, Yarn 1.22.22, Docker y AWS CLI. PostgreSQL se ejecuta con imagen compatible 17.11.0.003. Usar conexión directa Supabase o pooler **session** puerto 5432, del proyecto exacto; no transaction pooler 6543. Descargar la CA desde la configuración del proyecto, guardarla como archivo y usar `H08_DATABASE_CA_CERT`: el contenedor monta la CA de solo lectura y exige TLS `verify-full`.
 
@@ -61,7 +61,7 @@ S3 utiliza prefijo `runs/<id>/` para dump/manifiesto y `objects/<key-id>/<sha256
 
 Con `supabase-storage` se usan esos mismos prefijos dentro de `system-backups`, servicio únicamente, `upsert:false` y cifrado AES-256-GCM local antes de subir. El bucket admite objetos cifrados `application/octet-stream` hasta 50 MB; si DB u objeto supera el límite efectivo, la copia falla explícitamente y debe ampliarse el plan o adaptar el particionado. No se presenta una copia parcial como correcta. No borrar el bucket ni aplicar caducidad a objetos compartidos por hash.
 
-Guardar la CA descargada desde **Supabase → Database → Settings → SSL Configuration** y completar conexión session/directa y ruta CA en la configuración privada. El cliente acepta `postgres` y la identidad temporal `cli_login_postgres` del CLI, únicamente para el proyecto autorizado, puerto 5432 y base `postgres`; una credencial temporal no sustituye la identidad de una programación permanente. [Verificación SSL oficial](https://supabase.com/docs/guides/platform/ssl-enforcement).
+La CA pública enlazada en **Supabase → Database → Settings → SSL Configuration** se guardó en `.envs/cloud/supabase-ca.crt` y se comprobó como `Supabase Root 2021 CA`. Sirve para verificar la identidad del servidor de respaldo y rechazar intermediarios; no es una contraseña. Completar conexión session/directa y ruta CA en la configuración privada. El cliente acepta `postgres` y la identidad temporal `cli_login_postgres` del CLI, únicamente para el proyecto autorizado, puerto 5432 y base `postgres`. Usa `SET ROLE postgres` en la consulta de migraciones y `--role=postgres` en el dump, conforme al comando generado por el CLI; el pooler no aplica necesariamente `PGOPTIONS`. Una credencial temporal no sustituye la identidad de una programación permanente. [Verificación SSL oficial](https://supabase.com/docs/guides/platform/ssl-enforcement).
 
 ```powershell
 # Variables explícitas del entorno real, sin cambiar .env.local (Docker).

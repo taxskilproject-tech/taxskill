@@ -22,7 +22,7 @@ Los casilleros de aceptación formal que permanecen en H02–H05 corresponden a 
 ## Verificación consolidada
 
 - `yarn verify`: TypeScript, ESLint, arquitectura y **247 pruebas en 31 archivos** aprobados; última ejecución en 117,26 s.
-- `yarn build`: build de producción correcto, 19 entradas estáticas, Proxy y cuatro API routes; última ejecución en **19,26 s**.
+- `corepack yarn build`: build de producción correcto, 19 entradas estáticas, Proxy y cuatro API routes; última ejecución en **34,19 s**. Vercel instaló con Yarn **1.22.22** y terminó en **Ready**.
 - `yarn check:bundle`: secretos administrativos/HMAC/integraciones ausentes del bundle público.
 - Docker limpio: **64 migraciones**, siete suites SQL y **78 casos pgTAP**; H08 live **28 comprobaciones** y H03 live **59**.
 - Recuperación Docker aislada: DB cifrada, relaciones, **13 huellas históricas**, objeto real de 883 bytes, sesión previa revocada y login nuevo correcto. No acredita el volumen ni RTO productivo.
@@ -40,23 +40,23 @@ Las evidencias históricas mantienen sus fechas y límites; las verificaciones a
 |---|---|---|
 | Auth Cloud | **Aplicado y comprobado** tras autorización: registro desactivado, contraseñas solo administrativas, sin confirmación por correo y hooks activos. Diff declarado restante: cero. | Cerrado el ajuste; nueve opciones remotas ajenas conservadas. Login real de Josmel admitido por el hook. |
 | Edge Cloud | **Publicadas**: documentos v5 y notificaciones v1, con autenticación propia. Llamadas anónimas devuelven 401. | Despliegue cerrado; recorridos con documentos reales corresponden al piloto. |
-| Vercel | Usuario confirma proyecto importado y gestiona la publicación. Recibió clasificación de las seis variables. Última comprobación del dominio: `DEPLOYMENT_NOT_FOUND`. | Importar `.env.vercel` como Production, asignar Config/Secret según [tabla](../../variables-entorno.md#importación-en-vercel), redesplegar y verificar dominio/endpoints. No se requiere entregar sesión Vercel al agente. |
+| Vercel | **Publicado en Production, Ready**, commit `2618846`. Logs confirman `corepack yarn install --frozen-lockfile`, Yarn 1.22.22 y compilación correcta. Dominio muestra `/login`; receipt anónimo devuelve 401. [Captura](capturas/h08/vercel-ready.png). | Instalador y publicación resueltos. Completar login y recorridos autorizados por perfiles, preview separado y capacidad objetivo. Las seis variables mantienen su [clasificación](../../variables-entorno.md#importación-en-vercel). |
 | Administrador real | **Creado** Josmel, habilitado/listo. Login confiable y cierre de la sesión de comprobación correctos. Contraseña solo en `.envs/cloud/bootstrap.env`, ignorado. | Aprovisionamiento cerrado. Contacto de Josmel queda vacío por indicación del usuario; se actualizará después en Usuarios. |
-| Respaldo | Usuario eligió **Supabase Storage temporal**, aplazando el proveedor externo. Bucket privado `system-backups` creado, cifrado/copia incremental/descarga/restore comprobados en Docker. Intento real falló por faltar CA Supabase; no hay copia productiva confirmada. | Instalar CA/conexión verificadas, ejecutar copia y ensayo real. No reducir TLS. Custodiar clave fuera del mismo proyecto. [Opciones externas aplazadas](../../respaldos-opciones.md). |
-| n8n/WhatsApp | Cuatro credenciales separadas configuradas; la clave Evolution proporcionada por el usuario se guardó exclusivamente en la credencial privada y quedó vinculada al nodo. Publish bloqueado por revisión automática: confirmación específica solicitada. | Autorizar publicación/activación y comprobar el envío autorizado sin inventar obligaciones en Cloud; recorrido de digest/replay/receipt con datos reales configurados. `sent` no equivale a `delivered`. |
+| Respaldo | Usuario eligió **Supabase Storage temporal**, aplazando el proveedor externo. CA oficial instalada, TLS verificado y copia productiva **correcta**, ID `ffe0c353-a303-4499-8189-57dbd8362eeb`, cifrada en `system-backups`. Descarga y restore Docker nuevo aprobados en **54,38 s**, 64 migraciones, 13 huellas coincidentes, sesiones revocadas y login nuevo correcto. Registro real `c0753bb3-d484-4d96-95cd-b323dd89a606`. | Configurar ejecutor permanente/retención y validar objetivos con volumen real; la copia actual no contiene documentos. Custodiar clave fuera del mismo proyecto. [Opciones externas aplazadas](../../respaldos-opciones.md). |
+| n8n/WhatsApp | **Publicado y activo** tras autorización específica: versión **H08 · Canal autenticado TaxSkill**, workflow `MvcIvz2cHEe2jiCj`. Cuatro credenciales separadas seleccionadas; clave Evolution solo en n8n. Webhook anónimo rechazado con 403. [Captura](capturas/h08/n8n-publicado.png). | Comprobar el envío autorizado sin inventar obligaciones en Cloud; recorrido de digest/replay/receipt con datos reales configurados. Publicación no acredita entrega: `sent` no equivale a `delivered`. |
 | Programación y monitor | Implementados, sin habilitar automatización productiva. Solo permanece el cleanup que ya existía. | Después de copia/ensayo y canal correctos, habilitar programación y comprobar horarios Lima, progreso y recepción de alertas por el responsable real. |
-| Piloto y aceptación | Sin estudio/usuarios autorizados ni aplicación publicada; no hay piloto productivo ni medición de capacidad objetivo. | Producto configura empresas/reglas/responsables, ejecuta recorridos por perfil, revisión móvil efectiva y acepta resultados/objetivos de recuperación. |
+| Piloto y aceptación | Aplicación y administrador real disponibles; sin empresas/perfiles de piloto configurados ni aceptación productiva o medición de capacidad objetivo. | Producto configura empresas/reglas/responsables, ejecuta recorridos por perfil, revisión móvil efectiva y acepta resultados/objetivos de recuperación. |
 
 No se necesita volver a implementar H01–H07 para resolver estas dependencias. **H08 permanece abierto** hasta disponer de sus recursos y evidencias; las funciones futuras comerciales continúan fuera del alcance del MVP.
 
 ## Continuación segura
 
-1. Auth/Edge y administrador real ya están disponibles. Usuario completa variables y redespliegue Vercel.
-2. Resolver la confirmación de publicación n8n y completar CA/conexión del ejecutor de respaldo. La clave Evolution ya está guardada y no se versiona.
-3. Completar copia temporal en Storage y ensayo, publicar el canal y verificar los contratos con datos autorizados. La independencia externa queda aplazada por elección del usuario.
+1. Auth/Edge, administrador real y aplicación Vercel ya están disponibles; instalador corregido y publicación Ready comprobada.
+2. n8n ya está publicado con autenticación y credenciales separadas. Completar envío/replay/receipts con datos autorizados; mantener jobs detenidos.
+3. La copia real temporal en Storage ya existe y pasó descarga/recuperación aislada; configurar ejecutor permanente, retención y objetivos de recuperación. La independencia externa queda aplazada por elección del usuario.
 4. Activar jobs/monitor, ejecutar el piloto y registrar aceptación de producto y versión publicada.
 
-Todos los datos sintéticos, SQL de prueba y suites de integración continúan exclusivamente en Docker. En Cloud se publicaron migraciones/configuración/funciones autorizadas y se creó el administrador real. El respaldo real fallido permanece registrado; no hubo seeds, mensajes ni purgas de datos.
+Todos los datos sintéticos, SQL de prueba y suites de integración continúan exclusivamente en Docker. En Cloud se publicaron migraciones/configuración/funciones autorizadas, se creó el administrador real y se guardó una copia cifrada real. Los respaldos fallidos anteriores permanecen registrados; no hubo seeds, mensajes ni purgas de datos.
 
 ## Continuación autorizada del 18 de octubre
 
@@ -66,4 +66,12 @@ Regresión ampliada: **247 pruebas en 31 archivos**, TypeScript, ESLint y arquit
 
 ### Corrección del instalador Vercel
 
-El deployment Vercel observado utilizaba Yarn global 1.22.19 y fallaba contra `engines.yarn=1.22.22`. Se añadió `vercel.json` con instalación `corepack yarn install --frozen-lockfile` y compilación `corepack yarn build`, usando el `packageManager` ya fijado. Verificación local: Corepack selecciona 1.22.22, instalación offline/frozen correcta y build de producción aprobado en 34,19 s. No se alteró `yarn.lock`, no se ignoraron engines ni se añadieron variables. Es necesario desplegar el commit que incluye esta corrección.
+El deployment Vercel observado utilizaba Yarn global 1.22.19 y fallaba contra `engines.yarn=1.22.22`. Se añadió `vercel.json` con instalación `corepack yarn install --frozen-lockfile` y compilación `corepack yarn build`, usando el `packageManager` ya fijado. Verificación local: Corepack selecciona 1.22.22, instalación offline/frozen correcta y build de producción aprobado en 34,19 s. No se alteró `yarn.lock`, no se ignoraron engines ni se añadieron variables. El commit **2618846** fue publicado: deployment **3shjjWsSsUiLiuskDeuzwNEwZx22**, Production **Ready**, con login accesible en el [dominio real](https://taxskill.vercel.app/login).
+
+### Publicación n8n y conexión de respaldo
+
+Tras la autorización explícita del usuario se publicó **H08 · Canal autenticado TaxSkill**. n8n confirmó “Workflow published” y disponibilidad de la URL productiva. No se ejecutó manualmente el workflow ni se enviaron mensajes; la programación de Supabase continúa detenida.
+
+La CA pública oficial se validó con `X509Certificate` como **Supabase Root 2021 CA**, vigente hasta abril de 2031. El ejecutor conserva TLS `verify-full`; el dump usa el rol autorizado `postgres` que aplica el propio CLI. Se añadió una regresión para ese rol, conservación de TLS, contraseña fuera de argumentos y rechazo de proyectos ajenos. Verificación del cambio: **19 pruebas en cuatro archivos**, ESLint, TypeScript y arquitectura aprobados. La contraseña temporal del CLI se retiró después del ensayo.
+
+La copia real se descargó y restauró en un proyecto Docker nuevo, vacío y detenido al finalizar, conservando sus volúmenes. Relaciones y 13 huellas contrastadas; 64 migraciones, sesiones previas revocadas, jobs ausentes y login nuevo correcto. Duración del ensayo **54,38 s**. El Cloud actual tiene cero versiones documentales y esta copia tiene **cero objetos**; la prueba de recuperación de bytes permanece acreditada por el ensayo Docker con un PDF. No se añadieron documentos ficticios a Cloud. La recuperación real se registró después del resultado comprobado, sin convertir los fallos anteriores en éxito. RPO diario, retención, volumen objetivo y custodia independiente siguen por validar.
