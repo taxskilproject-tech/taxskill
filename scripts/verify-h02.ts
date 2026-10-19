@@ -15,10 +15,12 @@ import {
   LOCAL_TEST_RESULTS_DIR,
 } from "./constants/local-environment";
 import type { DemoIdentity, HttpSession } from "./types/h02.types";
+import { localApplicationOrigin } from "./utils/local-application-origin";
 import { requireLocalTestEnvironment } from "./utils/require-local-test-environment";
 
 const url = requireLocalTestEnvironment();
-const baseUrl = "http://127.0.0.1:3001";
+const baseUrl = localApplicationOrigin();
+const DEMO_COMPANY_RUCS = ["20000000001", "20000000002"];
 const demo = z
   .object({
     BOOTSTRAP_EMAIL: z.email(),
@@ -167,10 +169,11 @@ async function main() {
     .from("companies")
     .select("*")
     .eq("organization_id", org)
+    .in("ruc", DEMO_COMPANY_RUCS)
     .is("deleted_at", null)
     .order("ruc");
   expect(!companies.error, "consulta empresas");
-  if (!companies.data.length)
+  if (!companies.data.some((item) => item.ruc === "20000000001"))
     await command(actor, org, "CreateOrUpdateCompany", {
       ruc: "20000000001",
       legal_name: "Empresa de demostración H02",
@@ -188,6 +191,7 @@ async function main() {
     .from("companies")
     .select("*")
     .eq("organization_id", org)
+    .in("ruc", DEMO_COMPANY_RUCS)
     .is("deleted_at", null)
     .order("ruc");
   expect(
@@ -255,7 +259,8 @@ async function main() {
   }
   const clientAccount = accounts.find((item) => item.memberType === "client");
   await verifyRecovery(actor, org, companies.data[0].id);
-  await verifyProfiles(accounts);
+  const companyIds = companies.data.map((company) => company.id);
+  await verifyProfiles(accounts, companyIds);
   expect(clientAccount, "fixture cliente");
   const clientSession = session();
   const clientContext = await login(
@@ -264,7 +269,8 @@ async function main() {
     clientAccount.password,
   );
   expect(
-    clientContext.companies.length === 1 &&
+    clientContext.companies.filter((company) => companyIds.includes(company.id))
+      .length === 1 &&
       !clientContext.capabilities.some((item) => item.action === "approve"),
     "alcance cliente por empresa y módulo",
   );
@@ -390,29 +396,33 @@ async function main() {
   );
 }
 
-async function verifyProfiles(accounts: DemoIdentity[]) {
+async function verifyProfiles(accounts: DemoIdentity[], companyIds: string[]) {
   for (const account of accounts) {
     const context = await login(session(), account.email, account.password);
+    // Later milestones add valid grants to these same local demonstration accounts.
+    const companies = context.companies.filter((company) =>
+      companyIds.includes(company.id),
+    );
+    const capabilities = context.capabilities.filter((capability) =>
+      companyIds.includes(capability.company_id ?? ""),
+    );
     if (account.roleCode === "contador")
       expect(
-        context.companies.length === 2 &&
-          context.capabilities.some(
-            (item) => item.module === "laboral_general",
-          ) &&
-          !context.capabilities.some(
-            (item) => item.module === "laboral_trabajador",
-          ),
+        companies.length === 2 &&
+          capabilities.some((item) => item.module === "laboral_general") &&
+          !capabilities.some((item) => item.module === "laboral_trabajador"),
         "contador con módulos diferentes por empresa",
       );
     if (account.roleCode === "supervisor")
       expect(
-        context.capabilities.some((item) => item.action === "approve") &&
-          !context.capabilities.some((item) => item.action === "upload"),
+        capabilities.some((item) => item.action === "approve") &&
+          !capabilities.some((item) => item.action === "upload"),
         "supervisor revisa sin entrega inicial",
       );
     if (account.roleCode === "cliente")
       expect(
-        context.companies.length === 1 &&
+        companies.length === 1 &&
+          companies[0].id === companyIds[0] &&
           !context.capabilities.some((item) =>
             ["approve", "observe", "reopen"].includes(item.action),
           ),

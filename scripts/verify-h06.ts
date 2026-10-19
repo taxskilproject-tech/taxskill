@@ -21,6 +21,7 @@ import {
 } from "./constants/local-environment";
 import type { H03Client } from "./types/h03.types";
 import type { H06FaultOptions } from "./types/h06.types";
+import { localApplicationOrigin } from "./utils/local-application-origin";
 import { requireLocalTestEnvironment } from "./utils/require-local-test-environment";
 
 const url = requireLocalTestEnvironment();
@@ -327,7 +328,7 @@ async function scenarioUser(
   return user.id;
 }
 async function callback(receipt: unknown, authenticated = true) {
-  return fetch("http://127.0.0.1:3001/api/integrations/n8n/receipts", {
+  return fetch(`${localApplicationOrigin()}/api/integrations/n8n/receipts`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

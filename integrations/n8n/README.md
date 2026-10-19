@@ -47,7 +47,9 @@ yarn test:h06:live
 
 La integración crea adicionales de empresa e internas y reutiliza el recorrido H03 de archivos. Simula 429/500, respuesta perdida, timeout HTTP, timeout/fallo del proveedor, callbacks repetidos/desordenados y reinicia realmente **solo** `tax-skill-h06-n8n`. El script espera su readiness y registro del webhook; después compara el contador del proveedor. Al final verifica un resumen generado por Cron local. Evidencias sin secretos en `test-results/local/h06-evidence.json`.
 
-Puertos: Next 3001, Supabase 54331, n8n 5679, proveedor/proxy de fallos 5680. El proveedor escucha en la interfaz del host para permitir la conexión desde Docker y exige Bearer ficticio; solo trabaja con las identidades locales creadas por el script. Su estado no guarda teléfonos/texto, solo UUID, contador y evidencia mínima. No comunica con un proveedor externo.
+Puertos: Next 3001 (alternativa 4001), Supabase 54331, n8n 5679, proveedor/proxy de fallos 5680. El proveedor escucha en la interfaz del host para permitir la conexión desde Docker y exige Bearer ficticio; solo trabaja con las identidades locales creadas por el script. Su estado no guarda teléfonos/texto, solo UUID, contador y evidencia mínima. No comunica con un proveedor externo.
+
+Si Windows reserva 3001, definir `TAXSKILL_LOCAL_APP_PORT=4001` en `.env.local` **antes de `yarn h06:setup`** y servir Next con `yarn start -H 127.0.0.1 -p 4001`. Setup y suite comparten un validador que solo admite los dos puertos de aplicación sobre loopback. Al cambiarlo, regenerar e importar/publicar el workflow en esta instancia local para actualizar el callback `host.docker.internal`; se conservan los secretos existentes. No es una variable de Vercel ni modifica el puerto de Supabase. Ver [entorno local](../../docs/desarrollo.md#puerto-alternativo-para-la-aplicación-de-pruebas).
 
 ## Configurar un entorno real en H08
 

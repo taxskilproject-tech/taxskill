@@ -35,6 +35,22 @@ Abrir http://localhost:3000. Supabase local expone la API en `http://127.0.0.1:5
 
 TaxSkill reserva los puertos 54330–54339 y el inspector Edge 8183 para coexistir con otros proyectos Supabase. PostgreSQL usa 54332 y Studio 54333. Las pruebas rechazan también el puerto habitual 54321, que puede pertenecer a otra aplicación; no detener sus contenedores ni reutilizar su base.
 
+### Puerto alternativo para la aplicación de pruebas
+
+Las suites H02/H06 usan `http://127.0.0.1:3001` por defecto. Si Windows reserva ese puerto y devuelve `EACCES` sin un proceso escuchando, usar **4001** sin modificar exclusiones de red del sistema. Agregar `TAXSKILL_LOCAL_APP_PORT=4001` a `.env.local` y arrancar `yarn start -H 127.0.0.1 -p 4001` después del build. Los scripts solo admiten 3001 y 4001 sobre loopback; rechazan URLs, otros puertos y valores vacíos explícitos. Omitir la variable para usar el valor predeterminado. Esta variable es local y no se importa en Vercel.
+
+Supabase mantiene **54331**. Para H06, ejecutar `yarn h06:setup` después de elegir el puerto, volver a importar el workflow generado y publicarlo únicamente en n8n local, según la [guía del laboratorio](../integrations/n8n/README.md). El callback usa `host.docker.internal` para llegar desde Docker al puerto elegido.
+
+Con Docker y memoria limitada, ejecutar las pruebas unitarias en un solo worker:
+
+```powershell
+$env:NODE_OPTIONS='--max-old-space-size=512'
+$env:RAYON_NUM_THREADS='2'
+yarn test --maxWorkers=1 --no-file-parallelism
+```
+
+Estas opciones acotan esa sesión de PowerShell; no alteran la configuración productiva. La [aceptación funcional Docker](hitos/evidencias/aceptacion-funcional-docker-h08.md) registra la interrupción por memoria, su recuperación y los límites de capacidad observados.
+
 La agregación opcional de logs de Studio (`analytics`) está desactivada localmente: esta combinación de CLI y Docker Windows intentaba acceder a `host.docker.internal:2375`, provocando un bucle de reinicio de Vector. Se conservan `audit_events` y la consulta directa con `docker logs`; no habilitar acceso Docker TCP sin autenticación para usar ese panel. El monitoreo de publicación se resuelve por separado en H08.
 
 `yarn env:local` obtiene la configuración del CLI local sin imprimir secretos. Antes de sustituir una conexión remota conserva su contenido en `.envs/cloud/application.env`, ignorado por Git; nunca sobrescribe un respaldo diferente. Si Supabase local no está disponible, no modifica `.env.local`. Las credenciales locales proceden del contenedor, con una clave HMAC propia.

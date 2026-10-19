@@ -8,6 +8,8 @@ La [revalidación de entrada a H08](evidencias/revalidacion-base-h08.md) confirm
 
 **H08 en curso:** [seguridad y recuperación comprobadas](evidencias/h08.md), [matriz de acceso](../seguridad-produccion.md), [runbooks](../operacion-produccion.md) y [workflow Evolution](../../integrations/n8n/produccion/README.md). Usuario eligió respaldo temporal en Storage: bucket privado, copia/descarga real y recuperación aislada comprobados con CA oficial y TLS verificado. Vercel corrigió el instalador Yarn mediante Corepack; n8n fue publicado con autorización expresa y rechaza solicitudes sin credenciales. Ver [dependencias concretas](evidencias/cierre-hitos.md#pendientes-para-cierre-productivo).
 
+**Aceptación funcional del 18/10:** [regresión Docker H02–H08, móvil y teclado](evidencias/aceptacion-funcional-docker-h08.md) ejecutada con datos ficticios exclusivamente locales. Lecturas H07: P95 final inferior a dos segundos; CAP-01 sigue abierta por timeout del procesamiento masivo de avisos sobre 12.000 obligaciones sin responsable. Esta aceptación no cierra el piloto ni el canal WhatsApp productivo.
+
 ## 1. Orden y entregas
 
 | Hito | Resultado que debe poder demostrarse | Dependencia |

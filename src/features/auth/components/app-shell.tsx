@@ -24,8 +24,14 @@ export function AppShell({
     { href: "/actividades", label: "Actividades" },
     { href: "/empresas", label: "Empresas" },
     { href: "/documentos", label: "Documentos" },
-    ...(context.member.is_admin || context.capabilities.some(item => item.action === "reports.view") ? [{ href: "/reportes", label: "Reportes" }] : []),
-    ...(context.member.is_admin || context.capabilities.some(item => item.action === "audit.view") ? [{ href: "/auditoria", label: "Auditoría" }] : []),
+    ...(context.member.is_admin ||
+    context.capabilities.some((item) => item.action === "reports.view")
+      ? [{ href: "/reportes", label: "Reportes" }]
+      : []),
+    ...(context.member.is_admin ||
+    context.capabilities.some((item) => item.action === "audit.view")
+      ? [{ href: "/auditoria", label: "Auditoría" }]
+      : []),
     { href: "/notificaciones", label: "Notificaciones" },
     ...(context.member.is_admin
       ? [
@@ -129,6 +135,7 @@ export function AppShell({
         <main
           className="mx-auto max-w-7xl space-y-6 px-5 py-8 lg:px-10 lg:py-10"
           id="main"
+          tabIndex={-1}
         >
           {error && <FeedbackMessage kind="error">{error}</FeedbackMessage>}
           {children}

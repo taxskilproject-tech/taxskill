@@ -35,6 +35,8 @@ const identities = z
   )
   .parse(JSON.parse(readFileSync(LOCAL_H02_FIXTURES_FILE, "utf8")));
 const checks: string[] = [];
+const GENERATION_BATCH_SIZE = 100;
+const MAX_GENERATION_BATCHES = 100;
 const resultSchema = z.object({
   ok: z.literal(true),
   data: workerResultSchema,
@@ -162,6 +164,49 @@ async function detail(
     .object({ ok: z.literal(true), data: workerDetailSchema })
     .parse(response.data).data;
 }
+async function finishGeneration(employmentPeriodId: string) {
+  for (let batch = 0; batch < MAX_GENERATION_BATCHES; batch += 1) {
+    const result = await admin.rpc("h05_run_generation", {
+      p_employment_period_id: employmentPeriodId,
+      p_batch_size: GENERATION_BATCH_SIZE,
+    });
+    ensure(!result.error, "bounded local employment continuation");
+    const progress = z.object({ status: z.string() }).parse(result.data);
+    if (["completed", "idle"].includes(progress.status)) return;
+  }
+  throw new Error("H05: bounded employment generation did not complete.");
+}
+async function preparePreviousFixtures(
+  client: H03Client,
+  org: string,
+  company: string,
+) {
+  const rules = await admin
+    .from("requirement_rules")
+    .select("id,revision")
+    .eq("organization_id", org)
+    .eq("company_id", company)
+    .like("title", "H05 %")
+    .eq("active", true)
+    .is("deleted_at", null);
+  ensure(!rules.error, "previous local H05 rule inventory");
+  for (const rule of rules.data ?? []) {
+    await command(client, org, "SetRuleActive", {
+      rule_id: rule.id,
+      expected_revision: rule.revision,
+      active: false,
+      reason:
+        "Nueva ejecución de fixtures H05 en Docker; conservar obligaciones e historia.",
+    });
+  }
+  const periods = await admin
+    .from("employment_periods")
+    .select("id")
+    .eq("organization_id", org)
+    .eq("company_id", company);
+  ensure(!periods.error, "previous local H05 generation inventory");
+  for (const period of periods.data ?? []) await finishGeneration(period.id);
+}
 async function main() {
   const administrator = await login(
     credentials.BOOTSTRAP_EMAIL,
@@ -257,6 +302,7 @@ async function main() {
       true,
     );
   }
+  await preparePreviousFixtures(administrator.client, org, company);
   const imported = await command(
     administrator.client,
     org,
@@ -410,9 +456,10 @@ async function main() {
     endInput,
   );
   ensure(
-    ended.status === "completed",
-    "accountant with workers.manage can end employment",
+    ["completed", "pending"].includes(ended.status),
+    "accountant with workers.manage can end employment with durable generation",
   );
+  await finishGeneration(firstStage.id);
   const noAplica = await admin
     .from("obligations")
     .select("id")
@@ -427,6 +474,12 @@ async function main() {
     org,
     company,
     worker.resource_id,
+  );
+  ensure(
+    current.selected_period?.end_date === endInput.end_date &&
+      current.selected_period.termination_reason ===
+        endInput.termination_reason,
+    "employment end is committed even when document generation remains pending",
   );
   const startInput = {
     company_id: company,

@@ -9,6 +9,7 @@ import {
   LOCAL_N8N_ENV_FILE,
 } from "./constants/environment-files";
 import { ensureEnvironmentDirectory } from "./utils/environment-file";
+import { localApplicationOrigin } from "./utils/local-application-origin";
 import { requireLocalTestEnvironment } from "./utils/require-local-test-environment";
 
 loadEnvConfig(process.cwd());
@@ -80,7 +81,7 @@ const serialized = JSON.stringify(workflow)
   )
   .replaceAll(
     "https://TAXSKILL_APP.invalid",
-    "http://host.docker.internal:3001",
+    localApplicationOrigin().replace("127.0.0.1", "host.docker.internal"),
   );
 writeFileSync("test-results/local/h06-runtime/workflow.json", serialized);
 const credentials = [
