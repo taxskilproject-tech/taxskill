@@ -4,6 +4,8 @@
 
 Referencias: [índice](../README.md), [H08](../h08-preparacion-produccion.md), [evidencias H08](h08.md), [operación](../../operacion-produccion.md) y [variables privadas](../../variables-entorno.md).
 
+**Canal al 19/10/2026:** [instancia TI publicada y prueba manual](whatsapp-ti.md). El intento desde n8n devolvió 404; no se confirmó envío. Pendiente revisión/actualización de la credencial de TI por el usuario y finalización de la prueba, sin datos ficticios en Cloud ni activación de jobs.
+
 **Última aceptación funcional:** [pruebas Docker del 18 de octubre](aceptacion-funcional-docker-h08.md). H02–H08 reejecutados localmente; 249 pruebas unitarias y siete nuevas del puerto aprobadas, siete suites SQL/78 casos y recorridos API completos. Lecturas de capacidad H07 con P95 final inferior a dos segundos. Se corrigió y verificó el foco del salto al contenido. Se añade **CAP-01 abierta** para timeout de avisos con 12.000 obligaciones sin responsable; no se presenta el circuito H06 aislado como aceptación de esa carga masiva.
 
 ## Entregas de desarrollo

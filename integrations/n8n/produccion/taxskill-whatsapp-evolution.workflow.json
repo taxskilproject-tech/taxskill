@@ -117,7 +117,7 @@
       ],
       "parameters": {
         "method": "POST",
-        "url": "https://n8n-evolution-api.ricijy.easypanel.host/message/sendText/botcci",
+        "url": "https://n8n-evolution-api.ricijy.easypanel.host/message/sendText/TI",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
