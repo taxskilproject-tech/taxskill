@@ -66,6 +66,12 @@ export function evaluateOperationsHealth({
     now - Date.parse(snapshot.deadline_pending_since) > MAX_PROGRESS_AGE_MS
   )
     progressIssues.push({ code: "DEADLINES_NO_PROGRESS" });
+  if (
+    mode === "production" &&
+    snapshot.digest_pending_since &&
+    now - Date.parse(snapshot.digest_pending_since) > MAX_PROGRESS_AGE_MS
+  )
+    progressIssues.push({ code: "DIGESTS_NO_PROGRESS" });
   const issues = [...jobIssues, ...counterIssues, ...progressIssues];
   return {
     status: issues.length

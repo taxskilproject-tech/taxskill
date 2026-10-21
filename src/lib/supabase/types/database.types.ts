@@ -1886,7 +1886,7 @@ isOneToOne: false
 { Args: { "p_claim_id": string,"p_delivery_id": string,"p_receipt": Json }; Returns: Json
                            },
 "h06_prepare_digests":
-{ Args: { "p_base_url": string,"p_now"?: string,"p_today"?: string }; Returns: Json
+{ Args: { "p_base_url": string,"p_batch_size"?: number,"p_now"?: string,"p_organization_id"?: string,"p_today"?: string }; Returns: Json
                            },
 "h06_query":
 { Args: { "p_input"?: Json,"p_organization_id": string,"p_resource": string }; Returns: Json

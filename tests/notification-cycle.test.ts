@@ -18,6 +18,7 @@ function clientWithResponses(
   deadlineStatus: number,
   preparationStatus = 200,
   pageStatus = "pending",
+  preparationPageStatus = pageStatus,
 ) {
   vi.stubGlobal(
     "fetch",
@@ -35,7 +36,12 @@ function clientWithResponses(
         : preparationStatus;
       const body =
         status === 200
-          ? { status: pageStatus, has_more: true }
+          ? {
+              status: url.endsWith("h06_run_deadlines")
+                ? pageStatus
+                : preparationPageStatus,
+              has_more: true,
+            }
           : { code: "57014", message: "timeout", details: null, hint: null };
       return new Response(JSON.stringify(body), {
         status,
@@ -82,10 +88,29 @@ describe("aislamiento del procesador de avisos y el despacho", () => {
     ).toBe("degraded");
     expect(dispatchBatch).toHaveBeenCalledOnce();
   });
-  it("no afirma haber despachado si falla la preparación", async () => {
+  it("despacha resúmenes durables y comunica degradación si falla la preparación", async () => {
+    const result = await runNotificationCycle(
+      clientWithResponses(200, 500),
+      environment,
+    );
+    expect(result.status).toBe("degraded");
+    expect(result.dispatch).toEqual({ status: "idle" });
+    expect(dispatchBatch).toHaveBeenCalledOnce();
+  });
+  it("señala un fallo persistido de preparación aunque su transporte devuelva 200", async () => {
+    const result = await runNotificationCycle(
+      clientWithResponses(200, 200, "pending", "failed"),
+      environment,
+    );
+    expect(result.status).toBe("degraded");
+    expect(dispatchBatch).toHaveBeenCalledOnce();
+  });
+  it("propaga el fallo del despacho sin afirmar que se completó", async () => {
+    vi.mocked(dispatchBatch).mockRejectedValueOnce(
+      new Error("DEPENDENCY_UNAVAILABLE"),
+    );
     await expect(
       runNotificationCycle(clientWithResponses(200, 500), environment),
     ).rejects.toThrow("DEPENDENCY_UNAVAILABLE");
-    expect(dispatchBatch).not.toHaveBeenCalled();
   });
 });

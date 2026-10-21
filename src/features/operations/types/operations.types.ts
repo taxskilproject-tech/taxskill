@@ -2,6 +2,8 @@ import type { z } from "zod";
 
 import type { operationsSnapshotSchema } from "@/features/operations/contracts/operations.schema";
 
+export type OperationMode = "production" | "prepublication";
+
 export type RateLimitBucket = "admin" | "receipts";
 
 export interface RateLimitConfiguration {
@@ -12,12 +14,14 @@ export interface RateLimitConfiguration {
 export type OperationsSnapshot = z.infer<typeof operationsSnapshotSchema>;
 export interface OperationsStatusProps {
   snapshot: OperationsSnapshot;
+  mode?: OperationMode;
 }
 export interface OperationMetric {
   key:
     | "stalled_uploads"
     | "rejected_uploads"
     | "generation_failures"
+    | "automation_failures"
     | "invalid_responsibles"
     | "whatsapp_unknown"
     | "whatsapp_failed";

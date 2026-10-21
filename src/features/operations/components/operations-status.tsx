@@ -1,11 +1,13 @@
-import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { formatLimaDateTime } from "@/domain/time/utils/instant";
+import { OperationsDiagnostics } from "@/features/operations/components/operations-diagnostics";
+import { OperationsProgress } from "@/features/operations/components/operations-progress";
 import {
   JOB_LABELS,
   JOB_STATUS_LABELS,
   OPERATION_METRICS,
 } from "@/features/operations/constants/operations";
 import type { OperationsStatusProps } from "@/features/operations/types/operations.types";
+import { evaluateOperationsHealth } from "@/features/operations/utils/evaluate-operations-health";
 
 function jobInstant(value: string | null): string {
   if (!value) return "Sin ejecución";
@@ -13,9 +15,21 @@ function jobInstant(value: string | null): string {
   return formatted.ok ? formatted.data + " (Lima)" : "Fecha no disponible";
 }
 
-export function OperationsStatus({ snapshot }: OperationsStatusProps) {
+export function OperationsStatus({
+  snapshot,
+  mode = "production",
+}: OperationsStatusProps) {
+  const evaluation = evaluateOperationsHealth({
+    snapshot,
+    mode,
+    now: Date.parse(snapshot.checked_at),
+  });
   return (
     <div className="space-y-6">
+      <p className="text-sm text-zinc-600">
+        Evaluado: {jobInstant(snapshot.checked_at)}
+      </p>
+      <OperationsDiagnostics evaluation={evaluation} />
       <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {OPERATION_METRICS.map((metric) => (
           <div
@@ -29,12 +43,7 @@ export function OperationsStatus({ snapshot }: OperationsStatusProps) {
           </div>
         ))}
       </dl>
-      {snapshot.backup_overdue && (
-        <FeedbackMessage kind="error">
-          No hay un respaldo confirmado dentro del plazo operativo. Revisa el
-          ejecutor de copias.
-        </FeedbackMessage>
-      )}
+      <OperationsProgress snapshot={snapshot} />
       <section aria-labelledby="operation-jobs" className="space-y-3">
         <h3 className="font-medium" id="operation-jobs">
           Procesos programados

@@ -1,6 +1,7 @@
-import type { OperationsSnapshot } from "@/features/operations/types/operations.types";
-
-export type OperationMode = "production" | "prepublication";
+import type {
+  OperationMode,
+  OperationsSnapshot,
+} from "@/features/operations/types/operations.types";
 export interface HealthIssue {
   code: string;
   job?: string;
@@ -16,3 +17,7 @@ export interface HealthEvaluationInput {
   now: number;
 }
 export type JobHealth = OperationsSnapshot["jobs"][number];
+
+export interface OperationsDiagnosticsProps {
+  evaluation: HealthEvaluation;
+}

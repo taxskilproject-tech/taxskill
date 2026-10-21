@@ -65,7 +65,11 @@ it.each([
     ).toContainEqual({ code, job: "h08-generation" });
   },
 );
-it.each(["generation_pending_since", "deadline_pending_since"] as const)(
+it.each([
+  "generation_pending_since",
+  "deadline_pending_since",
+  "digest_pending_since",
+] as const)(
   "detecta ausencia de avance funcional en %s aunque Cron tenga éxito",
   (key) => {
     const snapshot = {
@@ -82,7 +86,9 @@ it.each(["generation_pending_since", "deadline_pending_since"] as const)(
       code:
         key === "generation_pending_since"
           ? "GENERATION_NO_PROGRESS"
-          : "DEADLINES_NO_PROGRESS",
+          : key === "deadline_pending_since"
+            ? "DEADLINES_NO_PROGRESS"
+            : "DIGESTS_NO_PROGRESS",
     });
   },
 );

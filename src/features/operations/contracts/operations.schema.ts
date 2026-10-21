@@ -27,6 +27,14 @@ export const operationsSnapshotSchema = z.object({
     .datetime({ offset: true })
     .nullable()
     .default(null),
+  digest_pending_since: z.iso
+    .datetime({ offset: true })
+    .nullable()
+    .default(null),
+  digest_last_progress_at: z.iso
+    .datetime({ offset: true })
+    .nullable()
+    .default(null),
   jobs: z.array(
     z.object({
       name: z.string(),

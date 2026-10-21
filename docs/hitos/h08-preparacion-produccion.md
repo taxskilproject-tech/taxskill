@@ -175,7 +175,7 @@ Guardar la evidencia con hito/requisito/caso, entorno, versión desplegada, acto
 
 ## 10. Condición para piloto y cierre
 
-La [aceptación funcional Docker del 18 de octubre](evidencias/aceptacion-funcional-docker-h08.md) registra regresión, muestra móvil y corrección de teclado comprobadas. **CAP-01 sigue abierta:** timeout del procesador de avisos sobre 12.000 obligaciones sintéticas sin responsable; resolver y repetir antes de aceptar esa capacidad. La muestra local no reemplaza la medición del entorno objetivo ni la aceptación del piloto.
+La [aceptación funcional Docker del 18 de octubre](evidencias/aceptacion-funcional-docker-h08.md) registra regresión, muestra móvil y corrección de teclado comprobadas. **CAP-01 quedó corregida y publicada el 20/10:** el barrido procesa las 12.000 obligaciones sin responsable por páginas, sin timeout ni duplicados; ver [remediación original](evidencias/correcciones-auditoria-2026-10-20.md). La preparación masiva del resumen y el diagnóstico del panel se verifican por separado en las [correcciones de la segunda auditoría](evidencias/correcciones-auditoria-2-2026-10-20.md). La muestra local no reemplaza la medición del entorno objetivo ni la aceptación del piloto; programación, monitoreo permanente y canal productivo completo siguen sujetos a sus evidencias.
 
 El piloto con datos reales comienza únicamente después de verificar T01, acceso privado, respaldos/restauración y configuración crítica. La preparación de pilotos puede adelantarse con datos sintéticos.
 

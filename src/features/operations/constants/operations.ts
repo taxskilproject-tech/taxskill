@@ -15,6 +15,7 @@ export const OPERATION_METRICS: readonly OperationMetric[] = [
   { key: "stalled_uploads", label: "Cargas sin finalizar" },
   { key: "rejected_uploads", label: "Archivos rechazados en 24 horas" },
   { key: "generation_failures", label: "Reglas con generación fallida" },
+  { key: "automation_failures", label: "Fallos de automatización" },
   { key: "invalid_responsibles", label: "Responsables que requieren revisión" },
   { key: "whatsapp_unknown", label: "WhatsApp por conciliar" },
   { key: "whatsapp_failed", label: "WhatsApp fallidos" },

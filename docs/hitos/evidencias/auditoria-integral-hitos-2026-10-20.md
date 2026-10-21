@@ -1,5 +1,7 @@
 # Auditoría integral H01–H08 después de las correcciones
 
+**Seguimiento:** [correcciones AUD2-01, AUD2-02 y OBS2-01](correcciones-auditoria-2-2026-10-20.md). Este informe conserva el diagnóstico y las evidencias de la revisión original.
+
 **Fecha:** 20/10/2026, America/Lima. **Base revisada:** `957b32115f15caacb5102b116a06be467ced7f9f`. Se preservó la modificación previa de `revalidacion-base-h08.md`, ajena a esta auditoría. Fuentes: [reglas](../../../.agents/rules.md), [índice](../README.md), los ocho hitos, [diseño](../../diseno-tecnico.md), [diccionario](../../tablas-db.md), contratos y evidencias del repositorio.
 
 ## Dictamen
