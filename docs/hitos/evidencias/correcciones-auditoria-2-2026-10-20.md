@@ -70,7 +70,8 @@ Logs y resultados privados: `test-results/correcciones-auditoria-2/`, ignorado p
 | H06 live | **170 comprobaciones**, 81,41 s: archivos, Realtime, 429/500, contenido estable, callback/replay, reinicio real de n8n Docker, ambigüedad y Cron. |
 | Seguridad H08 | **28 comprobaciones**, 34,23 s, solo Docker. |
 | Recuperación con 71 migraciones | Copia incremental/descarga y restauración aprobadas; **13 huellas, un archivo de 881 bytes**, sesiones revocadas, jobs detenidos, login nuevo y restricciones de descarga. Suite 145,58 s; recuperación 68,99 s. Dos proyectos Docker aislados; no acredita RTO productivo. |
-| Repositorio y documentación | 690 archivos candidatos contrastados con 18 valores privados configurados, sin coincidencias. **50 Markdown / 637 enlaces locales y anclas**, sin fallos; no verifica enlaces externos ni secretos desconocidos. |
+| CI remoto del código corregido | [Ejecución 39532135186](https://github.com/taxskilproject-tech/taxskill/actions/runs/39532135186), commit `31a6613`: instalación frozen, `yarn verify`, build y bundle completados correctamente. No se proporcionaron secretos productivos a CI. |
+| Repositorio y documentación | 691 archivos candidatos contrastados con 18 valores privados configurados, sin coincidencias. **50 Markdown / 637 enlaces locales y anclas**, sin fallos; no verifica enlaces externos ni secretos desconocidos. |
 
 ## Publicación y límites
 
@@ -78,6 +79,6 @@ Logs y resultados privados: `test-results/correcciones-auditoria-2/`, ignorado p
 
 El dry-run remoto incluyó exclusivamente esas tres migraciones, sin seeds ni roles. La línea base y el contraste posterior se obtuvieron con hashes/contadores calculados dentro de PostgreSQL; no se descargaron filas productivas. Resultado: **71 migraciones, 29 tablas públicas con RLS, 13 huellas históricas idénticas y jobs sin cambios**. Solo sigue activo el cleanup preexistente. Generación y WhatsApp productivos continúan detenidos.
 
-El frontend compila y está comprobado en Docker. GitHub continúa sin conexión desde el equipo (HTTPS/443), por lo que la publicación del panel en Vercel mediante Git queda pendiente del push; no se atribuye un nuevo deployment Ready a esta entrega.
+La conexión GitHub se recuperó y se subieron la auditoría y el código corregido, commit **`31a6613413c1b44b13fff5e60fc94d799ebe6f28`**. El proveedor confirmó **Production / success, Deployment has completed** para ese commit: [deployment Vercel](https://vercel.com/taxskilproject-6139/taxskill/Dsc25ijnWC7LYiwWiAoEZGt5HQS5), registro GitHub `7215958587`. El [dominio público](https://taxskill.vercel.app/login) respondió HTTP 200. Esta verificación acredita publicación, no sustituye un nuevo piloto autenticado productivo; las capturas de interfaz corresponden a Docker.
 
 Esta remediación no cierra el piloto ni la operación permanente de H08. Siguen separados el digest/receipt productivo completo, activación/observación de jobs, ejecutores permanentes de copias/monitor, retención y aceptación por perfiles. La copia temporal en el mismo Supabase es la decisión vigente del usuario. No hubo fixtures en Cloud, nuevos mensajes WhatsApp reales ni cambios de Auth.
