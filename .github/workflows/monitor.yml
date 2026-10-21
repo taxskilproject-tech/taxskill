@@ -26,3 +26,4 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: https://gzwrqvqofcrdjvzoblaz.supabase.co
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
           H08_OPERATION_ORGANIZATION_ID: ${{ vars.H08_OPERATION_ORGANIZATION_ID }}
+          H08_OPERATION_MODE: ${{ vars.H08_OPERATION_MODE || 'production' }}

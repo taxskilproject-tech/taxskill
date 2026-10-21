@@ -10,6 +10,23 @@ export const operationsSnapshotSchema = z.object({
   whatsapp_failed: z.number().int().nonnegative(),
   last_backup_at: z.iso.datetime({ offset: true }).nullable(),
   backup_overdue: z.boolean(),
+  automation_failures: z.number().int().nonnegative().default(0),
+  generation_pending_since: z.iso
+    .datetime({ offset: true })
+    .nullable()
+    .default(null),
+  generation_last_progress_at: z.iso
+    .datetime({ offset: true })
+    .nullable()
+    .default(null),
+  deadline_pending_since: z.iso
+    .datetime({ offset: true })
+    .nullable()
+    .default(null),
+  deadline_last_progress_at: z.iso
+    .datetime({ offset: true })
+    .nullable()
+    .default(null),
   jobs: z.array(
     z.object({
       name: z.string(),

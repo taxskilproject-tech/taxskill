@@ -49,6 +49,7 @@
     "test:h07:live": "tsx scripts/verify-h07.ts",
     "test:h08:sql": "tsx scripts/run-local-sql-test.ts h08",
     "test:h08:live": "tsx scripts/verify-h08.ts",
+    "test:automation:capacity": "tsx scripts/verify-automation-capacity.ts",
     "backup:local": "tsx scripts/backup.ts --local",
     "backup:cloud": "tsx scripts/backup.ts --cloud",
     "backup:fetch": "tsx scripts/fetch-backup.ts",

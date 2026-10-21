@@ -9,6 +9,15 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Synthetic canaries, never deployment credentials. No external service is used.
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54331
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_canary_not_a_real_key
+      SUPABASE_SECRET_KEY: sb_secret_ci_canary_not_a_real_key_00000000
+      IDEMPOTENCY_HMAC_KEY: 'a1b2c3d4a1b2c3d4a1b2c3d4a1b2c3d4a1b2c3d4a1b2c3d4a1b2c3d4a1b2c3d4'
+      N8N_RECEIPT_TOKEN: ci_receipt_canary_not_a_real_key_00000000
+      N8N_WEBHOOK_TOKEN: ci_webhook_canary_not_a_real_key_00000000
+      H06_DISPATCH_SECRET: ci_dispatch_canary_not_a_real_key_00000000
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:

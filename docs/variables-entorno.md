@@ -66,6 +66,10 @@ El contenedor n8n local recibe `.envs/local/n8n.env`, no las claves de la aplica
 
 ## Comprobaciones de la consolidación
 
+**Monitor de operación:** `H08_OPERATION_MODE` es una variable **Config** del ejecutor/GitHub, con valores `production` (predeterminado) o `prepublication` para suspensión deliberada. No se agrega al archivo `.env.vercel`. El segundo modo informa `paused` y no elimina alertas por errores, respaldo vencido o cleanup ausente. Ver [operación](operacion-produccion.md#programación-y-monitoreo).
+
+**CI:** `.github/workflows/ci.yml` declara canarios sintéticos públicos, sin acceso a Supabase ni proveedores reales, para compilar y comprobar ausencia de filtraciones. No requiere secrets productivos ni archivos `.env` en PR. Las regresiones ejecutan el verificador desde un directorio sin `.env` y comprueban que cada canario filtrado se rechace sin imprimir su valor. No copiar esos valores a un deployment.
+
 Se contrastaron valores antes de retirar cada origen; se comprobaron las seis variables Vercel, su proyecto exacto, identidad con las claves Cloud conservadas, separación de tokens y destino Docker de `.env.local`. Esa consolidación fue local. La instalación remota posterior del 18/10/2026 comprende exclusivamente las cinco variables Edge indicadas arriba, comprobadas mediante SHA-256; Vercel y n8n siguen pendientes. No se imprimieron claves ni se enviaron mensajes.
 
 Los respaldos y el estado completo de H08 se describen en [operación](operacion-produccion.md), [opciones económicas](respaldos-opciones.md) y [evidencias H08](hitos/evidencias/h08.md).

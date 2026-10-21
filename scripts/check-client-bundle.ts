@@ -1,6 +1,6 @@
-import { readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
 import { loadEnvConfig } from "@next/env";
+
+import { inspectClientBundle } from "./utils/inspect-client-bundle";
 
 loadEnvConfig(process.cwd());
 const requiredSecrets = [
@@ -17,21 +17,7 @@ const secrets = [
   process.env.N8N_WEBHOOK_TOKEN,
   process.env.H06_DISPATCH_SECRET,
 ].filter((value): value is string => Boolean(value));
-function inspect(directory: string): void {
-  for (const entry of readdirSync(directory, { withFileTypes: true })) {
-    const path = join(directory, entry.name);
-    if (entry.isDirectory()) {
-      inspect(path);
-      continue;
-    }
-    const content = readFileSync(path, "utf8");
-    if (secrets.some((secret) => content.includes(secret)))
-      throw new Error(
-        "Credencial privada detectada en un recurso de navegador: " + path,
-      );
-  }
-}
-inspect(".next/static");
+inspectClientBundle(".next/static", secrets);
 console.info(
   "Bundle del navegador verificado: sin claves administrativas, HMAC ni secretos H06 configurados.",
 );

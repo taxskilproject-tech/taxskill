@@ -68,9 +68,9 @@ begin
   perform pg_temp.expect(result->'data'->'indicators'->'documentary'->>'required'='0' and result->'data'->'indicators'->'additional'->>'required'='2','indicators have independent denominators');
   perform pg_temp.expect((public.h03_query(org,'detail',jsonb_build_object('id',internal_activity))->'error'->>'code')='NOT_FOUND','direct internal RPC checks scope');
   select c.id into cycle from public.submission_cycles c join public.deliverables d on d.id=c.deliverable_id where d.obligation_id=activity;
-  perform public.h06_run_deadlines(today); perform public.h06_run_deadlines(today);
+  perform public.h06_run_deadlines(today,org,100); perform public.h06_run_deadlines(today,org,100);
   perform pg_temp.expect((select count(*)=1 from public.notification_events where organization_id=org and cycle_id=cycle and threshold_days=7),'deadline threshold is unique after repeated job');
-  perform public.h06_run_deadlines(today+4); perform public.h06_run_deadlines(today+6); perform public.h06_run_deadlines(today+7); perform public.h06_run_deadlines(today+8);
+  perform public.h06_run_deadlines(today+4,org,100); perform public.h06_run_deadlines(today+6,org,100); perform public.h06_run_deadlines(today+7,org,100); perform public.h06_run_deadlines(today+8,org,100);
   perform pg_temp.expect((select count(*)=5 from public.notification_events where organization_id=org and cycle_id=cycle),'all five cycle thresholds have distinct events');
   select id into notification from public.notifications where organization_id=org and recipient_id=client limit 1;
   result:=public.h03_command(org,gen_random_uuid(),'MarkNotificationRead',jsonb_build_object('notification_id',(select id from public.notifications where organization_id=org and recipient_id=actor limit 1)));
@@ -136,7 +136,7 @@ begin
   perform pg_temp.expect(not exists(select 1 from jsonb_array_elements(private.h06_digest_items(org,client,today+1,'https://app.example.test')) i where i->>'obligation_id'=activity::text),'received cycle stops reminders regardless of approval');
   perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
   update public.access_grants set active=false where organization_id=org and member_id=client_member;
-  perform public.h06_run_deadlines(today);
+  perform public.h06_run_deadlines(today,org,100);
   perform pg_temp.expect((select assignment_issue from public.obligations where id=activity),'removed permission is an assignment issue');
   perform pg_temp.expect((select snapshot=original from public.obligations where id=activity),'assignment incident preserves frozen snapshot');
   perform pg_temp.expect(jsonb_array_length(private.h06_digest_items(org,client,today+5,'https://app.example.test'))=0,'retired delivery permission removes all recipient items');

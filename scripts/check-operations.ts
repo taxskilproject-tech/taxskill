@@ -4,13 +4,8 @@ import { z } from "zod";
 
 import { isLocalSupabaseUrl } from "../src/config/env/utils/is-local-supabase-url";
 import { operationsSnapshotSchema } from "../src/features/operations/contracts/operations.schema";
+import { evaluateOperationsHealth } from "../src/features/operations/utils/evaluate-operations-health";
 import type { Database } from "../src/lib/supabase/types/database.types";
-
-const MAX_PROGRESS_AGE_MS = 30 * 60 * 1000;
-const JOB_PROGRESS_AGE_MS: Readonly<Record<string, number>> = {
-  "h03-staging-cleanup": 90 * 60 * 1000,
-  "h04-generation-day": 26 * 60 * 60 * 1000,
-};
 
 async function main() {
   loadEnvConfig(process.cwd());
@@ -42,25 +37,16 @@ async function main() {
   const health = envelope.data;
   // Only aggregate counters and job status leave this executor, never payloads or credentials.
   console.info(JSON.stringify(health));
-  const failedJob = health.jobs.some(
-    (job) =>
-      !job.active ||
-      job.last_status === "failed" ||
-      !job.last_started_at ||
-      Date.now() - Date.parse(job.last_started_at) >
-        (JOB_PROGRESS_AGE_MS[job.name] ?? MAX_PROGRESS_AGE_MS),
-  );
-  if (
-    health.backup_overdue ||
-    health.generation_failures ||
-    health.invalid_responsibles ||
-    health.whatsapp_unknown ||
-    health.whatsapp_failed ||
-    health.stalled_uploads ||
-    !health.jobs.length ||
-    failedJob
-  )
-    process.exitCode = 1;
+  const operationMode = z
+    .enum(["production", "prepublication"])
+    .parse(process.env.H08_OPERATION_MODE ?? "production");
+  const evaluation = evaluateOperationsHealth({
+    snapshot: health,
+    mode: operationMode,
+    now: Date.now(),
+  });
+  console.info(JSON.stringify(evaluation));
+  if (evaluation.status === "degraded") process.exitCode = 1;
 }
 void main().catch(() => {
   console.error(

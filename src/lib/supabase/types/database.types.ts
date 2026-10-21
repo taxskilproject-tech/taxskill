@@ -1895,7 +1895,7 @@ isOneToOne: false
 { Args: { "p_receipt": Json }; Returns: Json
                            },
 "h06_run_deadlines":
-{ Args: { "p_today"?: string }; Returns: Json
+{ Args: { "p_batch_size"?: number,"p_organization_id"?: string,"p_today"?: string }; Returns: Json
                            },
 "h06_schedule":
 { Args: { "p_enabled"?: boolean,"p_function_url": string,"p_secret": string }; Returns: undefined
