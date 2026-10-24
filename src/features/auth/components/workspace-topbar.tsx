@@ -13,6 +13,7 @@ export function WorkspaceTopbar({
   onSelectCompany,
   onLogout,
   loggingOut,
+  documentaryModule,
 }: Omit<ShellProps, "children">) {
   const selected =
     company.kind === "company" ? company.companyId : company.kind;
@@ -23,13 +24,19 @@ export function WorkspaceTopbar({
     );
   const options = (
     <>
-      <option value="all">Todas mis empresas</option>
-      {internal && <option value="internal">Internas del estudio</option>}
-      {context.companies.map((item) => (
-        <option key={item.id} value={item.id}>
-          {item.legal_name}
-        </option>
-      ))}
+      <option value="all">
+        {documentaryModule ? "Seleccionar empresa" : "Todas mis empresas"}
+      </option>
+      {internal && !documentaryModule && (
+        <option value="internal">Internas del estudio</option>
+      )}
+      {context.companies
+        .filter((item) => !documentaryModule || item.status === "active")
+        .map((item) => (
+          <option key={item.id} value={item.id}>
+            {item.legal_name}
+          </option>
+        ))}
     </>
   );
   return (

@@ -3,7 +3,7 @@ import type { ReportColumn } from "@/domain/reporting/types/reporting.types";
 export const REPORT_COLUMNS: readonly ReportColumn[] = [
   { label: "Empresa / alcance", kind: "text", value: (r) => r.company_name },
   { label: "RUC", kind: "text", value: (r) => r.ruc },
-  { label: "Área", kind: "text", value: (r) => r.module },
+  { label: "Módulo", kind: "text", value: (r) => r.module },
   { label: "Clase", kind: "text", value: (r) => r.class },
   { label: "Periodo", kind: "text", value: (r) => r.period },
   { label: "Inicio periodo", kind: "date", value: (r) => r.period_start },

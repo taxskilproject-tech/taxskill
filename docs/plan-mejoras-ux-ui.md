@@ -4,7 +4,7 @@ Fecha: 24 de octubre de 2026, America/Lima. Alcance: presentación, orientación
 
 ## Diagnóstico comprobado
 
-Los listados mezclaban filtros, indicadores, acciones y formularios abiertos dentro de la misma página. El detalle de usuario aparecía después del listado. En empresa se repetían indicadores y configuración debajo de cada área. Expediente, revisión y configuración acumulaban formularios y datos secundarios.
+Los listados mezclaban filtros, indicadores, acciones y formularios abiertos dentro de la misma página. El detalle de usuario aparecía después del listado. En empresa se repetían indicadores y configuración debajo de cada módulo. Expediente, revisión y configuración acumulaban formularios y datos secundarios.
 
 La compilación anterior, conectada a Docker, permitió medir `/reportes?q=ux-empty-no-results-20261024` con la misma cuenta ficticia utilizada después. La consulta vacía no crea registros ni altera los filtros del backend.
 
@@ -17,7 +17,7 @@ El navegador informa un píxel adicional de ancho interior en ambas medidas; la 
 
 ## Patrones y decisiones
 
-- Barra lateral persistente y agrupada en escritorio. Cabecera móvil breve, contexto de empresa y navegación inferior Inicio, Actividades, Empresas, Más. Cuenta y avisos permanecen en cabecera.
+- Barra lateral persistente y agrupada en escritorio. Cabecera móvil breve, contexto de empresa y navegación inferior Inicio, Actividades, Módulos, Más; Empresas pasa a Más con la implementación de accesos directos. Cuenta y avisos permanecen en cabecera.
 - Listados con filas compactas; las tablas se adaptan a filas resumidas en dispositivos pequeños. Paginación existente de 25, con controles antes y después de resultados.
 - Búsqueda visible, opciones secundarias plegadas y número de filtros activos. No se agrupan ni suman indicadores de unidades diferentes.
 - Formularios en panel lateral o pantalla completa móvil, con diálogo nativo, foco contenido, cierre por Escape y aviso de cambios sin guardar. Las acciones asíncronas conservan su loading y protección contra doble ejecución.
@@ -35,10 +35,10 @@ El navegador informa un píxel adicional de ancho interior en ambas medidas; la 
 | Obligación | Un entregable seleccionado; Entrega, Revisión e Historial. Distribución en columnas en escritorio, motivo/plazo al preparar observación o reapertura. |
 | Empresas | Filas compactas, formularios en panel y acciones de conservación secundarias. |
 | Ficha de empresa | Pestañas antes del contenido, resumen exclusivo de su sección y responsables en Administración. |
-| Áreas documentales | Mismo motor/listado de obligaciones; sin rutas nuevas por área. |
+| Módulos documentales | Mismo motor/listado de obligaciones; sin rutas nuevas por módulo. |
 | Trabajadores | Listado compacto; secciones Documentos, Ficha laboral, Eventos. Formularios de ingreso/corrección/cese/reingreso en panel. |
-| Documentos | Resultados antes de metadatos secundarios; visor independiente del listado. |
-| Reportes | Consulta y resultados primero; exportación controlada, indicadores/desglose secundarios y filas móviles. Estados, áreas y periodos se presentan con etiquetas legibles, sin mostrar claves UUID de periodos únicos en la fila. |
+| Documentos | Buscador transversal de archivos entregados y versiones; resultados antes de metadatos secundarios y visor independiente del listado. |
+| Reportes | Consulta y resultados primero; exportación controlada, indicadores/desglose secundarios y filas móviles. Estados, módulos y periodos se presentan con etiquetas legibles, sin mostrar claves UUID de periodos únicos en la fila. |
 | Auditoría | Acción y actor legibles; identificadores y transición al ampliar un evento. |
 | Notificaciones | Bandeja Todas/Sin leer; marcar como leído sigue siendo una acción independiente. |
 | Usuarios | Panel Cuenta, Accesos y Contacto; no se apilan todas las gestiones debajo del listado. |
@@ -48,6 +48,10 @@ El navegador informa un píxel adicional de ancho interior en ambas medidas; la 
 | WhatsApp/Operación | Resúmenes y contactos separados, intentos bajo demanda; incidencias operativas visibles antes de métricas. |
 
 ## Compatibilidad y límites
+
+**Aclaraciones posteriores del usuario, 24/10/2026:** usar «Módulo» en lugar de «Área» y proporcionar accesos directos con una empresa a la vez. La terminología está aplicada en navegación, filtros, roles, catálogo/reglas y exportaciones. Documentos busca archivos entregados y versiones en las empresas autorizadas. Los [accesos a módulos](plan-navegacion-modulos.md) están implementados y verificados localmente. Las capturas anteriores conservan las etiquetas de la versión que acreditan.
+
+Validación de esta aclaración: `yarn build`, lint y 29 pruebas de contratos/controles de exportación aprobados. En Docker se comprobó el selector [Módulos de la empresa](hitos/evidencias/capturas/ux-ui/modulos-empresa-390.png) y la consulta directa `/documentos?module=tributario`, sin abrir previamente una empresa ni perder el alcance autorizado. No cambia esquema, permisos ni rutas. Las búsquedas locales de recomendaciones UX no aportaron una regla específica para esta terminología; la propuesta de menú procede del recorrido observado, no de esos resultados.
 
 Se conservan las rutas, RPC, operaciones, idempotencia, autorización, aprobación individual, concurrencia y políticas de conservación. Los parámetros adicionales de presentación son `view`, `memberId`, `deliverableId`, filtros/página de trabajadores y obligaciones, y consulta histórica de directorios. `tab=administracion` selecciona configuración de empresa y `tab=historial` restaura registros en Configuración. Los validadores de retorno admiten esos parámetros y conservan `indicators`; el backend sigue siendo la autoridad sobre cada recurso.
 

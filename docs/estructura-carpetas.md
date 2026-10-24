@@ -447,6 +447,28 @@ E2E recorre entrega, observación, corrección, revisión parcial, reapertura, c
 
 ## 12. Referencias
 
+### Actualización implementada: accesos a módulos, 24/10/2026
+
+La implementación conserva las rutas y la organización por funcionalidad. `src/app/(app)/empresas/page.tsx` delega en `CompaniesEntryPage`: directorio habitual o selector de empresa según `module`. La ruta de detalle de empresa sigue delegando en su página de funcionalidad; con un `tab` documental compone `CompanyModuleWorkspace`, sin duplicar servicios.
+
+```text
+src/features/auth/
+  components/      # Enlaces compartidos, barra lateral, barra móvil y cabecera
+  constants/       # Grupos de navegación y límite de origen
+  hooks/           # Contexto de empresa derivado de URL e identidad
+  types/           # NavigationItem, WorkspaceRoute y estado del contexto
+  utils/           # Módulo, permisos actuales, empresa elegible y destinos puros
+src/features/companies/
+  pages/           # Entrada, directorio, selector por módulo y detalle existentes
+  components/      # Filas de selección de empresa
+src/features/documents/
+  components/      # Espacio de módulo, filtros plegados y listado común
+src/features/workers/
+  components/      # Listado y expediente reutilizados desde el módulo laboral
+```
+
+El repositorio compartido sigue en `features/access/repositories`; no se creó `features/companies/repositories` por esta entrega. El layout autenticado incluye Suspense alrededor del espacio protegido para leer parámetros de URL conforme a la guía instalada de Next.js. No hay un dominio/SDK nuevo por cada módulo, endpoint adicional ni migración. Ver [implementación, pruebas y capturas](plan-navegacion-modulos.md).
+
 **Implementación H05:** `src/features/workers/` contiene componentes, hooks, repositorio, tipos y mapeo de formularios; `src/domain/workers/` mantiene contratos y constantes. La única ruta laboral nueva es `src/app/(app)/empresas/[companyId]/trabajadores/[workerId]/page.tsx`. Las tres áreas componen `features/documents` y el motor existente, sin tres copias de servicios. Detalles en [contratos laborales](expediente-laboral.md).
 
 - Guía instalada de Next.js: estructura, Server/Client Components, Route Handlers y template bajo node_modules/next/dist/docs/01-app; consultar esa versión al escribir código conforme a AGENTS.md.

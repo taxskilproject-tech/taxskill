@@ -48,7 +48,7 @@ export function CatalogForm({ item, onSaved, onCancel }: CatalogFormProps) {
           defaultValue={item?.module ?? "tributario"}
           disabled={Boolean(item)}
           id="document-module"
-          label="Área documental"
+          label="Módulo documental"
           name="module"
         >
           {DOCUMENT_MODULES.map((module) => (

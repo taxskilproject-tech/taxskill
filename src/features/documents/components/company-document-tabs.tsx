@@ -8,7 +8,6 @@ import { ActivityInbox } from "@/features/activities/components/activity-inbox";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 import type { CompanyTabsProps } from "@/features/companies/types/company.types";
 import { ObligationList } from "@/features/documents/components/obligation-list";
-import { WorkersPanel } from "@/features/workers/components/workers-panel";
 
 const TABS = [
   "resumen",
@@ -54,40 +53,21 @@ export function CompanyDocumentTabs({
     <section className="space-y-3">
       <SectionNavigation
         items={items}
-        label="Áreas de la empresa"
+        label="Módulos de la empresa"
         onSelect={setTab}
         selected={tab}
       />
       {!authorized ? (
         <ResourceState
-          description="No tienes acceso a esta área."
+          description="No tienes acceso a este módulo."
           kind="forbidden"
           title="Acceso restringido"
         />
       ) : (
         <>
           {tab === "resumen" && summary}
-          {(tab === "resumen" ||
-            ["tributario", "historial", "laboral_general"].includes(tab)) && (
-            <ObligationList
-              companyId={companyId}
-              key={tab}
-              module={modules.find((module) => module.id === tab)?.id}
-            />
-          )}
-          {tab === "laboral_trabajador" && (
-            <div className="space-y-3">
-              <WorkersPanel companyId={companyId} />
-              <details className="rounded-lg border border-zinc-200 bg-white p-3">
-                <summary className="min-h-11 cursor-pointer py-3 text-sm font-medium">
-                  Obligaciones de todos los trabajadores
-                </summary>
-                <ObligationList
-                  companyId={companyId}
-                  module="laboral_trabajador"
-                />
-              </details>
-            </div>
+          {(tab === "resumen" || tab === "historial") && (
+            <ObligationList companyId={companyId} key={tab} />
           )}
           {tab === "actividades" && <ActivityInbox companyId={companyId} />}
           {tab === "administracion" && administration}

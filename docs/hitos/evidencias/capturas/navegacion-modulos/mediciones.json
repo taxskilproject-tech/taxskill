@@ -1,0 +1,205 @@
+[
+  {
+    "firstY": 321.7303161621094,
+    "height": 844,
+    "overflow": false,
+    "view": "selector",
+    "width": 391
+  },
+  {
+    "firstY": 347.5838928222656,
+    "height": 844,
+    "overflow": false,
+    "view": "tributario",
+    "width": 391
+  },
+  {
+    "firstY": 390.6539306640625,
+    "height": 844,
+    "overflow": false,
+    "view": "laboral_trabajador",
+    "width": 391
+  },
+  {
+    "firstY": 394.64697265625,
+    "height": 844,
+    "overflow": false,
+    "view": "trabajadores-vacio",
+    "width": 391
+  },
+  {
+    "firstY": 391.5653991699219,
+    "height": 844,
+    "overflow": false,
+    "view": "laboral_general_vacio",
+    "width": 391
+  },
+  {
+    "firstY": 321.7303161621094,
+    "h1s": 1,
+    "height": 844,
+    "overflow": false,
+    "view": "selector",
+    "width": 376
+  },
+  {
+    "firstY": 347.5838928222656,
+    "h1s": 1,
+    "height": 844,
+    "overflow": false,
+    "view": "tributario",
+    "width": 376
+  },
+  {
+    "firstY": 390.6539306640625,
+    "h1s": 1,
+    "height": 844,
+    "overflow": false,
+    "view": "laboral_trabajador",
+    "width": 376
+  },
+  {
+    "firstY": 347.5838928222656,
+    "h1s": 1,
+    "height": 844,
+    "overflow": false,
+    "view": "laboral_general",
+    "width": 376
+  },
+  {
+    "firstY": 321.7303161621094,
+    "h1s": 1,
+    "height": 1024,
+    "overflow": false,
+    "view": "selector",
+    "width": 768
+  },
+  {
+    "firstY": 347.5838928222656,
+    "h1s": 1,
+    "height": 1024,
+    "overflow": false,
+    "view": "tributario",
+    "width": 768
+  },
+  {
+    "firstY": 390.6539306640625,
+    "h1s": 1,
+    "height": 1024,
+    "overflow": false,
+    "view": "laboral_trabajador",
+    "width": 768
+  },
+  {
+    "firstY": 347.5838928222656,
+    "h1s": 1,
+    "height": 1024,
+    "overflow": false,
+    "view": "laboral_general",
+    "width": 768
+  },
+  {
+    "firstY": 273.7557678222656,
+    "h1s": 1,
+    "height": 768,
+    "overflow": false,
+    "view": "selector",
+    "width": 1024
+  },
+  {
+    "firstY": 299.609375,
+    "h1s": 1,
+    "height": 768,
+    "overflow": false,
+    "view": "tributario",
+    "width": 1024
+  },
+  {
+    "firstY": 342.67938232421875,
+    "h1s": 1,
+    "height": 768,
+    "overflow": false,
+    "view": "laboral_trabajador",
+    "width": 1024
+  },
+  {
+    "firstY": 299.609375,
+    "h1s": 1,
+    "height": 768,
+    "overflow": false,
+    "view": "laboral_general",
+    "width": 1024
+  },
+  {
+    "firstY": 273.7557678222656,
+    "h1s": 1,
+    "height": 768,
+    "overflow": false,
+    "view": "selector",
+    "width": 1367
+  },
+  {
+    "firstY": 332.49420166015625,
+    "h1s": 1,
+    "height": 768,
+    "overflow": false,
+    "view": "tributario",
+    "width": 1367
+  },
+  {
+    "firstY": 342.67938232421875,
+    "h1s": 1,
+    "height": 768,
+    "overflow": false,
+    "view": "laboral_trabajador",
+    "width": 1367
+  },
+  {
+    "firstY": 332.49420166015625,
+    "h1s": 1,
+    "height": 768,
+    "overflow": false,
+    "view": "laboral_general",
+    "width": 1367
+  },
+  {
+    "firstY": 273.7557678222656,
+    "h1s": 1,
+    "height": 901,
+    "overflow": false,
+    "view": "selector",
+    "width": 1441
+  },
+  {
+    "firstY": 332.49420166015625,
+    "h1s": 1,
+    "height": 901,
+    "overflow": false,
+    "view": "tributario",
+    "width": 1441
+  },
+  {
+    "firstY": 342.67938232421875,
+    "h1s": 1,
+    "height": 901,
+    "overflow": false,
+    "view": "laboral_trabajador",
+    "width": 1441
+  },
+  {
+    "firstY": 332.49420166015625,
+    "h1s": 1,
+    "height": 901,
+    "overflow": false,
+    "view": "laboral_general",
+    "width": 1441
+  },
+  {
+    "firstY": 347.5838928222656,
+    "h1s": 1,
+    "height": 844,
+    "overflow": false,
+    "view": "laboral_general",
+    "width": 391
+  }
+]

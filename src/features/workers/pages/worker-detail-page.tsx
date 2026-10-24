@@ -81,7 +81,7 @@ export function WorkerDetailPage({
             : `/empresas/${companyId}?tab=laboral_trabajador`
         }
       >
-        ← Volver al área laboral
+        ← Volver a Laboral por trabajador
       </Link>
       <QueryState
         error={query.error}

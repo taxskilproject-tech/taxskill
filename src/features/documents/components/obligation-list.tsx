@@ -1,6 +1,7 @@
 "use client";
 import { z } from "zod";
 
+import { FilterDisclosure } from "@/components/molecules/filter-disclosure";
 import { ResourceState } from "@/components/organisms/resource-state";
 import { summarySchema } from "@/domain/documents/contracts/document.schema";
 import { Pagination } from "@/features/access/components/pagination";
@@ -59,16 +60,21 @@ export function ObligationList({
     );
   return (
     <div className="space-y-5">
-      <ObligationFilters
-        onPeriod={(value) => {
-          setPeriod(value);
-        }}
-        onState={(value) => {
-          setState(value);
-        }}
-        period={period}
-        state={state}
-      />
+      <FilterDisclosure
+        label="Filtros documentales"
+        count={Number(Boolean(period)) + Number(Boolean(state))}
+      >
+        <ObligationFilters
+          onPeriod={(value) => {
+            setPeriod(value);
+          }}
+          onState={(value) => {
+            setState(value);
+          }}
+          period={period}
+          state={state}
+        />
+      </FilterDisclosure>
       <QueryState
         error={query.error}
         loading={query.isPending}
@@ -83,10 +89,7 @@ export function ObligationList({
             onPage={setPage}
             page={page}
           />
-          <ObligationRows
-            rows={query.data?.rows ?? []}
-            origin={origin}
-          />
+          <ObligationRows rows={query.data?.rows ?? []} origin={origin} />
           {query.data?.count === 0 && (
             <ResourceState
               description="Las obligaciones aparecerán después de activar y generar una regla en Configuración."

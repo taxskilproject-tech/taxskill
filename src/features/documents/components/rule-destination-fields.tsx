@@ -55,7 +55,7 @@ export function RuleDestinationFields({
         value={value}
         disabled={Boolean(rule)}
         id="rule-document"
-        label="Tipo documental y área"
+        label="Tipo documental y módulo"
         name="document_type_id"
         onChange={(event) => {
           const type = catalog.find((item) => item.id === event.target.value);

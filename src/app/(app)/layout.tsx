@@ -5,5 +5,20 @@ import type { ProtectedWorkspaceProps } from "@/features/auth/types/auth.types";
 export const instant = false;
 
 export default function Layout({ children }: ProtectedWorkspaceProps) {
-  return <ProtectedWorkspace>{children}</ProtectedWorkspace>;
+  return (
+    <Suspense
+      fallback={
+        <ResourceState
+          title="Preparando tu espacio…"
+          description="Verificando acceso al estudio."
+          kind="loading"
+        />
+      }
+    >
+      <ProtectedWorkspace>{children}</ProtectedWorkspace>
+    </Suspense>
+  );
 }
+import { Suspense } from "react";
+
+import { ResourceState } from "@/components/organisms/resource-state";

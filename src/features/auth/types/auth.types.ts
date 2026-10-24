@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { z } from "zod";
 
+import type { DocumentaryModuleId } from "@/domain/common/types/module.types";
 import type {
   OperationError,
   OperationResult,
@@ -31,6 +32,7 @@ export interface WorkspaceContextValue {
   selectCompany: (value: string) => void;
 }
 export interface ShellProps extends ProtectedWorkspaceProps {
+  documentaryModule?: DocumentaryModuleId | null;
   context: SessionContext;
   company: CompanyScope;
   onSelectCompany: (value: string) => void;

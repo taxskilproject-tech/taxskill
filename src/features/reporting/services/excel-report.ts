@@ -73,7 +73,7 @@ export async function generateExcel(payload: ExportPayload): Promise<Blob> {
     ],
     [
       text("Empresa / alcance"),
-      text("Área"),
+      text("Módulo"),
       text("Clase"),
       text("Exigibles documentales"),
       text("Aprobadas documentales"),

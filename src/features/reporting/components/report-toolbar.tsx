@@ -22,7 +22,7 @@ export function ReportToolbar({
         value={filters.report}
       >
         <option value="detail">Detalle de obligaciones</option>
-        <option value="compliance">Cumplimiento por empresa y área</option>
+        <option value="compliance">Cumplimiento por empresa y módulo</option>
         <option value="pending">Pendientes de aprobación</option>
         <option value="deadlines">Vencimientos de entrega pendientes</option>
         <option value="observed">Observaciones</option>

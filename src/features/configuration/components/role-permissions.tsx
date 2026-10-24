@@ -17,7 +17,7 @@ export function RolePermissions({
   return (
     <section className="space-y-3">
       <p className="text-sm text-zinc-600" aria-live="polite">
-        {count} acciones seleccionadas. Cambiar de área conserva las
+        {count} acciones seleccionadas. Cambiar de módulo conserva las
         selecciones.
       </p>
       <SectionNavigation

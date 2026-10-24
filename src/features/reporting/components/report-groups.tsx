@@ -5,7 +5,7 @@ export function ReportGroups({ groups }: Pick<ReportResult, "groups">) {
   return (
     <section className="space-y-3">
       <h2 className="font-semibold">
-        Cumplimiento documental por empresa y área
+        Cumplimiento documental por empresa y módulo
       </h2>
       <div className="grid gap-3 sm:grid-cols-2">
         {groups

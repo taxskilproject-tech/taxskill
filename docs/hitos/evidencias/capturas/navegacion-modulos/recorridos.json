@@ -1,0 +1,22 @@
+[
+  {
+    "case": "invalid-module",
+    "passed": true
+  },
+  {
+    "case": "empty-company-search",
+    "passed": true
+  },
+  {
+    "case": "change-company-from-obligation",
+    "url": "http://127.0.0.1:4001/empresas/2203ba88-9926-450c-bf3e-99f48941ce93?tab=tributario"
+  },
+  {
+    "case": "documents-remains-transverse",
+    "title": "Documentos"
+  },
+  {
+    "case": "activity-inbox-preserved",
+    "passed": true
+  }
+]

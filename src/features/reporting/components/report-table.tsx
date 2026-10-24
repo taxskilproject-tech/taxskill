@@ -36,7 +36,7 @@ export function ReportTable({ rows, origin }: ReportTableProps) {
           <thead className="border-b border-zinc-200 bg-zinc-50 text-xs text-zinc-600">
             <tr>
               {[
-                "Empresa / área",
+                "Empresa / módulo",
                 "Periodo / trabajador",
                 "Obligación",
                 "Estado",

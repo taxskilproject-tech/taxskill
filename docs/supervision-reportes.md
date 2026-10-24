@@ -9,7 +9,7 @@ El [cierre complementario](hitos/evidencias/h07-cierre-complementario.md) corrig
 | Ruta | Función |
 |---|---|
 | `/dashboard` | Empresas activas, obligaciones pendientes, archivos por revisar/observados, entregas vencidas/próximas y cumplimiento. Los enlaces conservan el universo de filtros. |
-| `/reportes` | Detalle, cumplimiento por empresa/área, pendientes, vencimientos, observaciones y detalle por periodo. Exportación completa a Excel/PDF. |
+| `/reportes` | Detalle, cumplimiento por empresa/módulo, pendientes, vencimientos, observaciones y detalle por periodo. Exportación completa a Excel/PDF. |
 | `/documentos` | Metadatos de todas las versiones, incluidas las anteriores a una reapertura; descarga y vista previa usan el circuito documental existente. |
 | `/auditoria` | Actor humano/sistema, recurso, alcance, fecha de Lima y transición mínima, sin edición. |
 | `/empresas/{id}` | Resumen calculado con las mismas reglas; enlaces a periodos e histórico administrativo. |
@@ -17,6 +17,12 @@ El [cierre complementario](hitos/evidencias/h07-cierre-complementario.md) corrig
 La empresa del selector delimita el contexto; un parámetro URL no otorga autorización. Los filtros y `returnTo` sobreviven al recorrido documento → detalle → listado. Los formularios adicionales no introducen rutas.
 
 Los indicadores abren el listado de su recurso de origen: dashboard mantiene `view`, reportes mantiene `reports.view`. Los permisos de otra empresa o módulo no cambian ese destino ni reducen el universo al pasar entre pantallas.
+
+### Para qué sirve Documentos
+
+Es el buscador transversal de archivos entregados, incluidas versiones históricas. Permite localizar una boleta, constancia o declaración por empresa, módulo, trabajador, tipo y periodo sin recorrer las fichas de empresa. El contexto superior limita la consulta a una empresa o a todas las autorizadas; desde cada resultado se puede descargar/previsualizar y abrir su obligación.
+
+Las obligaciones sin archivos se encuentran en Actividades y en el módulo correspondiente. Los módulos organizan las obligaciones y su cumplimiento; Documentos reúne los archivos existentes para su consulta. La palabra visible es **Módulo**, también en filtros y encabezados Excel/PDF. Ver [navegación y responsabilidades](flujo-navegacion.md#36-módulos-y-buscador-documentos).
 
 Cada clic añade un criterio y reinicia únicamente la página. `indicators` es un array JSON de hasta cinco valores (`pending`, `review`, `observed`, `overdue`, `upcoming`) combinados mediante AND, además del reporte y otros filtros. URL: `indicators=pending,review`. Se validan, deduplican y ordenan; el antiguo `indicator` sigue admitido como condición adicional. Los criterios activos se muestran y pueden quitarse individualmente. Las métricas de archivos abren sus obligaciones conservando las unidades. Requiere la migración `20261017175617_h07_indicator_intersections.sql` antes de publicar este frontend.
 

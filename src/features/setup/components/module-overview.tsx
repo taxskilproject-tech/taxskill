@@ -2,10 +2,10 @@ import { DOCUMENT_MODULES } from "@/domain/common/constants/modules";
 
 export function ModuleOverview() {
   return (
-    <section aria-labelledby="areas-titulo" className="grid gap-5">
+    <section aria-labelledby="modulos-titulo" className="grid gap-5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-lg font-semibold" id="areas-titulo">
-          Áreas del producto
+        <h2 className="text-lg font-semibold" id="modulos-titulo">
+          Módulos del producto
         </h2>
         <span className="text-sm text-zinc-600">
           Se implementarán en los siguientes hitos

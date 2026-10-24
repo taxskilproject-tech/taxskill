@@ -57,7 +57,7 @@ export function WorkersPanel({ companyId }: WorkersPanelProps) {
     workerListSchema,
   );
   return (
-    <section className="space-y-5">
+    <section className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-semibold">Trabajadores</h2>
@@ -107,11 +107,7 @@ export function WorkersPanel({ companyId }: WorkersPanelProps) {
         />
         <div className="space-y-3">
           {query.data?.rows.map((worker) => (
-            <WorkerCard
-              key={worker.id}
-              worker={worker}
-              origin={origin}
-            />
+            <WorkerCard key={worker.id} worker={worker} origin={origin} />
           ))}
           {query.data?.count === 0 && (
             <p className="text-sm text-zinc-600">

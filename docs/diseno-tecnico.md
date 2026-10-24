@@ -51,6 +51,10 @@ Este diseño define los contratos; por sí solo no acredita migraciones aplicada
 
 ### 1.3 Actualización del diseño
 
+**Terminología confirmada el 24/10/2026:** Tributario, Laboral por trabajador y Laboral general se denominan módulos. Las menciones anteriores a «área documental» son equivalentes; se conserva la identidad de requisitos y archivos históricos. Documentos es un buscador transversal de archivos entregados y versiones, distinto de los listados de obligaciones de cada módulo. Ver [recorridos y responsabilidades](flujo-navegacion.md#36-módulos-y-buscador-documentos).
+
+**Navegación confirmada e implementada localmente el 24/10/2026:** accesos directos a módulos con una empresa a la vez y barra móvil Inicio/Actividades/Módulos/Más. Se reutiliza la ruta de empresa con `tab`; `module` en el listado de empresas activa la selección explícita. No se añaden rutas, tablas ni endpoints. Ver [contratos de contexto, pruebas y evidencias](plan-navegacion-modulos.md).
+
 La versión 1.1 incorpora las últimas aclaraciones del usuario: acceso directo a Supabase desde el frontend como Plan A, Route Handlers solo por necesidad concreta, configuración de RLS aplazada y Atomic Design obligatorio. Estas decisiones sustituyen el enfoque anterior de consultas de negocio desde componentes de servidor, mutaciones mediante Server Actions y políticas desarrolladas junto con cada módulo.
 
 ## 2. Registro de decisiones confirmadas
@@ -62,7 +66,7 @@ Los identificadores D se utilizan en la matriz de trazabilidad final.
 | D01 | Plataforma | Next.js para la aplicación y Supabase para backend, autenticación, PostgreSQL y archivos. |
 | D02 | Alojamiento | Next.js en Vercel y Supabase Cloud. |
 | D03 | Organización | Un estudio al inicio, con una base que permita incorporar estudios independientes después. |
-| D04 | Áreas documentales | Tributario, laboral por trabajador y laboral general desde la primera versión. |
+| D04 | Módulos documentales | Tributario, laboral por trabajador y laboral general desde la primera versión. |
 | D05 | Administración de usuarios | Módulo para crear cuentas y asignar empresas y permisos. |
 | D06 | Contraseñas y bloqueo | El administrador establece y cambia contraseñas y puede inhabilitar cuentas. Sin contraseña temporal ni cambio obligatorio al primer ingreso. |
 | D07 | Recuperación de acceso | Solo por el administrador. Sin recuperación de contraseña por correo en la primera versión. |
@@ -78,13 +82,13 @@ Los identificadores D se utilizan en la matriz de trazabilidad final.
 | D17 | Inicio de control | Empresas nuevas comienzan con el periodo vigente; sin pendientes automáticos de periodos anteriores. |
 | D18 | Reingresos | Nuevo periodo laboral por contratación, conservando las etapas anteriores del expediente. |
 | D19 | Archivos | Límite inicial configurable de 20 MB por archivo. |
-| D20 | Actividades | Bandeja central de obligaciones de las tres áreas y actividades adicionales creadas por el administrador. |
+| D20 | Actividades | Bandeja central de obligaciones de los tres módulos y actividades adicionales creadas por el administrador. |
 | D21 | Actividades adicionales | Siempre requieren archivos y revisión; pueden ser de una empresa o internas del estudio. |
 | D22 | Responsable | Solo se asigna responsable de entrega; cualquier contador o supervisor autorizado puede revisar. |
 | D23 | Recurrencia de actividades | Actividades adicionales únicas o recurrentes. |
 | D24 | Herencia de responsables | Obligaciones automáticas heredan el responsable configurado por empresa y módulo; el administrador puede reasignar. |
 | D25 | Urgencia | Vencimiento y prioridad alta, media o baja; se destacan primero las vencidas. |
-| D26 | Indicadores | Actividades adicionales separadas del cumplimiento documental de las tres áreas. |
+| D26 | Indicadores | Actividades adicionales separadas del cumplimiento documental de los tres módulos. |
 | D27 | Notificaciones internas | Los eventos principales producen avisos dentro de la aplicación. |
 | D28 | WhatsApp | Integración mediante webhook hacia n8n para vencimientos, atrasos y observaciones. |
 | D29 | Ahorro de recursos | Resumen diario por usuario, incluyendo nuevas observaciones; solo cuando haya avisos pendientes. |
@@ -284,7 +288,7 @@ Cada fila usa DeadlineLabel, Badge y controles de acción. Abrir una obligación
 | FormField + Input/Label | Empresas, trabajadores, usuarios, configuración. | Normal, foco, error, disabled. |
 | SearchField + PaginationControls | Listados y reportes. | Carga, vacío, error, datos. |
 | DeadlineLabel + Badge | Actividades, obligaciones, expediente y dashboard. | Pendiente, próximo, vencido, entregado. |
-| FilePicker + FileUploadPanel | Tributario, ambas áreas laborales y actividades adicionales. | Selección, transfiriendo, interrumpido, validando, confirmado, rechazado. |
+| FilePicker + FileUploadPanel | Tributario, ambos módulos laborales y actividades adicionales. | Selección, transfiriendo, interrumpido, validando, confirmado, rechazado. |
 | DeliverableList + VersionReviewPanel | Todos los recorridos de revisión. | Por revisar, observado, aprobado, conflicto, reapertura. |
 | ListTemplate + DetailTemplate | Páginas de los diferentes módulos. | Adaptación móvil, acceso limitado, carga y recuperación de error. |
 
@@ -532,7 +536,7 @@ La activación valida que exista responsable con permisos, entregables, formatos
 
 Los siguientes son datos de partida de A1, editables por configuración. No equivalen a un calendario legal.
 
-| Área | Tipos y frecuencia inicial |
+| Módulo | Tipos y frecuencia inicial |
 |---|---|
 | Tributario | Cálculo Excel quincenal; PDT mensual con dos posiciones revisables; Registro de compras PDF mensual; Registro de ventas PDF mensual; Control tributario Excel semanal. |
 | Tributario configurable | Consulta de declaraciones PDT y consulta de pagos; el administrador define frecuencia y plazo antes de activarlas. |
@@ -673,7 +677,7 @@ Orden por defecto:
 
 Dentro de cada grupo: prioridad alta, media y baja; luego fecha operativa ascendente y UUID como desempate estable. Para las que esperan revisión, usar fecha de recepción más antigua. Permitir cambiar orden mediante columnas.
 
-El administrador ve todos los alcances del estudio; los demás solo los autorizados. El responsable es un filtro de trabajo, no un mecanismo que otorgue acceso. Los documentos de las tres áreas se consultan también en sus pantallas originales sin duplicar registros.
+El administrador ve todos los alcances del estudio; los demás solo los autorizados. El responsable es un filtro de trabajo, no un mecanismo que otorgue acceso. Los documentos de los tres módulos se consultan también en sus pantallas originales sin duplicar registros.
 
 ### 11.2 Cumplimiento
 
@@ -688,7 +692,7 @@ Cumplimiento = Aprobadas / Exigibles × 100.
 
 Una obligación con dos entregables, uno aprobado y otro por revisar, suma cero obligaciones aprobadas y muestra avance de archivos 1/2. Las obligaciones opcionales permanecen visibles, pero no afectan el denominador.
 
-El cumplimiento global de las tres áreas se obtiene de sus totales, no del promedio simple de porcentajes de módulos. Las actividades adicionales usan la misma fórmula en un indicador separado, para empresas o para el estudio. No se mezclan actividades internas con métricas de una empresa.
+El cumplimiento global de los tres módulos se obtiene de sus totales, no del promedio simple de porcentajes de módulos. Las actividades adicionales usan la misma fórmula en un indicador separado, para empresas o para el estudio. No se mezclan actividades internas con métricas de una empresa.
 
 Los indicadores reflejan el estado actual de obligaciones de ese periodo. Las revisiones históricas permiten reconstruir qué versión fue aprobada; la primera versión no ofrece un tablero avanzado de evolución histórica.
 
@@ -970,7 +974,7 @@ Las etapas F01–F05 pertenecen a la primera versión. POST corresponde a futura
 |---|---|
 | F01 — Base y acceso | Estudio, Auth directo, empresas, usuarios, perfiles y asignaciones. SDK, repositorios, hooks y base de átomos/moléculas/templates. APIs administrativas limitadas. Sin políticas RLS en esta etapa. |
 | F02 — Motor documental | Catálogo, reglas versionadas, calendario, generación idempotente, entregables, ciclos, Storage directo, validación confiable, versiones y revisión mediante RPC. Organismos de carga y revisión reutilizables. |
-| F03 — Áreas documentales | Tributario, laboral general, trabajadores, etapas laborales y documentos de ingreso, relación y cese, componiendo las piezas compartidas. |
+| F03 — Módulos documentales | Tributario, laboral general, trabajadores, etapas laborales y documentos de ingreso, relación y cese, componiendo las piezas compartidas. |
 | F04 — Actividades y avisos | Bandeja, actividades únicas/recurrentes, responsables, prioridades, avisos y n8n/WhatsApp. Consultas directas y composición Atomic Design. |
 | F05 — Supervisión y operación | Dashboard, búsqueda, reportes, Excel/PDF en navegador, monitoreo y respaldos. Completar T01: RLS, acceso privado, sesiones y pruebas de aislamiento; después ejecutar piloto con datos reales. |
 | POST | Ampliaciones de la matriz siguiente, priorizadas mediante una nueva definición de alcance. |
@@ -1178,7 +1182,7 @@ Estas fuentes se consultaron para el diseño. Verificar nuevamente sus cambios a
 | Regla original | Diseño / ajuste acordado | Etapa |
 |---|---|---|
 | RN-01 Solo empresas asignadas | D08; administrador con alcance del estudio. Interfaz en F01 y protección efectiva de consultas mediante T01; CA01/CA02. | F01 / F05 |
-| RN-02 Obligación pertenece a empresa | Para las tres áreas y actividades de empresa. D21 permite actividades internas con empresa nula y estudio obligatorio. | F02 / F04 |
+| RN-02 Obligación pertenece a empresa | Para los tres módulos y actividades de empresa. D21 permite actividades internas con empresa nula y estudio obligatorio. | F02 / F04 |
 | RN-03 Obligación corresponde a periodo | Periodo calendario, intervalo, evento o identificador de entrega única. | F02 |
 | RN-04 Nueva carga conserva anterior | Objetos/versiones inmutables. | F02 |
 | RN-05 Aprobado requiere nueva versión | D13, reapertura y aprobación histórica conservada. | F02 |

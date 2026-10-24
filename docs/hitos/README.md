@@ -1,5 +1,7 @@
 # Hitos de implementación del sistema documental contable
 
+**Accesos a módulos del 24/10/2026:** [implementación y evidencia local](../plan-navegacion-modulos.md). Menú de módulos, selección explícita de empresa y barra móvil Inicio/Actividades/Módulos/Más. Verificación: 308 pruebas, H05 local 174, H08 local 28 y build aprobados. Sin publicación ni cambios de automatización productiva; no cambia el estado del piloto.
+
 **Mejora UX/UI del 24/10/2026:** [implementación, medidas y evidencias](../plan-mejoras-ux-ui.md). Navegación adaptable, listados compactos, paneles y asistentes; regresiones locales de H05/H06/H08 y 297 pruebas aprobadas. No cambia el estado del piloto ni activa automatizaciones productivas. La revisión manual con lector de pantalla y zoom real queda identificada en el informe.
 
 **Segunda remediación del 20/10/2026:** [AUD2-01, AUD2-02 y OBS2-01 corregidas](evidencias/correcciones-auditoria-2-2026-10-20.md). Preparación por páginas, despacho aislado y diagnóstico visible verificados: 286 unitarias, 123 casos SQL, H06 live 170 y seguridad H08 28. Tres migraciones y Edge v3 publicados: **71 migraciones, 29 tablas con RLS y 13 huellas conservadas**, sin activar jobs. GitHub recuperó conexión: `31a6613` publicado, CI correcto y Vercel confirmó Production/success. La operación permanente y el piloto H08 continúan abiertos.
@@ -28,7 +30,7 @@ La [revalidación de entrada a H08](evidencias/revalidacion-base-h08.md) confirm
 | [H02 — Acceso y empresas](h02-acceso-empresas.md) | Administrador crea cuentas, empresas y accesos; usuarios navegan su contexto de prueba. | H01. |
 | [H03 — Primer recorrido documental](h03-primer-recorrido-documental.md) | Una obligación mensual con dos archivos recorre entrega, revisión, corrección y reapertura. | H02. |
 | [H04 — Motor documental completo](h04-motor-documental.md) | Diez periodicidades, reglas versionadas y generación recuperable sin duplicados. | H03. |
-| [H05 — Tres áreas documentales](h05-areas-documentales.md) | Tributario, laboral general y expediente laboral con ingreso, cese y reingreso. | H04. |
+| [H05 — Tres módulos documentales](h05-areas-documentales.md) | Tributario, laboral general y expediente laboral con ingreso, cese y reingreso. | H04. |
 | [H06 — Actividades y notificaciones](h06-actividades-notificaciones.md) | Bandeja central, actividades adicionales y avisos internos/WhatsApp comprobados. | H05. |
 | [H07 — Supervisión y reportes](h07-supervision-reportes.md) | Indicadores conciliados, búsqueda, exportaciones y consulta de auditoría. | H06. |
 | [H08 — Preparación para producción](h08-preparacion-produccion.md) | Acceso efectivo protegido, recuperación probada y piloto aceptado. | H07. |
@@ -57,7 +59,7 @@ Los casilleros se marcan solamente cuando exista evidencia verificable; los esta
 7. **Reintentos y concurrencia:** `request_id` identifica la operación y `expected_revision` evita sobrescrituras. Un conflicto requiere refrescar y decidir; no repetir automáticamente una aprobación sobre otra versión.
 8. **RLS diferido:** H01–H07 verifican funcionalidad con datos sintéticos exclusivamente en Supabase local sobre Docker. El proyecto Cloud compartido no recibe fixtures ni sustituye un Docker no disponible. La protección de todas las lecturas directas y archivos, incluida revocación de sesiones, no se considera demostrada hasta completar T01 en H08.
 9. **Secretos:** ninguna clave administrativa o de integración se entrega al navegador, ni siquiera mientras RLS esté pendiente. No guardar contraseñas, tokens, salarios o diagnósticos en logs, auditoría o mensajes externos.
-10. **Navegación:** respetar las 14 rutas existentes del diseño. Las áreas son pestañas de empresa; los formularios no crean rutas nuevas por defecto. Un enlace o una asignación no concede permisos.
+10. **Navegación:** respetar las 14 rutas existentes del diseño. Los módulos tienen accesos directos que reutilizan la ruta de empresa con `tab`; `/empresas?module=...` permite elegir empresa. Los formularios no crean rutas nuevas por defecto. Un enlace o una asignación no concede permisos. Documentos permite buscar archivos de todos los módulos autorizados, sin abrir antes una empresa. Ver [terminología y responsabilidades](../flujo-navegacion.md#36-módulos-y-buscador-documentos).
 11. **Operación:** fechas y vencimientos se interpretan en `America/Lima`. Entrega puntual y aprobación documental son dimensiones distintas. Las actividades adicionales tienen cumplimiento separado.
 12. **Documentación:** consultar las guías locales de la versión instalada de Next.js antes de escribir código; actualizar contratos y documentación cuando la implementación cambie.
 

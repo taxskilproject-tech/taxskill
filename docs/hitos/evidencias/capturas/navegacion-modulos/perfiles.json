@@ -1,0 +1,37 @@
+[
+  {
+    "profile": "contador",
+    "company": "H05 · Empresa de pruebas local",
+    "hasRows": true,
+    "overflow": false,
+    "title": "Tributario"
+  },
+  {
+    "profile": "supervisor",
+    "company": "H05 · Empresa de pruebas local",
+    "hasRows": true,
+    "overflow": false,
+    "title": "Tributario",
+    "recheckedAfterLayout": true
+  },
+  {
+    "profile": "cliente",
+    "company": "H05 · Empresa de pruebas local",
+    "hasRows": true,
+    "overflow": false,
+    "title": "Tributario"
+  },
+  {
+    "profile": "cliente",
+    "foreignCompanyDenied": true
+  },
+  {
+    "profile": "cliente",
+    "moduleDeniedAfterLogin": true
+  },
+  {
+    "profile": "administrador",
+    "directReloadCompany": "H05 · Empresa de pruebas local",
+    "passed": true
+  }
+]

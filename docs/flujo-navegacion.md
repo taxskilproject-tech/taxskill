@@ -1,7 +1,7 @@
 # Flujo de navegación: páginas y rutas
 
-- **Versión:** 1.0 — 10 de octubre de 2026.
-- **Estado:** navegación propuesta, aún sin páginas de negocio implementadas.
+- **Versión:** 1.1 — actualización del 24 de octubre de 2026.
+- **Estado:** navegación implementada; [accesos directos a módulos](plan-navegacion-modulos.md) verificados localmente, pendientes de publicación.
 - **Fuentes:** [diseño técnico](diseno-tecnico.md), [análisis](analisis_completo_sistema_documental_contable.md) y [resumen](resumen_ejecutivo_sistema_documental_contable.md).
 - **Relacionados:** [tablas](tablas-db.md), [funcionamiento](diagrama-flujo.md) y [carpetas](estructura-carpetas.md).
 
@@ -28,6 +28,12 @@ flowchart TD
     Dash --> Shell["Navegación autenticada y selector de empresa"]
     Shell --> Activities["/actividades"]
     Shell --> Companies["/empresas"]
+    Shell --> Modules["Módulos: Tributario, Laboral por trabajador, Laboral general"]
+    Modules --> SelectedCompany{"Empresa seleccionada"}
+    SelectedCompany -->|"No"| ModulePicker["/empresas?module=... · selección explícita"]
+    SelectedCompany -->|"Sí"| CompanyModule["/empresas/{companyId}?tab=... · módulo directo"]
+    ModulePicker --> CompanyModule
+    CompanyModule --> Resolve
     Shell --> Documents["/documentos"]
     Shell --> Reports["/reportes"]
     Shell --> Notifications["/notificaciones"]
@@ -76,7 +82,7 @@ flowchart TD
 
 ## 3. Inventario de rutas y correspondencia física
 
-| URL | Archivo futuro | Propósito | Acceso objetivo |
+| URL | Archivo | Propósito | Acceso objetivo |
 |---|---|---|---|
 | / | `src/app/page.tsx` | Entrada: login o dashboard según sesión. | Público; resuelve estado de Auth sin datos privados. |
 | /login | `src/app/(public)/login/page.tsx` | Formulario y contacto con administrador. | Sin registro público ni recuperación por correo. |
@@ -84,7 +90,7 @@ flowchart TD
 | /actividades | `src/app/(app)/actividades/page.tsx` | Bandeja central, prioridad y filtros. | view de los módulos/alcances pertinentes. |
 | /actividades/{obligationId} | `src/app/(app)/actividades/[obligationId]/page.tsx` | Detalle común de obligación documental/adicional. | view; acciones individuales requieren su permiso. |
 | /empresas | `src/app/(app)/empresas/page.tsx` | Listado de empresas del alcance. | Asignación vigente o administración del estudio. |
-| /empresas/{companyId} | `src/app/(app)/empresas/[companyId]/page.tsx` | Ficha con pestañas de áreas y trabajadores. | Empresa autorizada y permiso por módulo. |
+| /empresas/{companyId} | `src/app/(app)/empresas/[companyId]/page.tsx` | Ficha con pestañas de módulos y trabajadores. | Empresa autorizada y permiso por módulo. |
 | /empresas/{companyId}/trabajadores/{workerId} | `src/app/(app)/empresas/[companyId]/trabajadores/[workerId]/page.tsx` | Expediente por etapa laboral. | Laboral trabajador view; edición con workers.manage. |
 | /documentos | `src/app/(app)/documentos/page.tsx` | Búsqueda transversal por metadatos. | Solo obligaciones/documentos del alcance. |
 | /reportes | `src/app/(app)/reportes/page.tsx` | Cumplimiento, pendientes, plazos, observaciones y exportación. | reports.view / reports.export. |
@@ -108,7 +114,7 @@ Los cuatro Route Handlers administrativos/integración son contratos HTTP, **no 
 
 ### 3.2 Selector de empresa y pestañas
 
-El selector ofrece Todas mis empresas, empresa autorizada e Internas del estudio para usuarios internos con permiso. Cambiar contexto cancela peticiones anteriores, separa claves de caché, limpia selección/acciones masivas y conserva solo filtros compatibles. Una respuesta tardía no reemplaza datos del contexto nuevo.
+En pantallas transversales, el selector ofrece Todas mis empresas, empresa autorizada e Internas del estudio para usuarios internos con permiso. Dentro de módulos ofrece empresas y Seleccionar empresa; no muestra agregados ni internas. Cambiar contexto cancela peticiones anteriores y separa caché. En módulos conserva únicamente el módulo y limpia filtros, página, expediente y entregable anteriores. Una respuesta tardía no reemplaza datos del contexto nuevo.
 
 Una carga ya iniciada conserva company_id/obligation_id de la intención; no cambia de destino por mover el selector. Detalles del recurso obtienen su empresa de las relaciones, sin confiar en el selector como autoridad.
 
@@ -126,7 +132,7 @@ Los otros listados reutilizan contratos de filtros pertinentes, sin forzar filtr
 
 Al abrir detalle desde bandeja, empresa, expediente, búsqueda o aviso, conservar origen interno y filtros/página. “Volver” usa origen validado; si no existe, /actividades. No fabricar acceso por conocer UUID.
 
-La página /actividades/{obligationId} reúne slots, historial, fechas y acciones; el mismo UUID se usa desde las áreas originales y desde Actividades. Puede enfocar un entregable mediante anchor interno, sin página adicional.
+La página /actividades/{obligationId} reúne slots, historial, fechas y acciones; el mismo UUID se usa desde los módulos originales y desde Actividades. Puede enfocar un entregable mediante anchor interno, sin página adicional.
 
 ### 3.4 Archivos y revisión
 
@@ -136,7 +142,7 @@ Cada control identifica entregable y versión vigente. Aprobar/observar/reabrir 
 
 ### 3.5 Presentación UX/UI implementada el 24/10/2026
 
-Se conservan todas las rutas. La barra lateral se mantiene en escritorio; en móvil hay cabecera compacta y navegación Inicio/Actividades/Empresas/Más. Configuración tiene grupos en escritorio y selector en móvil. Ver [implementación y evidencias UX/UI](plan-mejoras-ux-ui.md).
+Se conservan todas las rutas. La barra lateral se mantiene en escritorio; en móvil hay cabecera compacta y navegación Inicio/Actividades/Módulos/Más. Empresas se encuentra en Más. Configuración tiene grupos en escritorio y selector en móvil. Ver [implementación y evidencias UX/UI](plan-mejoras-ux-ui.md) y [accesos a módulos](plan-navegacion-modulos.md).
 
 | Ruta | Parámetros adicionales de presentación |
 |---|---|
@@ -148,6 +154,22 @@ Se conservan todas las rutas. La barra lateral se mantiene en escritorio; en mó
 Los listados enlazan con su URL efectiva como `returnTo`, sin reconstruir defaults. Se conserva la posición solo en memoria, separada por usuario/estudio/empresa, y se valida recursivamente el retorno interno con profundidad máxima de dos. Los enlaces Volver no fuerzan scroll de Next. Cambiar un filtro laboral/documental reinicia su página en una única actualización. Contraseñas y borradores no se incluyen en URL ni almacenamiento persistente.
 
 Los paneles administrativos no agregan rutas. Los asistentes conservan controles entre pasos, validan cada paso y todos los campos antes de guardar. Cerrar o cancelar un panel modificado advierte del descarte; una acción ocupada impide el cierre. Los permisos y la propiedad del recurso se validan además del estado de presentación.
+
+### 3.6 Módulos y buscador Documentos
+
+El término confirmado para Tributario, Laboral por trabajador y Laboral general es **Módulo**. La interfaz, filtros, configuración y exportaciones usan esta palabra. Las referencias históricas a «área documental» designan el mismo módulo; no se renombran identificadores, rutas ni archivos históricos. El campo de área/departamento de un puesto laboral conserva su significado laboral.
+
+| Entrada | Qué permite consultar |
+|---|---|
+| Empresa → módulo | Obligaciones de esa empresa, entregables pendientes y revisión; en Laboral por trabajador, expedientes y etapas. |
+| Actividades | Trabajo pendiente de varios módulos/empresas, urgencia y actividades adicionales; incluye obligaciones todavía sin archivos. |
+| Documentos | Archivos ya entregados y sus versiones, buscados por metadatos en las empresas autorizadas. Permite descargar, previsualizar y abrir la obligación relacionada. |
+
+Documentos no exige abrir primero una empresa: su filtro Módulo permite buscar, por ejemplo, archivos de Tributario en el alcance actual. Con Todas mis empresas busca en todas las empresas autorizadas; una empresa seleccionada restringe el contexto. No es un segundo repositorio ni genera las obligaciones pendientes.
+
+**Decisión confirmada e implementada:** accesos directos a los tres módulos en escritorio y desde Módulos en la barra móvil. Con una empresa seleccionada abren su URL existente con `tab`; sin ella abren `/empresas?module={moduleId}`, con búsqueda y selección explícita de una empresa autorizada. Solo se admiten `tributario`, `laboral_trabajador` y `laboral_general`. Una elección previa no evita el selector cuando se abre explícitamente esa URL. No se selecciona automáticamente una única empresa elegible.
+
+Una URL directa de módulo o expediente sincroniza la empresa del contexto antes de consultar contenido. El módulo tiene título propio, nombre/RUC de empresa y enlace Ficha empresa. El retorno interno validado permite mantener activo el módulo al abrir un detalle; un expediente pertenece a Laboral por trabajador. Cambiar empresa desde esos recorridos lleva al listado del mismo módulo, sin identificadores de recursos anteriores. Sin permiso se muestra Acceso restringido sin montar consultas del módulo. Ver [pruebas y capturas](plan-navegacion-modulos.md#5-validación-y-evidencias).
 
 ## 4. Recorridos por perfil
 

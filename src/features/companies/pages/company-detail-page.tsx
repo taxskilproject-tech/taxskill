@@ -12,11 +12,13 @@ import {
   loadModuleSettings,
 } from "@/features/access/repositories/access.repository";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
+import { documentaryModule } from "@/features/auth/utils/module-navigation";
 import { safeReturnTo } from "@/features/auth/utils/safe-return-to";
 import { CompanyOverview } from "@/features/companies/components/company-overview";
 import { ModuleSettingsPanel } from "@/features/companies/components/module-settings-panel";
 import type { CompanyDetailProps } from "@/features/companies/types/company.types";
 import { CompanyDocumentTabs } from "@/features/documents/components/company-document-tabs";
+import { CompanyModuleWorkspace } from "@/features/documents/components/company-module-workspace";
 import { useDataScope } from "@/lib/query/hooks/use-data-scope";
 import { createScopedQueryKey } from "@/lib/query/utils/query-keys";
 
@@ -24,6 +26,7 @@ export function CompanyDetailPage({ companyId }: CompanyDetailProps) {
   const { context, company: companyScope } = useWorkspace();
   const scope = useDataScope();
   const parameters = useSearchParams();
+  const moduleId = documentaryModule(parameters.get("tab"));
   const adminView =
     context.member.is_admin && parameters.get("tab") === "administracion";
   const authorized =
@@ -54,6 +57,27 @@ export function CompanyDetailPage({ companyId }: CompanyDetailProps) {
         kind="not-found"
         title="Empresa no encontrada"
       />
+    );
+  if (moduleId)
+    return (
+      <QueryState
+        error={company.error}
+        loading={company.isPending}
+        retrying={company.isFetching}
+        onRetry={() => {
+          void company.refetch();
+        }}
+      >
+        {company.data && !company.data.deleted_at ? (
+          <CompanyModuleWorkspace company={company.data} module={moduleId} />
+        ) : (
+          <ResourceState
+            title="Empresa no encontrada"
+            description="La empresa no está disponible."
+            kind="not-found"
+          />
+        )}
+      </QueryState>
     );
   return (
     <div className="space-y-3">

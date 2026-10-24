@@ -1,7 +1,7 @@
-import { CompaniesPage } from "@/features/companies/pages/companies-page";
+import { CompaniesEntryPage } from "@/features/companies/pages/companies-entry-page";
 
 export const instant = false;
 
 export default function Page() {
-  return <CompaniesPage />;
+  return <CompaniesEntryPage />;
 }

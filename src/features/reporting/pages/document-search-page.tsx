@@ -28,7 +28,7 @@ export function DocumentSearchPage() {
   return (
     <div className="space-y-3">
       <PageHeading
-        description="Archivos y versiones de tus empresas."
+        description="Busca archivos entregados y sus versiones en tus empresas autorizadas."
         title="Documentos"
       />
       <ReportFilters

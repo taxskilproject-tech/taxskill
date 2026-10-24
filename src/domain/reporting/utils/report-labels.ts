@@ -31,7 +31,7 @@ const FILTER_LABELS: Readonly<Record<keyof ReportFilters, string>> = {
   indicators: "Indicadores (todos)",
   company_id: "Empresa",
   scope: "Alcance",
-  module: "Área",
+  module: "Módulo",
   class: "Clase",
   state: "Estado",
   q: "Búsqueda",

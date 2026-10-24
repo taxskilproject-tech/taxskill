@@ -84,11 +84,11 @@ export function ReportFilters({
           </SelectField>
           <SelectField
             id="report-module"
-            label="Área"
+            label="Módulo"
             onChange={(e) => onChange("module", e.target.value)}
             value={filters.module ?? ""}
           >
-            <option value="">Todas las áreas</option>
+            <option value="">Todos los módulos</option>
             <option value="tributario">Tributario</option>
             <option value="laboral_trabajador">Laboral por trabajador</option>
             <option value="laboral_general">Laboral general</option>

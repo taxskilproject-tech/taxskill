@@ -43,11 +43,11 @@ export function ActivityPrimaryFilters({
       </SelectField>
       <SelectField
         id="activities-module"
-        label="Área"
+        label="Módulo"
         onChange={(event) => onChange("module", event.target.value)}
         value={filters.module ?? ""}
       >
-        <option value="">Todas las áreas</option>
+        <option value="">Todos los módulos</option>
         {DOCUMENT_MODULES.map((module) => (
           <option key={module.id} value={module.id}>
             {module.name}

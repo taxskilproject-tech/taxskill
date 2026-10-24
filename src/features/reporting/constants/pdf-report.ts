@@ -2,7 +2,7 @@ import type { PdfTableColumn } from "@/features/reporting/types/pdf.types";
 
 export const PDF_COLUMNS: readonly PdfTableColumn[] = [
   { label: "Empresa / RUC", width: 104 },
-  { label: "Área / clase", width: 91 },
+  { label: "Módulo / clase", width: 91 },
   { label: "Periodo", width: 66 },
   { label: "Trabajador / ID", width: 91 },
   { label: "Obligación / tipo", width: 156 },

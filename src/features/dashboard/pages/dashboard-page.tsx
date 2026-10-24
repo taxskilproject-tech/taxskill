@@ -93,7 +93,7 @@ export function DashboardPage() {
           onChange={change}
         />
       </FilterDisclosure>
-      <FilterDisclosure label="Desglose por empresa y área">
+      <FilterDisclosure label="Desglose por empresa y módulo">
         {query.data && <ReportGroups groups={query.data.groups} />}
       </FilterDisclosure>
     </div>
