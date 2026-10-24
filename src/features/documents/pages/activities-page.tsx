@@ -4,9 +4,9 @@ import { ActivityInbox } from "@/features/activities/components/activity-inbox";
 
 export function ActivitiesPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       <PageHeading
-        description="Entregas, revisión y actividades adicionales de tus empresas y del estudio."
+        description="Entregas, revisión y actividades adicionales."
         title="Actividades"
       />
       <ActivityInbox />

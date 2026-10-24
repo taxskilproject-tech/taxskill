@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/atoms/button";
 import { CheckboxField } from "@/components/molecules/checkbox-field";
+import { SidePanel } from "@/components/organisms/side-panel";
 import { catalogRowSchema } from "@/domain/documents/contracts/document.schema";
 import type { CatalogRow } from "@/domain/documents/types/document.types";
 import { Pagination } from "@/features/access/components/pagination";
@@ -57,12 +58,17 @@ export function CatalogPanel() {
         }}
       />
       {editing && (
-        <CatalogForm
-          item={selected}
-          key={selected?.id ?? "new"}
-          onCancel={() => setEditing(false)}
-          onSaved={() => setEditing(false)}
-        />
+        <SidePanel
+          title={selected ? "Editar tipo documental" : "Nuevo tipo documental"}
+          onClose={() => setEditing(false)}
+        >
+          <CatalogForm
+            item={selected}
+            key={selected?.id ?? "new"}
+            onCancel={() => setEditing(false)}
+            onSaved={() => setEditing(false)}
+          />
+        </SidePanel>
       )}
       <QueryState
         error={query.error}
@@ -73,6 +79,11 @@ export function CatalogPanel() {
         retrying={query.isFetching}
       >
         <div className="space-y-4">
+          <Pagination
+            count={query.data?.count ?? 0}
+            onPage={setPage}
+            page={page}
+          />
           {query.data?.rows.map((item) => (
             <CatalogItem
               item={item}

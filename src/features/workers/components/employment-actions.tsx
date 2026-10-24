@@ -2,6 +2,7 @@
 import { useState } from "react";
 
 import { Button } from "@/components/atoms/button";
+import { SidePanel } from "@/components/organisms/side-panel";
 import { EmploymentForm } from "@/features/workers/components/employment-form";
 import { EndEmploymentForm } from "@/features/workers/components/end-employment-form";
 import { WorkerForm } from "@/features/workers/components/worker-form";
@@ -44,24 +45,37 @@ export function EmploymentActions({
           )}
         </div>
       )}
-      {mode === "worker" && (
-        <WorkerForm
-          companyId={detail.worker.company_id}
-          onCancel={() => setMode("")}
-          onSaved={() => setMode("")}
-          worker={detail.worker}
-        />
-      )}
-      {(mode === "start" || mode === "correct") && (
-        <EmploymentForm
-          detail={detail}
-          key={`${mode}:${detail.selected_period?.id}`}
-          mode={mode}
-          onSaved={() => setMode("")}
-        />
-      )}
-      {mode === "end" && (
-        <EndEmploymentForm detail={detail} onSaved={() => setMode("")} />
+      {mode && (
+        <SidePanel
+          title={
+            mode === "end"
+              ? "Registrar cese"
+              : mode === "start"
+                ? "Ingreso o reingreso"
+                : "Editar expediente"
+          }
+          onClose={() => setMode("")}
+        >
+          {mode === "worker" && (
+            <WorkerForm
+              companyId={detail.worker.company_id}
+              onCancel={() => setMode("")}
+              onSaved={() => setMode("")}
+              worker={detail.worker}
+            />
+          )}
+          {(mode === "start" || mode === "correct") && (
+            <EmploymentForm
+              detail={detail}
+              key={`${mode}:${detail.selected_period?.id}`}
+              mode={mode}
+              onSaved={() => setMode("")}
+            />
+          )}
+          {mode === "end" && (
+            <EndEmploymentForm detail={detail} onSaved={() => setMode("")} />
+          )}
+        </SidePanel>
       )}
     </section>
   );

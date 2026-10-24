@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/atoms/button";
 import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { FormField } from "@/components/molecules/form-field";
+import { SidePanel } from "@/components/organisms/side-panel";
 import { useDocumentCommand } from "@/features/documents/hooks/use-document-command";
 import type { RuleEngineProps } from "@/features/documents/types/engine-ui.types";
 
@@ -11,6 +12,10 @@ export function RuleActiveControl({ rule }: RuleEngineProps) {
   const command = useDocumentCommand();
   const [opened, setOpened] = useState(false);
   const [reason, setReason] = useState("");
+  function close() {
+    setOpened(false);
+    setReason("");
+  }
   async function confirm() {
     if (
       await command.submit("SetRuleActive", {
@@ -20,7 +25,7 @@ export function RuleActiveControl({ rule }: RuleEngineProps) {
         reason: reason.trim() || "Activación de regla",
       })
     )
-      setOpened(false);
+      close();
   }
   return (
     <div className="space-y-3">
@@ -32,36 +37,46 @@ export function RuleActiveControl({ rule }: RuleEngineProps) {
         {rule.active ? "Pausar regla" : "Activar regla"}
       </Button>
       {opened && (
-        <div className="space-y-3 rounded-lg border border-zinc-200 p-4">
-          <p className="text-sm text-zinc-600">
-            {rule.active
-              ? "La pausa no borra obligaciones ni recupera los ciclos excluidos al reactivar."
-              : "Se comprobará el responsable. La generación retoma el periodo vigente y conserva los intervalos de pausa."}
-          </p>
-          {rule.active && (
-            <FormField
-              disabled={command.busy}
-              id={`pause-${rule.id}`}
-              label="Motivo de pausa"
-              maxLength={2000}
-              onChange={(event) => setReason(event.target.value)}
-              value={reason}
-            />
-          )}
-          <Button
-            disabled={rule.active && !reason.trim()}
-            loading={command.busy}
-            loadingText={rule.active ? "Pausando regla…" : "Activando regla…"}
-            onClick={() => {
+        <SidePanel
+          title={rule.active ? "Pausar regla" : "Activar regla"}
+          onClose={close}
+        >
+          <form
+            className="space-y-3"
+            onSubmit={(event) => {
+              event.preventDefault();
               void confirm();
             }}
           >
-            Confirmar {rule.active ? "pausa" : "activación"}
-          </Button>
-        </div>
-      )}
-      {command.error && (
-        <FeedbackMessage kind="error">{command.error}</FeedbackMessage>
+            <p className="text-sm text-zinc-600">
+              {rule.active
+                ? "La pausa no borra obligaciones ni recupera los ciclos excluidos al reactivar."
+                : "Se comprobará el responsable. La generación retoma el periodo vigente y conserva los intervalos de pausa."}
+            </p>
+            {rule.active && (
+              <FormField
+                disabled={command.busy}
+                id={`pause-${rule.id}`}
+                label="Motivo de pausa"
+                maxLength={2000}
+                required
+                onChange={(event) => setReason(event.target.value)}
+                value={reason}
+              />
+            )}
+            <Button
+              disabled={rule.active && !reason.trim()}
+              loading={command.busy}
+              loadingText={rule.active ? "Pausando regla…" : "Activando regla…"}
+              type="submit"
+            >
+              Confirmar {rule.active ? "pausa" : "activación"}
+            </Button>
+            {command.error && (
+              <FeedbackMessage kind="error">{command.error}</FeedbackMessage>
+            )}
+          </form>
+        </SidePanel>
       )}
     </div>
   );

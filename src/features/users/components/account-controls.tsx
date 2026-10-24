@@ -60,39 +60,44 @@ export function AccountControls({ user, onChanged }: UserDetailProps) {
   }
   return (
     <div className="grid gap-5 lg:grid-cols-2">
-      <form
-        className="space-y-4 rounded-xl border border-zinc-200 bg-white p-5"
-        onChange={password.resetIntent}
-        onSubmit={changePassword}
-      >
-        <h3 className="font-medium">Cambio administrativo de contraseña</h3>
-        <FormField
-          autoComplete="new-password"
-          disabled={password.busy}
-          id="new-password"
-          label="Nueva contraseña"
-          maxLength={128}
-          minLength={12}
-          name="password"
-          required
-          type="password"
-        />
-        <p className="text-xs leading-6 text-zinc-500">
-          Las sesiones admitidas se revocan. El usuario deberá ingresar de
-          nuevo.
-        </p>
-        <FormActions
-          busy={password.busy}
-          error={validation ?? password.error}
-          label="Establecer contraseña"
-          loadingText="Cambiando contraseña…"
-          success={
-            password.result
-              ? "Contraseña actualizada; sesiones revocadas."
-              : undefined
-          }
-        />
-      </form>
+      <details>
+        <summary className="min-h-11 cursor-pointer py-3 text-sm font-medium">
+          Cambiar contraseña
+        </summary>
+        <form
+          className="space-y-4 rounded-xl border border-zinc-200 bg-white p-5"
+          onChange={password.resetIntent}
+          onSubmit={changePassword}
+        >
+          <h3 className="font-medium">Cambio administrativo de contraseña</h3>
+          <FormField
+            autoComplete="new-password"
+            disabled={password.busy}
+            id="new-password"
+            label="Nueva contraseña"
+            maxLength={128}
+            minLength={12}
+            name="password"
+            required
+            type="password"
+          />
+          <p className="text-xs leading-6 text-zinc-500">
+            Las sesiones admitidas se revocan. El usuario deberá ingresar de
+            nuevo.
+          </p>
+          <FormActions
+            busy={password.busy}
+            error={validation ?? password.error}
+            label="Establecer contraseña"
+            loadingText="Cambiando contraseña…"
+            success={
+              password.result
+                ? "Contraseña actualizada; sesiones revocadas."
+                : undefined
+            }
+          />
+        </form>
+      </details>
       <form
         className="space-y-4 rounded-xl border border-zinc-200 bg-white p-5"
         onSubmit={changeEnabled}

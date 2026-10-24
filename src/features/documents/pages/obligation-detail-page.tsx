@@ -6,22 +6,24 @@ import { z } from "zod";
 import { Badge } from "@/components/atoms/badge";
 import { Button } from "@/components/atoms/button";
 import { ResourceState } from "@/components/organisms/resource-state";
+import { REVIEW_ACTIONS } from "@/domain/access/constants/access";
+import { canPerform } from "@/domain/access/utils/permissions";
 import { REVIEW_LABELS } from "@/domain/documents/constants/documents";
 import { detailSchema } from "@/domain/documents/contracts/document.schema";
+import { periodLabel } from "@/domain/reporting/utils/report-labels";
 import { PageHeading } from "@/features/access/components/page-heading";
 import { QueryState } from "@/features/access/components/query-state";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 import { safeReturnTo } from "@/features/auth/utils/safe-return-to";
-import { DeliverableCard } from "@/features/documents/components/deliverable-card";
 import { DispositionControl } from "@/features/documents/components/disposition-control";
+import { ObligationWorkspace } from "@/features/documents/components/obligation-workspace";
 import { ReassignmentControl } from "@/features/documents/components/reassignment-control";
-import { VersionHistory } from "@/features/documents/components/version-history";
 import { useDocumentQuery } from "@/features/documents/hooks/use-document-query";
 import type { ObligationDetailProps } from "@/features/documents/types/document-ui.types";
 
 export function ObligationDetailPage({ obligationId }: ObligationDetailProps) {
   const parameters = useSearchParams();
-  const { company } = useWorkspace();
+  const { company, context } = useWorkspace();
   const validId = z.uuid().safeParse(obligationId).success;
   const query = useDocumentQuery(
     "detail",
@@ -32,27 +34,37 @@ export function ObligationDetailPage({ obligationId }: ObligationDetailProps) {
   const returnTo = parameters.get("returnTo")
     ? safeReturnTo(parameters.get("returnTo"))
     : "/actividades";
-  if (
-    !validId ||
-    (company.kind === "internal" &&
-      query.data &&
-      query.data.summary.company_id !== null) ||
-    (query.data &&
-      company.kind === "company" &&
-      company.companyId !== query.data.summary.company_id)
-  )
+  const detail = query.data;
+  const wrongScope =
+    detail &&
+    ((company.kind === "internal" && detail.summary.company_id !== null) ||
+      (company.kind === "company" &&
+        company.companyId !== detail.summary.company_id));
+  const canReview =
+    detail &&
+    REVIEW_ACTIONS.some((action) =>
+      canPerform(
+        context.capabilities,
+        detail.summary.company_id,
+        detail.summary.module,
+        action,
+        context.member.member_type,
+      ),
+    );
+  if (!validId || wrongScope)
     return (
       <ResourceState
-        description="La obligación no existe o no está disponible en este contexto."
+        description="La obligación no está disponible en este contexto."
         kind="not-found"
         title="Obligación no encontrada"
       />
     );
   return (
-    <div className="space-y-7">
+    <div className="space-y-3">
       <Link
         className="inline-flex min-h-11 items-center text-sm underline underline-offset-4"
         href={returnTo}
+        scroll={false}
       >
         ← Volver al listado
       </Link>
@@ -64,9 +76,11 @@ export function ObligationDetailPage({ obligationId }: ObligationDetailProps) {
         }}
         retrying={query.isFetching}
       >
-        {query.data && (
+        {detail && (
           <>
             <PageHeading
+              title={detail.summary.title}
+              description={`${detail.summary.company_name ?? "Interna del estudio"} · ${periodLabel(detail.summary.occurrence_key, detail.summary.initial_due_date)}`}
               action={
                 <Button
                   loading={query.isFetching}
@@ -79,47 +93,40 @@ export function ObligationDetailPage({ obligationId }: ObligationDetailProps) {
                   Actualizar detalle
                 </Button>
               }
-              description={`${query.data.summary.company_name ?? "Interna del estudio"} · ${query.data.summary.occurrence_key.startsWith("event:") ? "Solicitud eventual" : query.data.summary.occurrence_key.startsWith("unique:") ? "Actividad única" : `Periodo ${query.data.summary.occurrence_key}`}`}
-              title={query.data.summary.title}
             />
-            <section className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-zinc-200 bg-white p-5">
-              <div className="space-y-2">
-                <p className="text-lg font-medium">
-                  {query.data.summary.approved_count}/
-                  {query.data.summary.total_count} archivos aprobados
-                </p>
-                <p className="text-sm text-zinc-600">
-                  {query.data.summary.operational_due_date &&
-                  query.data.summary.disposition === "active"
-                    ? `Entrega pendiente hasta ${query.data.summary.operational_due_date}`
-                    : "No hay entregas pendientes de este recorrido."}
-                </p>
-                {query.data.summary.disposition_reason && (
-                  <p className="text-sm text-zinc-600">
-                    Motivo: {query.data.summary.disposition_reason}
-                  </p>
-                )}
-              </div>
+            <section className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-zinc-200 bg-white p-3">
+              <p className="text-sm">
+                <strong>
+                  {detail.summary.approved_count}/{detail.summary.total_count}{" "}
+                  archivos aprobados
+                </strong>{" "}
+                ·{" "}
+                {detail.summary.operational_due_date
+                  ? `Entrega hasta ${detail.summary.operational_due_date}`
+                  : "Sin entregas pendientes"}
+              </p>
               <div className="flex gap-2">
-                <Badge>
-                  {REVIEW_LABELS[query.data.summary.aggregate_state]}
-                </Badge>
-                {query.data.summary.overdue && <Badge>Entrega vencida</Badge>}
+                <Badge>{REVIEW_LABELS[detail.summary.aggregate_state]}</Badge>
+                {detail.summary.overdue && <Badge>Entrega vencida</Badge>}
               </div>
+              {detail.summary.disposition_reason && (
+                <p className="w-full text-sm text-zinc-600">
+                  Motivo: {detail.summary.disposition_reason}
+                </p>
+              )}
             </section>
-            {query.data.deliverables.map((deliverable) => (
-              <DeliverableCard
-                deliverable={deliverable}
-                detail={query.data!}
-                key={deliverable.id}
-              />
-            ))}
-            <DispositionControl summary={query.data.summary} />
-            <ReassignmentControl summary={query.data.summary} />
-            <VersionHistory
+            <ObligationWorkspace
+              detail={detail}
               obligationId={obligationId}
-              summary={query.data.summary}
+              canReview={Boolean(canReview)}
             />
+            <details className="rounded-lg border border-zinc-200 bg-white p-3">
+              <summary className="min-h-11 cursor-pointer py-3 text-sm font-medium">
+                Administrar obligación y responsable
+              </summary>
+              <DispositionControl summary={detail.summary} />
+              <ReassignmentControl summary={detail.summary} />
+            </details>
           </>
         )}
       </QueryState>

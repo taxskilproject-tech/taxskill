@@ -1,15 +1,16 @@
 "use client";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useState } from "react";
 import { z } from "zod";
 
 import { ResourceState } from "@/components/organisms/resource-state";
 import { summarySchema } from "@/domain/documents/contracts/document.schema";
 import { Pagination } from "@/features/access/components/pagination";
 import { QueryState } from "@/features/access/components/query-state";
+import { useCurrentRoute } from "@/features/access/hooks/use-current-route";
+import { usePresentation } from "@/features/access/hooks/use-presentation";
+import { presentationPage } from "@/features/access/utils/presentation-page";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
-import { ObligationCard } from "@/features/documents/components/obligation-card";
 import { ObligationFilters } from "@/features/documents/components/obligation-filters";
+import { ObligationRows } from "@/features/documents/components/obligation-rows";
 import { useDocumentQuery } from "@/features/documents/hooks/use-document-query";
 import type { ObligationListProps } from "@/features/documents/types/document-ui.types";
 
@@ -25,11 +26,12 @@ export function ObligationList({
   employmentStage,
 }: ObligationListProps) {
   const { company } = useWorkspace();
-  const pathname = usePathname();
-  const parameters = useSearchParams();
-  const [page, setPage] = useState(1);
-  const [period, setPeriod] = useState("");
-  const [state, setState] = useState("");
+  const origin = useCurrentRoute();
+  const [pageValue, selectPage] = usePresentation("obligationPage", "1");
+  const page = presentationPage(pageValue);
+  const setPage = (value: number) => selectPage(String(value));
+  const [period, setPeriod] = usePresentation("obligationPeriod", "");
+  const [state, setState] = usePresentation("obligationState", "");
   const companyFilter =
     companyId ?? (company.kind === "company" ? company.companyId : undefined);
   const query = useDocumentQuery(
@@ -60,11 +62,9 @@ export function ObligationList({
       <ObligationFilters
         onPeriod={(value) => {
           setPeriod(value);
-          setPage(1);
         }}
         onState={(value) => {
           setState(value);
-          setPage(1);
         }}
         period={period}
         state={state}
@@ -78,13 +78,15 @@ export function ObligationList({
         retrying={query.isFetching}
       >
         <div className="space-y-4">
-          {query.data?.rows.map((obligation) => (
-            <ObligationCard
-              key={obligation.id}
-              obligation={obligation}
-              origin={pathname + (parameters.size ? `?${parameters}` : "")}
-            />
-          ))}
+          <Pagination
+            count={query.data?.count ?? 0}
+            onPage={setPage}
+            page={page}
+          />
+          <ObligationRows
+            rows={query.data?.rows ?? []}
+            origin={origin}
+          />
           {query.data?.count === 0 && (
             <ResourceState
               description="Las obligaciones aparecerán después de activar y generar una regla en Configuración."

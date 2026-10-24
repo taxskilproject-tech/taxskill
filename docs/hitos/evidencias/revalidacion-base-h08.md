@@ -52,3 +52,17 @@ La comprobación acredita persistencia del ajuste y dos arranques correctos en e
 No hay una nueva observación funcional que requiera reabrir H07. Empezar por **H08-T01**, inventario de recursos y matriz de acceso, seguido de T02/T03: privilegios/RLS, Storage y sesiones admitidas/revocadas. Conservar las pruebas y recorridos existentes como regresión al introducir esas protecciones.
 
 Dominio, secretos por entorno, n8n/proveedor reales, programación, copias independientes de DB/objetos, restauración, monitoreo y piloto son tareas propias de H08. Las casillas de aceptación de producto que el equipo no ha firmado permanecen abiertas. La entrada a H08 no autoriza un piloto con datos reales antes de cumplir sus controles previos.
+
+## 5. Revisión repetida antes de iniciar H08
+
+**Fecha local:** 17 de octubre de 2026. **Versión contrastada:** `2b4631ffbe4f60a2aedf6f5de7901fda41f2f3f3`. Desde el cierre correctivo `7b18e83` no cambiaron código, migraciones ni contratos; los cambios posteriores corresponden a documentación y evidencias. No se encontraron nuevos defectos funcionales confirmados ni un impedimento técnico para comenzar H08 en el alcance revisado.
+
+Se ejecutaron de nuevo `yarn verify` (**227 pruebas / 27 archivos**, TypeScript, ESLint y arquitectura), las seis suites SQL locales (**34 casos pgTAP**), `yarn db:lint`, `yarn build` (**19 páginas y Proxy**) y `yarn check:bundle`: todos finalizaron correctamente. Los tipos públicos generados desde Docker coinciden con los versionados al normalizar el formato; no se modificó su archivo. El contraste de secretos configurados abarcó 575 archivos candidatos. Se comprobaron 41 Markdown versionados y 410 destinos locales, sin archivos destino ausentes; no incluye verificación de anclas ni enlaces externos.
+
+Los dos primeros intentos de build fallaron al conectar con el subproceso Node de Turbopack, también fuera del sandbox. Se apartó exclusivamente `.next` a una carpeta ignorada dentro de `test-results/revision-pre-h08/`, comprobando previamente sus rutas y que no fuera un enlace. Al regenerar con `yarn build`, el build completo pasó. Se siguió el procedimiento ya documentado en [desarrollo](../../desarrollo.md#10-ajustes-de-compatibilidad-documentados), sin cambiar fuentes, dependencias ni configuración de Next.js.
+
+Cloud se consultó únicamente en lectura: **57 migraciones local/remoto coincidentes**, **13 huellas históricas idénticas** al cierre autorizado, 29 tablas públicas, helper de indicadores privado, intersecciones y exigencia conjunta de lectura/exportación conservadas, resolver de auditoría presente y cero jobs de WhatsApp. RLS sigue pendiente de H08. No se publicaron migraciones, fixtures ni cambios de negocio.
+
+La revisión adicional de fuentes cubrió contexto de sesión/caché, bloqueo de dobles acciones, carga recuperable, cancelación, suscripciones de avisos, intersección de indicadores y exportación paginada/contextual. Los scripts de integración conservan la validación del destino local antes de crear clientes o fixtures. No se repitieron en esta ejecución todos los recorridos visuales, integraciones live, laboratorio n8n, instalación limpia o mediciones de capacidad: se mantienen los límites y evidencias históricas descritos arriba.
+
+**Dictamen vigente:** comenzar H08 por su inventario de recursos y matriz de acceso (T01), seguido de privilegios/RLS/Storage y sesiones (T02/T03). La aceptación formal de producto y el cierre productivo siguen pendientes; no hay una nueva observación que requiera reabrir H01–H07.

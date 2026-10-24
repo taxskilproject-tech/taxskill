@@ -9,8 +9,10 @@ import { useCommand } from "@/features/access/hooks/use-command";
 import type { SubmitEvent } from "@/features/access/types/access-ui.types";
 import { parseForm, readForm } from "@/features/access/utils/form-data";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
+import type { ParametersFormProps } from "@/features/configuration/types/configuration.types";
+import { FileSizeField } from "@/features/documents/components/file-size-field";
 
-export function ParametersForm() {
+export function ParametersForm({ onSaved }: ParametersFormProps) {
   const { context } = useWorkspace();
   const command = useCommand();
   const [validation, setValidation] = useState<string | null>(null);
@@ -38,7 +40,8 @@ export function ParametersForm() {
       },
     });
     setValidation(parsed.error);
-    if (parsed.data) await command.submit("SaveOrganization", parsed.data);
+    if (parsed.data && (await command.submit("SaveOrganization", parsed.data)))
+      onSaved?.();
   }
   return (
     <form
@@ -80,15 +83,12 @@ export function ParametersForm() {
           required
           type="time"
         />
-        <FormField
+        <FileSizeField
           defaultValue={settings.default_max_file_bytes}
           id="max-file-bytes"
-          label="Tamaño máximo por archivo (bytes)"
-          max={50000000}
-          min={1}
+          label="Tamaño máximo por archivo"
+          maximum={50000000}
           name="default_max_file_bytes"
-          required
-          type="number"
         />
         <FormField
           defaultValue={settings.allowed_formats.join(",")}

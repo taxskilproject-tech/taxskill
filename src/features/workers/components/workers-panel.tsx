@@ -2,10 +2,14 @@
 import { useState } from "react";
 
 import { Button } from "@/components/atoms/button";
+import { SidePanel } from "@/components/organisms/side-panel";
 import { canPerform } from "@/domain/access/utils/permissions";
 import { workerListSchema } from "@/domain/workers/contracts/worker.schema";
 import { Pagination } from "@/features/access/components/pagination";
 import { QueryState } from "@/features/access/components/query-state";
+import { useCurrentRoute } from "@/features/access/hooks/use-current-route";
+import { usePresentation } from "@/features/access/hooks/use-presentation";
+import { presentationPage } from "@/features/access/utils/presentation-page";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 import { WorkerCard } from "@/features/workers/components/worker-card";
 import { WorkerFilters } from "@/features/workers/components/worker-filters";
@@ -14,12 +18,26 @@ import { useWorkerQuery } from "@/features/workers/hooks/use-worker-query";
 import type { WorkersPanelProps } from "@/features/workers/types/worker-ui.types";
 
 export function WorkersPanel({ companyId }: WorkersPanelProps) {
+  const origin = useCurrentRoute();
   const { context } = useWorkspace();
   const [creating, setCreating] = useState(false);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("all");
-  const [deleted, setDeleted] = useState(false);
+  const [pageValue, selectPage] = usePresentation("workerPage", "1");
+  const page = presentationPage(pageValue);
+  const setPage = (value: number) => selectPage(String(value));
+  const [search, setSearch] = usePresentation("workerQuery", "");
+  const [status, setStatus] = usePresentation("workerStatus", "all", [
+    "all",
+    "active",
+    "ended",
+    "unregistered",
+  ]);
+  const [deletedValue, selectDeleted] = usePresentation(
+    "workerDeleted",
+    "false",
+    ["true", "false"],
+  );
+  const deleted = deletedValue === "true";
+  const setDeleted = (value: boolean) => selectDeleted(String(value));
   const canManage = canPerform(
     context.capabilities,
     companyId,
@@ -43,7 +61,7 @@ export function WorkersPanel({ companyId }: WorkersPanelProps) {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-semibold">Trabajadores</h2>
-          <p className="mt-2 text-sm text-zinc-600">
+          <p className="sr-only">
             Cada expediente conserva sus etapas de ingreso, relación y cese.
           </p>
         </div>
@@ -54,27 +72,23 @@ export function WorkersPanel({ companyId }: WorkersPanelProps) {
         )}
       </div>
       {creating && (
-        <WorkerForm
-          companyId={companyId}
-          onCancel={() => setCreating(false)}
-          onSaved={() => setCreating(false)}
-        />
+        <SidePanel
+          title="Registrar trabajador"
+          onClose={() => setCreating(false)}
+        >
+          <WorkerForm
+            companyId={companyId}
+            onCancel={() => setCreating(false)}
+            onSaved={() => setCreating(false)}
+          />
+        </SidePanel>
       )}
       <WorkerFilters
         deleted={deleted}
         isAdmin={context.member.is_admin}
-        onDeleted={(value) => {
-          setDeleted(value);
-          setPage(1);
-        }}
-        onSearch={(value) => {
-          setSearch(value);
-          setPage(1);
-        }}
-        onStatus={(value) => {
-          setStatus(value);
-          setPage(1);
-        }}
+        onDeleted={setDeleted}
+        onSearch={setSearch}
+        onStatus={setStatus}
         search={search}
         status={status}
       />
@@ -86,9 +100,18 @@ export function WorkersPanel({ companyId }: WorkersPanelProps) {
         }}
         retrying={query.isFetching}
       >
+        <Pagination
+          count={query.data?.count ?? 0}
+          onPage={setPage}
+          page={page}
+        />
         <div className="space-y-3">
           {query.data?.rows.map((worker) => (
-            <WorkerCard key={worker.id} worker={worker} />
+            <WorkerCard
+              key={worker.id}
+              worker={worker}
+              origin={origin}
+            />
           ))}
           {query.data?.count === 0 && (
             <p className="text-sm text-zinc-600">

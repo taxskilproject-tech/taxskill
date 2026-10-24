@@ -3,6 +3,7 @@ import { FormField } from "@/components/molecules/form-field";
 import { SelectField } from "@/components/molecules/select-field";
 import type { AdditionalFieldsProps } from "@/features/activities/types/activity-ui.types";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
+import { FileSizeField } from "@/features/documents/components/file-size-field";
 
 export function AdditionalFields({
   companyId,
@@ -58,15 +59,12 @@ export function AdditionalFields({
         <option value="media">Media</option>
         <option value="baja">Baja</option>
       </SelectField>
-      <FormField
+      <FileSizeField
         id="additional-maximum"
-        label="Límite general por archivo (bytes)"
-        max={50000000}
-        min={1}
+        label="Límite general por archivo"
+        maximum={50000000}
         name="max_file_bytes"
-        onChange={(event) => onMaximum(Number(event.target.value))}
-        required
-        type="number"
+        onChange={onMaximum}
         value={maximum}
       />
     </div>

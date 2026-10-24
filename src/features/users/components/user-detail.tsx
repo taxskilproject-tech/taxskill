@@ -2,7 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 
+import { SectionNavigation } from "@/components/molecules/section-navigation";
 import { QueryState } from "@/features/access/components/query-state";
+import { usePresentation } from "@/features/access/hooks/use-presentation";
 import { loadMemberAccess } from "@/features/access/repositories/access.repository";
 import type { UserDetailProps } from "@/features/access/types/access-ui.types";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
@@ -14,6 +16,11 @@ import { useDataScope } from "@/lib/query/hooks/use-data-scope";
 import { createScopedQueryKey } from "@/lib/query/utils/query-keys";
 
 export function UserDetail({ user, directory, onChanged }: UserDetailProps) {
+  const [view, setView] = usePresentation("view", "cuenta", [
+    "cuenta",
+    "accesos",
+    "contacto",
+  ]);
   const { context } = useWorkspace();
   const scope = useDataScope();
   const access = useQuery({
@@ -28,51 +35,64 @@ export function UserDetail({ user, directory, onChanged }: UserDetailProps) {
     void access.refetch();
   }
   return (
-    <section className="space-y-6 border-t border-zinc-200 pt-6">
+    <section className="space-y-4">
       <div>
-        <h2 className="text-2xl font-semibold tracking-tight">
-          {user.profile.full_name}
-        </h2>
-        <p className="mt-2 text-sm text-zinc-500">{user.profile.email}</p>
+        <p className="text-sm break-all text-zinc-500">{user.profile.email}</p>
       </div>
-      {!user.profile.deleted_at && !user.member.deleted_at && (
-        <AccountControls
-          directory={directory}
-          key={user.profile.revision}
-          onChanged={changed}
-          user={user}
-        />
-      )}
-      <MembershipForm
-        directory={directory}
-        key={user.member.revision}
-        onChanged={changed}
-        user={user}
+      <SectionNavigation
+        label="Gestión del usuario"
+        selected={view}
+        onSelect={setView}
+        items={[
+          { id: "cuenta", label: "Cuenta" },
+          { id: "accesos", label: "Accesos" },
+          { id: "contacto", label: "Contacto" },
+        ]}
       />
-      {!user.profile.deleted_at && (
-        <WhatsappContactForm
+      <div hidden={view !== "cuenta"} className="space-y-4">
+        {!user.profile.deleted_at && !user.member.deleted_at && (
+          <AccountControls
+            directory={directory}
+            key={user.profile.revision}
+            onChanged={changed}
+            user={user}
+          />
+        )}
+        <MembershipForm
           directory={directory}
-          key={`whatsapp:${user.profile.revision}`}
+          key={user.member.revision}
           onChanged={changed}
           user={user}
         />
-      )}
-      <QueryState
-        error={access.error}
-        loading={access.isPending}
-        onRetry={() => {
-          void access.refetch();
-        }}
-        retrying={access.isFetching}
-      >
-        <GrantList
-          directory={directory}
-          grants={access.data?.grants ?? []}
-          onChanged={changed}
-          overrides={access.data?.overrides ?? []}
-          user={user}
-        />
-      </QueryState>
+      </div>
+      <div hidden={view !== "contacto"}>
+        {!user.profile.deleted_at && (
+          <WhatsappContactForm
+            directory={directory}
+            key={`whatsapp:${user.profile.revision}`}
+            onChanged={changed}
+            user={user}
+          />
+        )}
+      </div>
+      <div hidden={view !== "accesos"}>
+        <QueryState
+          error={access.error}
+          loading={access.isPending}
+          onRetry={() => {
+            void access.refetch();
+          }}
+          retrying={access.isFetching}
+        >
+          <GrantList
+            directory={directory}
+            grants={access.data?.grants ?? []}
+            onChanged={changed}
+            overrides={access.data?.overrides ?? []}
+            user={user}
+          />
+        </QueryState>
+      </div>
     </section>
   );
 }

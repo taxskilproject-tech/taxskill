@@ -1,15 +1,29 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { PdfPreview } from "@/features/documents/components/pdf-preview";
 import type { FilePreviewProps } from "@/features/documents/types/preview.types";
 
+function OfficePreview({ onReady }: Pick<FilePreviewProps, "onReady">) {
+  useEffect(() => {
+    onReady();
+  }, [onReady]);
+  return (
+    <FeedbackMessage>
+      Este formato no tiene vista previa. Usa Descargar para abrir el archivo
+      original.
+    </FeedbackMessage>
+  );
+}
+
 export function FilePreview({ file, onReady }: FilePreviewProps) {
   const [failed, setFailed] = useState(false);
   if (file.extension === "pdf")
     return <PdfPreview name={file.name} onReady={onReady} url={file.url} />;
+  if (!["jpg", "jpeg", "png"].includes(file.extension))
+    return <OfficePreview onReady={onReady} />;
   if (failed)
     return (
       <FeedbackMessage kind="error">

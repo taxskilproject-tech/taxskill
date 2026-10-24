@@ -1,4 +1,5 @@
 import { Button } from "@/components/atoms/button";
+import { SelectField } from "@/components/molecules/select-field";
 import {
   ACTIVITY_GROUP_LABELS,
   ACTIVITY_GROUPS,
@@ -11,8 +12,30 @@ export function ActivityGroups({
   onGroup,
 }: ActivityGroupsProps) {
   return (
-    <div className="space-y-2">
-      <nav aria-label="Grupos de actividades" className="flex flex-wrap gap-2">
+    <div className="space-y-1">
+      <div className="sm:hidden">
+        <SelectField
+          id="activity-group"
+          label="Grupo de actividades"
+          value={filters.group}
+          onChange={(event) => {
+            const group = ACTIVITY_GROUPS.find(
+              (item) => item === event.target.value,
+            );
+            if (group) onGroup(group);
+          }}
+        >
+          {ACTIVITY_GROUPS.map((group) => (
+            <option key={group} value={group}>
+              {ACTIVITY_GROUP_LABELS[group]} · {counts[group]}
+            </option>
+          ))}
+        </SelectField>
+      </div>
+      <nav
+        aria-label="Grupos de actividades"
+        className="hidden flex-wrap gap-1 sm:flex"
+      >
         {ACTIVITY_GROUPS.map((group) => (
           <Button
             aria-pressed={filters.group === group}
@@ -25,7 +48,7 @@ export function ActivityGroups({
         ))}
       </nav>
       <p className="text-xs text-zinc-500">
-        Una actividad puede estar en varios grupos. Los contadores no se suman.
+        Los grupos pueden coincidir; sus contadores no se suman.
       </p>
     </div>
   );

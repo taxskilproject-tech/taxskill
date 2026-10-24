@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/atoms/button";
 import { CheckboxField } from "@/components/molecules/checkbox-field";
+import { SidePanel } from "@/components/organisms/side-panel";
 import { ruleRowSchema } from "@/domain/documents/contracts/document.schema";
 import type { RuleRow } from "@/domain/documents/types/document.types";
 import { Pagination } from "@/features/access/components/pagination";
@@ -46,11 +47,17 @@ export function RulesPanel() {
         </Button>
       </div>
       {creating && (
-        <RuleForm
-          key={selected?.id ?? "new"}
-          onSaved={() => setCreating(false)}
-          rule={selected}
-        />
+        <SidePanel
+          title={selected ? "Nueva versión de regla" : "Nueva regla"}
+          onClose={() => setCreating(false)}
+          wide
+        >
+          <RuleForm
+            key={selected?.id ?? "new"}
+            onSaved={() => setCreating(false)}
+            rule={selected}
+          />
+        </SidePanel>
       )}
       <CheckboxField
         checked={deleted}
@@ -70,6 +77,11 @@ export function RulesPanel() {
         retrying={query.isFetching}
       >
         <div className="space-y-4">
+          <Pagination
+            count={query.data?.count ?? 0}
+            onPage={setPage}
+            page={page}
+          />
           {query.data?.rows.map((rule) => (
             <RuleItem
               key={rule.id}

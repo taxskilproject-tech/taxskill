@@ -1,4 +1,5 @@
 import { FormField } from "@/components/molecules/form-field";
+import { FileSizeField } from "@/features/documents/components/file-size-field";
 import { FormatFields } from "@/features/documents/components/format-fields";
 import type { SlotFieldsProps } from "@/features/documents/types/document-ui.types";
 
@@ -16,15 +17,12 @@ export function SlotFields({ position, maximum, spec }: SlotFieldsProps) {
         name={`slot_label_${position}`}
         required
       />
-      <FormField
+      <FileSizeField
         defaultValue={spec?.max_file_bytes ?? maximum}
         id={`slot-max-${position}`}
-        label="Tamaño máximo en bytes"
-        max={maximum}
-        min={1}
+        label="Tamaño máximo"
+        maximum={maximum}
         name={`slot_max_${position}`}
-        required
-        type="number"
       />
       <input
         name={`slot_code_${position}`}

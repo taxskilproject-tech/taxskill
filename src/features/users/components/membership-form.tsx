@@ -75,6 +75,11 @@ export function MembershipForm({ user, onChanged }: UserDetailProps) {
         <LifecycleControl
           deleted={Boolean(user.member.deleted_at)}
           entity="organization_members"
+          label={
+            user.member.deleted_at
+              ? "Restaurar membresía"
+              : "Eliminar membresía"
+          }
           id={user.member.id}
           onChanged={onChanged}
           revision={user.member.revision}
@@ -82,6 +87,9 @@ export function MembershipForm({ user, onChanged }: UserDetailProps) {
         <LifecycleControl
           deleted={Boolean(user.profile.deleted_at)}
           entity="profiles"
+          label={
+            user.profile.deleted_at ? "Restaurar perfil" : "Eliminar perfil"
+          }
           id={user.profile.user_id}
           onChanged={onChanged}
           revision={user.profile.revision}

@@ -2,6 +2,7 @@ import { CheckboxField } from "@/components/molecules/checkbox-field";
 import { FormField } from "@/components/molecules/form-field";
 import { SelectField } from "@/components/molecules/select-field";
 import { MAX_CONFIGURED_FILE_BYTES } from "@/domain/documents/constants/engine";
+import { FileSizeField } from "@/features/documents/components/file-size-field";
 import type { RuleMetadataProps } from "@/features/documents/types/engine-ui.types";
 
 export function RuleMetadataFields({
@@ -37,15 +38,12 @@ export function RuleMetadataFields({
           <option value="media">Media</option>
           <option value="baja">Baja</option>
         </SelectField>
-        <FormField
+        <FileSizeField
           id="rule-maximum"
-          label="Límite general por archivo, en bytes"
-          max={MAX_CONFIGURED_FILE_BYTES}
-          min={1}
+          label="Límite general por archivo"
+          maximum={MAX_CONFIGURED_FILE_BYTES}
           name="max_file_bytes"
-          onChange={(event) => onMaximum(Number(event.target.value))}
-          required
-          type="number"
+          onChange={onMaximum}
           value={maximum}
         />
       </div>

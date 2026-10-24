@@ -325,7 +325,32 @@ async function scenarioUser(
     `H06 ${name} — envío de prueba`,
   );
   fixtureUsers.push(user.id);
+  // Preparation is paginated: a newly inserted UUID may precede today's durable cursor.
+  // Transport scenarios need their payload ready before injecting HTTP faults.
+  if (name !== "cron-dispatch") await prepareScenarioDigest(org, user.id);
   return user.id;
+}
+async function prepareScenarioDigest(org: string, userId: string) {
+  const maximumPages = 20;
+  for (let page = 0; page < maximumPages; page++) {
+    const prepared = await admin.rpc("h06_prepare_digests", {
+      p_base_url: "https://app.example.test",
+      p_organization_id: org,
+      p_batch_size: 10,
+    });
+    ensure(!prepared.error, "bounded local preparation page completed");
+    const ready = await admin
+      .from("whatsapp_digests")
+      .select("id")
+      .eq("recipient_id", userId)
+      .eq("local_date", today)
+      .maybeSingle();
+    ensure(!ready.error, "local scenario digest checked");
+    if (ready.data) return;
+  }
+  throw new Error(
+    "H06: bounded preparation did not reach the local scenario recipient",
+  );
 }
 async function callback(receipt: unknown, authenticated = true) {
   return fetch(`${localApplicationOrigin()}/api/integrations/n8n/receipts`, {
@@ -791,7 +816,9 @@ async function main() {
   });
   ensure(!schedule.error, "local notification Cron registered");
   console.info("H06: esperando un resumen preparado y enviado por Cron local.");
-  for (let index = 0; index < 90; index++) {
+  // A new UUID can require a completed sweep and the next minute's page.
+  const cronPreparationTimeoutSeconds = 180;
+  for (let index = 0; index < cronPreparationTimeoutSeconds; index++) {
     const generated = await admin
       .from("whatsapp_digests")
       .select("status")

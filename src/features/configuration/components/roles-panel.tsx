@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Badge } from "@/components/atoms/badge";
 import { Button } from "@/components/atoms/button";
+import { SidePanel } from "@/components/organisms/side-panel";
 import type { Role } from "@/domain/access/types/access.types";
 import { LifecycleControl } from "@/features/access/components/lifecycle-control";
 import { RoleForm } from "@/features/configuration/components/role-form";
@@ -22,13 +23,15 @@ export function RolesPanel({ directory, onChanged }: RolesPanelProps) {
         <Button onClick={() => setEditing("new")}>Nuevo rol</Button>
       </div>
       {editing && (
-        <RoleForm
-          directory={directory}
-          key={editing === "new" ? "new" : editing.id + editing.revision}
-          onCancel={() => setEditing(null)}
-          onSaved={saved}
-          role={editing === "new" ? undefined : editing}
-        />
+        <SidePanel title="Rol y permisos" onClose={() => setEditing(null)} wide>
+          <RoleForm
+            directory={directory}
+            key={editing === "new" ? "new" : editing.id + editing.revision}
+            onCancel={() => setEditing(null)}
+            onSaved={saved}
+            role={editing === "new" ? undefined : editing}
+          />
+        </SidePanel>
       )}
       <ul className="space-y-3">
         {directory.roles

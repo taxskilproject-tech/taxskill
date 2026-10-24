@@ -29,6 +29,10 @@ export interface ObligationFiltersProps {
 export interface ObligationDetailProps {
   obligationId: string;
 }
+export interface ObligationWorkspaceProps extends ObligationDetailProps {
+  detail: ObligationDetail;
+  canReview: boolean;
+}
 export interface ObligationRouteProps {
   params: Promise<{ obligationId: string }>;
 }
@@ -36,9 +40,14 @@ export interface ObligationCardProps {
   obligation: ObligationSummary;
   origin?: string;
 }
+export interface ObligationRowsProps {
+  rows: ObligationSummary[];
+  origin: string;
+}
 export interface DeliverableCardProps {
   deliverable: Deliverable;
   detail: ObligationDetail;
+  section?: string;
 }
 export interface UploadControlProps {
   deliverable: Deliverable;
@@ -66,6 +75,7 @@ export interface DownloadProps {
   extension?: string;
   name?: string;
   preview?: boolean;
+  inlinePreview?: boolean;
 }
 export interface CatalogFormProps {
   item?: CatalogRow;

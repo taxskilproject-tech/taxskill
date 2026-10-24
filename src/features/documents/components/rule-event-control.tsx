@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/atoms/button";
 import { FormField } from "@/components/molecules/form-field";
+import { SidePanel } from "@/components/organisms/side-panel";
 import { FormActions } from "@/features/access/components/form-actions";
 import type { SubmitEvent } from "@/features/access/types/access-ui.types";
 import { GenerationResult } from "@/features/documents/components/generation-result";
@@ -52,30 +53,35 @@ export function RuleEventControl({ rule }: RuleEngineProps) {
         Registrar solicitud identificada
       </Button>
       {opened && (
-        <form
-          className="space-y-3 rounded-lg border border-zinc-200 p-4"
-          onSubmit={submit}
+        <SidePanel
+          title="Registrar solicitud identificada"
+          onClose={() => setOpened(false)}
         >
-          <FormField
-            disabled={command.busy}
-            id={`event-date-${rule.id}`}
-            label="Fecha de referencia de la solicitud"
-            name="event_reference"
-            required
-            type="date"
-          />
-          <p className="text-sm text-zinc-600">
-            Un reintento conserva la identidad de esta solicitud y no crea otra
-            obligación.
-          </p>
-          <FormActions
-            busy={command.busy}
-            error={command.error}
-            label="Crear obligación del evento"
-            loadingText="Registrando solicitud…"
-            onCancel={() => setOpened(false)}
-          />
-        </form>
+          <form
+            className="space-y-3 rounded-lg border border-zinc-200 p-4"
+            onSubmit={submit}
+          >
+            <FormField
+              disabled={command.busy}
+              id={`event-date-${rule.id}`}
+              label="Fecha de referencia de la solicitud"
+              name="event_reference"
+              required
+              type="date"
+            />
+            <p className="text-sm text-zinc-600">
+              Un reintento conserva la identidad de esta solicitud y no crea
+              otra obligación.
+            </p>
+            <FormActions
+              busy={command.busy}
+              error={command.error}
+              label="Crear obligación del evento"
+              loadingText="Registrando solicitud…"
+              onCancel={() => setOpened(false)}
+            />
+          </form>
+        </SidePanel>
       )}
       <GenerationResult result={command.result} />
     </section>

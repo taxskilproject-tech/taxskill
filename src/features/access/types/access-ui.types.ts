@@ -43,12 +43,14 @@ export interface CompanyFormProps {
   onCancel: () => void;
 }
 export interface CompanyListProps {
+  origin?: string;
   companies: Company[];
   isAdmin: boolean;
   onEdit: (company: Company) => void;
   onChanged: () => void;
 }
 export interface LifecycleProps {
+  label?: string;
   entity: SoftDeleteEntity;
   id: string;
   revision: number;

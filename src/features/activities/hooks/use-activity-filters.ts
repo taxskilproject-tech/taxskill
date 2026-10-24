@@ -6,6 +6,7 @@ import {
   parseActivityFilters,
   serializeActivityFilters,
 } from "@/domain/activities/utils/activity-filters";
+import { useCurrentRoute } from "@/features/access/hooks/use-current-route";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 
 export function useActivityFilters(fixedCompanyId?: string) {
@@ -13,6 +14,7 @@ export function useActivityFilters(fixedCompanyId?: string) {
   const parameters = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const origin = useCurrentRoute();
   const parsed = parseActivityFilters(
     new URLSearchParams(parameters.toString()),
   );
@@ -44,6 +46,6 @@ export function useActivityFilters(fixedCompanyId?: string) {
     filters,
     change,
     lockedCompany: Boolean(lockedCompanyId) || internal,
-    origin: `${pathname}?${fixedCompanyId ? "tab=actividades&" : ""}${serializeActivityFilters(filters)}`,
+    origin,
   };
 }

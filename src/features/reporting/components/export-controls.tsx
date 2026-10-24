@@ -57,7 +57,11 @@ export function ExportControls({
           </Button>
         )}
       </div>
-      <p aria-live="polite" className="text-sm text-zinc-600" role="status">
+      <p
+        aria-live="polite"
+        className={action.progress ? "text-sm text-zinc-600" : "sr-only"}
+        role="status"
+      >
         {action.progress ||
           `Se exportarán las ${result.count} obligaciones del resultado, con los filtros actuales.`}
       </p>

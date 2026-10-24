@@ -30,20 +30,25 @@ export function OperationsStatus({
         Evaluado: {jobInstant(snapshot.checked_at)}
       </p>
       <OperationsDiagnostics evaluation={evaluation} />
-      <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {OPERATION_METRICS.map((metric) => (
-          <div
-            className="rounded-lg border border-zinc-200 p-4"
-            key={metric.key}
-          >
-            <dt className="text-sm text-zinc-600">{metric.label}</dt>
-            <dd className="mt-2 text-2xl font-semibold tabular-nums">
-              {snapshot[metric.key]}
-            </dd>
-          </div>
-        ))}
-      </dl>
-      <OperationsProgress snapshot={snapshot} />
+      <details>
+        <summary className="min-h-11 cursor-pointer py-3 text-sm font-medium">
+          Métricas y avance de los procesos
+        </summary>
+        <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {OPERATION_METRICS.map((metric) => (
+            <div
+              className="rounded-lg border border-zinc-200 p-4"
+              key={metric.key}
+            >
+              <dt className="text-sm text-zinc-600">{metric.label}</dt>
+              <dd className="mt-2 text-2xl font-semibold tabular-nums">
+                {snapshot[metric.key]}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <OperationsProgress snapshot={snapshot} />
+      </details>
       <section aria-labelledby="operation-jobs" className="space-y-3">
         <h3 className="font-medium" id="operation-jobs">
           Procesos programados

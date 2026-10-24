@@ -24,7 +24,7 @@ export function StageSelector({ detail, page, onPage }: StageSelectorProps) {
         onChange={(event) => {
           const next = new URLSearchParams(parameters.toString());
           next.set("employmentPeriodId", event.target.value);
-          router.replace(`${pathname}?${next}`);
+          router.replace(`${pathname}?${next}`, { scroll: false });
         }}
         value={selected.id}
       >

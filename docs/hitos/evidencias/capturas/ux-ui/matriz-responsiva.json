@@ -1,0 +1,110 @@
+[
+  {
+    "client": 376,
+    "h1s": 1,
+    "height": 844,
+    "overflow": false,
+    "scrollWidth": 376,
+    "url": "/reportes?q=ux-empty-no-results-20261024",
+    "width": 376
+  },
+  {
+    "client": 376,
+    "h1s": 1,
+    "height": 844,
+    "overflow": false,
+    "scrollWidth": 376,
+    "url": "/actividades",
+    "width": 376
+  },
+  {
+    "client": 361,
+    "h1s": 1,
+    "height": 844,
+    "overflow": false,
+    "scrollWidth": 361,
+    "url": "/configuracion?tab=parametros",
+    "width": 376
+  },
+  {
+    "client": 768,
+    "h1s": 1,
+    "height": 1024,
+    "overflow": false,
+    "scrollWidth": 768,
+    "url": "/reportes?q=ux-empty-no-results-20261024",
+    "width": 768
+  },
+  {
+    "client": 768,
+    "h1s": 1,
+    "height": 1024,
+    "overflow": false,
+    "scrollWidth": 768,
+    "url": "/actividades",
+    "width": 768
+  },
+  {
+    "client": 768,
+    "h1s": 1,
+    "height": 1024,
+    "overflow": false,
+    "scrollWidth": 768,
+    "url": "/configuracion?tab=parametros",
+    "width": 768
+  },
+  {
+    "client": 1024,
+    "h1s": 1,
+    "height": 768,
+    "overflow": false,
+    "scrollWidth": 1024,
+    "url": "/reportes?q=ux-empty-no-results-20261024",
+    "width": 1024
+  },
+  {
+    "client": 1024,
+    "h1s": 1,
+    "height": 768,
+    "overflow": false,
+    "scrollWidth": 1024,
+    "url": "/actividades",
+    "width": 1024
+  },
+  {
+    "client": 1024,
+    "h1s": 1,
+    "height": 768,
+    "overflow": false,
+    "scrollWidth": 1024,
+    "url": "/configuracion?tab=parametros",
+    "width": 1024
+  },
+  {
+    "client": 1441,
+    "h1s": 1,
+    "height": 901,
+    "overflow": false,
+    "scrollWidth": 1441,
+    "url": "/reportes?q=ux-empty-no-results-20261024",
+    "width": 1441
+  },
+  {
+    "client": 1441,
+    "h1s": 1,
+    "height": 901,
+    "overflow": false,
+    "scrollWidth": 1441,
+    "url": "/actividades",
+    "width": 1441
+  },
+  {
+    "client": 1441,
+    "h1s": 1,
+    "height": 901,
+    "overflow": false,
+    "scrollWidth": 1441,
+    "url": "/configuracion?tab=parametros",
+    "width": 1441
+  }
+]

@@ -11,14 +11,8 @@ import { workerDetailSchema } from "@/domain/workers/contracts/worker.schema";
 import { PageHeading } from "@/features/access/components/page-heading";
 import { QueryState } from "@/features/access/components/query-state";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
-import { EmploymentActions } from "@/features/workers/components/employment-actions";
-import { EmploymentEventForm } from "@/features/workers/components/employment-event-form";
-import { EmploymentFacts } from "@/features/workers/components/employment-facts";
-import { GenerationProgress } from "@/features/workers/components/generation-progress";
-import { StageDocuments } from "@/features/workers/components/stage-documents";
-import { StageSelector } from "@/features/workers/components/stage-selector";
-import { WorkerFacts } from "@/features/workers/components/worker-facts";
-import { WorkerLifecycle } from "@/features/workers/components/worker-lifecycle";
+import { safeReturnTo } from "@/features/auth/utils/safe-return-to";
+import { WorkerWorkspace } from "@/features/workers/components/worker-workspace";
 import { useWorkerQuery } from "@/features/workers/hooks/use-worker-query";
 import type { WorkerDetailPageProps } from "@/features/workers/types/worker-ui.types";
 
@@ -77,10 +71,15 @@ export function WorkerDetailPage({
       </div>
     );
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       <Link
+        scroll={false}
         className="inline-flex min-h-11 items-center text-sm underline underline-offset-4"
-        href={`/empresas/${companyId}?tab=laboral_trabajador`}
+        href={
+          parameters.get("returnTo")
+            ? safeReturnTo(parameters.get("returnTo"))
+            : `/empresas/${companyId}?tab=laboral_trabajador`
+        }
       >
         ← Volver al área laboral
       </Link>
@@ -93,34 +92,17 @@ export function WorkerDetailPage({
         retrying={query.isFetching}
       >
         {query.data && (
-          <div className="space-y-6">
+          <div className="space-y-3">
             <PageHeading
               description={`${query.data.company_name} · Expediente laboral`}
               title={`${query.data.worker.first_names} ${query.data.worker.last_names}`}
             />
-            <WorkerFacts worker={query.data.worker} />
-            <StageSelector detail={query.data} onPage={setPage} page={page} />
-            <EmploymentActions
-              canManage={canManage}
+            <WorkerWorkspace
               detail={query.data}
-              key={query.data.selected_period?.id ?? "empty"}
-            />
-            {query.data.selected_period && (
-              <EmploymentFacts stage={query.data.selected_period} />
-            )}
-            <GenerationProgress canManage={canManage} detail={query.data} />
-            <EmploymentEventForm
               canManage={canManage}
-              detail={query.data}
-              key={`event:${query.data.selected_period?.id}`}
+              page={page}
+              onPage={setPage}
             />
-            <StageDocuments detail={query.data} />
-            {context.member.is_admin && canManage && (
-              <WorkerLifecycle
-                key={query.data.worker.deleted_at ?? "active"}
-                worker={query.data.worker}
-              />
-            )}
           </div>
         )}
       </QueryState>

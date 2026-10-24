@@ -20,7 +20,7 @@ export function RuleItem({ rule, onEdit }: RuleItemProps) {
   const version = rule.configuration;
   const state = getRuleState(rule);
   return (
-    <article className="space-y-4 rounded-xl border border-zinc-200 bg-white p-5">
+    <article className="space-y-2 rounded-lg border border-zinc-200 bg-white p-3">
       <div className="space-y-2">
         <h3 className="font-semibold">{rule.title}</h3>
         <p className="text-sm text-zinc-600">
@@ -40,41 +40,46 @@ export function RuleItem({ rule, onEdit }: RuleItemProps) {
             </p>
           )}
       </div>
-      <RuleProgress rule={rule} />
-      <div className="flex flex-wrap items-start gap-3">
-        {!rule.deleted_at && (
-          <Button onClick={onEdit} variant="secondary">
-            Editar nueva versión
-          </Button>
-        )}
+      <details>
+        <summary className="min-h-11 cursor-pointer py-3 text-sm font-medium">
+          Operación y trazabilidad
+        </summary>
+        <RuleProgress rule={rule} />
+        <div className="flex flex-wrap items-start gap-3">
+          {!rule.deleted_at &&
+            rule.active &&
+            version.frequency !== "eventual" && (
+              <Button
+                loading={command.busy}
+                loadingText="Generando lote…"
+                onClick={() => {
+                  void command.submit("GenerateRule", {
+                    rule_id: rule.id,
+                    batch_size: GENERATION_BATCH_SIZE,
+                  });
+                }}
+              >
+                {rule.generation_cursor.has_more
+                  ? "Continuar generación"
+                  : "Generar obligaciones"}
+              </Button>
+            )}
+          {!rule.deleted_at && <RuleActiveControl rule={rule} />}
+          <DocumentLifecycle
+            deleted={Boolean(rule.deleted_at)}
+            entity="requirement_rules"
+            id={rule.id}
+            revision={rule.revision}
+          />
+        </div>
         {!rule.deleted_at &&
           rule.active &&
-          version.frequency !== "eventual" && (
-            <Button
-              loading={command.busy}
-              loadingText="Generando lote…"
-              onClick={() => {
-                void command.submit("GenerateRule", {
-                  rule_id: rule.id,
-                  batch_size: GENERATION_BATCH_SIZE,
-                });
-              }}
-            >
-              {rule.generation_cursor.has_more
-                ? "Continuar generación"
-                : "Generar obligaciones"}
-            </Button>
-          )}
-        {!rule.deleted_at && <RuleActiveControl rule={rule} />}
-        <DocumentLifecycle
-          deleted={Boolean(rule.deleted_at)}
-          entity="requirement_rules"
-          id={rule.id}
-          revision={rule.revision}
-        />
-      </div>
-      {!rule.deleted_at && rule.active && version.frequency === "eventual" && (
-        <RuleEventControl rule={rule} />
+          version.frequency === "eventual" && <RuleEventControl rule={rule} />}
+      </details>
+      {!rule.deleted_at && (
+        <Button onClick={onEdit} variant="secondary">
+          Editar nueva versión
+        </Button>
       )}
       {command.error && (
         <FeedbackMessage kind="error">{command.error}</FeedbackMessage>

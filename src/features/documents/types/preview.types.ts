@@ -11,6 +11,10 @@ export interface FilePreviewProps {
   file: PreviewFile;
   onReady: PreviewReady;
 }
+export interface FilePreviewPanelProps extends FilePreviewProps {
+  inline?: boolean;
+  onClose: () => void;
+}
 export interface PdfPreviewProps {
   url: string;
   name: string;

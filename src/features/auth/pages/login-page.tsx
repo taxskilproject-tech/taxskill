@@ -50,11 +50,11 @@ export function LoginPage() {
           <p className="text-xs uppercase tracking-[0.25em] text-zinc-400">
             El estudio, conectado
           </p>
-          <h1 className="text-5xl leading-tight font-medium tracking-tight">
+          <h2 className="text-4xl leading-tight font-medium tracking-tight">
             Cada empresa.
             <br />
             Un mismo orden.
-          </h1>
+          </h2>
           <p className="max-w-md text-base leading-7 text-zinc-400">
             Un espacio compartido para organizar el trabajo contable y la
             documentación de tus clientes.
@@ -71,9 +71,9 @@ export function LoginPage() {
             <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
               Acceso al estudio
             </p>
-            <h2 className="text-3xl font-semibold tracking-tight">
+            <h1 className="text-3xl font-semibold tracking-tight">
               Bienvenido de nuevo
-            </h2>
+            </h1>
             <p className="text-sm leading-6 text-zinc-600">
               Ingresa con la cuenta que te proporcionó tu administrador.
             </p>
@@ -98,6 +98,8 @@ export function LoginPage() {
             <form className="space-y-5" onSubmit={submit}>
               <FormField
                 autoComplete="username"
+                autoCapitalize="none"
+                spellCheck={false}
                 id="email"
                 label="Correo electrónico"
                 name="email"

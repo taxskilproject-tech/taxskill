@@ -1,6 +1,19 @@
 const ALLOWED_ROUTES =
   /^\/(dashboard|empresas(?:\/[0-9a-f-]{36}(?:\/trabajadores\/[0-9a-f-]{36})?)?|usuarios|configuracion|actividades(?:\/[0-9a-f-]{36})?|reportes|notificaciones|documentos|auditoria)$/;
 const ALLOWED_QUERY = new Set([
+  "returnTo",
+  "view",
+  "indicators",
+  "memberId",
+  "deliverableId",
+  "workerPage",
+  "workerQuery",
+  "workerStatus",
+  "workerDeleted",
+  "obligationPage",
+  "obligationPeriod",
+  "obligationState",
+  "deleted",
   "tab",
   "companyId",
   "module",
@@ -20,11 +33,26 @@ const ALLOWED_QUERY = new Set([
   "unread",
   "employmentPeriodId",
   "stage",
-  "company_id", "include_deleted", "report", "indicator", "year", "month", "worker_id", "document_type_id",
-  "due_from", "due_to", "actor_id", "resource", "action", "from", "to",
+  "company_id",
+  "include_deleted",
+  "report",
+  "indicator",
+  "year",
+  "month",
+  "worker_id",
+  "document_type_id",
+  "due_from",
+  "due_to",
+  "actor_id",
+  "resource",
+  "action",
+  "from",
+  "to",
 ]);
 
-export function safeReturnTo(value: string | null) {
+const MAX_RETURN_DEPTH = 2;
+
+function internalReturnTo(value: string | null, depth: number): string {
   if (
     !value ||
     !value.startsWith("/") ||
@@ -41,5 +69,17 @@ export function safeReturnTo(value: string | null) {
   for (const key of [...url.searchParams.keys()]) {
     if (!ALLOWED_QUERY.has(key)) url.searchParams.delete(key);
   }
+  if (url.searchParams.has("returnTo")) {
+    if (depth >= MAX_RETURN_DEPTH) url.searchParams.delete("returnTo");
+    else
+      url.searchParams.set(
+        "returnTo",
+        internalReturnTo(url.searchParams.get("returnTo"), depth + 1),
+      );
+  }
   return url.pathname + url.search;
+}
+
+export function safeReturnTo(value: string | null): string {
+  return internalReturnTo(value, 0);
 }

@@ -15,6 +15,7 @@ export function ReviewControls({ deliverable, summary }: ReviewControlsProps) {
   const command = useDocumentCommand();
   const [comment, setComment] = useState("");
   const [due, setDue] = useState("");
+  const [editingReason, setEditingReason] = useState(false);
   const today = getLimaDate(new Date());
   function allowed(action: "approve" | "observe" | "reopen") {
     return canPerform(
@@ -48,7 +49,12 @@ export function ReviewControls({ deliverable, summary }: ReviewControlsProps) {
   return (
     <section className="space-y-4 border-t border-zinc-100 pt-4">
       <h3 className="text-sm font-medium">Revisión de la versión vigente</h3>
-      {needsReason && (
+      {needsReason && !editingReason && (
+        <Button onClick={() => setEditingReason(true)} variant="secondary">
+          {approved ? "Preparar reapertura" : "Preparar observación"}
+        </Button>
+      )}
+      {needsReason && editingReason && (
         <div className="grid gap-3 sm:grid-cols-2">
           <FormField
             disabled={command.busy}
@@ -82,7 +88,7 @@ export function ReviewControls({ deliverable, summary }: ReviewControlsProps) {
             Aprobar archivo
           </Button>
         )}
-        {revisable && allowed("observe") && (
+        {revisable && allowed("observe") && editingReason && (
           <Button
             disabled={command.busy || !comment.trim() || !due}
             loading={command.busy}
@@ -95,7 +101,7 @@ export function ReviewControls({ deliverable, summary }: ReviewControlsProps) {
             Observar archivo
           </Button>
         )}
-        {approved && allowed("reopen") && (
+        {approved && allowed("reopen") && editingReason && (
           <Button
             disabled={command.busy || !comment.trim() || !due}
             loading={command.busy}

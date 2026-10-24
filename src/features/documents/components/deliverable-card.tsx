@@ -8,7 +8,11 @@ import { ReviewControls } from "@/features/documents/components/review-controls"
 import { UploadControl } from "@/features/documents/components/upload-control";
 import type { DeliverableCardProps } from "@/features/documents/types/document-ui.types";
 
-export function DeliverableCard({ deliverable, detail }: DeliverableCardProps) {
+export function DeliverableCard({
+  deliverable,
+  detail,
+  section = "entrega",
+}: DeliverableCardProps) {
   const { context } = useWorkspace();
   const { summary } = detail;
   const cycle = detail.cycles.find(
@@ -53,27 +57,46 @@ export function DeliverableCard({ deliverable, detail }: DeliverableCardProps) {
             : "Entrega pendiente"}
         </p>
       )}
-      {deliverable.current_version_id && allowed("download") && (
-        <div className="flex flex-wrap gap-3">
-          <DownloadControl versionId={deliverable.current_version_id} />
+      <div className="grid items-start gap-4 xl:grid-cols-2">
+        <div
+          className={
+            section === "revision" ? "hidden space-y-3 xl:block" : "space-y-3"
+          }
+        >
+          {deliverable.current_version_id && allowed("download") && (
+            <div className="flex flex-wrap gap-3">
+              <DownloadControl versionId={deliverable.current_version_id} />
+              <DownloadControl
+                inlinePreview
+                preview
+                versionId={deliverable.current_version_id}
+              />
+            </div>
+          )}
+          {summary.disposition === "active" &&
+            cycle &&
+            specs &&
+            deliverable.review_state !== "aprobado" &&
+            allowed("upload") && (
+              <UploadControl
+                cycle={cycle}
+                deliverable={deliverable}
+                key={`${cycle.id}:${deliverable.revision}`}
+                recovery={recovery}
+                specs={specs}
+              />
+            )}
         </div>
-      )}
-      {summary.disposition === "active" &&
-        cycle &&
-        specs &&
-        deliverable.review_state !== "aprobado" &&
-        allowed("upload") && (
-          <UploadControl
-            cycle={cycle}
-            deliverable={deliverable}
-            key={`${cycle.id}:${deliverable.revision}`}
-            recovery={recovery}
-            specs={specs}
-          />
-        )}
-      {summary.disposition === "active" && (
-        <ReviewControls deliverable={deliverable} summary={summary} />
-      )}
+        <div
+          className={
+            section === "entrega" ? "hidden space-y-3 xl:block" : "space-y-3"
+          }
+        >
+          {summary.disposition === "active" && (
+            <ReviewControls deliverable={deliverable} summary={summary} />
+          )}
+        </div>
+      </div>
     </article>
   );
 }

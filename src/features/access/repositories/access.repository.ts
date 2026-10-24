@@ -161,6 +161,22 @@ export async function listUsers(
   };
 }
 
+export async function loadUser(
+  organizationId: string,
+  memberId: string,
+  signal: AbortSignal,
+) {
+  const { data, error } = await requireBrowserClient()
+    .from("h02_users")
+    .select("profile,member")
+    .eq("organization_id", organizationId)
+    .eq("member->>id", memberId)
+    .abortSignal(signal)
+    .maybeSingle();
+  if (error) throw normalizeOperationError(error);
+  return data ? userRowSchema.parse(data) : null;
+}
+
 export async function loadCompany(
   organizationId: string,
   companyId: string,

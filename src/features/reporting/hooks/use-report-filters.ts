@@ -3,10 +3,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { reportFiltersSchema } from "@/domain/reporting/contracts/reporting.schema";
 import type { ReportFilterName } from "@/domain/reporting/types/reporting.types";
-import {
-  parseReportFilters,
-  serializeReportFilters,
-} from "@/domain/reporting/utils/report-filters";
+import { parseReportFilters } from "@/domain/reporting/utils/report-filters";
+import { useCurrentRoute } from "@/features/access/hooks/use-current-route";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 
 export function useReportFilters() {
@@ -14,6 +12,7 @@ export function useReportFilters() {
   const parameters = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const origin = useCurrentRoute();
   let parsed = reportFiltersSchema.parse({});
   let error = "";
   try {
@@ -45,6 +44,6 @@ export function useReportFilters() {
     error,
     change,
     reset: () => router.replace(pathname, { scroll: false }),
-    origin: `${pathname}?${serializeReportFilters(filters)}`,
+    origin,
   };
 }

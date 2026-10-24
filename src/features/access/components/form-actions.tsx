@@ -20,7 +20,7 @@ export function FormActions({
     if (error) feedback.current?.focus();
   }, [error]);
   return (
-    <div className="space-y-4">
+    <div className="sticky bottom-0 z-10 space-y-3 border-t border-zinc-200 bg-white py-3">
       {error && (
         <div ref={feedback} tabIndex={-1}>
           <FeedbackMessage kind="error">{error}</FeedbackMessage>

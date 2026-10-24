@@ -17,7 +17,7 @@ export function NotificationItem({
     ? `/actividades/${notification.obligation_id}?returnTo=${encodeURIComponent(origin)}`
     : "/configuracion?tab=whatsapp";
   return (
-    <article className="space-y-3 rounded-xl border border-zinc-200 bg-white p-5">
+    <article className="space-y-1 rounded-lg border border-zinc-200 bg-white p-3">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <h2 className="font-semibold">{notification.title}</h2>
         <span className="text-xs text-zinc-500">

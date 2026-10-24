@@ -33,6 +33,7 @@ export interface EndFieldsProps {
 }
 export interface WorkerCardProps {
   worker: WorkerList["rows"][number];
+  origin?: string;
 }
 export interface WorkerFactsProps {
   worker: Worker;
@@ -50,6 +51,7 @@ export interface EmploymentActionsProps {
   detail: WorkerDetail;
   canManage: boolean;
 }
+export type WorkerWorkspaceProps = EmploymentActionsProps & StageSelectorProps;
 export interface StageSelectorProps {
   detail: WorkerDetail;
   page: number;

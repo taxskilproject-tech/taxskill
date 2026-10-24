@@ -4,6 +4,11 @@ import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { ResourceState } from "@/components/organisms/resource-state";
 import { metadataResultSchema } from "@/domain/reporting/contracts/consultation.schema";
 import { limaMoment } from "@/domain/reporting/utils/report-filters";
+import {
+  moduleLabel,
+  recordLabel,
+  stateLabel,
+} from "@/domain/reporting/utils/report-labels";
 import { PageHeading } from "@/features/access/components/page-heading";
 import { Pagination } from "@/features/access/components/pagination";
 import { QueryState } from "@/features/access/components/query-state";
@@ -21,12 +26,16 @@ export function DocumentSearchPage() {
     !error,
   );
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       <PageHeading
-        description="Busca archivos y versiones por sus metadatos, incluido nombre, trabajador, identificación, periodo y área."
+        description="Archivos y versiones de tus empresas."
         title="Documentos"
       />
-      <ReportFilters filters={filters} onChange={change} />
+      <ReportFilters
+        busy={query.isFetching}
+        filters={filters}
+        onChange={change}
+      />
       <Button onClick={reset} variant="secondary">
         Limpiar filtros
       </Button>
@@ -47,22 +56,34 @@ export function DocumentSearchPage() {
                 Consulta: {limaMoment(query.data.queried_at)} · Lima · Unidad:
                 versiones de archivo.
               </p>
+              <Pagination
+                count={query.data.count}
+                onPage={(page) => change("page", String(page))}
+                page={filters.page}
+                pageSize={filters.pageSize}
+              />
               {query.data.rows.map((document) => (
-                <section className="space-y-2" key={document.id}>
-                  <p className="text-xs text-zinc-600">
-                    {document.module} · {document.period} ·{" "}
-                    {document.worker_name || "Sin trabajador"}{" "}
-                    {document.worker_identity ?? ""} · {document.state} ·{" "}
-                    {document.is_current
-                      ? "Versión actual"
-                      : "Versión histórica"}{" "}
-                    · {document.record_status}
-                  </p>
+                <section className="space-y-1" key={document.id}>
                   <DocumentItem
                     allowActions={document.record_status !== "deleted"}
                     document={document}
                     origin={origin}
                   />
+                  <details className="px-3 text-xs text-zinc-600">
+                    <summary className="min-h-11 cursor-pointer py-3 focus-visible:outline-2">
+                      Periodo y metadatos
+                    </summary>
+                    <p className="pb-3">
+                      {moduleLabel(document.module)} · {document.period} ·{" "}
+                      {document.worker_name || "Sin trabajador"}{" "}
+                      {document.worker_identity ?? ""} ·{" "}
+                      {stateLabel(document.state)} ·{" "}
+                      {document.is_current
+                        ? "Versión actual"
+                        : "Versión histórica"}{" "}
+                      · {recordLabel(document.record_status)}
+                    </p>
+                  </details>
                 </section>
               ))}
               {query.data.count === 0 && (

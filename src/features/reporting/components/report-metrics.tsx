@@ -23,27 +23,27 @@ export function ReportMetrics({ metrics, filters, mode }: ReportMetricsProps) {
   return (
     <section
       aria-label="Indicadores del alcance consultado"
-      className="space-y-4"
+      className="space-y-3"
     >
       <ActiveReportIndicators filters={filters} mode={mode} />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-2 gap-2 xl:grid-cols-3">
         {cards.map((card) => (
           <Link
-            className="rounded-xl border border-zinc-200 bg-white p-5 hover:border-zinc-400 focus-visible:outline-2"
+            className="rounded-xl border border-zinc-200 bg-white p-3 hover:border-zinc-400 focus-visible:outline-2"
             href={card.href}
             key={card.label}
           >
             <p className="text-sm text-zinc-600">{card.label}</p>
-            <p className="mt-3 text-3xl font-semibold tracking-tight">
+            <p className="mt-1 text-2xl font-semibold tracking-tight">
               {card.value.toLocaleString("es-PE")}
             </p>
           </Link>
         ))}
       </div>
       <div className="grid gap-4 md:grid-cols-2">
-        <article className="rounded-xl border border-zinc-200 bg-white p-5">
+        <article className="rounded-xl border border-zinc-200 bg-white p-3">
           <h2 className="text-sm font-medium">Cumplimiento documental</h2>
-          <p className="mt-3 text-3xl font-semibold">
+          <p className="mt-1 text-2xl font-semibold">
             {compliance(metrics.approved, metrics.required)}
           </p>
           <p className="mt-2 text-sm text-zinc-600">
@@ -51,11 +51,11 @@ export function ReportMetrics({ metrics, filters, mode }: ReportMetricsProps) {
             aprobadas. Se suman obligaciones, sin promediar porcentajes.
           </p>
         </article>
-        <article className="rounded-xl border border-zinc-200 bg-white p-5">
+        <article className="rounded-xl border border-zinc-200 bg-white p-3">
           <h2 className="text-sm font-medium">
             Actividades adicionales · indicador separado
           </h2>
-          <p className="mt-3 text-3xl font-semibold">
+          <p className="mt-1 text-2xl font-semibold">
             {compliance(
               metrics.additional_approved,
               metrics.additional_required,

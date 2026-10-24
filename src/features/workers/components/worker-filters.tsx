@@ -1,5 +1,6 @@
+import { Input } from "@/components/atoms/input";
 import { CheckboxField } from "@/components/molecules/checkbox-field";
-import { FormField } from "@/components/molecules/form-field";
+import { FilterDisclosure } from "@/components/molecules/filter-disclosure";
 import { SelectField } from "@/components/molecules/select-field";
 import type { WorkerFiltersProps } from "@/features/workers/types/worker-ui.types";
 
@@ -13,16 +14,24 @@ export function WorkerFilters({
   isAdmin,
 }: WorkerFiltersProps) {
   return (
-    <div className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <FormField
+    <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2 has-[details[open]]:grid-cols-1">
+      <div>
+        <label className="sr-only" htmlFor="workers-search">
+          Buscar por nombre o identificación
+        </label>
+        <Input
           id="workers-search"
-          label="Buscar por nombre o identificación"
           maxLength={150}
           onChange={(event) => onSearch(event.target.value)}
+          placeholder="Buscar trabajador…"
           type="search"
           value={search}
         />
+      </div>
+      <FilterDisclosure
+        label="Filtros"
+        count={Number(status !== "all") + Number(deleted)}
+      >
         <SelectField
           id="workers-status"
           label="Relación laboral"
@@ -34,15 +43,15 @@ export function WorkerFilters({
           <option value="ended">Con etapas cerradas</option>
           <option value="unregistered">Sin etapa registrada</option>
         </SelectField>
-      </div>
-      {isAdmin && (
-        <CheckboxField
-          checked={deleted}
-          id="workers-deleted"
-          label="Incluir trabajadores eliminados"
-          onChange={(event) => onDeleted(event.target.checked)}
-        />
-      )}
+        {isAdmin && (
+          <CheckboxField
+            checked={deleted}
+            id="workers-deleted"
+            label="Incluir trabajadores eliminados"
+            onChange={(event) => onDeleted(event.target.checked)}
+          />
+        )}
+      </FilterDisclosure>
     </div>
   );
 }

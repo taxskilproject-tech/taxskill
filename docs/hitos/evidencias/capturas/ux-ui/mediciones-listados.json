@@ -1,0 +1,100 @@
+[
+  {
+    "height": 768,
+    "overflow": false,
+    "path": "/reportes",
+    "resultY": 383.5648193359375,
+    "width": 1367
+  },
+  {
+    "height": 768,
+    "overflow": false,
+    "path": "/actividades",
+    "resultY": 390.6105346679687,
+    "width": 1367
+  },
+  {
+    "height": 768,
+    "overflow": false,
+    "path": "/empresas",
+    "resultY": 352.4884338378906,
+    "width": 1367
+  },
+  {
+    "height": 768,
+    "overflow": false,
+    "path": "/documentos",
+    "resultY": 391.5509338378906,
+    "width": 1367
+  },
+  {
+    "height": 768,
+    "overflow": false,
+    "path": "/auditoria",
+    "resultY": 366.6377258300781,
+    "width": 1367
+  },
+  {
+    "height": 768,
+    "overflow": false,
+    "path": "/notificaciones",
+    "resultY": 305.7436218261719,
+    "width": 1367
+  },
+  {
+    "height": 768,
+    "overflow": false,
+    "path": "/usuarios",
+    "resultY": 311.5885314941406,
+    "width": 1367
+  },
+  {
+    "height": 844,
+    "overflow": false,
+    "path": "/reportes",
+    "resultY": 483.5213928222656,
+    "width": 391
+  },
+  {
+    "height": 844,
+    "overflow": false,
+    "path": "/actividades",
+    "resultY": 462.5867919921875,
+    "width": 391
+  },
+  {
+    "height": 844,
+    "overflow": false,
+    "path": "/empresas",
+    "resultY": 347.5838928222656,
+    "width": 391
+  },
+  {
+    "height": 844,
+    "overflow": false,
+    "path": "/documentos",
+    "resultY": 491.5075073242187,
+    "width": 391
+  },
+  {
+    "height": 844,
+    "overflow": false,
+    "path": "/auditoria",
+    "resultY": 430.5989379882813,
+    "width": 391
+  },
+  {
+    "height": 844,
+    "overflow": false,
+    "path": "/notificaciones",
+    "resultY": 356.8287048339844,
+    "width": 391
+  },
+  {
+    "height": 844,
+    "overflow": false,
+    "path": "/usuarios",
+    "resultY": 347.5838928222656,
+    "width": 391
+  }
+]

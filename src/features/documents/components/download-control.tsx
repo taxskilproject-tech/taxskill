@@ -7,12 +7,16 @@ import { success } from "@/domain/common/utils/operation-result";
 import { signedDownloadSchema } from "@/domain/documents/contracts/document.schema";
 import { useAction } from "@/features/access/hooks/use-action";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
-import { FilePreview } from "@/features/documents/components/file-preview";
+import { FilePreviewPanel } from "@/features/documents/components/file-preview-panel";
 import { invokeDocumentEdge } from "@/features/documents/repositories/document.repository";
 import type { DownloadProps } from "@/features/documents/types/document-ui.types";
 import type { PreviewFile } from "@/features/documents/types/preview.types";
 
-export function DownloadControl({ versionId, preview = false }: DownloadProps) {
+export function DownloadControl({
+  versionId,
+  preview = false,
+  inlinePreview = false,
+}: DownloadProps) {
   const action = useAction<null>();
   const { context } = useWorkspace();
   const [previewFile, setPreviewFile] = useState<PreviewFile | null>(null);
@@ -90,16 +94,13 @@ export function DownloadControl({ versionId, preview = false }: DownloadProps) {
         <FeedbackMessage kind="error">{action.error}</FeedbackMessage>
       )}
       {previewFile && (
-        <div className="space-y-2 rounded-lg border border-zinc-200 p-3">
-          <Button onClick={closePreview} variant="secondary">
-            Cerrar vista previa
-          </Button>
-          <FilePreview
-            file={previewFile}
-            key={previewFile.url}
-            onReady={previewReady}
-          />
-        </div>
+        <FilePreviewPanel
+          file={previewFile}
+          key={previewFile.url}
+          onReady={previewReady}
+          onClose={closePreview}
+          inline={inlinePreview}
+        />
       )}
     </div>
   );

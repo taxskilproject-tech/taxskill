@@ -2,11 +2,12 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/atoms/button";
-import { CheckboxField } from "@/components/molecules/checkbox-field";
+import { SectionNavigation } from "@/components/molecules/section-navigation";
 import { notificationListSchema } from "@/domain/notifications/contracts/notification.schema";
 import { PageHeading } from "@/features/access/components/page-heading";
 import { Pagination } from "@/features/access/components/pagination";
 import { QueryState } from "@/features/access/components/query-state";
+import { useCurrentRoute } from "@/features/access/hooks/use-current-route";
 import { useActivityQuery } from "@/features/activities/hooks/use-activity-query";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 import { NotificationItem } from "@/features/notifications/components/notification-item";
@@ -32,7 +33,7 @@ export function NotificationsPage() {
     },
     notificationListSchema,
   );
-  const origin = `${pathname}?page=${page}&unread=${unread}`;
+  const origin = useCurrentRoute();
   return (
     <div className="space-y-5">
       <PageHeading
@@ -51,12 +52,15 @@ export function NotificationsPage() {
         description="Avisos personales de tus alcances actuales. Leerlos no completa las actividades."
         title="Notificaciones"
       />
-      <CheckboxField
-        checked={unread}
-        id="notifications-unread"
-        label="Mostrar solo sin leer"
-        onChange={(event) =>
-          router.replace(`${pathname}?page=1&unread=${event.target.checked}`, {
+      <SectionNavigation
+        label="Bandeja de notificaciones"
+        selected={unread ? "unread" : "all"}
+        items={[
+          { id: "all", label: "Todas" },
+          { id: "unread", label: "Sin leer" },
+        ]}
+        onSelect={(value) =>
+          router.replace(`${pathname}?page=1&unread=${value === "unread"}`, {
             scroll: false,
           })
         }
@@ -69,6 +73,15 @@ export function NotificationsPage() {
         }}
         retrying={query.isFetching}
       >
+        <Pagination
+          count={query.data?.count ?? 0}
+          onPage={(value) =>
+            router.replace(`${pathname}?page=${value}&unread=${unread}`, {
+              scroll: false,
+            })
+          }
+          page={page}
+        />
         {query.data?.rows.map((notification) => (
           <NotificationItem
             key={notification.id}

@@ -9,6 +9,7 @@ import type { SoftDeleteEntity } from "@/domain/access/types/access.types";
 import { LifecycleControl } from "@/features/access/components/lifecycle-control";
 import { QueryState } from "@/features/access/components/query-state";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
+import { ENTITY_LABELS } from "@/features/configuration/constants/entity-labels";
 import { listDeleted } from "@/features/configuration/repositories/history.repository";
 import { useDataScope } from "@/lib/query/hooks/use-data-scope";
 import { createScopedQueryKey } from "@/lib/query/utils/query-keys";
@@ -41,7 +42,7 @@ export function HistoryPanel() {
       >
         {SOFT_DELETE_ENTITIES.map((item) => (
           <option key={item} value={item}>
-            {item}
+            {ENTITY_LABELS[item] ?? item}
           </option>
         ))}
       </SelectField>

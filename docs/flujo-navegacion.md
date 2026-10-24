@@ -112,15 +112,15 @@ El selector ofrece Todas mis empresas, empresa autorizada e Internas del estudio
 
 Una carga ya iniciada conserva company_id/obligation_id de la intención; no cambia de destino por mover el selector. Detalles del recurso obtienen su empresa de las relaciones, sin confiar en el selector como autoridad.
 
-En /empresas/{companyId}, usar tab con valores resumen,tributario,laboral_trabajador,laboral_general,actividades,historial. Omitido/incorrecto utiliza resumen. Tabs sin permiso se ocultan; acceso manual se resuelve como restringido sin consultar datos del módulo. El query no crea un segmento de ruta.
+En /empresas/{companyId}, usar tab con valores resumen,tributario,laboral_trabajador,laboral_general,actividades,historial,administracion. Omitido/incorrecto utiliza resumen. Administración reúne responsables y módulos de la empresa. Tabs sin permiso se ocultan; acceso manual se resuelve como restringido sin consultar datos del módulo. El query no crea un segmento de ruta.
 
 Dentro de laboral_trabajador se lista trabajadores y se abre su expediente. employmentPeriodId en query selecciona una etapa que pertenezca al trabajador; omitido elige la etapa abierta o, si no existe, la más reciente por start_date/id. Valor ajeno o inexistente no muestra detalles: estado No encontrado, sin asumir otra identidad.
 
-En configuración, tab puede ser catalogo,reglas,roles,responsables,parametros; predeterminado catalogo. Las capacidades están compuestas desde sus funcionalidades, sin duplicar tablas/lógica bajo otra ruta.
+En configuración, tab puede ser catalogo,reglas,roles,responsables,parametros,historial,whatsapp,operacion; predeterminado catalogo. Las capacidades están compuestas desde sus funcionalidades, sin duplicar tablas/lógica bajo otra ruta.
 
 ### 3.3 Listados, detalle y retorno
 
-Actividades admite companyId (UUID o all/internal), module, class, group (mis_entregas,por_revisar,vencidas,proximas,observadas,todas), responsibleId, periodId, q, page, pageSize y sort. Defaults: companyId=all, group=mis_entregas, page=1, pageSize=25, sort=urgencia. pageSize solo 25/50/100; sort en lista permitida. El alcance real siempre limita el resultado.
+En la implementación actual, Actividades admite companyId (UUID), scope (all/company/internal), module, class, group (mine/review/overdue/upcoming/observed/all), responsibleId, period, priority, dueFrom, dueTo, state, q, page, pageSize y sort. Defaults: scope=all, group=mine, page=1, pageSize=25, sort=urgency. pageSize solo 25/50/100; sort admite urgency/priority/due_date/received_at. Las etiquetas visibles permanecen en español. El alcance real siempre limita el resultado.
 
 Los otros listados reutilizan contratos de filtros pertinentes, sin forzar filtros laborales a usuarios o auditoría. Búsqueda inicial por metadatos, no contenido de archivos.
 
@@ -133,6 +133,21 @@ La página /actividades/{obligationId} reúne slots, historial, fechas y accione
 Previsualizar PDF/imágenes y descargar Office ocurre dentro de detalle/expediente. Autorizar intento por RPC y emitir URL Storage de 60 segundos al usarla; no guardar URL en navegación o caché persistente. PDF/imágenes no se ofrecen como página pública.
 
 Cada control identifica entregable y versión vigente. Aprobar/observar/reabrir depende del permiso y estado. Observación/reapertura exige comentario y nuevo plazo antes de enviar. Conflicto mantiene el formulario y refresca el recurso; no confirma ni sobrescribe una revisión ajena.
+
+### 3.5 Presentación UX/UI implementada el 24/10/2026
+
+Se conservan todas las rutas. La barra lateral se mantiene en escritorio; en móvil hay cabecera compacta y navegación Inicio/Actividades/Empresas/Más. Configuración tiene grupos en escritorio y selector en móvil. Ver [implementación y evidencias UX/UI](plan-mejoras-ux-ui.md).
+
+| Ruta | Parámetros adicionales de presentación |
+|---|---|
+| `/usuarios` | `memberId` selecciona una membresía autorizada independientemente de la página del listado; `view=cuenta/accesos/contacto`. |
+| `/actividades/{obligationId}` | `deliverableId` selecciona un archivo perteneciente a la obligación; `view=entrega/revision/historial`. |
+| `/empresas/{companyId}` | `workerPage`, `workerQuery`, `workerStatus`, `workerDeleted`; `obligationPage`, `obligationPeriod`, `obligationState`. |
+| `/empresas/{companyId}/trabajadores/{workerId}` | `view=documentos/ficha/eventos`, además de etapa y filtros documentales existentes. |
+
+Los listados enlazan con su URL efectiva como `returnTo`, sin reconstruir defaults. Se conserva la posición solo en memoria, separada por usuario/estudio/empresa, y se valida recursivamente el retorno interno con profundidad máxima de dos. Los enlaces Volver no fuerzan scroll de Next. Cambiar un filtro laboral/documental reinicia su página en una única actualización. Contraseñas y borradores no se incluyen en URL ni almacenamiento persistente.
+
+Los paneles administrativos no agregan rutas. Los asistentes conservan controles entre pasos, validan cada paso y todos los campos antes de guardar. Cerrar o cancelar un panel modificado advierte del descarte; una acción ocupada impide el cierre. Los permisos y la propiedad del recurso se validan además del estado de presentación.
 
 ## 4. Recorridos por perfil
 

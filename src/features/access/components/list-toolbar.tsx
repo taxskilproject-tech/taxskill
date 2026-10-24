@@ -1,7 +1,8 @@
 import { useId } from "react";
 
+import { Input } from "@/components/atoms/input";
 import { CheckboxField } from "@/components/molecules/checkbox-field";
-import { FormField } from "@/components/molecules/form-field";
+import { FilterDisclosure } from "@/components/molecules/filter-disclosure";
 import type { ListToolbarProps } from "@/features/access/types/access-ui.types";
 
 export function ListToolbar({
@@ -13,23 +14,28 @@ export function ListToolbar({
 }: ListToolbarProps) {
   const id = useId();
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4">
-      <div className="w-full max-w-sm">
-        <FormField
+    <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2 has-[details[open]]:grid-cols-1">
+      <div>
+        <label className="sr-only" htmlFor={id + "-search"}>
+          Buscar por nombre
+        </label>
+        <Input
           id={id + "-search"}
-          label="Buscar por nombre"
+          placeholder="Buscar por nombre…"
           onChange={(event) => onQuery(event.target.value)}
           type="search"
           value={query}
         />
       </div>
       {allowDeleted && (
-        <CheckboxField
-          checked={deleted}
-          id={id + "-deleted"}
-          label="Consultar eliminados"
-          onChange={(event) => onDeleted(event.target.checked)}
-        />
+        <FilterDisclosure label="Histórico" count={Number(deleted)}>
+          <CheckboxField
+            checked={deleted}
+            id={id + "-deleted"}
+            label="Consultar eliminados"
+            onChange={(event) => onDeleted(event.target.checked)}
+          />
+        </FilterDisclosure>
       )}
     </div>
   );

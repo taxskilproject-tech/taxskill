@@ -8,6 +8,7 @@ import type {
 } from "@/domain/reporting/types/reporting.types";
 
 export interface ReportFilterProps {
+  busy?: boolean;
   filters: ReportFilters;
   onChange: (name: ReportFilterName, value: string) => void;
   audit?: boolean;
@@ -34,6 +35,11 @@ export interface ExportControlsProps {
   result: ReportResult;
   filters: ReportFilters;
   allowed: boolean;
+}
+export interface ReportToolbarProps extends ReportFilterProps {
+  result?: ReportResult;
+  allowed: boolean;
+  onReset: () => void;
 }
 export interface CompanyReportingProps {
   companyId: string;

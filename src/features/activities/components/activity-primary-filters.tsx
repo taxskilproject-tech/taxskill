@@ -1,5 +1,4 @@
 "use client";
-import { FormField } from "@/components/molecules/form-field";
 import { SelectField } from "@/components/molecules/select-field";
 import { DOCUMENT_MODULES } from "@/domain/common/constants/modules";
 import type { ActivityFiltersProps } from "@/features/activities/types/activity-ui.types";
@@ -13,14 +12,6 @@ export function ActivityPrimaryFilters({
   const { context } = useWorkspace();
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <FormField
-        id="activities-search"
-        label="Buscar en actividades"
-        maxLength={150}
-        onChange={(event) => onChange("q", event.target.value)}
-        type="search"
-        value={filters.q ?? ""}
-      />
       <SelectField
         disabled={lockedCompany}
         id="activities-company"

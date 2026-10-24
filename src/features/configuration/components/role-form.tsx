@@ -6,9 +6,7 @@ import { CheckboxField } from "@/components/molecules/checkbox-field";
 import { FormField } from "@/components/molecules/form-field";
 import { SelectField } from "@/components/molecules/select-field";
 import { REVIEW_ACTIONS } from "@/domain/access/constants/access";
-import { ACTION_LABELS } from "@/domain/access/constants/action-labels";
 import { roleSchema } from "@/domain/access/contracts/access.schema";
-import { DOCUMENT_MODULES } from "@/domain/common/constants/modules";
 import { FormActions } from "@/features/access/components/form-actions";
 import { useCommand } from "@/features/access/hooks/use-command";
 import type {
@@ -16,6 +14,7 @@ import type {
   SubmitEvent,
 } from "@/features/access/types/access-ui.types";
 import { parseForm, readForm } from "@/features/access/utils/form-data";
+import { RolePermissions } from "@/features/configuration/components/role-permissions";
 
 export function RoleForm({
   role,
@@ -100,29 +99,11 @@ export function RoleForm({
           name="active"
         />
       </fieldset>
-      <div className="grid gap-4 lg:grid-cols-2">
-        {DOCUMENT_MODULES.map((module) => (
-          <fieldset
-            className="rounded-lg border border-zinc-200 px-4 py-2"
-            disabled={command.busy}
-            key={module.id}
-          >
-            <legend className="px-2 text-sm font-medium">{module.name}</legend>
-            {availablePermissions
-              .filter((permission) => permission.module === module.id)
-              .map((permission) => (
-                <CheckboxField
-                  defaultChecked={selectedPermissions.has(permission.id)}
-                  id={`permission-${permission.id}`}
-                  key={permission.id}
-                  label={ACTION_LABELS[permission.action] ?? permission.action}
-                  name="permission_ids"
-                  value={permission.id}
-                />
-              ))}
-          </fieldset>
-        ))}
-      </div>
+      <RolePermissions
+        permissions={availablePermissions}
+        selected={selectedPermissions}
+        busy={command.busy}
+      />
       <p className="text-xs leading-6 text-zinc-500">
         Los roles conceden acciones documentales. La administración se configura
         en la membresía y no puede concederse a clientes.
