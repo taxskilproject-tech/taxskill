@@ -1,0 +1,66 @@
+[
+  {
+    "path": "/documentos",
+    "width": 1366,
+    "before": 4892,
+    "after": 2116,
+    "reduction_percent": 56.75,
+    "reference": "initial audit reference"
+  },
+  {
+    "path": "/configuracion?tab=reglas",
+    "width": 1366,
+    "before": 6089,
+    "after": 2174,
+    "reduction_percent": 64.3,
+    "reference": "initial audit reference"
+  },
+  {
+    "path": "/auditoria",
+    "width": 1366,
+    "before": 3391,
+    "after": 1998,
+    "reduction_percent": 41.08,
+    "reference": "initial audit reference"
+  },
+  {
+    "path": "/notificaciones",
+    "width": 1366,
+    "before": 3915,
+    "after": 2279,
+    "reduction_percent": 41.79,
+    "reference": "controlled original/final layouts with matching row IDs"
+  },
+  {
+    "path": "/documentos",
+    "width": 390,
+    "before": 6403,
+    "after": 2718,
+    "reduction_percent": 57.55,
+    "reference": "initial audit reference"
+  },
+  {
+    "path": "/configuracion?tab=reglas",
+    "width": 390,
+    "before": 7393,
+    "after": 2833,
+    "reduction_percent": 61.68,
+    "reference": "initial audit reference"
+  },
+  {
+    "path": "/auditoria",
+    "width": 390,
+    "before": 4431,
+    "after": 2537,
+    "reduction_percent": 42.74,
+    "reference": "initial audit reference"
+  },
+  {
+    "path": "/notificaciones",
+    "width": 390,
+    "before": 4742,
+    "after": 2406,
+    "reduction_percent": 49.26,
+    "reference": "controlled original/final layouts with matching row IDs"
+  }
+]

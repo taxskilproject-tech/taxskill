@@ -21,3 +21,11 @@ export type JobHealth = OperationsSnapshot["jobs"][number];
 export interface OperationsDiagnosticsProps {
   evaluation: HealthEvaluation;
 }
+
+export interface HealthIssueAction {
+  href: string;
+  label: string;
+}
+export interface HealthIssueLinkProps {
+  issue: HealthIssue;
+}

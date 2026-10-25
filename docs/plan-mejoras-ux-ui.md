@@ -1,5 +1,7 @@
 # Mejora UX/UI de TaxSkill
 
+**Evolución del 25/10/2026:** [auditoría, color, densidad y validación](auditoria-ux-ui.md). La barra azul marino y los acentos sustituyen la preferencia visual anterior por neutros; se conservan las evidencias históricas de esta primera mejora.
+
 Fecha: 24 de octubre de 2026, America/Lima. Alcance: presentación, orientación y navegación de H01–H08. Computadora y celular tienen igual prioridad. Referencias: [reglas](../.agents/rules.md), [hitos](hitos/README.md), [navegación](flujo-navegacion.md), [entornos](desarrollo.md).
 
 ## Diagnóstico comprobado

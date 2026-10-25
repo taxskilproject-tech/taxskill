@@ -43,7 +43,7 @@ export function EndEmploymentForm({ detail, onSaved }: EndEmploymentFormProps) {
       onSubmit={submit}
     >
       <h2 className="font-semibold">
-        Registrar cese de la etapa {stage.sequence_number}
+        Registrar cese del periodo laboral {stage.sequence_number}
       </h2>
       <p className="text-sm text-zinc-600">
         Se conserva toda la documentación de esta relación. El checklist de cese

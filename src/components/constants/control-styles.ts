@@ -1,9 +1,10 @@
 export const FOCUS_RING =
-  "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-950";
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600";
 
 export const BUTTON_VARIANTS = {
-  primary: "border-zinc-950 bg-zinc-950 text-white hover:bg-zinc-800",
-  secondary: "border-zinc-300 bg-white text-zinc-950 hover:bg-zinc-100",
+  primary: "border-blue-700 bg-blue-700 text-white hover:bg-blue-800",
+  secondary:
+    "border-slate-300 bg-white text-slate-800 hover:border-blue-300 hover:bg-blue-50",
 };
 
 export const FEEDBACK_STYLES = {

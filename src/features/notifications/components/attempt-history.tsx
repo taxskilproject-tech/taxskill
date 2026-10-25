@@ -18,7 +18,7 @@ export function AttemptHistory({ digestId }: AttemptHistoryProps) {
   );
   return (
     <details onToggle={(event) => setOpened(event.currentTarget.open)}>
-      <summary className="cursor-pointer text-sm font-medium">
+      <summary className="min-h-11 cursor-pointer py-3 text-sm font-medium">
         Intentos y confirmaciones
       </summary>
       {opened && (

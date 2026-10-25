@@ -29,7 +29,7 @@ export function AppShell(props: ShellProps) {
     `${props.context.profile.user_id}:${props.context.organization.id}:${JSON.stringify(props.company)}`,
   );
   return (
-    <div className="min-h-dvh pb-20 lg:pb-0 lg:pl-56">
+    <div className="min-h-dvh bg-slate-50 pb-20 lg:pb-0 lg:pl-60">
       <a
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-white focus:p-3"
         href="#main"

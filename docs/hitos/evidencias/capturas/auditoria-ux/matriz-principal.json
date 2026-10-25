@@ -1,0 +1,130 @@
+[
+  {
+    "path": "/actividades?group=all",
+    "w": 1366,
+    "h": 768,
+    "firstRow": 396.4554443359375,
+    "height": 2327,
+    "overflow": false
+  },
+  {
+    "path": "/reportes",
+    "w": 1366,
+    "h": 768,
+    "firstRow": 384.4762573242187,
+    "height": 2249,
+    "overflow": false
+  },
+  {
+    "path": "/empresas",
+    "w": 1366,
+    "h": 768,
+    "firstRow": 316.4930419921875,
+    "height": 768,
+    "overflow": false
+  },
+  {
+    "path": "/usuarios",
+    "w": 1366,
+    "h": 768,
+    "firstRow": 303.6024169921875,
+    "height": 2478,
+    "overflow": false
+  },
+  {
+    "path": "/empresas/5def6a01-a7db-4917-b01d-05ec1539d379?tab=tributario",
+    "w": 1366,
+    "h": 768,
+    "firstRow": 276.4901428222656,
+    "height": 768,
+    "overflow": false
+  },
+  {
+    "path": "/empresas/5def6a01-a7db-4917-b01d-05ec1539d379?tab=laboral_trabajador",
+    "w": 1366,
+    "h": 768,
+    "firstRow": 371.5856323242187,
+    "height": 2274,
+    "overflow": false
+  },
+  {
+    "path": "/empresas/5def6a01-a7db-4917-b01d-05ec1539d379?tab=laboral_general",
+    "w": 1366,
+    "h": 768,
+    "firstRow": 276.4901428222656,
+    "height": 768,
+    "overflow": false
+  },
+  {
+    "path": "/empresas/5def6a01-a7db-4917-b01d-05ec1539d379/trabajadores/b80012de-2399-4e1f-8939-0483520a4863",
+    "w": 1366,
+    "h": 768,
+    "firstRow": 393.359375,
+    "height": 824,
+    "overflow": false
+  },
+  {
+    "path": "/actividades?group=all",
+    "w": 390,
+    "h": 844,
+    "firstRow": 435.546875,
+    "height": 4436,
+    "overflow": false
+  },
+  {
+    "path": "/reportes",
+    "w": 390,
+    "h": 844,
+    "firstRow": 451.5480346679687,
+    "height": 3936,
+    "overflow": false
+  },
+  {
+    "path": "/empresas",
+    "w": 390,
+    "h": 844,
+    "firstRow": 311.5885314941406,
+    "height": 1122,
+    "overflow": false
+  },
+  {
+    "path": "/usuarios",
+    "w": 390,
+    "h": 844,
+    "firstRow": 339.5978088378906,
+    "height": 3837,
+    "overflow": false
+  },
+  {
+    "path": "/empresas/5def6a01-a7db-4917-b01d-05ec1539d379?tab=tributario",
+    "w": 390,
+    "h": 844,
+    "firstRow": 291.5798645019531,
+    "height": 1481,
+    "overflow": false
+  },
+  {
+    "path": "/empresas/5def6a01-a7db-4917-b01d-05ec1539d379?tab=laboral_trabajador",
+    "w": 390,
+    "h": 844,
+    "firstRow": 434.6498718261719,
+    "height": 3309,
+    "overflow": false
+  },
+  {
+    "path": "/empresas/5def6a01-a7db-4917-b01d-05ec1539d379?tab=laboral_general",
+    "w": 390,
+    "h": 844,
+    "firstRow": 291.5798645019531,
+    "height": 1481,
+    "overflow": false
+  },
+  {
+    "path": "/empresas/5def6a01-a7db-4917-b01d-05ec1539d379/trabajadores/b80012de-2399-4e1f-8939-0483520a4863",
+    "w": 390,
+    "h": 844,
+    "firstRow": 460.4311218261719,
+    "height": 1525,
+    "overflow": false
+  }
+]

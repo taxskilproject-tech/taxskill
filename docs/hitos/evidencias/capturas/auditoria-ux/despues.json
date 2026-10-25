@@ -1,0 +1,82 @@
+[
+  {
+    "path": "/documentos",
+    "w": 1366,
+    "h": 768,
+    "count": "192 registros · Página 1 de 8\n\nAnterior\nSiguiente",
+    "firstRow": 334.6643371582031,
+    "height": 2116,
+    "overflow": false,
+    "width": 1367
+  },
+  {
+    "path": "/configuracion?tab=reglas",
+    "w": 1366,
+    "h": 768,
+    "count": "351 registros · Página 1 de 15\n\nAnterior\nSiguiente",
+    "firstRow": 310.66259765625,
+    "height": 2174,
+    "overflow": false,
+    "width": 1367
+  },
+  {
+    "path": "/documentos",
+    "w": 390,
+    "h": 844,
+    "count": "192 registros · 1/8\n\nAnterior\nSiguiente",
+    "firstRow": 470.6018371582031,
+    "height": 2718,
+    "overflow": false,
+    "width": 391
+  },
+  {
+    "path": "/configuracion?tab=reglas",
+    "w": 390,
+    "h": 844,
+    "count": "351 registros · 1/15\n\nAnterior\nSiguiente",
+    "firstRow": 494.60357666015625,
+    "height": 2833,
+    "overflow": false,
+    "width": 391
+  },
+  {
+    "path": "/auditoria?to=2026-10-24",
+    "w": 1366,
+    "h": 768,
+    "count": "2706 registros · Página 1 de 109\n\nAnterior\nSiguiente",
+    "firstRow": 330.6712951660156,
+    "height": 1998,
+    "overflow": false,
+    "width": 1367
+  },
+  {
+    "path": "/notificaciones",
+    "w": 1366,
+    "h": 768,
+    "count": "372 registros · Página 1 de 15\n\nAnterior\nSiguiente",
+    "firstRow": 261.73321533203125,
+    "height": 2279,
+    "overflow": false,
+    "width": 1367
+  },
+  {
+    "path": "/auditoria?to=2026-10-24",
+    "w": 390,
+    "h": 844,
+    "count": "2706 registros · 1/109\n\nAnterior\nSiguiente",
+    "firstRow": 394.6325073242187,
+    "height": 2537,
+    "overflow": false,
+    "width": 391
+  },
+  {
+    "path": "/notificaciones",
+    "w": 390,
+    "h": 844,
+    "count": "372 registros · 1/15\n\nAnterior\nSiguiente",
+    "firstRow": 312.8182678222656,
+    "height": 2406,
+    "overflow": false,
+    "width": 391
+  }
+]

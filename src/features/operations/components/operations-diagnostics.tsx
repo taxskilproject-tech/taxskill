@@ -1,4 +1,5 @@
 import { FeedbackMessage } from "@/components/molecules/feedback-message";
+import { HealthIssueLink } from "@/features/operations/components/health-issue-link";
 import type { OperationsDiagnosticsProps } from "@/features/operations/types/health-evaluation.types";
 import { describeHealthIssue } from "@/features/operations/utils/describe-health-issue";
 
@@ -19,7 +20,7 @@ export function OperationsDiagnostics({
           <ul className="mt-2 list-disc space-y-1 pl-5">
             {evaluation.issues.map((issue) => (
               <li key={`${issue.code}:${issue.job ?? "system"}`}>
-                {describeHealthIssue(issue)}
+                {describeHealthIssue(issue)} <HealthIssueLink issue={issue} />
               </li>
             ))}
           </ul>

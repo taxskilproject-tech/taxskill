@@ -20,7 +20,7 @@ export function FormSteps({
           <button
             aria-current={step === index ? "step" : undefined}
             aria-label={label}
-            className={`min-h-11 min-w-11 rounded-lg px-3 text-sm focus-visible:outline-2 ${index === step ? "bg-zinc-950 text-white" : "bg-zinc-100 text-zinc-700"}`}
+            className={`min-h-11 min-w-11 rounded-lg px-3 text-sm focus-visible:outline-2 ${index === step ? "bg-blue-700 text-white" : "bg-zinc-100 text-zinc-700"}`}
             key={label}
             onClick={() => onSelect(index)}
             type="button"

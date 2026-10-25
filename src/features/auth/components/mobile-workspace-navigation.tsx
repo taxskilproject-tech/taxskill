@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { Icon } from "@/components/atoms/icon";
 import { SidePanel } from "@/components/organisms/side-panel";
 import { NavigationLinks } from "@/features/auth/components/navigation-links";
 import type { MobileNavigationProps } from "@/features/auth/types/navigation.types";
@@ -34,16 +35,18 @@ export function MobileWorkspaceNavigation({
         <button
           aria-expanded={panel === "modules"}
           aria-current={moduleActive ? "page" : undefined}
-          className={`min-h-11 rounded-lg text-sm font-medium focus-visible:outline-2 ${moduleActive ? "bg-zinc-950 text-white" : ""}`}
+          className={`flex min-h-11 flex-col items-center justify-center rounded-lg py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-blue-600 ${moduleActive ? "bg-blue-700 text-white" : "text-slate-700"}`}
           onClick={() => setPanel("modules")}
         >
+          <Icon name="modules" />
           Módulos
         </button>
         <button
           aria-expanded={panel === "more"}
-          className={`min-h-11 rounded-lg text-sm font-medium focus-visible:outline-2 ${more.some((item) => item.id === active) ? "bg-zinc-950 text-white" : ""}`}
+          className={`flex min-h-11 flex-col items-center justify-center rounded-lg py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-blue-600 ${more.some((item) => item.id === active) ? "bg-blue-700 text-white" : "text-slate-700"}`}
           onClick={() => setPanel("more")}
         >
+          <Icon name="more" />
           Más
         </button>
       </nav>

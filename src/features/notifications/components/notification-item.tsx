@@ -2,6 +2,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/atoms/button";
+import { Icon } from "@/components/atoms/icon";
 import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { formatLimaDateTime } from "@/domain/time/utils/instant";
 import { useDocumentCommand } from "@/features/documents/hooks/use-document-command";
@@ -17,34 +18,40 @@ export function NotificationItem({
     ? `/actividades/${notification.obligation_id}?returnTo=${encodeURIComponent(origin)}`
     : "/configuracion?tab=whatsapp";
   return (
-    <article className="space-y-1 rounded-lg border border-zinc-200 bg-white p-3">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <h2 className="font-semibold">{notification.title}</h2>
-        <span className="text-xs text-zinc-500">
-          {notification.read_at ? "Leída" : "Sin leer"} ·{" "}
-          {formatted.ok ? formatted.data : "Fecha no disponible"}
-        </span>
-      </div>
-      <p className="text-sm text-zinc-600">{notification.body}</p>
-      <div className="flex flex-wrap items-center gap-4">
-        <Link
-          className="inline-flex min-h-11 items-center text-sm underline underline-offset-4"
-          href={target}
-        >
-          Abrir {notification.obligation_id ? "actividad" : "seguimiento"} →
-        </Link>
+    <article
+      data-notification-id={notification.id}
+      className={`rounded-lg border px-3 py-1 ${notification.read_at ? "border-slate-200 bg-white" : "border-blue-200 bg-blue-50/40"}`}
+    >
+      <div className="flex items-center justify-between gap-2">
+        <div className="min-w-0">
+          <Link
+            aria-label={`Abrir ${notification.obligation_id ? "actividad" : "seguimiento"}: ${notification.title}`}
+            className="block min-h-11 py-1 text-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-blue-600"
+            href={target}
+          >
+            <h2 className="font-semibold">{notification.title}</h2>
+            <p className="text-xs text-slate-600">{notification.body}</p>
+          </Link>
+          <p className="text-xs text-slate-600">
+            {notification.read_at ? "Leída" : "Sin leer"} ·{" "}
+            {formatted.ok ? formatted.data : "Fecha no disponible"}
+          </p>
+        </div>
         {!notification.read_at && (
           <Button
+            aria-label="Marcar como leída"
+            title="Marcar como leída"
             loading={command.busy}
-            loadingText="Marcando como leída…"
+            loadingText="Marcando…"
             onClick={() => {
               void command.submit("MarkNotificationRead", {
                 notification_id: notification.id,
               });
             }}
             variant="secondary"
+            className="shrink-0 px-2"
           >
-            Marcar como leída
+            <Icon name="check" />
           </Button>
         )}
       </div>

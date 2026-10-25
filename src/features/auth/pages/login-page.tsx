@@ -44,10 +44,10 @@ export function LoginPage() {
 
   return (
     <main className="grid min-h-dvh lg:grid-cols-2">
-      <section className="hidden flex-col justify-between bg-zinc-950 p-12 text-white lg:flex">
+      <section className="hidden flex-col justify-between bg-slate-950 p-12 text-white lg:flex">
         <p className="text-2xl font-semibold tracking-tight">TaxSkills.</p>
         <div className="max-w-lg space-y-6">
-          <p className="text-xs uppercase tracking-[0.25em] text-zinc-400">
+          <p className="text-xs uppercase tracking-[0.25em] text-slate-300">
             El estudio, conectado
           </p>
           <h2 className="text-4xl leading-tight font-medium tracking-tight">
@@ -55,7 +55,7 @@ export function LoginPage() {
             <br />
             Un mismo orden.
           </h2>
-          <p className="max-w-md text-base leading-7 text-zinc-400">
+          <p className="max-w-md text-base leading-7 text-slate-300">
             Un espacio compartido para organizar el trabajo contable y la
             documentación de tus clientes.
           </p>

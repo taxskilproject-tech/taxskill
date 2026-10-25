@@ -75,7 +75,7 @@ export function EmploymentEventForm({
         {query.data?.count === 0 ? (
           <p className="mt-4 text-sm text-zinc-600">
             El administrador debe configurar una regla eventual con solicitudes
-            manuales para esta etapa.
+            manuales para este periodo laboral.
           </p>
         ) : (
           <form className="mt-5 space-y-4" onSubmit={submit}>
@@ -105,7 +105,7 @@ export function EmploymentEventForm({
                 page={page}
               />
               <FormField
-                hint="Debe pertenecer a la etapa y al intervalo de control de la regla."
+                hint="Debe pertenecer al periodo laboral y al intervalo de control de la regla."
                 id="employment-event-date"
                 label="Fecha de referencia del evento"
                 name="reference_date"

@@ -35,7 +35,7 @@ export function NotificationsPage() {
   );
   const origin = useCurrentRoute();
   return (
-    <div className="space-y-5">
+    <div className="space-y-2">
       <PageHeading
         action={
           <Button

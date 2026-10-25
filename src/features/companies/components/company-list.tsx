@@ -27,9 +27,9 @@ export function CompanyList({
       />
     );
   return (
-    <table className="block w-full rounded-xl border border-zinc-200 bg-white text-left text-sm xl:table">
+    <table className="block w-full rounded-xl border border-zinc-200 bg-white text-left text-sm lg:table">
       <caption className="sr-only">Empresas del estudio</caption>
-      <thead className="hidden border-b border-zinc-200 bg-zinc-50 text-xs text-zinc-600 xl:table-header-group">
+      <thead className="hidden border-b border-zinc-200 bg-zinc-50 text-xs text-zinc-600 lg:table-header-group">
         <tr>
           <th className="p-3" scope="col">
             Empresa
@@ -47,10 +47,10 @@ export function CompanyList({
           )}
         </tr>
       </thead>
-      <tbody className="block divide-y divide-zinc-100 xl:table-row-group">
+      <tbody className="block divide-y divide-zinc-100 lg:table-row-group">
         {companies.map((company) => (
-          <tr className="block p-3 xl:table-row xl:p-0" key={company.id}>
-            <td className="block xl:table-cell xl:p-3">
+          <tr className="block p-3 lg:table-row lg:p-0" key={company.id}>
+            <td className="block lg:table-cell lg:p-3">
               {company.deleted_at ? (
                 <p className="font-medium">{company.legal_name}</p>
               ) : (
@@ -67,13 +67,13 @@ export function CompanyList({
                 </p>
               )}
             </td>
-            <td className="block text-xs text-zinc-500 xl:table-cell xl:p-3">
+            <td className="block text-xs text-zinc-500 lg:table-cell lg:p-3">
               RUC {company.ruc}
-              <span className="ml-2 xl:ml-0 xl:block">
+              <span className="ml-2 lg:ml-0 lg:block">
                 Desde {company.control_start_date}
               </span>
             </td>
-            <td className="inline-block py-2 xl:table-cell xl:p-3">
+            <td className="inline-block py-2 lg:table-cell lg:p-3">
               <Badge>
                 {company.deleted_at
                   ? "Eliminada"
@@ -81,7 +81,7 @@ export function CompanyList({
               </Badge>
             </td>
             {isAdmin && (
-              <td className="block xl:table-cell xl:p-3">
+              <td className="block lg:table-cell lg:p-3">
                 <div className="flex flex-wrap items-start gap-2">
                   {!company.deleted_at && (
                     <Button onClick={() => onEdit(company)} variant="secondary">

@@ -18,7 +18,7 @@ export function WorkspaceTemplate({
           <div className="flex items-center gap-3">
             <span
               aria-hidden="true"
-              className="flex size-10 items-center justify-center rounded-lg bg-zinc-950 text-sm font-bold text-white"
+              className="flex size-10 items-center justify-center rounded-lg bg-blue-700 text-sm font-bold text-white"
             >
               TS
             </span>

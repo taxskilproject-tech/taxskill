@@ -35,6 +35,7 @@ export function ActivityGroups({
       <nav
         aria-label="Grupos de actividades"
         className="hidden flex-wrap gap-1 sm:flex"
+        title="Los grupos pueden coincidir; sus contadores no se suman."
       >
         {ACTIVITY_GROUPS.map((group) => (
           <Button
@@ -47,9 +48,6 @@ export function ActivityGroups({
           </Button>
         ))}
       </nav>
-      <p className="text-xs text-zinc-500">
-        Los grupos pueden coincidir; sus contadores no se suman.
-      </p>
     </div>
   );
 }

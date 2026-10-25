@@ -61,7 +61,7 @@ export function WorkerForm({
           <CheckboxField
             checked={withEmployment}
             id="worker-with-employment"
-            label="Registrar también su etapa laboral"
+            label="Registrar también su periodo laboral"
             onChange={(event) => setWithEmployment(event.target.checked)}
           />
         )}

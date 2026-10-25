@@ -41,6 +41,7 @@ export interface ObligationCardProps {
   origin?: string;
 }
 export interface ObligationRowsProps {
+  hideCompany?: boolean;
   rows: ObligationSummary[];
   origin: string;
 }
@@ -101,6 +102,7 @@ export interface RuleFormProps {
   rule?: RuleRow;
 }
 export interface RuleDestinationProps {
+  busy?: boolean;
   catalog: CatalogRow[];
   rule?: RuleRow;
   companyId: string;
@@ -125,3 +127,5 @@ export interface SlotFieldsProps {
   maximum: number;
   spec?: SlotSpec;
 }
+
+export type RuleOperationsProps = Pick<RuleItemProps, "rule">;

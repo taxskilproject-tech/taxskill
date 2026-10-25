@@ -24,6 +24,7 @@ export interface NavigationLinksProps {
   active: NavigationId;
   onNavigate?: () => void;
   centered?: boolean;
+  dark?: boolean;
 }
 
 export interface MobileNavigationProps extends NavigationLinksProps {

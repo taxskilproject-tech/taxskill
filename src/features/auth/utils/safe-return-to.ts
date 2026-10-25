@@ -2,6 +2,20 @@ const ALLOWED_ROUTES =
   /^\/(dashboard|empresas(?:\/[0-9a-f-]{36}(?:\/trabajadores\/[0-9a-f-]{36})?)?|usuarios|configuracion|actividades(?:\/[0-9a-f-]{36})?|reportes|notificaciones|documentos|auditoria)$/;
 const ALLOWED_QUERY = new Set([
   "returnTo",
+  "laborView",
+  "catalogQuery",
+  "catalogModule",
+  "catalogActive",
+  "catalogCompany",
+  "catalogDeleted",
+  "catalogPage",
+  "rulesQuery",
+  "rulesModule",
+  "rulesActive",
+  "rulesCompany",
+  "rulesDeleted",
+  "rulesPage",
+
   "view",
   "indicators",
   "memberId",

@@ -30,6 +30,7 @@ export type DocumentRow = z.infer<typeof documentRowSchema>;
 export type DocumentResult = z.infer<typeof documentResultSchema>;
 export type RequirementInput = z.infer<typeof requirementInputSchema>;
 export interface DocumentQueryInput {
+  active?: boolean;
   worker_id?: string;
   employment_period_id?: string;
   employment_stage?: string;

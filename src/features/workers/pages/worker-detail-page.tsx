@@ -22,6 +22,9 @@ export function WorkerDetailPage({
 }: WorkerDetailPageProps) {
   const { context, company } = useWorkspace();
   const parameters = useSearchParams();
+  const returnTo = parameters.get("returnTo")
+    ? safeReturnTo(parameters.get("returnTo"))
+    : `/empresas/${companyId}?tab=laboral_trabajador`;
   const selectedId = parameters.get("employmentPeriodId") ?? undefined;
   const [page, setPage] = useState(1);
   const valid =
@@ -64,22 +67,18 @@ export function WorkerDetailPage({
           ← Volver a empresas
         </Link>
         <ResourceState
-          description="El expediente o la etapa no están disponibles en este contexto."
+          description="El expediente o el periodo laboral no están disponibles en este contexto."
           kind="not-found"
           title="Expediente no encontrado"
         />
       </div>
     );
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <Link
         scroll={false}
-        className="inline-flex min-h-11 items-center text-sm underline underline-offset-4"
-        href={
-          parameters.get("returnTo")
-            ? safeReturnTo(parameters.get("returnTo"))
-            : `/empresas/${companyId}?tab=laboral_trabajador`
-        }
+        className="inline-flex min-h-11 items-center text-sm underline underline-offset-4 lg:hidden"
+        href={returnTo}
       >
         ← Volver a Laboral por trabajador
       </Link>
@@ -92,8 +91,18 @@ export function WorkerDetailPage({
         retrying={query.isFetching}
       >
         {query.data && (
-          <div className="space-y-3">
+          <div className="space-y-2">
             <PageHeading
+              showDescriptionOnMobile
+              action={
+                <Link
+                  scroll={false}
+                  className="hidden min-h-11 items-center text-sm text-blue-800 underline underline-offset-4 lg:inline-flex"
+                  href={returnTo}
+                >
+                  ← Volver a Laboral por trabajador
+                </Link>
+              }
               description={`${query.data.company_name} · Expediente laboral`}
               title={`${query.data.worker.first_names} ${query.data.worker.last_names}`}
             />

@@ -1,8 +1,11 @@
+import { TONE_STYLES } from "@/components/constants/visual-styles";
 import type { BadgeProps } from "@/components/types/control.types";
 
-export function Badge({ children }: BadgeProps) {
+export function Badge({ children, tone = "neutral" }: BadgeProps) {
   return (
-    <span className="inline-flex rounded-md border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-700">
+    <span
+      className={`inline-flex rounded-md border px-2 py-0.5 text-xs font-medium ${TONE_STYLES[tone]}`}
+    >
       {children}
     </span>
   );

@@ -37,7 +37,7 @@ export function WorkerFacts({ worker }: WorkerFactsProps) {
       {worker.deleted_at && (
         <p className="text-sm text-zinc-700">
           Ficha eliminada lógicamente. Motivo: {worker.deletion_reason}. Las
-          etapas y documentos se conservan.
+          periodos laborales y documentos se conservan.
         </p>
       )}
     </section>

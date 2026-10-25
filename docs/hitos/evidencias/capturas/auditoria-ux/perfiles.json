@@ -1,0 +1,56 @@
+[
+  {
+    "role": "contador",
+    "navigation": [
+      "Inicio",
+      "Actividades",
+      "Tributario",
+      "Laboral por trabajador",
+      "Laboral general",
+      "Empresas",
+      "Documentos",
+      "Reportes",
+      "Notificaciones"
+    ],
+    "reviewShortcut": true,
+    "hasResults": true,
+    "heading": "Tributario",
+    "restricted": false
+  },
+  {
+    "role": "supervisor",
+    "navigation": [
+      "Inicio",
+      "Actividades",
+      "Tributario",
+      "Laboral por trabajador",
+      "Laboral general",
+      "Empresas",
+      "Documentos",
+      "Reportes",
+      "Auditoría",
+      "Notificaciones"
+    ],
+    "reviewShortcut": true,
+    "hasResults": true,
+    "heading": "Tributario",
+    "restricted": false
+  },
+  {
+    "role": "cliente",
+    "navigation": [
+      "Inicio",
+      "Actividades",
+      "Tributario",
+      "Laboral por trabajador",
+      "Laboral general",
+      "Empresas",
+      "Documentos",
+      "Notificaciones"
+    ],
+    "reviewShortcut": false,
+    "hasResults": true,
+    "heading": "Tributario",
+    "restricted": false
+  }
+]

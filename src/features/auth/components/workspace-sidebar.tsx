@@ -1,7 +1,7 @@
 import Link from "next/link";
 
+import { Icon } from "@/components/atoms/icon";
 import { NavigationLinks } from "@/features/auth/components/navigation-links";
-import { NAVIGATION_GROUPS } from "@/features/auth/constants/navigation";
 import type { MobileNavigationProps } from "@/features/auth/types/navigation.types";
 
 export function WorkspaceSidebar({
@@ -9,28 +9,52 @@ export function WorkspaceSidebar({
   active,
   companyName,
 }: MobileNavigationProps) {
+  const primary = items.filter(
+    (item) => item.id === "inicio" || item.id === "actividades",
+  );
+  const modules = items.filter((item) => item.group === "Módulos");
+  const consultation = items.filter(
+    (item) => item.group === "Consulta" || item.group === "Supervisión",
+  );
+  const administration = items.filter(
+    (item) => item.group === "Administración",
+  );
   return (
-    <aside className="fixed inset-y-0 left-0 hidden w-56 flex-col overflow-y-auto border-r border-zinc-200 bg-white p-3 lg:flex">
+    <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col overflow-y-auto bg-slate-950 p-3 text-slate-100 lg:flex">
       <Link
-        className="px-3 py-4 text-xl font-semibold tracking-tight"
+        className="flex min-h-12 items-center gap-2 px-3 text-xl font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-blue-400"
         href="/dashboard"
       >
+        <span className="rounded-lg bg-blue-600 p-1.5">
+          <Icon name="document" />
+        </span>{" "}
         TaxSkills.
       </Link>
-      <p className="truncate px-3 text-xs text-zinc-500">{companyName}</p>
-      <nav aria-label="Navegación principal" className="mt-4 space-y-3">
-        {NAVIGATION_GROUPS.map((group) => {
-          const entries = items.filter((item) => item.group === group);
-          if (!entries.length) return null;
-          return (
-            <div key={group} className="space-y-1">
-              <p className="px-3 text-xs font-medium text-zinc-500">{group}</p>
-              <NavigationLinks active={active} items={entries} />
-            </div>
-          );
-        })}
+      <p className="truncate px-3 pb-3 text-xs text-slate-400">{companyName}</p>
+      <nav aria-label="Navegación principal" className="space-y-2">
+        <div>
+          <NavigationLinks active={active} dark items={primary} />
+        </div>
+        {modules.length > 0 && (
+          <section aria-label="Módulos documentales">
+            <p className="px-3 pt-1 pb-1 text-[11px] font-semibold tracking-widest text-slate-400">
+              MÓDULOS
+            </p>
+            <NavigationLinks active={active} dark items={modules} />
+          </section>
+        )}
+        {consultation.length > 0 && (
+          <div className="border-t border-slate-800 pt-2">
+            <NavigationLinks active={active} dark items={consultation} />
+          </div>
+        )}
+        {administration.length > 0 && (
+          <div className="border-t border-slate-800 pt-2">
+            <NavigationLinks active={active} dark items={administration} />
+          </div>
+        )}
       </nav>
-      <p className="mt-auto px-3 pt-6 text-xs text-zinc-500">
+      <p className="mt-auto px-3 pt-3 text-xs text-slate-400">
         Perú · America/Lima
       </p>
     </aside>

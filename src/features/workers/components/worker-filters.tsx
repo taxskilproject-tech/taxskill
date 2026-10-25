@@ -39,9 +39,9 @@ export function WorkerFilters({
           value={status}
         >
           <option value="all">Todas</option>
-          <option value="active">Con etapa activa</option>
-          <option value="ended">Con etapas cerradas</option>
-          <option value="unregistered">Sin etapa registrada</option>
+          <option value="active">Con periodo activo</option>
+          <option value="ended">Con periodos cerrados</option>
+          <option value="unregistered">Sin periodo laboral registrado</option>
         </SelectField>
         {isAdmin && (
           <CheckboxField

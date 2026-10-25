@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 
 import { Button } from "@/components/atoms/button";
 import type { SidePanelProps } from "@/components/types/layout.types";
+import { handleDialogKeyDown } from "@/components/utils/dialog-keyboard";
 
 export function SidePanel({
   title,
@@ -35,7 +36,8 @@ export function SidePanel({
   return (
     <dialog
       aria-labelledby={titleId}
-      className={`fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-dvh w-full max-w-none bg-zinc-50 p-0 text-zinc-950 shadow-xl backdrop:bg-zinc-950/30 ${wide ? "sm:max-w-3xl" : "sm:max-w-xl"}`}
+      onKeyDown={handleDialogKeyDown}
+      className={`fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-dvh w-full max-w-none bg-zinc-50 p-0 text-zinc-950 shadow-xl backdrop:bg-slate-950/40 ${wide ? "sm:max-w-3xl" : "sm:max-w-xl"}`}
       onCancel={(event) => {
         event.preventDefault();
         requestClose();
@@ -44,10 +46,17 @@ export function SidePanel({
     >
       <div className="flex h-full flex-col">
         <header className="flex shrink-0 items-center justify-between gap-3 border-b border-zinc-200 bg-white px-4 py-3">
-          <h2 className="text-lg font-semibold" id={titleId}>
+          <h2
+            className="min-w-0 break-words text-lg font-semibold"
+            id={titleId}
+          >
             {title}
           </h2>
-          <Button onClick={requestClose} variant="secondary">
+          <Button
+            className="shrink-0"
+            onClick={requestClose}
+            variant="secondary"
+          >
             Cerrar
           </Button>
         </header>

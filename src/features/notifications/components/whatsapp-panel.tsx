@@ -31,13 +31,13 @@ export function WhatsappPanel() {
     await Promise.all([query.refetch(), contacts.refetch()]);
   }
   return (
-    <section className="space-y-5">
+    <section className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-semibold">Seguimiento de WhatsApp</h2>
           <p className="mt-2 text-sm text-zinc-600">
-            Estados confirmados y resultados pendientes de conciliación. Revisa
-            las incidencias y consulta la evidencia de cada resumen.
+            Recibir el webhook no confirma la entrega por WhatsApp. Abre un
+            resumen para consultar intentos y confirmaciones.
           </p>
         </div>
         <Button

@@ -13,12 +13,27 @@ const ACTION_LABELS: Readonly<Record<string, string>> = {
   ObserveVersion: "Observación de archivo",
   ReopenApproved: "Reapertura de archivo",
   ConfigureRequirement: "Configuración documental",
+  GenerateRequirement: "Generación de obligación",
+  GenerateMonthly: "Generación mensual",
+  RegisterWorker: "Registro de trabajador",
+  UpdateWorker: "Actualización de trabajador",
+  StartEmployment: "Ingreso laboral",
+  EndEmployment: "Cese laboral",
+  CorrectEmployment: "Corrección de periodo laboral",
+  CreateAdditionalActivity: "Creación de actividad adicional",
+  ConfigureAdditionalRequirement: "Configuración de actividad recurrente",
+  ImportDocumentCatalog: "Importación de catálogo",
+  SaveDocumentType: "Actualización de tipo documental",
+  CreateUploadIntent: "Preparación de entrega",
+  FinalizeUpload: "Recepción de archivo",
+  SetRuleActive: "Cambio de estado de regla",
+  ReassignDelivery: "Cambio de responsable",
+  SetNotApplicable: "Documento no aplicable",
+  CancelObligation: "Cancelación de obligación",
+  SaveWhatsAppContact: "Actualización de contacto WhatsApp",
   GenerateRule: "Generación de obligaciones",
   MarkNotificationRead: "Notificación leída",
 };
 export function auditActionLabel(action: string): string {
-  return (
-    ACTION_LABELS[action] ??
-    action.replace(/([a-z])([A-Z])/g, "$1 $2").replaceAll("_", " ")
-  );
+  return ACTION_LABELS[action] ?? "Acción registrada";
 }

@@ -1,0 +1,24 @@
+[
+  {
+    "w": 1366,
+    "h": 768,
+    "before": 3915,
+    "after": 2279,
+    "count": "372 registros · Página 1 de 15\n\nAnterior\nSiguiente",
+    "sameRows": true,
+    "rows": 25,
+    "rowIdentityHash": "919d7c2b9fbe89872e856c73990046b1f935bc9aab2d69fcf13d7f923bf0cc8c",
+    "reduction": 41.79
+  },
+  {
+    "w": 390,
+    "h": 844,
+    "before": 4742,
+    "after": 2406,
+    "count": "372 registros · 1/15\n\nAnterior\nSiguiente",
+    "sameRows": true,
+    "rows": 25,
+    "rowIdentityHash": "919d7c2b9fbe89872e856c73990046b1f935bc9aab2d69fcf13d7f923bf0cc8c",
+    "reduction": 49.26
+  }
+]

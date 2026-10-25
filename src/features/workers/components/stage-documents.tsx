@@ -17,10 +17,10 @@ export function StageDocuments({ detail }: StageDocumentsProps) {
     EMPLOYMENT_STAGES.find((stage) => stage === requested) ?? "relacion";
   if (!detail.selected_period) return null;
   return (
-    <section className="space-y-5">
+    <section className="space-y-2">
       <nav
-        aria-label="Documentos de la etapa laboral"
-        className="flex flex-wrap gap-2 border-b border-zinc-200 pb-3"
+        aria-label="Documentos por etapa documental"
+        className="flex flex-wrap gap-2 border-b border-zinc-200 pb-1"
       >
         {EMPLOYMENT_STAGES.map((stage) => {
           const next = new URLSearchParams(parameters.toString());
@@ -28,7 +28,7 @@ export function StageDocuments({ detail }: StageDocumentsProps) {
           return (
             <Link
               aria-current={selected === stage ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center rounded-lg px-4 text-sm ${selected === stage ? "bg-zinc-950 text-white" : "hover:bg-zinc-100"}`}
+              className={`inline-flex min-h-11 items-center rounded-lg px-4 text-sm ${selected === stage ? "bg-blue-700 text-white" : "hover:bg-zinc-100"}`}
               href={`${pathname}?${next}`}
               key={stage}
             >

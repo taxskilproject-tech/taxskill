@@ -1,0 +1,96 @@
+{
+  "method": "Relative luminance of installed Tailwind OKLCH palette, converted to linear sRGB. Text and focus pairs; not a full accessibility certification.",
+  "pairs": [
+    {
+      "foreground": "white",
+      "background": "blue-700",
+      "ratio": 6.82,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "slate-200",
+      "background": "slate-950",
+      "ratio": 16.37,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "slate-400",
+      "background": "slate-950",
+      "ratio": 7.68,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "slate-700",
+      "background": "slate-50",
+      "ratio": 9.88,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "blue-800",
+      "background": "blue-50",
+      "ratio": 8.11,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "violet-800",
+      "background": "violet-50",
+      "ratio": 8.35,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "cyan-900",
+      "background": "cyan-50",
+      "ratio": 8.76,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "emerald-800",
+      "background": "emerald-50",
+      "ratio": 7.19,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "amber-900",
+      "background": "amber-50",
+      "ratio": 8.77,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "red-800",
+      "background": "red-50",
+      "ratio": 7.67,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "zinc-500",
+      "background": "white",
+      "ratio": 4.83,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "blue-600",
+      "background": "white",
+      "ratio": 5.26,
+      "minimum": 3,
+      "passed": true
+    },
+    {
+      "foreground": "blue-400",
+      "background": "slate-950",
+      "ratio": 7.65,
+      "minimum": 3,
+      "passed": true
+    }
+  ]
+}

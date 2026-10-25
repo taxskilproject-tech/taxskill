@@ -1,0 +1,50 @@
+[
+  {
+    "firstEmpty": 334.6354064941406,
+    "h": 768,
+    "height": 768,
+    "overflow": false,
+    "path": "/actividades?group=all&q=ux-audit-empty-absent",
+    "w": 1366
+  },
+  {
+    "firstEmpty": 306.65509033203125,
+    "h": 768,
+    "height": 768,
+    "overflow": false,
+    "path": "/documentos?q=ux-audit-empty-absent",
+    "w": 1366
+  },
+  {
+    "firstEmpty": 322.65625,
+    "h": 768,
+    "height": 768,
+    "overflow": false,
+    "path": "/reportes?q=ux-audit-empty-absent",
+    "w": 1366
+  },
+  {
+    "firstEmpty": 406.6116943359375,
+    "h": 844,
+    "height": 844,
+    "overflow": false,
+    "path": "/actividades?group=all&q=ux-audit-empty-absent",
+    "w": 390
+  },
+  {
+    "firstEmpty": 426.60589599609375,
+    "h": 844,
+    "height": 844,
+    "overflow": false,
+    "path": "/documentos?q=ux-audit-empty-absent",
+    "w": 390
+  },
+  {
+    "firstEmpty": 422.61285400390625,
+    "h": 844,
+    "height": 844,
+    "overflow": false,
+    "path": "/reportes?q=ux-audit-empty-absent",
+    "w": 390
+  }
+]

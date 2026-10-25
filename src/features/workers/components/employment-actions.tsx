@@ -35,7 +35,7 @@ export function EmploymentActions({
           )}
           {detail.selected_period && (
             <Button onClick={() => setMode("correct")} variant="secondary">
-              Corregir etapa seleccionada
+              Corregir periodo laboral seleccionado
             </Button>
           )}
           {detail.selected_period && !detail.selected_period.end_date && (

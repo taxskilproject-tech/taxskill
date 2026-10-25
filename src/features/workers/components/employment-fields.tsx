@@ -14,7 +14,7 @@ export function EmploymentFields({
   return (
     <fieldset className="space-y-4">
       <legend className="mb-3 text-sm font-semibold">
-        Condiciones de la etapa laboral
+        Condiciones del periodo laboral
       </legend>
       <div className="grid gap-4 sm:grid-cols-2">
         <FormField
@@ -70,7 +70,7 @@ export function EmploymentFields({
         <CheckboxField
           checked={closed}
           id="employment-historical"
-          label="Registrar una etapa que ya terminó"
+          label="Registrar un periodo laboral que ya terminó"
           onChange={(event) => setClosed(event.target.checked)}
         />
       )}

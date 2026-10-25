@@ -5,6 +5,7 @@ export function PageHeading({
   title,
   description,
   action,
+  showDescriptionOnMobile = false,
 }: PageHeadingProps) {
   return (
     <header className="flex flex-wrap items-start justify-between gap-3">
@@ -13,7 +14,7 @@ export function PageHeading({
         <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
         <p
           className={
-            action
+            action && !showDescriptionOnMobile
               ? "sr-only text-sm leading-5 text-zinc-600 sm:not-sr-only"
               : "text-sm leading-5 text-zinc-600"
           }

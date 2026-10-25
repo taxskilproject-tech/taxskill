@@ -9,6 +9,7 @@ import type { RuleDestinationProps } from "@/features/documents/types/document-u
 
 export function RuleDestinationFields({
   catalog,
+  busy = false,
   rule,
   companyId,
   onCompany,
@@ -53,7 +54,7 @@ export function RuleDestinationFields({
       </SelectField>
       <SelectField
         value={value}
-        disabled={Boolean(rule)}
+        disabled={Boolean(rule) || busy}
         id="rule-document"
         label="Tipo documental y módulo"
         name="document_type_id"

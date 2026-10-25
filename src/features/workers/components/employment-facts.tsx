@@ -6,7 +6,9 @@ export function EmploymentFacts({ stage }: EmploymentFactsProps) {
   return (
     <section className="space-y-4 rounded-xl border border-zinc-200 bg-white p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-semibold">Etapa {stage.sequence_number}</h2>
+        <h2 className="font-semibold">
+          Periodo laboral {stage.sequence_number}
+        </h2>
         <Badge>{stage.end_date ? "Cesada" : "Activa"}</Badge>
       </div>
       <dl className="grid gap-4 text-sm sm:grid-cols-3">

@@ -4,15 +4,10 @@ import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { ResourceState } from "@/components/organisms/resource-state";
 import { metadataResultSchema } from "@/domain/reporting/contracts/consultation.schema";
 import { limaMoment } from "@/domain/reporting/utils/report-filters";
-import {
-  moduleLabel,
-  recordLabel,
-  stateLabel,
-} from "@/domain/reporting/utils/report-labels";
 import { PageHeading } from "@/features/access/components/page-heading";
 import { Pagination } from "@/features/access/components/pagination";
 import { QueryState } from "@/features/access/components/query-state";
-import { DocumentItem } from "@/features/documents/components/document-item";
+import { MetadataRow } from "@/features/reporting/components/metadata-row";
 import { ReportFilters } from "@/features/reporting/components/report-filters";
 import { useReportFilters } from "@/features/reporting/hooks/use-report-filters";
 import { useReportQuery } from "@/features/reporting/hooks/use-report-query";
@@ -51,7 +46,7 @@ export function DocumentSearchPage() {
           retrying={query.isFetching}
         >
           {query.data && (
-            <div className="space-y-4">
+            <div className="space-y-1">
               <p className="text-xs text-zinc-500">
                 Consulta: {limaMoment(query.data.queried_at)} · Lima · Unidad:
                 versiones de archivo.
@@ -63,28 +58,11 @@ export function DocumentSearchPage() {
                 pageSize={filters.pageSize}
               />
               {query.data.rows.map((document) => (
-                <section className="space-y-1" key={document.id}>
-                  <DocumentItem
-                    allowActions={document.record_status !== "deleted"}
-                    document={document}
-                    origin={origin}
-                  />
-                  <details className="px-3 text-xs text-zinc-600">
-                    <summary className="min-h-11 cursor-pointer py-3 focus-visible:outline-2">
-                      Periodo y metadatos
-                    </summary>
-                    <p className="pb-3">
-                      {moduleLabel(document.module)} · {document.period} ·{" "}
-                      {document.worker_name || "Sin trabajador"}{" "}
-                      {document.worker_identity ?? ""} ·{" "}
-                      {stateLabel(document.state)} ·{" "}
-                      {document.is_current
-                        ? "Versión actual"
-                        : "Versión histórica"}{" "}
-                      · {recordLabel(document.record_status)}
-                    </p>
-                  </details>
-                </section>
+                <MetadataRow
+                  document={document}
+                  key={document.id}
+                  origin={origin}
+                />
               ))}
               {query.data.count === 0 && (
                 <ResourceState

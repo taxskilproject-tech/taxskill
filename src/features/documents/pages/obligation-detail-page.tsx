@@ -20,6 +20,10 @@ import { ObligationWorkspace } from "@/features/documents/components/obligation-
 import { ReassignmentControl } from "@/features/documents/components/reassignment-control";
 import { useDocumentQuery } from "@/features/documents/hooks/use-document-query";
 import type { ObligationDetailProps } from "@/features/documents/types/document-ui.types";
+import {
+  displayDate,
+  reviewTone,
+} from "@/features/documents/utils/document-presentation";
 
 export function ObligationDetailPage({ obligationId }: ObligationDetailProps) {
   const parameters = useSearchParams();
@@ -80,7 +84,20 @@ export function ObligationDetailPage({ obligationId }: ObligationDetailProps) {
           <>
             <PageHeading
               title={detail.summary.title}
-              description={`${detail.summary.company_name ?? "Interna del estudio"} · ${periodLabel(detail.summary.occurrence_key, detail.summary.initial_due_date)}`}
+              showDescriptionOnMobile
+              description={[
+                detail.summary.company_name ?? "Interna del estudio",
+                periodLabel(
+                  detail.summary.occurrence_key,
+                  detail.summary.initial_due_date,
+                ),
+                detail.summary.worker_name,
+                detail.summary.employment_sequence
+                  ? `Periodo laboral ${detail.summary.employment_sequence}`
+                  : null,
+              ]
+                .filter(Boolean)
+                .join(" · ")}
               action={
                 <Button
                   loading={query.isFetching}
@@ -102,12 +119,16 @@ export function ObligationDetailPage({ obligationId }: ObligationDetailProps) {
                 </strong>{" "}
                 ·{" "}
                 {detail.summary.operational_due_date
-                  ? `Entrega hasta ${detail.summary.operational_due_date}`
+                  ? `Entrega hasta ${displayDate(detail.summary.operational_due_date)}`
                   : "Sin entregas pendientes"}
               </p>
               <div className="flex gap-2">
-                <Badge>{REVIEW_LABELS[detail.summary.aggregate_state]}</Badge>
-                {detail.summary.overdue && <Badge>Entrega vencida</Badge>}
+                <Badge tone={reviewTone(detail.summary.aggregate_state)}>
+                  {REVIEW_LABELS[detail.summary.aggregate_state]}
+                </Badge>
+                {detail.summary.overdue && (
+                  <Badge tone="danger">Entrega vencida</Badge>
+                )}
               </div>
               {detail.summary.disposition_reason && (
                 <p className="w-full text-sm text-zinc-600">

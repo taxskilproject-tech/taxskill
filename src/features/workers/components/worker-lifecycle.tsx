@@ -40,8 +40,8 @@ export function WorkerLifecycle({ worker }: WorkerLifecycleProps) {
           }}
         >
           <p className="text-sm text-zinc-600">
-            La ficha conserva identidad, etapas y archivos. Restaurarla no
-            registra ingreso ni reabre una etapa cesada.
+            La ficha conserva identidad, periodos laborales y archivos.
+            Restaurarla no registra un ingreso ni reabre un periodo cerrado.
           </p>
           <FormField
             disabled={action.busy}

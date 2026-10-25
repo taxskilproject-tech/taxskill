@@ -24,7 +24,7 @@ export function WorkerCard({ worker, origin }: WorkerCardProps) {
             ? "Relación activa"
             : worker.employment_status === "ended"
               ? "Cesado"
-              : "Sin etapa registrada"}
+              : "Sin periodo laboral registrado"}
       </Badge>
     </article>
   );

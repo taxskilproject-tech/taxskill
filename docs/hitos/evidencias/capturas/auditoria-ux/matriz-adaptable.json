@@ -1,0 +1,130 @@
+[
+  {
+    "firstRow": 435.546875,
+    "h": 812,
+    "overflow": false,
+    "path": "/actividades?group=all",
+    "rowDisplay": "grid",
+    "w": 375
+  },
+  {
+    "firstRow": 451.5480346679687,
+    "h": 812,
+    "overflow": false,
+    "path": "/reportes",
+    "rowDisplay": "list-item",
+    "w": 375
+  },
+  {
+    "firstRow": 470.6018371582031,
+    "h": 812,
+    "overflow": false,
+    "path": "/documentos",
+    "rowDisplay": "flex",
+    "w": 375
+  },
+  {
+    "firstRow": 494.60357666015625,
+    "h": 812,
+    "overflow": false,
+    "path": "/configuracion?tab=reglas",
+    "rowDisplay": "flex",
+    "w": 375
+  },
+  {
+    "firstRow": 459.5341491699219,
+    "h": 1024,
+    "overflow": false,
+    "path": "/actividades?group=all",
+    "rowDisplay": "grid",
+    "w": 768
+  },
+  {
+    "firstRow": 399.56597900390625,
+    "h": 1024,
+    "overflow": false,
+    "path": "/reportes",
+    "rowDisplay": "list-item",
+    "w": 768
+  },
+  {
+    "firstRow": 382.6388854980469,
+    "h": 1024,
+    "overflow": false,
+    "path": "/documentos",
+    "rowDisplay": "flex",
+    "w": 768
+  },
+  {
+    "firstRow": 442.62152099609375,
+    "h": 1024,
+    "overflow": false,
+    "path": "/configuracion?tab=reglas",
+    "rowDisplay": "flex",
+    "w": 768
+  },
+  {
+    "firstRow": 444.4444274902344,
+    "h": 768,
+    "overflow": false,
+    "path": "/actividades?group=all",
+    "rowDisplay": "table-row",
+    "w": 1024
+  },
+  {
+    "firstRow": 400.46295166015625,
+    "h": 768,
+    "overflow": false,
+    "path": "/reportes",
+    "rowDisplay": "table-row",
+    "w": 1024
+  },
+  {
+    "firstRow": 334.6643371582031,
+    "h": 768,
+    "overflow": false,
+    "path": "/documentos",
+    "rowDisplay": "flex",
+    "w": 1024
+  },
+  {
+    "firstRow": 394.64697265625,
+    "h": 768,
+    "overflow": false,
+    "path": "/configuracion?tab=reglas",
+    "rowDisplay": "flex",
+    "w": 1024
+  },
+  {
+    "firstRow": 396.4554443359375,
+    "h": 900,
+    "overflow": false,
+    "path": "/actividades?group=all",
+    "rowDisplay": "table-row",
+    "w": 1440
+  },
+  {
+    "firstRow": 384.4762573242187,
+    "h": 900,
+    "overflow": false,
+    "path": "/reportes",
+    "rowDisplay": "table-row",
+    "w": 1440
+  },
+  {
+    "firstRow": 334.6643371582031,
+    "h": 900,
+    "overflow": false,
+    "path": "/documentos",
+    "rowDisplay": "flex",
+    "w": 1440
+  },
+  {
+    "firstRow": 310.66259765625,
+    "h": 900,
+    "overflow": false,
+    "path": "/configuracion?tab=reglas",
+    "rowDisplay": "flex",
+    "w": 1440
+  }
+]

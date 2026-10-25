@@ -1,5 +1,7 @@
 # Acceso directo a los módulos de TaxSkill
 
+**Presentación del 25/10/2026:** [segunda mejora UX/UI](auditoria-ux-ui.md). Se conserva este contrato de rutas y permisos. La barra lateral utiliza iconos y separadores; solo MÓDULOS queda como etiqueta estática. Laboral por trabajador incorpora `laborView` para alternar trabajadores y obligaciones.
+
 Fecha: 24 de octubre de 2026 · America/Lima. Estado: implementado y verificado localmente. No publicado en esta entrega. Referencias: [reglas](../.agents/rules.md), [navegación](flujo-navegacion.md), [carpetas](estructura-carpetas.md), [entornos](desarrollo.md) y [mejoras UX](plan-mejoras-ux-ui.md).
 
 ## 1. Decisiones confirmadas y resultado

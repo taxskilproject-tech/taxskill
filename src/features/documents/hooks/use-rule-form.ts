@@ -23,6 +23,7 @@ export function useRuleForm({ onSaved, rule }: RuleFormProps) {
   const { context } = useWorkspace();
   const form = useRef<HTMLFormElement>(null);
   const [page, setPage] = useState(1);
+  const [catalogQuery, setCatalogQuery] = useState("");
   const [companyId, setCompanyId] = useState(rule?.company_id ?? "");
   const [module, setModule] = useState<DocumentModule>(
     rule?.module ?? "tributario",
@@ -35,7 +36,11 @@ export function useRuleForm({ onSaved, rule }: RuleFormProps) {
       context.organization.settings.default_max_file_bytes,
   );
   const [validation, setValidation] = useState<string | null>(null);
-  const catalog = useDocumentQuery("catalog", { page }, catalogSchema);
+  const catalog = useDocumentQuery(
+    "catalog",
+    { page, q: catalogQuery, active: true },
+    catalogSchema,
+  );
   const command = useDocumentCommand();
   const steps = useFormSteps(form, 4);
   async function submit(event: SubmitEvent) {
@@ -75,6 +80,10 @@ export function useRuleForm({ onSaved, rule }: RuleFormProps) {
     setMaximum,
     validation,
     catalog,
+    searchCatalog: (query: string) => {
+      setCatalogQuery(query);
+      setPage(1);
+    },
     command,
     steps,
     submit,

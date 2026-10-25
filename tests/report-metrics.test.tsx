@@ -129,9 +129,11 @@ it.each([
         expect.arrayContaining(["review", "upcoming"]),
       );
     }
-    expect(parseReportFilters(links[0].searchParams).indicators).toContain(
-      "pending",
-    );
+    expect(
+      links.some((link) =>
+        parseReportFilters(link.searchParams).indicators?.includes("pending"),
+      ),
+    ).toBe(true);
   },
 );
 

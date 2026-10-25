@@ -54,6 +54,9 @@ export function ActivityPrimaryFilters({
           </option>
         ))}
       </SelectField>
+      <p className="text-xs text-slate-600 sm:col-span-2">
+        Los grupos pueden coincidir; sus contadores no se suman.
+      </p>
     </div>
   );
 }

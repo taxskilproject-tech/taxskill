@@ -33,7 +33,7 @@ export function GenerationProgress({
                   : "pendiente"}{" "}
             · {phase?.generated_count ?? 0} obligaciones nuevas.
             {phase?.last_error
-              ? " La etapa está guardada; se conserva el avance para reintentar."
+              ? " El periodo laboral está guardado; se conserva el avance para reintentar."
               : ""}
           </p>
         ))}

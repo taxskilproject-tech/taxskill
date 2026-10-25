@@ -1,3 +1,4 @@
+import type { IconName, VisualTone } from "@/components/types/visual.types";
 import type {
   ReportFilterName,
   ReportFilters,
@@ -14,11 +15,15 @@ export interface ReportFilterProps {
   audit?: boolean;
 }
 export interface ReportMetricsProps {
+  reviewAllowed?: boolean;
   metrics: ReportMetrics;
   filters: ReportFilters;
   mode: ReportingPageProps["mode"];
 }
 export interface ReportIndicatorDefinition {
+  shortLabel: string;
+  tone: VisualTone;
+  icon: IconName;
   indicator: ReportIndicator;
   label: string;
   metric: keyof ReportMetrics;
@@ -46,4 +51,8 @@ export interface CompanyReportingProps {
 }
 export interface ReportingPageProps {
   mode: "dashboard" | "report";
+}
+
+export interface ReportRowDetailProps {
+  row: ReportRow;
 }

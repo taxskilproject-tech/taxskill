@@ -62,7 +62,8 @@ export function WorkersPanel({ companyId }: WorkersPanelProps) {
         <div>
           <h2 className="text-lg font-semibold">Trabajadores</h2>
           <p className="sr-only">
-            Cada expediente conserva sus etapas de ingreso, relación y cese.
+            Cada expediente conserva la documentación de ingreso, relación y
+            cese.
           </p>
         </div>
         {canManage && (

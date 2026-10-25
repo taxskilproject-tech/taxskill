@@ -59,7 +59,7 @@ export function AccountControls({ user, onChanged }: UserDetailProps) {
       onChanged();
   }
   return (
-    <div className="grid gap-5 lg:grid-cols-2">
+    <div className="space-y-3">
       <details>
         <summary className="min-h-11 cursor-pointer py-3 text-sm font-medium">
           Cambiar contraseña

@@ -12,7 +12,7 @@ export function Pagination({
   return (
     <nav
       aria-label="Paginación"
-      className="flex flex-wrap items-center justify-between gap-2 py-2"
+      className="flex flex-wrap items-center justify-between gap-2 py-1"
     >
       <p
         className="text-xs text-zinc-600"
@@ -24,24 +24,26 @@ export function Pagination({
         <span className="hidden sm:inline"> de </span>
         {pages}
       </p>
-      <div className="flex gap-2">
-        <Button
-          disabled={page <= 1}
-          className="px-3"
-          onClick={() => onPage(page - 1)}
-          variant="secondary"
-        >
-          Anterior
-        </Button>
-        <Button
-          disabled={page >= pages}
-          className="px-3"
-          onClick={() => onPage(page + 1)}
-          variant="secondary"
-        >
-          Siguiente
-        </Button>
-      </div>
+      {pages > 1 && (
+        <div className="flex gap-2">
+          <Button
+            disabled={page <= 1}
+            className="px-3"
+            onClick={() => onPage(page - 1)}
+            variant="secondary"
+          >
+            Anterior
+          </Button>
+          <Button
+            disabled={page >= pages}
+            className="px-3"
+            onClick={() => onPage(page + 1)}
+            variant="secondary"
+          >
+            Siguiente
+          </Button>
+        </div>
+      )}
     </nav>
   );
 }

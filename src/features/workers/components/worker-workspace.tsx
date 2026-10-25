@@ -27,24 +27,26 @@ export function WorkerWorkspace({
     "eventos",
   ]);
   return (
-    <div className="space-y-3">
-      <StageSelector detail={detail} onPage={onPage} page={page} />
-      <SectionNavigation
-        label="Sección del expediente"
-        selected={view}
-        onSelect={setView}
-        items={[
-          { id: "documentos", label: "Documentos" },
-          { id: "ficha", label: "Ficha laboral" },
-          { id: "eventos", label: "Eventos y generación" },
-        ]}
-      />
+    <div className="space-y-2">
+      <div className="grid grid-cols-2 items-end gap-2 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <StageSelector detail={detail} onPage={onPage} page={page} />
+        <SectionNavigation
+          label="Sección del expediente"
+          selected={view}
+          onSelect={setView}
+          items={[
+            { id: "documentos", label: "Documentos" },
+            { id: "ficha", label: "Ficha laboral" },
+            { id: "eventos", label: "Eventos y generación" },
+          ]}
+        />
+      </div>
       <div hidden={view !== "documentos"}>
         {detail.selected_period ? (
           <StageDocuments detail={detail} />
         ) : (
           <ResourceState
-            title="Sin etapa laboral registrada"
+            title="Sin periodo laboral registrado"
             description="La ficha laboral permite registrar el primer ingreso."
             kind="empty"
             action={
@@ -57,7 +59,7 @@ export function WorkerWorkspace({
           />
         )}
       </div>
-      <div hidden={view !== "ficha"} className="space-y-3">
+      <div hidden={view !== "ficha"} className="space-y-2">
         <EmploymentActions
           canManage={canManage}
           detail={detail}
@@ -79,7 +81,7 @@ export function WorkerWorkspace({
           </details>
         )}
       </div>
-      <div hidden={view !== "eventos"} className="space-y-3">
+      <div hidden={view !== "eventos"} className="space-y-2">
         <GenerationProgress canManage={canManage} detail={detail} />
         <EmploymentEventForm
           canManage={canManage}

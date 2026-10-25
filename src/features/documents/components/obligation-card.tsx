@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Badge } from "@/components/atoms/badge";
 import { REVIEW_LABELS } from "@/domain/documents/constants/documents";
 import type { ObligationCardProps } from "@/features/documents/types/document-ui.types";
+import { reviewTone } from "@/features/documents/utils/document-presentation";
 
 export function ObligationCard({
   obligation,
@@ -44,9 +45,13 @@ export function ObligationCard({
         </p>
       </div>
       <div className="flex flex-wrap gap-2">
-        <Badge>{REVIEW_LABELS[obligation.aggregate_state]}</Badge>
-        {obligation.overdue && <Badge>Entrega vencida</Badge>}
-        {obligation.assignment_issue && <Badge>Revisar responsable</Badge>}
+        <Badge tone={reviewTone(obligation.aggregate_state)}>
+          {REVIEW_LABELS[obligation.aggregate_state]}
+        </Badge>
+        {obligation.overdue && <Badge tone="danger">Entrega vencida</Badge>}
+        {obligation.assignment_issue && (
+          <Badge tone="warning">Revisar responsable</Badge>
+        )}
       </div>
     </article>
   );

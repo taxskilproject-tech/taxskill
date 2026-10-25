@@ -3,6 +3,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { SelectField } from "@/components/molecules/select-field";
 import { Pagination } from "@/features/access/components/pagination";
+import { displayDate } from "@/features/documents/utils/document-presentation";
 import type { StageSelectorProps } from "@/features/workers/types/worker-ui.types";
 
 export function StageSelector({ detail, page, onPage }: StageSelectorProps) {
@@ -13,35 +14,42 @@ export function StageSelector({ detail, page, onPage }: StageSelectorProps) {
   if (!selected)
     return (
       <p className="text-sm text-zinc-600">
-        Todavía no hay etapas laborales registradas.
+        Todavía no hay periodos laborales registrados.
       </p>
     );
   return (
     <section className="space-y-3">
       <SelectField
         id="employment-selector"
-        label="Etapa del expediente"
+        label="Periodo laboral"
         onChange={(event) => {
           const next = new URLSearchParams(parameters.toString());
           next.set("employmentPeriodId", event.target.value);
+          next.delete("obligationPage");
+          next.delete("obligationPeriod");
+          next.delete("obligationState");
+          next.delete("deliverableId");
           router.replace(`${pathname}?${next}`, { scroll: false });
         }}
         value={selected.id}
       >
         {!detail.period_rows.some((stage) => stage.id === selected.id) && (
           <option value={selected.id}>
-            Etapa {selected.sequence_number} · {selected.start_date} a{" "}
-            {selected.end_date ?? "actualidad"}
+            Periodo {selected.sequence_number} ·{" "}
+            {displayDate(selected.start_date)} a{" "}
+            {selected.end_date ? displayDate(selected.end_date) : "actualidad"}
           </option>
         )}
         {detail.period_rows.map((stage) => (
           <option key={stage.id} value={stage.id}>
-            Etapa {stage.sequence_number} · {stage.start_date} a{" "}
-            {stage.end_date ?? "actualidad"}
+            Periodo {stage.sequence_number} · {displayDate(stage.start_date)} a{" "}
+            {stage.end_date ? displayDate(stage.end_date) : "actualidad"}
           </option>
         ))}
       </SelectField>
-      <Pagination count={detail.period_count} onPage={onPage} page={page} />
+      {detail.period_count > 25 && (
+        <Pagination count={detail.period_count} onPage={onPage} page={page} />
+      )}
     </section>
   );
 }

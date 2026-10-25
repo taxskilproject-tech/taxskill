@@ -32,7 +32,7 @@ export function MembershipForm({ user, onChanged }: UserDetailProps) {
   }
   return (
     <section className="space-y-4 rounded-xl border border-zinc-200 bg-white p-5">
-      <h3 className="font-medium">Membresía del estudio</h3>
+      <h3 className="font-medium">Acceso al estudio</h3>
       {!user.member.deleted_at && (
         <form className="space-y-4" onSubmit={submit}>
           <fieldset
@@ -51,7 +51,7 @@ export function MembershipForm({ user, onChanged }: UserDetailProps) {
             <CheckboxField
               defaultChecked={user.member.active}
               id="member-active"
-              label="Membresía activa"
+              label="Acceso activo al estudio"
               name="active"
             />
             {memberType === "internal" && (
@@ -66,39 +66,44 @@ export function MembershipForm({ user, onChanged }: UserDetailProps) {
           <FormActions
             busy={command.busy}
             error={command.error}
-            label="Guardar membresía"
+            label="Guardar acceso al estudio"
             loadingText="Actualizando membresía…"
           />
         </form>
       )}
-      <div className="flex flex-wrap gap-3">
-        <LifecycleControl
-          deleted={Boolean(user.member.deleted_at)}
-          entity="organization_members"
-          label={
-            user.member.deleted_at
-              ? "Restaurar membresía"
-              : "Eliminar membresía"
-          }
-          id={user.member.id}
-          onChanged={onChanged}
-          revision={user.member.revision}
-        />
-        <LifecycleControl
-          deleted={Boolean(user.profile.deleted_at)}
-          entity="profiles"
-          label={
-            user.profile.deleted_at ? "Restaurar perfil" : "Eliminar perfil"
-          }
-          id={user.profile.user_id}
-          onChanged={onChanged}
-          revision={user.profile.revision}
-        />
-      </div>
-      <p className="text-xs text-zinc-500">
-        El perfil global solo puede eliminarse cuando no mantenga membresías
-        vigentes.
-      </p>
+      <details className="border-t border-slate-200 pt-2">
+        <summary className="min-h-11 cursor-pointer py-3 text-sm text-slate-600">
+          Conservación y restauración
+        </summary>
+        <div className="flex flex-wrap gap-3">
+          <LifecycleControl
+            deleted={Boolean(user.member.deleted_at)}
+            entity="organization_members"
+            label={
+              user.member.deleted_at
+                ? "Restaurar membresía"
+                : "Eliminar membresía"
+            }
+            id={user.member.id}
+            onChanged={onChanged}
+            revision={user.member.revision}
+          />
+          <LifecycleControl
+            deleted={Boolean(user.profile.deleted_at)}
+            entity="profiles"
+            label={
+              user.profile.deleted_at ? "Restaurar perfil" : "Eliminar perfil"
+            }
+            id={user.profile.user_id}
+            onChanged={onChanged}
+            revision={user.profile.revision}
+          />
+        </div>
+        <p className="text-xs text-zinc-500">
+          El perfil global solo puede eliminarse cuando no mantenga membresías
+          vigentes.
+        </p>
+      </details>
     </section>
   );
 }

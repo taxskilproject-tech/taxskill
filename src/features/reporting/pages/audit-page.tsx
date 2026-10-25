@@ -60,7 +60,7 @@ export function AuditPage() {
           retrying={query.isFetching}
         >
           {query.data && (
-            <div className="space-y-4">
+            <div className="space-y-0.5">
               <p className="text-xs text-zinc-500">
                 Consulta: {limaMoment(query.data.queried_at)} · Lima · Unidad:
                 eventos de auditoría.

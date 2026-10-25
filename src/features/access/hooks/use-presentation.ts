@@ -23,6 +23,10 @@ export function usePresentation(
       next.delete("workerPage");
     if (name.startsWith("obligation") && name !== "obligationPage")
       next.delete("obligationPage");
+    if (name.startsWith("catalog") && name !== "catalogPage")
+      next.delete("catalogPage");
+    if (name.startsWith("rules") && name !== "rulesPage")
+      next.delete("rulesPage");
     router.replace(`${pathname}?${next}`, { scroll: false });
   }
   return [selected, select] as const;

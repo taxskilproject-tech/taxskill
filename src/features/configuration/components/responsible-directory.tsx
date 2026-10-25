@@ -35,7 +35,7 @@ export function ResponsibleDirectory() {
       </SelectField>
       {found ? (
         <Link
-          className="inline-flex min-h-11 items-center rounded-lg bg-zinc-950 px-4 text-sm font-medium text-white"
+          className="inline-flex min-h-11 items-center rounded-lg bg-blue-700 px-4 text-sm font-medium text-white"
           href={`/empresas/${found.id}?tab=administracion`}
         >
           Configurar responsables de {found.legal_name} →

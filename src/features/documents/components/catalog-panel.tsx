@@ -3,7 +3,6 @@ import { useState } from "react";
 import { z } from "zod";
 
 import { Button } from "@/components/atoms/button";
-import { CheckboxField } from "@/components/molecules/checkbox-field";
 import { SidePanel } from "@/components/organisms/side-panel";
 import { catalogRowSchema } from "@/domain/documents/contracts/document.schema";
 import type { CatalogRow } from "@/domain/documents/types/document.types";
@@ -11,7 +10,9 @@ import { Pagination } from "@/features/access/components/pagination";
 import { QueryState } from "@/features/access/components/query-state";
 import { CatalogForm } from "@/features/documents/components/catalog-form";
 import { CatalogItem } from "@/features/documents/components/catalog-item";
+import { ConfigurationFilters } from "@/features/documents/components/configuration-filters";
 import { ImportCatalogControl } from "@/features/documents/components/import-catalog-control";
+import { useConfigurationFilters } from "@/features/documents/hooks/use-configuration-filters";
 import { useDocumentQuery } from "@/features/documents/hooks/use-document-query";
 
 const catalogSchema = z.object({
@@ -21,20 +22,18 @@ const catalogSchema = z.object({
 export function CatalogPanel() {
   const [editing, setEditing] = useState(false);
   const [selected, setSelected] = useState<CatalogRow>();
-  const [deleted, setDeleted] = useState(false);
-  const [page, setPage] = useState(1);
-  const query = useDocumentQuery(
-    "catalog",
-    { page, include_deleted: deleted },
-    catalogSchema,
-  );
+  const filters = useConfigurationFilters("catalog");
+  const { page, setPage } = filters;
+  const query = useDocumentQuery("catalog", filters.input, catalogSchema);
   return (
-    <section className="space-y-5">
-      <ImportCatalogControl />
+    <section className="space-y-2">
+      {query.data?.count === 0 && !filters.query && !filters.module && (
+        <ImportCatalogControl />
+      )}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold">Catálogo documental</h2>
-          <p className="mt-2 text-sm text-zinc-600">
+          <p className="sr-only">
             Tipos disponibles para Tributario, Laboral general y las etapas de
             cada trabajador.
           </p>
@@ -48,14 +47,10 @@ export function CatalogPanel() {
           Nuevo tipo
         </Button>
       </div>
-      <CheckboxField
-        checked={deleted}
-        id="catalog-deleted"
-        label="Incluir tipos eliminados"
-        onChange={(event) => {
-          setDeleted(event.target.checked);
-          setPage(1);
-        }}
+      <ConfigurationFilters
+        filters={filters}
+        resource="catalog"
+        busy={query.isFetching}
       />
       {editing && (
         <SidePanel
@@ -78,7 +73,7 @@ export function CatalogPanel() {
         }}
         retrying={query.isFetching}
       >
-        <div className="space-y-4">
+        <div className="space-y-1">
           <Pagination
             count={query.data?.count ?? 0}
             onPage={setPage}
@@ -106,6 +101,12 @@ export function CatalogPanel() {
           />
         </div>
       </QueryState>
+      <details>
+        <summary className="min-h-11 cursor-pointer py-3 text-sm text-blue-800">
+          Importar tipos del catálogo inicial
+        </summary>
+        <ImportCatalogControl />
+      </details>
     </section>
   );
 }

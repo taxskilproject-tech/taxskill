@@ -69,7 +69,7 @@ export function ActivityInbox({ companyId }: ActivityInboxProps) {
               setCreating(true);
             }}
           >
-            Crear actividad adicional
+            Nueva actividad
           </Button>
         )}
       </div>
@@ -133,7 +133,11 @@ export function ActivityInbox({ companyId }: ActivityInboxProps) {
               page={filters.page}
               pageSize={filters.pageSize}
             />
-            <ObligationRows rows={query.data.rows} origin={origin} />
+            <ObligationRows
+              rows={query.data.rows}
+              origin={origin}
+              hideCompany={Boolean(fixedCompany)}
+            />
             {!query.data.count && (
               <p className="rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-600">
                 No hay actividades para este grupo y filtros. Puedes consultar

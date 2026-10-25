@@ -7,6 +7,7 @@ import { DownloadControl } from "@/features/documents/components/download-contro
 import { ReviewControls } from "@/features/documents/components/review-controls";
 import { UploadControl } from "@/features/documents/components/upload-control";
 import type { DeliverableCardProps } from "@/features/documents/types/document-ui.types";
+import { displayDate, reviewTone } from "@/features/documents/utils/document-presentation";
 
 export function DeliverableCard({
   deliverable,
@@ -47,11 +48,13 @@ export function DeliverableCard({
           </p>
           <h2 className="mt-1 text-lg font-semibold">{deliverable.label}</h2>
         </div>
-        <Badge>{REVIEW_LABELS[deliverable.review_state]}</Badge>
+        <Badge tone={reviewTone(deliverable.review_state)}>
+          {REVIEW_LABELS[deliverable.review_state]}
+        </Badge>
       </div>
       {cycle && (
         <p className="text-sm text-zinc-600">
-          Ciclo {cycle.cycle_number} · Plazo {cycle.due_date} ·{" "}
+          Ciclo {cycle.cycle_number} · Plazo {displayDate(cycle.due_date)} ·{" "}
           {cycle.first_submitted_at
             ? "Entrega registrada"
             : "Entrega pendiente"}

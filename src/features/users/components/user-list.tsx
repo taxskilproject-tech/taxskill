@@ -7,10 +7,10 @@ export function UserList({ users, selected, onSelect }: UserListProps) {
     <ul className="divide-y divide-zinc-200 rounded-xl border border-zinc-200 bg-white">
       {users.map((user) => (
         <li
-          className="flex flex-wrap items-center justify-between gap-2 px-4 py-3"
+          className="flex flex-wrap items-center justify-between gap-2 px-3 py-1"
           key={user.member.id}
         >
-          <div className="min-w-0 space-y-1">
+          <div className="min-w-0 space-y-0.5">
             <p className="font-medium">{user.profile.full_name}</p>
             <p className="text-sm break-all text-zinc-500">
               {user.profile.email}
@@ -23,7 +23,13 @@ export function UserList({ users, selected, onSelect }: UserListProps) {
                     ? "Cliente"
                     : "Equipo"}
               </Badge>
-              <Badge>
+              <Badge
+                tone={
+                  user.profile.enabled && user.member.active
+                    ? "success"
+                    : "neutral"
+                }
+              >
                 {user.profile.deleted_at || user.member.deleted_at
                   ? "Eliminado"
                   : user.profile.enabled && user.member.active
@@ -39,7 +45,7 @@ export function UserList({ users, selected, onSelect }: UserListProps) {
             }
             variant="secondary"
           >
-            Gestionar acceso
+            Gestionar usuario
           </Button>
         </li>
       ))}

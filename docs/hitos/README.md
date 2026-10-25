@@ -1,5 +1,7 @@
 # Hitos de implementación del sistema documental contable
 
+**UX/UI del 25/10/2026:** [distribución, color y auditoría local](../auditoria-ux-ui.md). Barra azul marino, listados e inspectores, expediente compacto y filtros de configuración. La migración de consulta se publicó después con autorización del usuario: **72 versiones local/Cloud coincidentes, 13 huellas conservadas, políticas y jobs sin cambios**; [evidencia SQL](evidencias/ux-cloud-20261025.json). La interfaz continúa verificada localmente, sin nuevo despliegue Vercel ni activación de automatizaciones. No cambia el estado del piloto H08.
+
 **Accesos a módulos del 24/10/2026:** [implementación y evidencia local](../plan-navegacion-modulos.md). Menú de módulos, selección explícita de empresa y barra móvil Inicio/Actividades/Módulos/Más. Verificación: 308 pruebas, H05 local 174, H08 local 28 y build aprobados. Sin publicación ni cambios de automatización productiva; no cambia el estado del piloto.
 
 **Mejora UX/UI del 24/10/2026:** [implementación, medidas y evidencias](../plan-mejoras-ux-ui.md). Navegación adaptable, listados compactos, paneles y asistentes; regresiones locales de H05/H06/H08 y 297 pruebas aprobadas. No cambia el estado del piloto ni activa automatizaciones productivas. La revisión manual con lector de pantalla y zoom real queda identificada en el informe.

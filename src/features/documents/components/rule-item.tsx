@@ -1,90 +1,53 @@
-"use client";
+import { Badge } from "@/components/atoms/badge";
 import { Button } from "@/components/atoms/button";
-import { FeedbackMessage } from "@/components/molecules/feedback-message";
+import { RecordInspector } from "@/components/organisms/record-inspector";
 import {
   FREQUENCY_LABELS,
-  GENERATION_BATCH_SIZE,
   MODULE_LABELS,
 } from "@/domain/documents/constants/engine";
 import { getRuleState } from "@/domain/documents/utils/rule-state";
-import { DocumentLifecycle } from "@/features/documents/components/document-lifecycle";
-import { GenerationResult } from "@/features/documents/components/generation-result";
-import { RuleActiveControl } from "@/features/documents/components/rule-active-control";
-import { RuleEventControl } from "@/features/documents/components/rule-event-control";
-import { RuleProgress } from "@/features/documents/components/rule-progress";
-import { useDocumentCommand } from "@/features/documents/hooks/use-document-command";
+import { RuleOperations } from "@/features/documents/components/rule-operations";
 import type { RuleItemProps } from "@/features/documents/types/document-ui.types";
 
 export function RuleItem({ rule, onEdit }: RuleItemProps) {
-  const command = useDocumentCommand();
-  const version = rule.configuration;
-  const state = getRuleState(rule);
   return (
-    <article className="space-y-2 rounded-lg border border-zinc-200 bg-white p-3">
-      <div className="space-y-2">
-        <h3 className="font-semibold">{rule.title}</h3>
-        <p className="text-sm text-zinc-600">
-          {rule.company_name} · {MODULE_LABELS[rule.module]} ·{" "}
-          {FREQUENCY_LABELS[version.frequency]} · {state}
+    <article className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1">
+      <div className="min-w-0">
+        <h3 className="text-sm font-semibold">{rule.title}</h3>
+        <p className="text-xs text-slate-600">
+          {rule.company_name} · {MODULE_LABELS[rule.module]}
         </p>
-        <p className="text-sm text-zinc-600">
-          Versión {version.version_number}, vigente desde{" "}
-          {version.effective_from}. {version.deliverable_specs.length} archivos
-          requeridos · {version.is_required ? "Exigible" : "Opcional"}.
+        <p className="text-xs text-slate-600">
+          {FREQUENCY_LABELS[rule.configuration.frequency]} · v
+          {rule.configuration.version_number} ·{" "}
+          <Badge
+            tone={
+              rule.deleted_at ? "neutral" : rule.active ? "success" : "warning"
+            }
+          >
+            {getRuleState(rule)}
+          </Badge>
         </p>
-        {rule.effective_configuration &&
-          rule.effective_configuration.id !== version.id && (
-            <p className="text-sm text-zinc-600">
-              La versión {rule.effective_configuration.version_number} continúa
-              vigente hasta iniciar el siguiente ciclo configurado.
-            </p>
-          )}
       </div>
-      <details>
-        <summary className="min-h-11 cursor-pointer py-3 text-sm font-medium">
-          Operación y trazabilidad
-        </summary>
-        <RuleProgress rule={rule} />
-        <div className="flex flex-wrap items-start gap-3">
-          {!rule.deleted_at &&
-            rule.active &&
-            version.frequency !== "eventual" && (
-              <Button
-                loading={command.busy}
-                loadingText="Generando lote…"
-                onClick={() => {
-                  void command.submit("GenerateRule", {
-                    rule_id: rule.id,
-                    batch_size: GENERATION_BATCH_SIZE,
-                  });
-                }}
-              >
-                {rule.generation_cursor.has_more
-                  ? "Continuar generación"
-                  : "Generar obligaciones"}
-              </Button>
-            )}
-          {!rule.deleted_at && <RuleActiveControl rule={rule} />}
-          <DocumentLifecycle
-            deleted={Boolean(rule.deleted_at)}
-            entity="requirement_rules"
-            id={rule.id}
-            revision={rule.revision}
-          />
-        </div>
-        {!rule.deleted_at &&
-          rule.active &&
-          version.frequency === "eventual" && <RuleEventControl rule={rule} />}
-      </details>
-      {!rule.deleted_at && (
-        <Button onClick={onEdit} variant="secondary">
-          Editar nueva versión
-        </Button>
-      )}
-      {command.error && (
-        <FeedbackMessage kind="error">{command.error}</FeedbackMessage>
-      )}
-      <GenerationResult result={command.result} />
+      <div className="flex shrink-0 gap-1">
+        {!rule.deleted_at && (
+          <Button
+            onClick={onEdit}
+            variant="secondary"
+            className="hidden px-2 sm:inline-flex"
+          >
+            Editar
+          </Button>
+        )}
+        <RecordInspector title={rule.title} label="Gestionar">
+          {!rule.deleted_at && (
+            <Button onClick={onEdit} variant="secondary">
+              Crear nueva versión
+            </Button>
+          )}
+          <RuleOperations rule={rule} />
+        </RecordInspector>
+      </div>
     </article>
   );
 }

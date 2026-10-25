@@ -59,7 +59,7 @@ export function ObligationList({
       />
     );
   return (
-    <div className="space-y-5">
+    <div className="space-y-2">
       <FilterDisclosure
         label="Filtros documentales"
         count={Number(Boolean(period)) + Number(Boolean(state))}
@@ -83,13 +83,17 @@ export function ObligationList({
         }}
         retrying={query.isFetching}
       >
-        <div className="space-y-4">
+        <div className="space-y-2">
           <Pagination
             count={query.data?.count ?? 0}
             onPage={setPage}
             page={page}
           />
-          <ObligationRows rows={query.data?.rows ?? []} origin={origin} />
+          <ObligationRows
+            rows={query.data?.rows ?? []}
+            origin={origin}
+            hideCompany={Boolean(companyFilter)}
+          />
           {query.data?.count === 0 && (
             <ResourceState
               description="Las obligaciones aparecerán después de activar y generar una regla en Configuración."

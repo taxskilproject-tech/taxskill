@@ -48,14 +48,14 @@ export function EmploymentForm({ detail, mode, onSaved }: EmploymentFormProps) {
     >
       <h2 className="font-semibold">
         {mode === "correct"
-          ? "Corregir condiciones de la etapa"
-          : "Registrar nueva etapa laboral"}
+          ? "Corregir condiciones del periodo laboral"
+          : "Registrar nuevo periodo laboral"}
       </h2>
       <fieldset className="space-y-5" disabled={action.busy}>
         <EmploymentFields stage={stage} />
         {mode === "correct" && (
           <FormField
-            hint="Conserva los documentos emitidos; no reabre la etapa ni reemplaza sus archivos."
+            hint="Conserva los documentos emitidos; no reabre el periodo laboral ni reemplaza sus archivos."
             id="employment-correction-reason"
             label="Motivo de corrección"
             maxLength={1000}
@@ -67,8 +67,12 @@ export function EmploymentForm({ detail, mode, onSaved }: EmploymentFormProps) {
       <FormActions
         busy={action.busy}
         error={validation ?? action.error}
-        label={mode === "correct" ? "Guardar corrección" : "Registrar etapa"}
-        loadingText="Guardando etapa laboral…"
+        label={
+          mode === "correct"
+            ? "Guardar corrección"
+            : "Registrar periodo laboral"
+        }
+        loadingText="Guardando periodo laboral…"
         onCancel={onSaved}
       />
     </form>

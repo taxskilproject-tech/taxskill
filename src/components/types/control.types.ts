@@ -6,6 +6,8 @@ import type {
   SelectHTMLAttributes,
 } from "react";
 
+import type { VisualTone } from "@/components/types/visual.types";
+
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   loadingText?: string;
@@ -20,6 +22,7 @@ export type LabelProps = LabelHTMLAttributes<HTMLLabelElement>;
 
 export interface BadgeProps {
   children: ReactNode;
+  tone?: VisualTone;
 }
 
 export interface FeedbackMessageProps {

@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 
 import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { FilterDisclosure } from "@/components/molecules/filter-disclosure";
@@ -8,6 +7,9 @@ import { activeReportIndicators } from "@/domain/reporting/utils/report-indicato
 import { PageHeading } from "@/features/access/components/page-heading";
 import { Pagination } from "@/features/access/components/pagination";
 import { QueryState } from "@/features/access/components/query-state";
+import { useWorkspace } from "@/features/auth/providers/workspace-context";
+import { canReviewScope } from "@/features/auth/utils/review-access";
+import { DashboardShortcuts } from "@/features/dashboard/components/dashboard-shortcuts";
 import { ActiveReportIndicators } from "@/features/reporting/components/active-report-indicators";
 import { ReportFilters } from "@/features/reporting/components/report-filters";
 import { ReportGroups } from "@/features/reporting/components/report-groups";
@@ -17,6 +19,7 @@ import { useReportFilters } from "@/features/reporting/hooks/use-report-filters"
 import { useReportQuery } from "@/features/reporting/hooks/use-report-query";
 
 export function DashboardPage() {
+  const { context, company } = useWorkspace();
   const { filters, error, change, origin } = useReportFilters();
   const showingResults = activeReportIndicators(filters).length > 0;
   const query = useReportQuery(
@@ -31,29 +34,7 @@ export function DashboardPage() {
         title="Inicio"
         description="El estado de tus empresas y el trabajo que necesita atención."
       />
-      <nav
-        aria-label="Accesos al trabajo"
-        className="grid grid-cols-2 gap-2 sm:grid-cols-3"
-      >
-        <Link
-          className="rounded-xl border border-zinc-200 bg-white p-3 text-sm font-medium hover:border-zinc-400"
-          href="/actividades?group=mine"
-        >
-          Mis entregas →
-        </Link>
-        <Link
-          className="rounded-xl border border-zinc-200 bg-white p-3 text-sm font-medium hover:border-zinc-400"
-          href="/actividades?group=overdue"
-        >
-          Vencidas →
-        </Link>
-        <Link
-          className="rounded-xl border border-zinc-200 bg-white p-3 text-sm font-medium hover:border-zinc-400"
-          href="/actividades?group=review"
-        >
-          Por revisar →
-        </Link>
-      </nav>
+      <DashboardShortcuts />
       {error ? (
         <FeedbackMessage kind="error">{error}</FeedbackMessage>
       ) : (
@@ -82,17 +63,16 @@ export function DashboardPage() {
               filters={filters}
               metrics={query.data.metrics}
               mode="dashboard"
+              reviewAllowed={canReviewScope(context, company)}
             />
           )}
         </QueryState>
       )}
-      <FilterDisclosure label="Consultar otro alcance">
-        <ReportFilters
-          busy={query.isFetching}
-          filters={filters}
-          onChange={change}
-        />
-      </FilterDisclosure>
+      <ReportFilters
+        busy={query.isFetching}
+        filters={filters}
+        onChange={change}
+      />
       <FilterDisclosure label="Desglose por empresa y módulo">
         {query.data && <ReportGroups groups={query.data.groups} />}
       </FilterDisclosure>

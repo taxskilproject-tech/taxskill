@@ -22,6 +22,8 @@ export function useDocumentQuery<T>(
     }),
     queryFn: ({ signal }) =>
       queryDocuments(context.organization.id, resource, input, schema, signal),
+    placeholderData:
+      resource === "catalog" ? (previous) => previous : undefined,
     enabled,
   });
 }

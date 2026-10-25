@@ -31,6 +31,7 @@ export interface FormActionProps {
   onCancel?: () => void;
 }
 export interface PageHeadingProps {
+  showDescriptionOnMobile?: boolean;
   eyebrow?: string;
   title: string;
   description: string;
