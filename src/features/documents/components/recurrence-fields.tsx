@@ -5,6 +5,7 @@ import {
   FREQUENCIES,
   FREQUENCY_LABELS,
 } from "@/domain/documents/constants/engine";
+import { DeadlineFields } from "@/features/documents/components/deadline-fields";
 import type { RecurrenceFieldsProps } from "@/features/documents/types/engine-ui.types";
 
 export function RecurrenceFields({
@@ -12,6 +13,7 @@ export function RecurrenceFields({
   onFrequency,
   configuration,
   allowEventual = true,
+  allowIncomplete = false,
 }: RecurrenceFieldsProps) {
   const frequencies = allowEventual
     ? FREQUENCIES
@@ -29,8 +31,11 @@ export function RecurrenceFields({
           );
           if (selected) onFrequency(selected);
         }}
-        value={frequency}
+        value={frequency ?? ""}
       >
+        {frequency === null && (
+          <option value="">Seleccionar periodicidad</option>
+        )}
         {frequencies.map((item) => (
           <option key={item} value={item}>
             {FREQUENCY_LABELS[item]}
@@ -77,20 +82,10 @@ export function RecurrenceFields({
         {frequency === "unica" ? (
           <input name="deadline_offset_days" type="hidden" value="0" />
         ) : (
-          <FormField
-            defaultValue={configuration?.deadline_offset_days ?? 0}
-            hint={
-              frequency === "eventual"
-                ? "Días calendario desde la fecha del evento."
-                : "Días calendario respecto al cierre del periodo; admite valores negativos."
-            }
-            id="rule-offset"
-            label="Desplazamiento del vencimiento"
-            max={366}
-            min={-366}
-            name="deadline_offset_days"
-            required
-            type="number"
+          <DeadlineFields
+            initial={configuration ? configuration.deadline_offset_days : 0}
+            eventual={frequency === "eventual"}
+            allowIncomplete={allowIncomplete}
           />
         )}
       </div>

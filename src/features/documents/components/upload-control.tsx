@@ -70,8 +70,8 @@ export function UploadControl(props: UploadControlProps) {
       )}
       {invalid && (
         <FeedbackMessage kind="error">
-          El formato o tamaño del archivo no cumple los límites de esta
-          posición.
+          El formato o tamaño del archivo no cumple los límites de este archivo
+          requerido.
         </FeedbackMessage>
       )}
       {upload.busy && upload.progress.phase === "uploading" && (

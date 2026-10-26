@@ -2,6 +2,7 @@
 import { useState } from "react";
 
 import { SelectField } from "@/components/molecules/select-field";
+import { documentAppliesToProfile } from "@/domain/company-profile/utils/profile";
 import { MODULE_LABELS } from "@/domain/documents/constants/engine";
 import type { CatalogRow } from "@/domain/documents/types/document.types";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
@@ -16,6 +17,9 @@ export function RuleDestinationFields({
   onModule,
 }: RuleDestinationProps) {
   const { context } = useWorkspace();
+  const profile = context.companies.find(
+    (item) => item.id === companyId,
+  )?.documentary_profile;
   const [selected, setSelected] = useState<CatalogRow>();
   const value = selected?.id ?? rule?.document_type_id ?? "";
   const options =
@@ -39,7 +43,10 @@ export function RuleDestinationFields({
         id="rule-company"
         label="Empresa"
         name="company_id"
-        onChange={(event) => onCompany(event.target.value)}
+        onChange={(event) => {
+          setSelected(undefined);
+          onCompany(event.target.value);
+        }}
         required
         value={companyId}
       >
@@ -56,7 +63,7 @@ export function RuleDestinationFields({
         value={value}
         disabled={Boolean(rule) || busy}
         id="rule-document"
-        label="Tipo documental y módulo"
+        label="Tipo de entregable y módulo"
         name="document_type_id"
         onChange={(event) => {
           const type = catalog.find((item) => item.id === event.target.value);
@@ -67,7 +74,9 @@ export function RuleDestinationFields({
       >
         <option value="">Seleccionar tipo habilitado</option>
         {rule && !options.some((item) => item.id === rule.document_type_id) && (
-          <option value={rule.document_type_id}>Tipo de la regla actual</option>
+          <option value={rule.document_type_id}>
+            Tipo del entregable actual
+          </option>
         )}
         {options
           .filter(
@@ -76,8 +85,19 @@ export function RuleDestinationFields({
               item.id === rule?.document_type_id,
           )
           .map((item) => (
-            <option key={item.id} value={item.id}>
+            <option
+              key={item.id}
+              value={item.id}
+              disabled={
+                !rule &&
+                !documentAppliesToProfile(profile, item.code, item.module)
+              }
+            >
               {item.name} · {MODULE_LABELS[item.module]}
+              {!rule &&
+              !documentAppliesToProfile(profile, item.code, item.module)
+                ? " · No aplica al perfil"
+                : ""}
             </option>
           ))}
       </SelectField>

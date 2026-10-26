@@ -32,7 +32,7 @@ export function CatalogPanel() {
       )}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold">Catálogo documental</h2>
+          <h2 className="text-lg font-semibold">Catálogo de entregables</h2>
           <p className="sr-only">
             Tipos disponibles para Tributario, Laboral general y las etapas de
             cada trabajador.
@@ -54,7 +54,9 @@ export function CatalogPanel() {
       />
       {editing && (
         <SidePanel
-          title={selected ? "Editar tipo documental" : "Nuevo tipo documental"}
+          title={
+            selected ? "Editar tipo de entregable" : "Nuevo tipo de entregable"
+          }
           onClose={() => setEditing(false)}
         >
           <CatalogForm
@@ -91,7 +93,8 @@ export function CatalogPanel() {
           ))}
           {query.data?.count === 0 && (
             <p className="text-sm text-zinc-600">
-              Crea el primer tipo para configurar sus reglas y periodicidades.
+              Crea el primer tipo para configurar sus entregables y
+              periodicidades.
             </p>
           )}
           <Pagination

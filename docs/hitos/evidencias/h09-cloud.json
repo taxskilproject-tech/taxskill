@@ -1,0 +1,118 @@
+{
+  "project_ref": "gzwrqvqofcrdjvzoblaz",
+  "verified_at_utc": "2026-10-26T03:24:01.0173985Z",
+  "authorization": "Usuario: sube las migraciones tambien a cloud",
+  "migration_count_before": 72,
+  "migration_count_after": 83,
+  "migrations": [
+    {
+      "Migration": "20261025152519_tax_period_workspace.sql",
+      "SHA256": "aaa6e6c7afeeba862058299e1d44a53a276ec305853cbc8c1a00c5e6fd1dceb9"
+    },
+    {
+      "Migration": "20261025153532_unified_document_period_workspace.sql",
+      "SHA256": "e05389c0a1cb2b63056db825367e7325995d6d2d50e82a790e524292f04142ed"
+    },
+    {
+      "Migration": "20261025220955_h09_templates_schema.sql",
+      "SHA256": "719d10a98f25c317b7574dec99567f81fb8a68322d489845ab55211d23d4c9ad"
+    },
+    {
+      "Migration": "20261025220956_h09_template_operations.sql",
+      "SHA256": "55137a20735392e3305c5d8f86ed6c1abcdb19d2338a0e1153ad69088fc36755"
+    },
+    {
+      "Migration": "20261025220958_h09_company_preparation.sql",
+      "SHA256": "3c022f64ee3e250a78bdf1031866d52a29c14515b588219d582663ebea07acdb"
+    },
+    {
+      "Migration": "20261025221000_h09_document_workspace.sql",
+      "SHA256": "c48217373af3b0cfa7d773fdee4aa7fc141b244c2b4d0bf132e0d66a2075a95a"
+    },
+    {
+      "Migration": "20261025221716_h09_validation_and_activation.sql",
+      "SHA256": "a30e0c95d4ae0510923b7f7f489f3e0242052229d07f518d069f3333d954fa83"
+    },
+    {
+      "Migration": "20261025222539_h09_start_dates_and_guards.sql",
+      "SHA256": "99fcb3d00862ee6c1c2af75dac16472f1475ea7b9f0a5078d00afdcea4985d99"
+    },
+    {
+      "Migration": "20261025222923_h09_activation_checks.sql",
+      "SHA256": "8c8af95d73f4abbcac2809a0057703b9aeac1a8bb4d82c2388e6a825e000eeaa"
+    },
+    {
+      "Migration": "20261025224447_h09_strict_contracts.sql",
+      "SHA256": "9c077c7800bcd61cd852e42c8edf4292d15d9cd2932ff408465cce1ae3681bb1"
+    },
+    {
+      "Migration": "20261026010740_h09_legacy_order_and_employment.sql",
+      "SHA256": "a8599e0bca599924df2ffb5918eacbe8507ff529d56cfc7d9a6b2319c67f372e"
+    }
+  ],
+  "public_table_count": 31,
+  "rls_table_count": 31,
+  "existing_tables_checked": 29,
+  "historical_fingerprints": {
+    "obligations": true,
+    "deliverables": true,
+    "submission_cycles": true,
+    "upload_intents": true,
+    "document_versions": true,
+    "review_events": true,
+    "notification_events": true,
+    "notifications": true,
+    "rule_versions": true,
+    "requirement_rules": true,
+    "workers": true,
+    "employment_periods": true,
+    "audit_events": true
+  },
+  "checks": {
+    "all_local_remote_versions_match": true,
+    "existing_data_unchanged": true,
+    "existing_migration_records_unchanged": true,
+    "existing_policies_unchanged": true,
+    "jobs_unchanged": true,
+    "public_query_wrapper_unchanged": true,
+    "public_command_wrapper_unchanged": true,
+    "storage_object_count_unchanged": true,
+    "exactly_two_expected_catalog_additions": true,
+    "h09_tables_protected": true,
+    "private_functions_not_exposed": true,
+    "context_permissions_preserved": true,
+    "published_versions_immutable": true,
+    "profile_constraint_validated": true,
+    "eight_regimes_prepared": true,
+    "templates_remain_unpublished": true,
+    "no_deadlines_invented": true,
+    "existing_companies_not_converted": true
+  },
+  "remaining_pending_migrations": [],
+  "catalog_count_before": 28,
+  "catalog_count_after": 30,
+  "catalog_additions": [
+    "laboral_pago_essalud",
+    "laboral_reporte_essalud"
+  ],
+  "template_drafts": 8,
+  "template_items_per_draft": [
+    30,
+    30,
+    30,
+    30,
+    30,
+    30,
+    30,
+    30
+  ],
+  "sql_lint_errors": [],
+  "seeds_applied": false,
+  "roles_sql_applied": false,
+  "vault_updates": false,
+  "fixtures_uploaded": false,
+  "frontend_deployed": false,
+  "templates_published": false,
+  "notifications_sent": false,
+  "tests_with_fixtures": "Docker local only"
+}

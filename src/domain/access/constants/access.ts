@@ -25,6 +25,9 @@ export const ADMIN_OPERATIONS = [
   "SetUserEnabled",
 ] as const;
 export const MUTATION_OPERATIONS = [
+  "InitializeDeliverableTemplates",
+  "SaveDeliverableTemplate",
+  "PublishDeliverableTemplate",
   "CreateOrUpdateCompany",
   "SaveRole",
   "AssignAccess",

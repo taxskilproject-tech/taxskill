@@ -96,7 +96,7 @@ export function ObligationList({
           />
           {query.data?.count === 0 && (
             <ResourceState
-              description="Las obligaciones aparecerán después de activar y generar una regla en Configuración."
+              description="Las obligaciones aparecerán después de activar y generar un entregable en Configuración."
               kind="empty"
               title="No hay obligaciones en este contexto"
             />

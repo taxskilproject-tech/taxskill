@@ -134,6 +134,14 @@ export const versionSchema = z.object({
 export const catalogRowSchema = documentTypeInputSchema
   .omit({ id: true, expected_revision: true, module: true })
   .extend({
+    usage: z
+      .object({
+        count: z.number(),
+        active_companies: z.number(),
+        pending_companies: z.number(),
+        paused_companies: z.number(),
+      })
+      .optional(),
     id: z.uuid(),
     module: z.enum(DOCUMENT_MODULES),
     revision: z.number(),
@@ -141,6 +149,8 @@ export const catalogRowSchema = documentTypeInputSchema
     deletion_reason: z.string().nullable(),
   });
 export const ruleRowSchema = z.object({
+  preparation_pending: z.boolean().optional(),
+  presentation_order: z.number().nullable().optional(),
   id: z.uuid(),
   title: z.string(),
   company_id: z.uuid(),

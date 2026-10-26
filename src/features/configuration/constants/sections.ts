@@ -1,6 +1,7 @@
 export const CONFIGURATION_SECTIONS = [
-  { id: "catalogo", label: "Catálogo", group: "Documentación" },
-  { id: "reglas", label: "Reglas", group: "Documentación" },
+  { id: "catalogo", label: "Catálogo de entregables", group: "Documentación" },
+  { id: "plantillas", label: "Plantillas por régimen", group: "Documentación" },
+  { id: "reglas", label: "Entregables por empresa", group: "Documentación" },
   { id: "roles", label: "Roles y permisos", group: "Accesos" },
   { id: "responsables", label: "Responsables", group: "Accesos" },
   { id: "parametros", label: "Parámetros", group: "Estudio" },

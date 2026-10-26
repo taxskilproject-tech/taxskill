@@ -5,4 +5,7 @@ export {
 export const LOCAL_TEST_RESULTS_DIR = "test-results/local";
 export const LOCAL_H02_FIXTURES_FILE = `${LOCAL_TEST_RESULTS_DIR}/h02-fixtures.json`;
 export const LOCAL_H02_RECOVERY_FILE = `${LOCAL_TEST_RESULTS_DIR}/h02-recovery.json`;
-export const LOCAL_H03_EVIDENCE_FILE = `${LOCAL_TEST_RESULTS_DIR}/h03-evidence.json`;
+export const LOCAL_H03_EVIDENCE_FILE =
+  process.env.TAXSKILL_BUILD_PROFILE === "h09"
+    ? `${LOCAL_TEST_RESULTS_DIR}/h09-lab/documents.json`
+    : `${LOCAL_TEST_RESULTS_DIR}/h03-evidence.json`;

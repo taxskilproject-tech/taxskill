@@ -1,4 +1,6 @@
 "use client";
+import { useState } from "react";
+
 import { Button } from "@/components/atoms/button";
 import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { FormField } from "@/components/molecules/form-field";
@@ -12,17 +14,21 @@ import { readRecurrenceForm } from "@/features/documents/utils/requirement-input
 export function RulePreview({ form }: RulePreviewProps) {
   const { context } = useWorkspace();
   const action = useAction<CalendarPreview>();
+  const [requestedStart, setRequestedStart] = useState<string | null>(null);
   async function preview() {
     if (!form.current) return;
     const input = readRecurrenceForm(new FormData(form.current));
-    await action.run(() => previewRule(context.organization.id, input));
+    const result = await action.run(() =>
+      previewRule(context.organization.id, input),
+    );
+    if (result) setRequestedStart(input.reference_date);
   }
   return (
     <section className="space-y-3 rounded-lg border border-zinc-200 p-4">
       <FormField
-        hint="Vacío: fecha actual de Lima. Esta simulación no crea obligaciones."
+        hint="Vacío: utiliza el inicio solicitado o la fecha de aplicación de cambios. La simulación no crea obligaciones."
         id="rule-preview-date"
-        label="Fecha de referencia para simular"
+        label="Probar otra fecha (opcional)"
         name="reference_date"
         type="date"
       />
@@ -34,15 +40,16 @@ export function RulePreview({ form }: RulePreviewProps) {
         }}
         variant="secondary"
       >
-        Simular calendario
+        Ver primer periodo y fecha límite
       </Button>
       {action.error && (
         <FeedbackMessage kind="error">{action.error}</FeedbackMessage>
       )}
       {action.result && (
         <div aria-live="polite" className="space-y-2 text-sm text-zinc-700">
+          <p>Inicio solicitado: {requestedStart ?? "hoy en Lima"}.</p>
           <p>
-            Última simulación: {action.result.start_date} a{" "}
+            Primer periodo: {action.result.start_date} a{" "}
             {action.result.end_date}.
           </p>
           <p>Fecha límite: {action.result.due_date}.</p>

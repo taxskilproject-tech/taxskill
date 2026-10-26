@@ -84,8 +84,8 @@ export function AdditionalRuleCard({ rule }: AdditionalRuleProps) {
             <FormActions
               busy={command.busy}
               error={command.error}
-              label={rule.active ? "Pausar regla" : "Reactivar regla"}
-              loadingText="Actualizando regla…"
+              label={rule.active ? "Pausar entregable" : "Reactivar entregable"}
+              loadingText="Actualizando entregable…"
               onCancel={() => setPausing(false)}
             />
           </form>

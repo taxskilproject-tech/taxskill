@@ -48,8 +48,8 @@ export function DocumentLifecycle({
         <SidePanel
           title={
             deleted
-              ? "Restaurar documento o regla"
-              : "Eliminar documento o regla"
+              ? "Restaurar tipo o entregable"
+              : "Eliminar tipo o entregable"
           }
           onClose={close}
         >

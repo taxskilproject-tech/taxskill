@@ -3,6 +3,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { SelectField } from "@/components/molecules/select-field";
 import { Pagination } from "@/features/access/components/pagination";
+import { clearDocumentWorkspaceFilters } from "@/features/document-workspace/utils/document-period-navigation";
 import { displayDate } from "@/features/documents/utils/document-presentation";
 import type { StageSelectorProps } from "@/features/workers/types/worker-ui.types";
 
@@ -23,7 +24,9 @@ export function StageSelector({ detail, page, onPage }: StageSelectorProps) {
         id="employment-selector"
         label="Periodo laboral"
         onChange={(event) => {
-          const next = new URLSearchParams(parameters.toString());
+          const next = clearDocumentWorkspaceFilters(
+            new URLSearchParams(parameters.toString()),
+          );
           next.set("employmentPeriodId", event.target.value);
           next.delete("obligationPage");
           next.delete("obligationPeriod");

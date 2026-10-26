@@ -17,7 +17,7 @@ const secrets = [
   process.env.N8N_WEBHOOK_TOKEN,
   process.env.H06_DISPATCH_SECRET,
 ].filter((value): value is string => Boolean(value));
-inspectClientBundle(".next/static", secrets);
+inspectClientBundle(process.env.TAXSKILL_BUILD_PROFILE === "h09" ? ".next-h09/static" : ".next/static", secrets);
 console.info(
   "Bundle del navegador verificado: sin claves administrativas, HMAC ni secretos H06 configurados.",
 );

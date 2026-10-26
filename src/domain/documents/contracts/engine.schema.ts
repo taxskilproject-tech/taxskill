@@ -86,6 +86,7 @@ export const engineRequirementFieldsSchema = z.object({
   interval_unit: z.enum(["days", "weeks", "months"]).nullable().default(null),
   anchor_date: civilDateSchema.nullable().default(null),
   effective_from: civilDateSchema.nullable().optional(),
+  control_start_date: civilDateSchema.optional(),
   deadline_offset_days: z.number().int().min(-366).max(366),
   priority: z.enum(["alta", "media", "baja"]),
   is_required: z.boolean(),

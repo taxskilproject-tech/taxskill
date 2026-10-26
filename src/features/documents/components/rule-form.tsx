@@ -16,7 +16,12 @@ import { RuleSlots } from "@/features/documents/components/rule-slots";
 import { useRuleForm } from "@/features/documents/hooks/use-rule-form";
 import type { RuleFormProps } from "@/features/documents/types/document-ui.types";
 
-export function RuleForm({ onSaved, rule }: RuleFormProps) {
+export function RuleForm({
+  onSaved,
+  rule,
+  initialCompanyId,
+  initialModule,
+}: RuleFormProps) {
   const {
     form,
     page,
@@ -35,7 +40,7 @@ export function RuleForm({ onSaved, rule }: RuleFormProps) {
     command,
     steps,
     submit,
-  } = useRuleForm({ onSaved, rule });
+  } = useRuleForm({ onSaved, rule, initialCompanyId, initialModule });
   return (
     <form
       className="space-y-5 rounded-xl border border-zinc-200 bg-white p-5"
@@ -91,6 +96,7 @@ export function RuleForm({ onSaved, rule }: RuleFormProps) {
               page={page}
             />
             <RuleMetadataFields
+              companyId={companyId}
               maximum={maximum}
               onMaximum={setMaximum}
               rule={rule}
@@ -142,7 +148,7 @@ export function RuleForm({ onSaved, rule }: RuleFormProps) {
         <FormActions
           busy={command.busy}
           error={validation ?? command.error}
-          label={rule ? "Guardar nueva versión" : "Guardar regla"}
+          label={rule ? "Guardar nueva versión" : "Guardar entregable"}
           onCancel={onSaved}
         />
       </div>

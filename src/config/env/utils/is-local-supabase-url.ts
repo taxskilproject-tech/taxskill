@@ -1,4 +1,4 @@
-const LOCAL_API_PORT = "54331";
+const LOCAL_API_PORTS = ["54331", "54431"]; // TaxSkill principal y laboratorio H09 aislado.
 const LOCAL_HOSTS = ["127.0.0.1", "localhost", "[::1]"];
 
 export function isLocalSupabaseUrl(value: string | undefined): boolean {
@@ -8,7 +8,7 @@ export function isLocalSupabaseUrl(value: string | undefined): boolean {
     return (
       url.protocol === "http:" &&
       LOCAL_HOSTS.includes(url.hostname) &&
-      url.port === LOCAL_API_PORT &&
+      LOCAL_API_PORTS.includes(url.port) &&
       url.pathname === "/" &&
       !url.username &&
       !url.password &&

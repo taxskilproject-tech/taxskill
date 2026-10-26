@@ -1,5 +1,7 @@
 # Expediente laboral y áreas documentales — H05
 
+**Actualización del 25/10/2026:** [vista documental común por periodos](vista-documental-periodos.md). `employmentPeriodId` identifica el **periodo laboral** (ingreso o reingreso), mientras `stage` identifica la **etapa documental**. Relación ofrece Por periodo/Eventuales; Ingreso y Cese conservan requisitos del periodo laboral seleccionado sin exigir mes. Las operaciones laborales y documentales de H05 no cambian.
+
 Implementación de [H05](hitos/h05-areas-documentales.md) sobre el [motor H04](motor-documental.md). Las decisiones de producto siguen el [diseño técnico](diseno-tecnico.md); los límites de lote, cursor y contratos que se concretan aquí son bases técnicas. Pruebas y datos ficticios exclusivamente en [Docker local](desarrollo.md#15-expediente-y-tres-áreas-h05). Evidencias en [H05](hitos/evidencias/h05.md).
 
 ## 1. Recorrido y responsabilidades

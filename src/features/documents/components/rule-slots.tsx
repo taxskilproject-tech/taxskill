@@ -29,7 +29,7 @@ export function RuleSlots({ maximum, slots }: RuleSlotsProps) {
       <h3 className="font-medium">Archivos requeridos</h3>
       <input name="slot_count" type="hidden" value={count} />
       <p className="text-sm text-zinc-600">
-        Cada posición se revisa individualmente. Todas deben aprobarse para
+        Cada archivo se revisa individualmente. Todos deben aprobarse para
         completar la obligación.
       </p>
       <nav aria-label="Archivos requeridos" className="flex flex-wrap gap-1">

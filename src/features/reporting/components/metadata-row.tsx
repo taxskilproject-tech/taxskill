@@ -37,7 +37,7 @@ export function MetadataRow({ document, origin }: MetadataRowProps) {
             {document.worker_name || "No corresponde"}{" "}
             {document.worker_identity}
           </dd>
-          <dt>Tipo documental</dt>
+          <dt>Tipo de entregable</dt>
           <dd>{document.document_type}</dd>
           <dt>Estado de obligación</dt>
           <dd>{stateLabel(document.state)}</dd>

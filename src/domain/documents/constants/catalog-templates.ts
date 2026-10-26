@@ -9,7 +9,7 @@ export const DOCUMENT_CATALOG_TEMPLATES: CatalogTemplate[] = [
     category: "tributario",
     suggested_formats: ["xls", "xlsx"],
     description:
-      "Frecuencia orientativa: quincenal. Configurar plazo y posiciones antes de activar la regla.",
+      "Frecuencia orientativa: quincenal. Configurar plazo y archivos requeridos antes de activar el entregable.",
     active: true,
   },
   {
@@ -125,6 +125,26 @@ export const DOCUMENT_CATALOG_TEMPLATES: CatalogTemplate[] = [
     active: true,
   },
   {
+    code: "laboral_reporte_essalud",
+    name: "Reporte EsSalud",
+    module: "laboral_general",
+    category: "laboral_general",
+    suggested_formats: ["pdf"],
+    description:
+      "Alternativa a Reporte SIS cuando la empresa selecciona EsSalud. Periodicidad y plazo configurables.",
+    active: true,
+  },
+  {
+    code: "laboral_pago_essalud",
+    name: "Pago EsSalud",
+    module: "laboral_general",
+    category: "laboral_general",
+    suggested_formats: ["pdf"],
+    description:
+      "Alternativa a Pago SIS cuando la empresa selecciona EsSalud. Periodicidad y plazo configurables.",
+    active: true,
+  },
+  {
     code: "laboral_reporte_plame",
     name: "Reporte PLAME",
     module: "laboral_general",
@@ -159,7 +179,7 @@ export const DOCUMENT_CATALOG_TEMPLATES: CatalogTemplate[] = [
     category: "ingreso",
     suggested_formats: ["pdf"],
     description:
-      "Evento de ingreso. Configurar la regla con etapa ingreso y evento worker_hired.",
+      "Evento de ingreso. Se solicita al registrar el ingreso del trabajador.",
     active: true,
   },
   {

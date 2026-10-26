@@ -1,5 +1,9 @@
 # Hitos de implementación del sistema documental contable
 
+**Publicación SQL H09 del 25/10/2026:** once migraciones autorizadas (dos de vista por periodos y nueve H09). **83 versiones local/Cloud coincidentes, 31 tablas con RLS, datos anteriores y 72 registros de migración conservados**. Catálogo con dos tipos EsSalud nuevos y ocho plantillas en borrador; sin plazos, publicación de plantillas, fixtures, frontend ni cambios de jobs. [Evidencias](evidencias/h09.md#publicación-sql-en-cloud-autorizada) y [verificación](evidencias/h09-cloud.json). Para el alta productiva falta desplegar el frontend H09 y completar/publicar las plantillas reales. H08 conserva sus pendientes.
+
+**Vista documental del 25/10/2026:** [periodos y orden compartidos por los tres módulos](../vista-documental-periodos.md). Tributario, Laboral general y controles periódicos del trabajador reutilizan la misma vista; Ingreso/Cese mantienen listas de requisitos y Relación separa eventuales. Las dos migraciones se probaron primero en Docker y se publicaron posteriormente junto a H09, según el registro anterior. No cambia el estado del piloto H08.
+
 **UX/UI del 25/10/2026:** [distribución, color y auditoría local](../auditoria-ux-ui.md). Barra azul marino, listados e inspectores, expediente compacto y filtros de configuración. La migración de consulta se publicó después con autorización del usuario: **72 versiones local/Cloud coincidentes, 13 huellas conservadas, políticas y jobs sin cambios**; [evidencia SQL](evidencias/ux-cloud-20261025.json). La interfaz continúa verificada localmente, sin nuevo despliegue Vercel ni activación de automatizaciones. No cambia el estado del piloto H08.
 
 **Accesos a módulos del 24/10/2026:** [implementación y evidencia local](../plan-navegacion-modulos.md). Menú de módulos, selección explícita de empresa y barra móvil Inicio/Actividades/Módulos/Más. Verificación: 308 pruebas, H05 local 174, H08 local 28 y build aprobados. Sin publicación ni cambios de automatización productiva; no cambia el estado del piloto.
@@ -36,6 +40,7 @@ La [revalidación de entrada a H08](evidencias/revalidacion-base-h08.md) confirm
 | [H06 — Actividades y notificaciones](h06-actividades-notificaciones.md) | Bandeja central, actividades adicionales y avisos internos/WhatsApp comprobados. | H05. |
 | [H07 — Supervisión y reportes](h07-supervision-reportes.md) | Indicadores conciliados, búsqueda, exportaciones y consulta de auditoría. | H06. |
 | [H08 — Preparación para producción](h08-preparacion-produccion.md) | Acceso efectivo protegido, recuperación probada y piloto aceptado. | H07. |
+| [H09 — Entregables y plantillas por régimen](h09-entregables-plantillas-empresa.md) | Alta guiada, preparación por plantilla, responsables posteriores y lista documental continua. Validado en Docker y SQL publicado en Cloud; frontend y valores reales pendientes de publicación. Ver [evidencias](evidencias/h09.md). | H02–H05 y vista por periodos. |
 
 Se puede preparar trabajo independiente de un hito posterior, pero no declararlo cerrado sin sus dependencias y evidencias. Las tablas auxiliares necesarias para una FK se incorporan antes de su pantalla; el expediente laboral se entrega funcionalmente en H05.
 

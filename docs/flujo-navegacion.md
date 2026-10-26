@@ -1,5 +1,9 @@
 # Flujo de navegación: páginas y rutas
 
+**Actualización local del 25/10/2026:** [vista unificada por periodos](vista-documental-periodos.md). Año → Mes → Tipo → Archivo reutiliza las rutas existentes; `documentYear`, `documentMonth`, `documentType`, `documentState`, `documentPage`, `documentStage` y `documentScope` se conservan mediante retorno validado. Ingreso/Cese del expediente no requieren mes.
+
+**H09:** Configuración distingue `tab=catalogo` (Catálogo de entregables), `tab=plantillas` (Plantillas por régimen) y `tab=reglas` (Entregables por empresa, URL compatible). Esta última exige empresa mediante `rulesCompany`; `rulesModule` y `newDeliverable=true` permiten añadir desde el módulo con contexto preseleccionado. La ficha conserva Administración para responsables. El alta de empresa se divide en Datos, Módulos y cobertura y Resumen, dentro del panel existente. Ver [recorridos y permisos H09](entregables-plantillas-empresa.md).
+
 - **Versión:** 1.1 — actualización del 24 de octubre de 2026.
 - **Estado:** navegación implementada; [accesos directos a módulos](plan-navegacion-modulos.md) verificados localmente, pendientes de publicación.
 - **Fuentes:** [diseño técnico](diseno-tecnico.md), [análisis](analisis_completo_sistema_documental_contable.md) y [resumen](resumen_ejecutivo_sistema_documental_contable.md).

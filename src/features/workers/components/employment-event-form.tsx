@@ -74,24 +74,24 @@ export function EmploymentEventForm({
       >
         {query.data?.count === 0 ? (
           <p className="mt-4 text-sm text-zinc-600">
-            El administrador debe configurar una regla eventual con solicitudes
-            manuales para este periodo laboral.
+            El administrador debe configurar un entregable eventual con
+            solicitudes manuales para este periodo laboral.
           </p>
         ) : (
           <form className="mt-5 space-y-4" onSubmit={submit}>
             <fieldset className="space-y-4" disabled={action.busy}>
               <SelectField
                 id="employment-event-rule"
-                label="Regla documental"
+                label="Entregable documental"
                 name="rule_id"
                 onChange={(event) => setSelected(event.target.value)}
                 required
                 value={selected}
               >
-                <option value="">Seleccionar regla</option>
+                <option value="">Seleccionar entregable</option>
                 {selected &&
                   !query.data?.rows.some((rule) => rule.id === selected) && (
-                    <option value={selected}>Regla seleccionada</option>
+                    <option value={selected}>Entregable seleccionado</option>
                   )}
                 {query.data?.rows.map((rule) => (
                   <option key={rule.id} value={rule.id}>
@@ -105,7 +105,7 @@ export function EmploymentEventForm({
                 page={page}
               />
               <FormField
-                hint="Debe pertenecer al periodo laboral y al intervalo de control de la regla."
+                hint="Debe pertenecer al periodo laboral y al intervalo de control de el entregable."
                 id="employment-event-date"
                 label="Fecha de referencia del evento"
                 name="reference_date"

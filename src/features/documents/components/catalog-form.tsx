@@ -41,7 +41,7 @@ export function CatalogForm({ item, onSaved, onCancel }: CatalogFormProps) {
       onSubmit={submit}
     >
       <h2 className="text-lg font-semibold">
-        {item ? "Editar tipo documental" : "Nuevo tipo documental"}
+        {item ? "Editar tipo de entregable" : "Nuevo tipo de entregable"}
       </h2>
       <fieldset className="space-y-4" disabled={command.busy}>
         <SelectField
@@ -96,7 +96,7 @@ export function CatalogForm({ item, onSaved, onCancel }: CatalogFormProps) {
         <CheckboxField
           defaultChecked={item?.active ?? true}
           id="document-active"
-          label="Tipo habilitado para nuevas reglas"
+          label="Tipo habilitado para nuevos entregables"
           name="active"
         />
       </fieldset>

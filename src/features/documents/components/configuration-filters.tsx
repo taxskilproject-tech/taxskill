@@ -38,7 +38,7 @@ export function ConfigurationFilters({
         <label className="sr-only" htmlFor={`${resource}-query`}>
           {resource === "catalog"
             ? "Buscar tipo por nombre o código"
-            : "Buscar regla o empresa"}
+            : "Buscar entregable o empresa"}
         </label>
         <input
           className="min-h-11 min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-3 text-sm focus-visible:outline-2 focus-visible:outline-blue-600"
@@ -50,7 +50,7 @@ export function ConfigurationFilters({
           placeholder={
             resource === "catalog"
               ? "Buscar tipo documental…"
-              : "Buscar regla o empresa…"
+              : "Buscar entregable o empresa…"
           }
         />
         <Button
@@ -89,21 +89,7 @@ export function ConfigurationFilters({
             <option value="true">Activas</option>
             <option value="false">Pausadas o borradores</option>
           </SelectField>
-          {resource === "rules" && (
-            <SelectField
-              id="rules-company"
-              label="Empresa"
-              value={filters.company}
-              onChange={(e) => filters.setCompany(e.target.value)}
-            >
-              <option value="">Todas las empresas</option>
-              {context.companies.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.legal_name}
-                </option>
-              ))}
-            </SelectField>
-          )}
+
           <CheckboxField
             id={`${resource}-deleted`}
             checked={filters.deleted}

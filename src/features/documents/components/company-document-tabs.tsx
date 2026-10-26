@@ -6,6 +6,7 @@ import { DOCUMENT_MODULES } from "@/domain/common/constants/modules";
 import { usePresentation } from "@/features/access/hooks/use-presentation";
 import { ActivityInbox } from "@/features/activities/components/activity-inbox";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
+import { canViewModule } from "@/features/auth/utils/module-navigation";
 import type { CompanyTabsProps } from "@/features/companies/types/company.types";
 import { ObligationList } from "@/features/documents/components/obligation-list";
 
@@ -25,16 +26,17 @@ export function CompanyDocumentTabs({
 }: CompanyTabsProps) {
   const { context } = useWorkspace();
   const [tab, setTab] = usePresentation("tab", "resumen", TABS);
-  const modules = DOCUMENT_MODULES.filter(
-    (module) =>
-      context.member.is_admin ||
-      canPerform(
-        context.capabilities,
-        companyId,
-        module.id,
-        "view",
-        context.member.member_type,
-      ),
+  const modules = DOCUMENT_MODULES.filter((module) =>
+    module.id !== "actividades"
+      ? canViewModule(context, companyId, module.id)
+      : context.member.is_admin ||
+        canPerform(
+          context.capabilities,
+          companyId,
+          module.id,
+          "view",
+          context.member.member_type,
+        ),
   );
   const authorized =
     tab === "resumen" ||

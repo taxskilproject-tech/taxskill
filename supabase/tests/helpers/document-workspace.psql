@@ -1,0 +1,28 @@
+create function pg_temp.period_obligation(org uuid,company uuid,dtype uuid,actor uuid,p_module text,p_kind text,first_day date,last_day date,due date,title text,p_employment uuid default null,p_stage text default null) returns uuid
+language plpgsql as $$
+declare period uuid; obligation uuid; spec jsonb; slot uuid; rule uuid; version uuid; conditions jsonb;
+  specs jsonb:='[{"position_code":"p1","label":"PDT 1","display_order":1,"allowed_formats":["pdf"],"max_file_bytes":20000000},{"position_code":"p2","label":"PDT 2","display_order":2,"allowed_formats":["pdf"],"max_file_bytes":20000000}]';
+begin
+  if p_stage is not null then
+    conditions:=jsonb_build_object('schema_version',1,'employment_stage',p_stage,'event_types','[]'::jsonb,'termination_reasons','[]'::jsonb);
+    insert into public.requirement_rules(organization_id,company_id,employment_period_id,document_type_id,module,target_scope,title,control_start_date,active)
+      values(org,company,p_employment,dtype,p_module,'employment_period',title,first_day,false) returning id into rule;
+    insert into public.rule_versions(organization_id,rule_id,version_number,effective_from,frequency,deadline_offset_days,deliverable_specs,applicability_conditions,configuration_snapshot)
+      values(org,rule,1,first_day,case when p_kind='event' then 'eventual' else 'mensual' end,0,specs,conditions,jsonb_build_object('title',title)) returning id into version;
+  end if;
+  insert into public.periods(organization_id,kind,period_key,start_date,end_date,reference_date)
+    values(org,p_kind,p_kind||first_day::text||last_day::text,first_day,last_day,case when p_kind in ('event','unique') then first_day end)
+    on conflict(organization_id,kind,period_key) do nothing;
+  select id into period from public.periods where organization_id=org and period_key=p_kind||first_day::text||last_day::text;
+  insert into public.obligations(organization_id,class,company_id,employment_period_id,module,period_id,document_type_id,rule_id,rule_version_id,manual_request_id,destination_key,occurrence_key,title,initial_due_date,delivery_responsible_id,snapshot)
+    values(org,'documentary',company,p_employment,p_module,period,dtype,rule,version,case when rule is null then gen_random_uuid() end,'company:'||company,first_day::text,title,due,actor,
+      jsonb_build_object('schema_version',1,'module',p_module,'applicability_conditions',jsonb_build_object('employment_stage',p_stage),'initial_due_date',due,'allowed_formats','["pdf"]'::jsonb,'max_file_bytes',20000000,'deliverables',specs)) returning id into obligation;
+  -- Deliberately insert the second file first: response must follow display_order.
+  for spec in select value from jsonb_array_elements(specs) order by (value->>'display_order')::int desc loop
+    insert into public.deliverables(organization_id,obligation_id,position_code,label,display_order)
+      values(org,obligation,spec->>'position_code',spec->>'label',(spec->>'display_order')::int) returning id into slot;
+    insert into public.submission_cycles(organization_id,deliverable_id,cycle_number,reason,due_date)
+      values(org,slot,1,'initial',due);
+  end loop;
+  return obligation;
+end $$;

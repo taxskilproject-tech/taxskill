@@ -46,7 +46,7 @@ begin
   perform pg_temp.authenticate(jsonb_build_object('sub',limited,'role','authenticated','session_id',sid)::text,true);
 end $$;
 
-select extensions.is((select count(*)::integer from pg_tables where schemaname='public' and rowsecurity),29,'all 29 business tables have RLS');
+select extensions.is((select count(*)::integer from pg_tables where schemaname='public' and rowsecurity),31,'all 31 business tables including H09 templates have RLS');
 select extensions.ok(not exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname like 'h0%' and has_function_privilege('anon',p.oid,'EXECUTE')),'anonymous has no business RPC execution');
 select extensions.ok(not has_function_privilege('authenticated','public.h03_confirm_upload(uuid,uuid,uuid,uuid,jsonb)','EXECUTE'),'client cannot confirm trusted validation');
 select extensions.ok(not has_table_privilege('authenticated','public.audit_events','INSERT'),'audit cannot be fabricated');

@@ -9,7 +9,7 @@ do $$
 declare org uuid := gen_random_uuid(); other_org uuid := gen_random_uuid();
   actor uuid := gen_random_uuid(); second_admin uuid := gen_random_uuid(); client_user uuid := gen_random_uuid();
   client_member uuid; internal_role uuid; client_role uuid; company uuid; grant_id uuid; permission uuid;
-  req uuid := gen_random_uuid(); result jsonb; first_result jsonb; original_input jsonb;
+  req uuid := gen_random_uuid(); result jsonb; first_result jsonb; original_input jsonb; hdr public.deliverable_templates; ver public.deliverable_template_versions; items jsonb;
 begin
   insert into auth.users(id,email) values(actor,'sql-admin-'||actor||'@example.test'),(second_admin,'sql-second-'||second_admin||'@example.test'),(client_user,'sql-client-'||client_user||'@example.test');
   insert into public.profiles(user_id,email,full_name,provisioning_status) select id,email,'SQL fixture','ready' from auth.users where id in(actor,second_admin,client_user);
@@ -22,7 +22,19 @@ begin
   perform pg_temp.authenticate(jsonb_build_object('sub',actor,'role','authenticated','session_id',gen_random_uuid())::text,true);
   result := public.h02_context();
   perform pg_temp.expect((result->>'ok')::boolean,'session admission');
+  -- H09 company creation requires a published configuration, even in H02 regression fixtures.
+  insert into public.document_types(organization_id,module,code,name,category,suggested_formats) values(org,'tributario','tributario_calculo','SQL tax fixture','tributario',array['pdf']);
+  perform private.h09_initialize(org,actor,gen_random_uuid());
+  select * into hdr from public.deliverable_templates where organization_id=org and regime_code='rg';
+  select * into ver from public.deliverable_template_versions where template_id=hdr.id;
+  select jsonb_agg(jsonb_set(jsonb_set(i,'{configuration,frequency}','"mensual"'),'{configuration,deadline_offset_days}','2')) into items from jsonb_array_elements(ver.items) i;
+  result:=public.h02_command(org,gen_random_uuid(),'SaveDeliverableTemplate',jsonb_build_object('template_id',hdr.id,'version_id',ver.id,'expected_revision',ver.revision,'items',items));
+  perform pg_temp.expect((result->>'ok')::boolean,'H09 draft fixture');
+  select * into ver from public.deliverable_template_versions where id=ver.id;
+  result:=public.h02_command(org,gen_random_uuid(),'PublishDeliverableTemplate',jsonb_build_object('template_id',hdr.id,'version_id',ver.id,'expected_revision',ver.revision));
+  perform pg_temp.expect((result->>'ok')::boolean,'H09 published fixture');
   original_input := '{"ruc":"20999999991","legal_name":"SQL company","status":"active","control_start_date":"2026-10-01"}';
+  original_input:=original_input||jsonb_build_object('tax_regime_code','rg','document_template_version_id',ver.id,'documentary_profile','{"schema_version":1,"plame":false,"afp":false,"igv_renta":true,"health_coverage":"none"}'::jsonb);
   result := public.h02_command(org,req,'CreateOrUpdateCompany',original_input);
   perform pg_temp.expect((result->>'ok')::boolean,'create company: '||result::text);
   first_result := result;

@@ -24,7 +24,7 @@ export function ReportRowDetail({ row }: ReportRowDetailProps) {
         <dd>
           {row.worker_name || "No corresponde"} {row.worker_identity}
         </dd>
-        <dt>Tipo documental</dt>
+        <dt>Tipo de entregable</dt>
         <dd>{row.document_type}</dd>
         <dt>Registro</dt>
         <dd>{recordLabel(row.record_status)}</dd>

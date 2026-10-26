@@ -8,9 +8,9 @@ export const HEALTH_MESSAGES: Readonly<Record<string, string>> = {
   DIGESTS_NO_PROGRESS:
     "La preparación de resúmenes no avanza. Revisa su cursor y los destinatarios con incidencias.",
   GENERATION_FAILED:
-    "Hay reglas con generación fallida. Revisa su configuración y el error registrado.",
+    "Hay entregables con generación fallida. Revisa su configuración y el error registrado.",
   GENERATION_NO_PROGRESS:
-    "La generación documental no avanza. Revisa las reglas y los eventos laborales pendientes.",
+    "La generación documental no avanza. Revisa los entregables y los eventos laborales pendientes.",
   INVALID_RESPONSIBLES:
     "Hay responsables sin acceso vigente. Revisa las asignaciones y reasigna las entregas.",
   JOB_DISABLED:

@@ -6,6 +6,8 @@
 - **Estado actualizado al 17 de octubre de 2026:** H01–H07 implementados; REV-01–REV-05 cerradas. [Cierre complementario](hitos/evidencias/h07-cierre-complementario.md): 57 versiones local/Cloud coincidentes y 13 huellas históricas conservadas, con pruebas únicamente en Docker. Base lista para comenzar H08; preparación productiva y aceptación formal pendientes.
 - **Operación inicial:** un estudio contable en Perú, zona horaria America/Lima.
 
+**Ampliación H09 — 25/10/2026:** [Entregables, plantillas por régimen y empresas](hitos/h09-entregables-plantillas-empresa.md). Esta especificación reciente prevalece sobre las referencias anteriores a reglas y alta sin perfil documental. Implementación y pruebas exclusivamente locales; [estado de validación](hitos/evidencias/h09.md). H08 conserva sus pendientes operativos.
+
 ### Índice
 
 - [Decisiones confirmadas](#2-registro-de-decisiones-confirmadas) y [alcance y valores iniciales](#3-alcance-y-valores-de-partida).
@@ -1233,3 +1235,18 @@ Estas fuentes se consultaron para el diseño. Verificar nuevamente sus cambios a
 | RLS aplazado en la etapa actual | D34, alcance diferido 6.5, T01 y OP15; validación de aislamiento en F05. | F05 |
 | Atomic Design obligatorio | D35, niveles, carpetas, dependencias y componentes de 4.2; CA32. | F01–F05 |
 | Documentación de todo lo aplazado | Sección 19, P01–P26 y distinción frente a tareas OP. | Documentación / POST |
+
+## Ampliación H09 — configuración por plantilla de régimen
+
+La [especificación vigente H09](entregables-plantillas-empresa.md) y el [hito completo](hitos/h09-entregables-plantillas-empresa.md) incorporan las decisiones posteriores al diseño original. Prevalecen sobre el alta administrativa anterior y el término visible «Reglas».
+
+- Se conservan los identificadores técnicos `requirement_rules`, `rule_versions` y `tab=reglas` para compatibilidad; las pantallas distinguen Catálogo de entregables, Plantillas por régimen y Entregables por empresa.
+- El modelo añade cabeceras y versiones de plantilla por estudio. Las publicaciones son inmutables; los borradores pueden tener frecuencia/plazo pendientes. Cada uno de los ocho regímenes se publica por separado, con confirmación administrativa de valores reales.
+- Empresa nueva: régimen cerrado, checklist inicialmente vacío, cobertura explícita con PLAME y al menos PLAME/IGV renta. Alta y copia de aplicables en una única transacción idempotente, rechazando un resumen de versión obsoleta.
+- Los tipos copiados quedan pendientes de responsable, sin obligaciones ni avisos. Asignar un responsable elegible activa únicamente la preparación inicial, conserva pausas y comienza por la ocurrencia vigente de cada frecuencia.
+- Se reutilizan eventos laborales registrados, lotes y continuaciones; no se crean documentos sin trabajador o evento correspondiente. Las solicitudes recurrentes no recuperan periodos anteriores por una asignación tardía.
+- Se guarda procedencia, orden y perfil documental. Cada módulo/etapa muestra una lista continua, incluidos tipos particulares y configurados sin obligaciones. El catálogo permite consultar uso por empresas y estados, con historial separado.
+- Las modificaciones de perfil/régimen muestran añadir/dejar de solicitar/conservar y requieren confirmación. Se conservan ajustes particulares compatibles y snapshots emitidos; una publicación nueva no migra empresas anteriores.
+- Las nuevas tablas usan RLS administrativa por estudio y las operaciones RPC mantienen sesión, permisos, auditoría, concurrencia e idempotencia. No se añaden endpoints ni se traslada lógica de permisos al navegador.
+
+Las empresas previas mantienen perfil NULL y condiciones históricas; no se aplican plantillas automáticamente a fixtures existentes ni a Cloud. La [evidencia H09](hitos/evidencias/h09.md) registra validación local y estado de cierre, independiente de H08.

@@ -47,7 +47,7 @@ export function EndEmploymentForm({ detail, onSaved }: EndEmploymentFormProps) {
       </h2>
       <p className="text-sm text-zinc-600">
         Se conserva toda la documentación de esta relación. El checklist de cese
-        seguirá las reglas configuradas.
+        seguirá los entregables configuradas.
       </p>
       <fieldset disabled={action.busy}>
         <EndFields />

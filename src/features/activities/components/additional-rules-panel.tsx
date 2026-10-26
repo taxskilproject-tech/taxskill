@@ -27,13 +27,13 @@ export function AdditionalRulesPanel({ companyId }: ActivityInboxProps) {
   return (
     <details className="rounded-xl border border-zinc-200 bg-white p-5">
       <summary className="cursor-pointer font-medium">
-        Reglas de actividades recurrentes
+        Entregables de actividades recurrentes
       </summary>
       <div className="mt-4 space-y-4">
         <CheckboxField
           checked={includeDeleted}
           id="additional-rules-deleted"
-          label="Incluir reglas eliminadas"
+          label="Incluir entregables eliminados"
           onChange={(event) => {
             setIncludeDeleted(event.target.checked);
             setPage(1);

@@ -1,5 +1,7 @@
 # Estructura de carpetas y responsabilidades
 
+**Actualización implementada localmente el 25/10/2026:** [vista documental compartida](vista-documental-periodos.md) en `src/features/document-workspace/{components,constants,hooks,types,utils}`; contratos y tipos persistidos en `src/domain/documents/`. Los tres módulos y el expediente componen esta funcionalidad y reutilizan el repositorio documental. No hay una copia por módulo.
+
 - **Versión:** 1.0 — 10 de octubre de 2026.
 - **Estado:** estructura objetivo del producto; base H01 implementada. Consultar [desarrollo](desarrollo.md) y [evidencias H01](hitos/evidencias/h01.md) para el inventario actual. Las reglas más recientes de [.agents](../.agents/rules.md) prevalecen sobre ejemplos anteriores.
 - **Fuentes:** [diseño técnico](diseno-tecnico.md), [análisis](analisis_completo_sistema_documental_contable.md) y [resumen](resumen_ejecutivo_sistema_documental_contable.md).
@@ -478,3 +480,15 @@ El repositorio compartido sigue en `features/access/repositories`; no se creó `
 - [Modelo físico y conservación](tablas-db.md).
 - [Estados y contratos del proceso](diagrama-flujo.md).
 - [URLs y recorridos](flujo-navegacion.md).
+
+## Extensión H09 implementada
+
+- `src/domain/company-profile/{constants,contracts,types,utils}`: regímenes cerrados, perfil documental y aplicabilidad puros.
+- `src/domain/documents/contracts/template.schema.ts` y `types/template.types.ts`: contratos de plantillas, versiones, preparación y uso por empresa.
+- `src/features/deliverable-templates/{components,types,utils}`: borradores/publicación por régimen, checklist, edición de un entregable y previsualización; reutiliza recurrencias, archivos y paneles existentes.
+- `src/features/companies/{components,hooks,contracts,types}`: alta guiada y resumen confirmado del perfil. `legacy-company-form.tsx` conserva la edición de empresas anteriores y comparte campos; no se convierten automáticamente.
+- `src/features/document-workspace`: lista unificada de tipos realmente configurados, numeración por contexto y estados vacíos, reutilizada por los tres módulos.
+- `supabase/migrations/*_h09_*.sql` y `supabase/tests/h09-templates.sql`: esquema, RPC, RLS y casos transaccionales de H09.
+- `scripts/run-h09-lab.ts`, `scripts/utils/h09-lab-environment.ts` y fixtures H09: laboratorio Docker separado, con conexión validada antes de solicitar o escribir datos.
+
+No se añaden rutas App Router, API routes, bibliotecas visuales ni servicios duplicados por módulo. Los artefactos locales `.next-h09` y `test-results/local/h09-lab` están excluidos del repositorio. [Especificación y conservación H09](entregables-plantillas-empresa.md).

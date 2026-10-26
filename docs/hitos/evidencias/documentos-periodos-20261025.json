@@ -1,0 +1,133 @@
+{
+  "date": "2026-10-25",
+  "environment": "Docker local TaxSkill",
+  "cloud_changed": false,
+  "local_migrations": 74,
+  "new_migrations": [
+    "20261025152519",
+    "20261025153532"
+  ],
+  "checks": {
+    "unit_files": 50,
+    "unit_tests": 340,
+    "sql_tap_tests": 85,
+    "typecheck": "passed",
+    "lint": "passed",
+    "architecture": "passed",
+    "yarn_build": "passed after existing security reminder",
+    "client_bundle": "passed",
+    "local_http_status": 200
+  },
+  "profiles": [
+    {
+      "profile": "administrador",
+      "module": "tributario",
+      "access": "allowed",
+      "groups": 7,
+      "rows": 1,
+      "files": 1
+    },
+    {
+      "profile": "administrador",
+      "module": "laboral_general",
+      "access": "allowed",
+      "groups": 8,
+      "rows": 1,
+      "files": 1
+    },
+    {
+      "profile": "administrador",
+      "module": "laboral_trabajador",
+      "access": "allowed",
+      "groups": 1,
+      "rows": 1,
+      "files": 1
+    },
+    {
+      "profile": "contador",
+      "module": "tributario",
+      "access": "allowed",
+      "groups": 7,
+      "rows": 1,
+      "files": 1
+    },
+    {
+      "profile": "contador",
+      "module": "laboral_general",
+      "access": "allowed",
+      "groups": 8,
+      "rows": 1,
+      "files": 1
+    },
+    {
+      "profile": "contador",
+      "module": "laboral_trabajador",
+      "access": "allowed",
+      "groups": 1,
+      "rows": 1,
+      "files": 1
+    },
+    {
+      "profile": "supervisor",
+      "module": "tributario",
+      "access": "allowed",
+      "groups": 7,
+      "rows": 1,
+      "files": 1
+    },
+    {
+      "profile": "supervisor",
+      "module": "laboral_general",
+      "access": "allowed",
+      "groups": 8,
+      "rows": 1,
+      "files": 1
+    },
+    {
+      "profile": "supervisor",
+      "module": "laboral_trabajador",
+      "access": "allowed",
+      "groups": 1,
+      "rows": 1,
+      "files": 1
+    },
+    {
+      "profile": "cliente",
+      "module": "tributario",
+      "access": "allowed",
+      "groups": 7,
+      "rows": 1,
+      "files": 1
+    },
+    {
+      "profile": "cliente",
+      "module": "laboral_general",
+      "access": "allowed",
+      "groups": 8,
+      "rows": 1,
+      "files": 1
+    },
+    {
+      "profile": "cliente",
+      "module": "laboral_trabajador",
+      "access": "allowed",
+      "groups": 1,
+      "rows": 1,
+      "files": 1
+    }
+  ],
+  "visual": {
+    "reviewed": [
+      "1440x900",
+      "390x844"
+    ],
+    "pending": [
+      "375px",
+      "768px",
+      "1024px",
+      "last worker-header adjustment"
+    ],
+    "reason": "User presenting; preserve running test environment without further restarts"
+  },
+  "known_framework_warning": "Existing Next.js 16.4.0 security advisory remains unresolved"
+}

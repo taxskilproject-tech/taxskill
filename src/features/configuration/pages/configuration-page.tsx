@@ -13,6 +13,7 @@ import { ParametersPanel } from "@/features/configuration/components/parameters-
 import { ResponsibleDirectory } from "@/features/configuration/components/responsible-directory";
 import { RolesPanel } from "@/features/configuration/components/roles-panel";
 import { CONFIGURATION_SECTIONS } from "@/features/configuration/constants/sections";
+import { TemplatesPanel } from "@/features/deliverable-templates/components/templates-panel";
 import { CatalogPanel } from "@/features/documents/components/catalog-panel";
 import { RulesPanel } from "@/features/documents/components/rules-panel";
 import { WhatsappPanel } from "@/features/notifications/components/whatsapp-panel";
@@ -72,6 +73,7 @@ export function ConfigurationPage() {
           {tab === "parametros" && <ParametersPanel />}
           {tab === "historial" && <HistoryPanel />}
           {tab === "responsables" && <ResponsibleDirectory />}
+          {tab === "plantillas" && <TemplatesPanel />}
           {tab === "catalogo" && <CatalogPanel />}
           {tab === "reglas" && <RulesPanel />}
           {tab === "whatsapp" && <WhatsappPanel />}

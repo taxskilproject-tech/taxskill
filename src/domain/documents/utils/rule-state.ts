@@ -1,6 +1,7 @@
 import type { RuleRow } from "@/domain/documents/types/document.types";
 
 export function getRuleState(rule: RuleRow) {
+  if (rule.preparation_pending) return "Pendiente de responsable";
   if (rule.deleted_at) return "Eliminada";
   if (rule.active) return "Activa";
   if (

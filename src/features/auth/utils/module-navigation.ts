@@ -1,6 +1,7 @@
 import { canPerform } from "@/domain/access/utils/permissions";
 import { DOCUMENT_MODULES } from "@/domain/common/constants/modules";
 import type { DocumentaryModuleId } from "@/domain/common/types/module.types";
+import { appliesToProfile } from "@/domain/company-profile/utils/profile";
 import type { SessionContext } from "@/features/auth/types/auth.types";
 
 export function documentaryModule(
@@ -24,6 +25,10 @@ export function canViewModule(
   companyId: string,
   module: DocumentaryModuleId,
 ) {
+  const profile = context.companies.find(
+    (item) => item.id === companyId,
+  )?.documentary_profile;
+  if (profile && !appliesToProfile(profile, module)) return false;
   return (
     context.member.is_admin ||
     canPerform(

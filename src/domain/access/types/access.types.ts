@@ -18,7 +18,11 @@ import type {
 } from "@/domain/access/contracts/access.schema";
 import type { Database, Json } from "@/lib/supabase/types/database.types";
 
-export type Company = Database["public"]["Tables"]["companies"]["Row"];
+type StoredCompany = Database["public"]["Tables"]["companies"]["Row"];
+type CompanyProfileFields =
+  "tax_regime_code" | "documentary_profile" | "document_template_version_id";
+export type Company = Omit<StoredCompany, CompanyProfileFields> &
+  Partial<Pick<StoredCompany, CompanyProfileFields>>;
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 export type Member =
   Database["public"]["Tables"]["organization_members"]["Row"];

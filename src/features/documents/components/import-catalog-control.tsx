@@ -11,7 +11,7 @@ export function ImportCatalogControl() {
       <p className="text-sm text-zinc-600">
         Agregar los tipos iniciales de Tributario, Laboral general e
         ingreso/relación/cese. Conserva tus tipos existentes y sus
-        modificaciones; no activa reglas ni fija vencimientos legales.
+        modificaciones; no activa entregables ni fija vencimientos legales.
       </p>
       <Button
         loading={action.busy}

@@ -443,7 +443,10 @@ async function main() {
   } catch (cause) {
     ensure(
       cause instanceof Error && cause.message === "FILE_INVALID",
-      "reject spoofed file bytes",
+      "reject spoofed file bytes" +
+        (cause instanceof Error && /^[A-Z_]+$/.test(cause.message)
+          ? ` (${cause.message})`
+          : ""),
     );
   }
   const original = makeH03Pdf("PDT demonstration H03");

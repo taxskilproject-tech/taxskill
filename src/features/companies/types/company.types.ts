@@ -5,6 +5,7 @@ import type { DocumentaryModuleId } from "@/domain/common/types/module.types";
 
 export interface CompanyFieldsProps {
   company?: Company;
+  hideRegime?: boolean;
 }
 
 export interface CompanyDetailProps {

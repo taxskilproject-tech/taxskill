@@ -3,6 +3,7 @@ import { Badge } from "@/components/atoms/badge";
 import { Button } from "@/components/atoms/button";
 import { RecordInspector } from "@/components/organisms/record-inspector";
 import { MODULE_LABELS } from "@/domain/documents/constants/engine";
+import { CatalogUsage } from "@/features/deliverable-templates/components/catalog-usage";
 import { DocumentLifecycle } from "@/features/documents/components/document-lifecycle";
 import type { CatalogItemProps } from "@/features/documents/types/document-ui.types";
 
@@ -14,6 +15,12 @@ export function CatalogItem({ item, onEdit }: CatalogItemProps) {
         <p className="text-xs text-slate-600">
           {MODULE_LABELS[item.module]} ·{" "}
           {item.suggested_formats.join(", ").toUpperCase()}
+        </p>
+        <p className="text-xs text-slate-600">
+          {item.usage?.count ?? 0} empresas ·{" "}
+          {item.usage?.active_companies ?? 0} activas ·{" "}
+          {item.usage?.pending_companies ?? 0} pendientes ·{" "}
+          {item.usage?.paused_companies ?? 0} pausadas
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-2">
@@ -40,9 +47,10 @@ export function CatalogItem({ item, onEdit }: CatalogItemProps) {
           )}
           {!item.deleted_at && (
             <Button onClick={onEdit} variant="secondary">
-              Editar tipo documental
+              Editar tipo de entregable
             </Button>
           )}
+          <CatalogUsage id={item.id} />
           <details className="mt-4">
             <summary className="min-h-11 cursor-pointer py-3 text-sm">
               Conservación y restauración

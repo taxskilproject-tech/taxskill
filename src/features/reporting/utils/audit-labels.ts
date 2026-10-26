@@ -26,7 +26,7 @@ const ACTION_LABELS: Readonly<Record<string, string>> = {
   SaveDocumentType: "Actualización de tipo documental",
   CreateUploadIntent: "Preparación de entrega",
   FinalizeUpload: "Recepción de archivo",
-  SetRuleActive: "Cambio de estado de regla",
+  SetRuleActive: "Cambio de estado de entregable",
   ReassignDelivery: "Cambio de responsable",
   SetNotApplicable: "Documento no aplicable",
   CancelObligation: "Cancelación de obligación",

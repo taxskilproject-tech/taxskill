@@ -107,14 +107,14 @@ it("envía todas las posiciones aunque solo una esté visible y convierte MB sin
   fireEvent.change(
     within(
       screen.getByRole("group", { name: "Archivo requerido 1" }),
-    ).getByLabelText("Nombre de la posición"),
+    ).getByLabelText("Nombre del archivo requerido"),
     { target: { value: "Declaración" } },
   );
   fireEvent.click(screen.getByRole("button", { name: "Archivo 2" }));
   fireEvent.change(
     within(
       screen.getByRole("group", { name: "Archivo requerido 2" }),
-    ).getByLabelText("Nombre de la posición"),
+    ).getByLabelText("Nombre del archivo requerido"),
     { target: { value: "Constancia" } },
   );
   fireEvent.change(
@@ -146,7 +146,7 @@ it("revela el archivo oculto que impide avanzar sin perder las otras posiciones"
   fireEvent.change(
     within(
       screen.getByRole("group", { name: "Archivo requerido 2" }),
-    ).getByLabelText("Nombre de la posición"),
+    ).getByLabelText("Nombre del archivo requerido"),
     { target: { value: "" } },
   );
   fireEvent.click(screen.getByRole("button", { name: "Archivo 1" }));

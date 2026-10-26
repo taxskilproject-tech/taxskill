@@ -8,6 +8,7 @@ const eslintConfig = defineConfig([
   ...nextTs,
   globalIgnores([
     ".next/**",
+    ".next-h09/**",
     ".yarn-cache/**",
     "coverage/**",
     "test-results/**",
@@ -18,7 +19,7 @@ const eslintConfig = defineConfig([
     "src/lib/supabase/types/database.types.ts",
   ]),
   {
-    files: ["src/**/*.{ts,tsx}", "scripts/**/*.ts", "tests/**/*.{ts,tsx}", "*.config.{ts,mjs}"],
+    files: ["src/**/*.{ts,tsx}", "scripts/**/*.{ts,mts}", "tests/**/*.{ts,tsx}", "*.config.{ts,mjs}"],
     plugins: { "simple-import-sort": simpleImportSort },
     rules: {
       "@typescript-eslint/consistent-type-imports": ["error", { fixStyle: "separate-type-imports" }],

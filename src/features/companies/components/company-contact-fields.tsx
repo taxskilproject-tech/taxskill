@@ -1,7 +1,17 @@
 import { FormField } from "@/components/molecules/form-field";
+import { SelectField } from "@/components/molecules/select-field";
+import { TAX_REGIMES } from "@/domain/company-profile/constants/regimes";
 import type { CompanyFieldsProps } from "@/features/companies/types/company.types";
 
-export function CompanyContactFields({ company }: CompanyFieldsProps) {
+export function CompanyContactFields({
+  company,
+  hideRegime,
+}: CompanyFieldsProps) {
+  const retainedRegime =
+    company?.tax_regime &&
+    !TAX_REGIMES.some((item) => item.label === company.tax_regime)
+      ? company.tax_regime
+      : null;
   return (
     <>
       <FormField
@@ -10,13 +20,26 @@ export function CompanyContactFields({ company }: CompanyFieldsProps) {
         label="Nombre comercial"
         name="trade_name"
       />
-      <FormField
-        defaultValue={company?.tax_regime ?? ""}
-        hint="Información declarada manualmente."
-        id="tax-regime"
-        label="Régimen tributario"
-        name="tax_regime"
-      />
+      {!hideRegime && (
+        <SelectField
+          defaultValue={company?.tax_regime ?? ""}
+          id="tax-regime"
+          label="Régimen o categoría tributaria"
+          name="tax_regime"
+        >
+          <option value="">Seleccionar régimen</option>
+          {retainedRegime && (
+            <option value={retainedRegime}>
+              Conservar registro anterior: {retainedRegime}
+            </option>
+          )}
+          {TAX_REGIMES.map((item) => (
+            <option key={item.code} value={item.label}>
+              {item.label}
+            </option>
+          ))}
+        </SelectField>
+      )}
       <FormField
         defaultValue={company?.contact_email ?? ""}
         id="contact-email"

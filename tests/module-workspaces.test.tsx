@@ -19,17 +19,27 @@ import { moduleContext } from "./fixtures/module-navigation";
 import { companyScope } from "./fixtures/scopes";
 
 const calls = vi.hoisted(() => ({
+  tax: vi.fn(),
   obligations: vi.fn(),
   workers: vi.fn(),
   companies: vi.fn(),
 }));
-const workspace = { current: moduleContext };
+const workspace = {
+  current: moduleContext,
+  parameters: new URLSearchParams("module=tributario"),
+};
 vi.mock("@/features/auth/providers/workspace-context", () => ({
   useWorkspace: () => ({ context: workspace.current }),
 }));
 vi.mock("@/features/documents/components/obligation-list", () => ({
   ObligationList: calls.obligations,
 }));
+vi.mock(
+  "@/features/document-workspace/components/document-period-workspace",
+  () => ({
+    DocumentPeriodWorkspace: calls.tax,
+  }),
+);
 vi.mock("@/features/workers/components/workers-panel", () => ({
   WorkersPanel: calls.workers,
 }));
@@ -41,12 +51,14 @@ vi.mock("@/lib/query/hooks/use-data-scope", () => ({
 }));
 vi.mock("next/navigation", () => ({
   usePathname: () => "/empresas",
-  useSearchParams: () => new URLSearchParams("module=tributario"),
+  useSearchParams: () => workspace.parameters,
   useRouter: () => ({ replace: vi.fn() }),
 }));
 beforeEach(() => {
   workspace.current = moduleContext;
+  workspace.parameters = new URLSearchParams("module=tributario");
   calls.obligations.mockReturnValue(null);
+  calls.tax.mockReturnValue(null);
   calls.workers.mockReturnValue(null);
   Object.defineProperty(HTMLDialogElement.prototype, "showModal", {
     configurable: true,
@@ -80,17 +92,26 @@ it("un módulo sin permiso no monta consultas documentales ni laborales", () => 
   ).toBe("/empresas?module=laboral_trabajador");
 });
 
-it("abre el listado existente con empresa y módulo concretos", () => {
-  render(
-    <CompanyModuleWorkspace company={companyFixture} module="tributario" />,
-  );
-  expect(screen.getByRole("heading", { name: "Tributario" })).toBeTruthy();
-  expect(calls.obligations.mock.calls[0][0]).toEqual({
-    companyId: companyFixture.id,
-    module: "tributario",
-  });
-  expect(calls.workers).not.toHaveBeenCalled();
-});
+it.each(["tributario", "laboral_general", "laboral_trabajador"] as const)(
+  "abre %s con la misma vista por periodos",
+  (module) => {
+    workspace.current = {
+      ...moduleContext,
+      member: { ...moduleContext.member, is_admin: true },
+    };
+    workspace.parameters = new URLSearchParams(
+      `tab=${module}&laborView=obligations`,
+    );
+    render(<CompanyModuleWorkspace company={companyFixture} module={module} />);
+    expect(screen.getByRole("heading", { level: 1 })).toBeTruthy();
+    expect(calls.tax.mock.calls[0][0]).toEqual({
+      companyId: companyFixture.id,
+      module,
+    });
+    expect(calls.obligations).not.toHaveBeenCalled();
+    expect(calls.workers).not.toHaveBeenCalled();
+  },
+);
 
 it("sin empresas elegibles muestra vacío y no inicia solicitudes ni un loading infinito", () => {
   workspace.current = { ...moduleContext, capabilities: [] };

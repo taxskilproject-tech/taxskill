@@ -18,7 +18,7 @@ import {
   moduleDestination,
 } from "@/features/auth/utils/module-navigation";
 import type { CompanyModuleProps } from "@/features/companies/types/company.types";
-import { ObligationList } from "@/features/documents/components/obligation-list";
+import { DocumentPeriodWorkspace } from "@/features/document-workspace/components/document-period-workspace";
 import { WorkersPanel } from "@/features/workers/components/workers-panel";
 
 export function CompanyModuleWorkspace({
@@ -44,12 +44,22 @@ export function CompanyModuleWorkspace({
             </span>
             {MODULE_LABELS[module]}
           </h1>
-          <Link
-            className="inline-flex min-h-11 shrink-0 items-center text-xs underline underline-offset-4"
-            href={`/empresas/${company.id}`}
-          >
-            Ficha empresa
-          </Link>
+          <div className="flex flex-wrap gap-3">
+            {context.member.is_admin && allowed && (
+              <Link
+                href={`/configuracion?tab=reglas&rulesCompany=${company.id}&rulesModule=${module}&newDeliverable=true`}
+                className="inline-flex min-h-11 items-center text-xs font-medium text-blue-800 underline"
+              >
+                Agregar entregable
+              </Link>
+            )}
+            <Link
+              className="inline-flex min-h-11 shrink-0 items-center text-xs underline underline-offset-4"
+              href={`/empresas/${company.id}`}
+            >
+              Ficha empresa
+            </Link>
+          </div>
         </div>
         <p className="text-sm text-zinc-600">
           {company.legal_name} · RUC {company.ruc}
@@ -69,6 +79,12 @@ export function CompanyModuleWorkspace({
             Cambiar empresa
           </Link>
         </>
+      ) : module === "tributario" ? (
+        <DocumentPeriodWorkspace
+          companyId={company.id}
+          module={module}
+          key={company.id}
+        />
       ) : module === "laboral_trabajador" ? (
         <>
           <SectionNavigation
@@ -83,11 +99,19 @@ export function CompanyModuleWorkspace({
           {laborView === "workers" ? (
             <WorkersPanel companyId={company.id} />
           ) : (
-            <ObligationList companyId={company.id} module={module} />
+            <DocumentPeriodWorkspace
+              companyId={company.id}
+              module={module}
+              key={company.id}
+            />
           )}
         </>
       ) : (
-        <ObligationList companyId={company.id} module={module} />
+        <DocumentPeriodWorkspace
+          companyId={company.id}
+          module={module}
+          key={company.id}
+        />
       )}
     </section>
   );

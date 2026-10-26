@@ -6,7 +6,8 @@ import {
   EMPLOYMENT_STAGES,
   STAGE_LABELS,
 } from "@/domain/workers/constants/workers";
-import { ObligationList } from "@/features/documents/components/obligation-list";
+import { DocumentPeriodWorkspace } from "@/features/document-workspace/components/document-period-workspace";
+import { clearDocumentWorkspaceFilters } from "@/features/document-workspace/utils/document-period-navigation";
 import type { StageDocumentsProps } from "@/features/workers/types/worker-ui.types";
 
 export function StageDocuments({ detail }: StageDocumentsProps) {
@@ -23,7 +24,9 @@ export function StageDocuments({ detail }: StageDocumentsProps) {
         className="flex flex-wrap gap-2 border-b border-zinc-200 pb-1"
       >
         {EMPLOYMENT_STAGES.map((stage) => {
-          const next = new URLSearchParams(parameters.toString());
+          const next = clearDocumentWorkspaceFilters(
+            new URLSearchParams(parameters.toString()),
+          );
           next.set("stage", stage);
           return (
             <Link
@@ -37,7 +40,7 @@ export function StageDocuments({ detail }: StageDocumentsProps) {
           );
         })}
       </nav>
-      <ObligationList
+      <DocumentPeriodWorkspace
         companyId={detail.worker.company_id}
         employmentPeriodId={detail.selected_period.id}
         employmentStage={selected}

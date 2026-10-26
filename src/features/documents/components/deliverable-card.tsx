@@ -7,7 +7,10 @@ import { DownloadControl } from "@/features/documents/components/download-contro
 import { ReviewControls } from "@/features/documents/components/review-controls";
 import { UploadControl } from "@/features/documents/components/upload-control";
 import type { DeliverableCardProps } from "@/features/documents/types/document-ui.types";
-import { displayDate, reviewTone } from "@/features/documents/utils/document-presentation";
+import {
+  displayDate,
+  reviewTone,
+} from "@/features/documents/utils/document-presentation";
 
 export function DeliverableCard({
   deliverable,

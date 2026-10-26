@@ -19,14 +19,21 @@ const catalogSchema = z.object({
   rows: z.array(catalogRowSchema),
   count: z.number(),
 });
-export function useRuleForm({ onSaved, rule }: RuleFormProps) {
+export function useRuleForm({
+  onSaved,
+  rule,
+  initialCompanyId,
+  initialModule,
+}: RuleFormProps) {
   const { context } = useWorkspace();
   const form = useRef<HTMLFormElement>(null);
   const [page, setPage] = useState(1);
   const [catalogQuery, setCatalogQuery] = useState("");
-  const [companyId, setCompanyId] = useState(rule?.company_id ?? "");
+  const [companyId, setCompanyId] = useState(
+    rule?.company_id ?? initialCompanyId ?? "",
+  );
   const [module, setModule] = useState<DocumentModule>(
-    rule?.module ?? "tributario",
+    rule?.module ?? initialModule ?? "tributario",
   );
   const [frequency, setFrequency] = useState<Frequency>(
     rule?.configuration.frequency ?? "mensual",
@@ -38,7 +45,12 @@ export function useRuleForm({ onSaved, rule }: RuleFormProps) {
   const [validation, setValidation] = useState<string | null>(null);
   const catalog = useDocumentQuery(
     "catalog",
-    { page, q: catalogQuery, active: true },
+    {
+      page,
+      q: catalogQuery,
+      active: true,
+      module: rule?.module ?? initialModule,
+    },
     catalogSchema,
   );
   const command = useDocumentCommand();

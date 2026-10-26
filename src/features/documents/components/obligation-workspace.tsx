@@ -46,7 +46,7 @@ export function ObligationWorkspace({
       ) : (
         <div className="grid items-start gap-3 xl:grid-cols-[200px_minmax(0,1fr)]">
           <nav
-            aria-label="Entregables de la obligación"
+            aria-label="Archivos requeridos de la obligación"
             className="flex flex-wrap gap-1 xl:flex-col"
           >
             {detail.deliverables.map((item) => (

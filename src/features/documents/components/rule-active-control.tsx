@@ -22,7 +22,7 @@ export function RuleActiveControl({ rule }: RuleEngineProps) {
         rule_id: rule.id,
         expected_revision: rule.revision,
         active: !rule.active,
-        reason: reason.trim() || "Activación de regla",
+        reason: reason.trim() || "Activación de entregable",
       })
     )
       close();
@@ -34,11 +34,11 @@ export function RuleActiveControl({ rule }: RuleEngineProps) {
         onClick={() => setOpened(!opened)}
         variant="secondary"
       >
-        {rule.active ? "Pausar regla" : "Activar regla"}
+        {rule.active ? "Pausar entregable" : "Activar entregable"}
       </Button>
       {opened && (
         <SidePanel
-          title={rule.active ? "Pausar regla" : "Activar regla"}
+          title={rule.active ? "Pausar entregable" : "Activar entregable"}
           onClose={close}
         >
           <form
@@ -67,7 +67,7 @@ export function RuleActiveControl({ rule }: RuleEngineProps) {
             <Button
               disabled={rule.active && !reason.trim()}
               loading={command.busy}
-              loadingText={rule.active ? "Pausando regla…" : "Activando regla…"}
+              loadingText={rule.active ? "Pausando entregable…" : "Activando entregable…"}
               type="submit"
             >
               Confirmar {rule.active ? "pausa" : "activación"}

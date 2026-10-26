@@ -61,8 +61,8 @@ export function RuleConditionsFields({
             <option value="cese">Cese, mediante evento</option>
           </SelectField>
           <p className="text-sm text-zinc-600">
-            La regla se expande a cada etapa laboral elegible de la empresa. El
-            expediente y sus operaciones se completan en H05.
+            El entregable se aplica a cada etapa laboral elegible de la empresa.
+            El expediente y sus operaciones se completan en H05.
           </p>
         </>
       ) : (

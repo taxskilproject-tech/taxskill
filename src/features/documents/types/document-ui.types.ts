@@ -98,6 +98,8 @@ export interface DocumentLifecycleProps {
   deleted: boolean;
 }
 export interface RuleFormProps {
+  initialCompanyId?: string;
+  initialModule?: "tributario" | "laboral_general" | "laboral_trabajador";
   onSaved: () => void;
   rule?: RuleRow;
 }

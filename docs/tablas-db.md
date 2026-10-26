@@ -5,6 +5,8 @@
 - **Fuentes:** [diseño técnico 1.1](diseno-tecnico.md), [análisis funcional](analisis_completo_sistema_documental_contable.md) y [resumen ejecutivo](resumen_ejecutivo_sistema_documental_contable.md).
 - **Relacionados:** [procesos](diagrama-flujo.md), [navegación](flujo-navegacion.md) y [carpetas](estructura-carpetas.md).
 
+**Extensión implementada H09:** el modelo original de 29 tablas se amplía a **31** mediante plantillas y versiones. Consultar [diccionario H09](#extensión-h09--plantillas-y-perfil-documental) y [migraciones y comprobaciones locales](hitos/evidencias/h09.md). Las menciones a modelo propuesto/RLS posterior en el cuerpo original son históricas; H08 protege el modelo existente y H09 añade sus propias políticas administrativas. No se aplicaron estas migraciones H09 a Cloud.
+
 ## 1. Alcance y convenciones
 
 Las decisiones recientes del usuario prevalecen sobre las propuestas de los análisis originales. **CONFIRMADO:** Next.js, Supabase directo como Plan A, Atomic Design, RLS posterior y soft delete de entidades administrables con restauración. **BASE TÉCNICA:** los nombres físicos, tipos, campos, restricciones y estructuras JSONB detallados aquí concretan esas decisiones.
@@ -2216,3 +2218,151 @@ Documentary y additional usan denominadores separados. No aplica/cancelled y obl
 Las reglas funcionales provienen de los tres documentos y de la conversación. Capacidades técnicas consultadas: [restricciones PostgreSQL](https://www.postgresql.org/docs/current/ddl-constraints.html), [índices parciales](https://www.postgresql.org/docs/current/indexes-partial.html), [sintaxis E-R Mermaid](https://mermaid.js.org/syntax/entityRelationshipDiagram.html) y referencias Supabase del diseño central.
 
 Las restricciones del alcance H01–H05 tienen migraciones y evidencia asociadas; el resto permanece como especificación. La protección universal de accesos directos y Storage sigue pendiente de H08.
+
+## Extensión H09 — plantillas y perfil documental
+
+Esta sección describe el incremento físico local H09 y prevalece sobre las propuestas iniciales anteriores que difieran. Se agregan **dos tablas** a las 29 existentes. La [guía funcional y de contratos](entregables-plantillas-empresa.md) define los recorridos; el [hito](hitos/h09-entregables-plantillas-empresa.md) conserva los acuerdos completos. Las políticas H08 existentes se mantienen y las nuevas tablas se restringen a administración del estudio mediante RLS.
+
+```mermaid
+erDiagram
+  organizations ||--o{ deliverable_templates : posee
+  organizations ||--o{ deliverable_template_versions : aisla
+  deliverable_templates ||--|{ deliverable_template_versions : versiona
+  deliverable_template_versions o|--o| deliverable_templates : publicacion_vigente
+  deliverable_template_versions o|--o{ companies : aplicada_en
+  deliverable_template_versions o|--o{ requirement_rules : origen
+  companies ||--o{ requirement_rules : configura
+  document_types ||--o{ requirement_rules : identifica
+  requirement_rules ||--|{ rule_versions : conserva
+  profiles o|--o{ deliverable_templates : autor
+  profiles o|--o{ deliverable_template_versions : autor
+  deliverable_templates {
+    uuid id PK
+    uuid organization_id FK
+    text regime_code UK
+    uuid published_version_id FK
+    integer revision
+    timestamptz deleted_at
+  }
+  deliverable_template_versions {
+    uuid id PK
+    uuid organization_id FK
+    uuid template_id FK
+    integer version_number UK
+    integer revision
+    jsonb items
+    timestamptz published_at
+  }
+  companies {
+    uuid id PK
+    uuid organization_id FK
+    text tax_regime_code
+    jsonb documentary_profile
+    uuid document_template_version_id FK
+  }
+  requirement_rules {
+    uuid id PK
+    uuid organization_id FK
+    uuid company_id FK
+    uuid document_type_id FK
+    uuid template_version_id FK
+    boolean preparation_pending
+    integer presentation_order
+    text applicability_key
+  }
+```
+
+### Tabla 30 — `deliverable_templates`
+
+Cabecera administrable de un régimen por estudio. No contiene obligaciones ni archivos subidos.
+
+| Campo | Tipo | NULL / predeterminado | Clave y regla |
+|---|---|---|---|
+| `id` | uuid | No / `gen_random_uuid()` | PK; UNIQUE adicional `(organization_id,id)`. |
+| `organization_id` | uuid | No / — | FK → organizations.id, RESTRICT. |
+| `regime_code` | text | No / — | CHECK con los ocho códigos de la guía; UNIQUE `(organization_id,regime_code)`, incluso eliminado. |
+| `published_version_id` | uuid | Sí / NULL | FK compuesta `(organization_id,id,published_version_id)` → versiones `(organization_id,template_id,id)`, RESTRICT. Nunca apunta a otro régimen/estudio. |
+| `revision` | integer | No / 0 | Se incrementa al publicar y cambiar el puntero. |
+| `created_at` | timestamptz | No / `now()` | Instante de creación. |
+| `created_by` | uuid | Sí / NULL | FK → profiles.user_id, RESTRICT; NULL para inicialización de sistema. |
+| `updated_at` | timestamptz | No / `now()` | Actualizado por operación confiable. |
+| `updated_by` | uuid | Sí / NULL | FK → profiles.user_id, RESTRICT. |
+| `deleted_at` | timestamptz | Sí / NULL | Eliminación lógica, independiente de una nueva publicación. |
+| `deleted_by` | uuid | Sí / NULL | FK → profiles.user_id, RESTRICT. |
+| `deletion_reason` | text | Sí / NULL | Motivo histórico. |
+
+No hay cascadas físicas. Una cabecera eliminada no se utiliza para nuevas altas, y no borra empresas ni versiones ya aplicadas. La publicación vigente y la última versión borrador se consultan por separado. Los índices UNIQUE cubren aislamiento, búsqueda por régimen y referencia de publicación. No se crean índices de consulta pública de plantillas.
+
+### Tabla 31 — `deliverable_template_versions`
+
+Versiones de configuración de plantilla: borrador mutable mediante revisión; publicada inmutable mediante trigger de PostgreSQL para UPDATE y DELETE. Conservación histórica, sin soft delete de versiones.
+
+| Campo | Tipo | NULL / predeterminado | Clave y regla |
+|---|---|---|---|
+| `id` | uuid | No / `gen_random_uuid()` | PK; UNIQUE `(organization_id,id)` y `(organization_id,template_id,id)`. |
+| `organization_id` | uuid | No / — | Aislamiento en FK compuesta. |
+| `template_id` | uuid | No / — | FK `(organization_id,template_id)` → cabecera, RESTRICT. |
+| `version_number` | integer | No / — | CHECK >0; UNIQUE `(template_id,version_number)`. |
+| `revision` | integer | No / 0 | Control de concurrencia del borrador/publicación. |
+| `items` | jsonb | No / `[]` | Array, CHECK máximo 200; contrato J-H09-01. Guardar/publicar exige 1–200 entradas. |
+| `published_at` | timestamptz | Sí / NULL | NULL=borrador; fecha=publicada e inmutable. |
+| `created_at` | timestamptz | No / `now()` | Instante de creación. |
+| `created_by` | uuid | Sí / NULL | FK → profiles.user_id, RESTRICT. |
+| `updated_at` | timestamptz | No / `now()` | Última edición/publicación permitida. |
+| `updated_by` | uuid | Sí / NULL | FK → profiles.user_id, RESTRICT. |
+
+La edición de una publicada inserta el siguiente `version_number`; no cambia el JSONB anterior. La cabecera permanece apuntando a la publicación previa hasta completar y publicar el nuevo borrador. Autorización: SELECT administrativo por estudio con sesión admitida; sin INSERT/UPDATE/DELETE directos para authenticated. Escrituras únicamente mediante RPC confiable. La cuenta técnica conserva su acceso administrativo.
+
+### Columnas incorporadas a empresas y solicitudes
+
+| Tabla.campo | Tipo / NULL / default | Relación y comportamiento |
+|---|---|---|
+| `companies.tax_regime_code` | text / Sí / NULL | CHECK de ocho códigos cerrados. NULL en empresas anteriores conservadas. |
+| `companies.documentary_profile` | jsonb / Sí / NULL | J-H09-02; si existe, exige régimen y versión de plantilla. |
+| `companies.document_template_version_id` | uuid / Sí / NULL | FK `(organization_id,document_template_version_id)` → versiones, RESTRICT. Índice por estudio/versión. |
+| `requirement_rules.template_version_id` | uuid / Sí / NULL | Procedencia de la copia; FK por estudio a versiones, RESTRICT. NULL en configuración particular/anterior. |
+| `requirement_rules.preparation_pending` | boolean / No / false | Espera inicial, diferente de pausa/borrador. Se limpia al activar o pausar explícitamente. |
+| `requirement_rules.presentation_order` | integer / Sí / NULL | CHECK >0. Orden persistido; las distintas configuraciones de un mismo tipo comparten acceso. |
+| `requirement_rules.applicability_key` | text / No / `always` | CHECK: always, plame, afp, sis, essalud. Condición derivada del tipo/módulo; no concede permisos. |
+
+Índices nuevos de solicitudes: `(organization_id,company_id,module)` parcial para preparación pendiente no eliminada; `(organization_id,document_type_id,company_id)` parcial para uso no eliminado. Se conservan UUID, revisiones, autoría, soft delete y snapshots de las tablas anteriores.
+
+### Contrato J-H09-01 — elementos de plantilla
+
+`items` es un array de objetos con todas estas claves:
+
+| Clave | Tipo y contenido |
+|---|---|
+| `document_type_id` | UUID de document_types del mismo estudio. |
+| `code`, `name` | Código estable del catálogo y nombre legible. Código/módulo/etapa/condición deben coincidir con el tipo confiable. |
+| `module` | tributario, laboral_general o laboral_trabajador. |
+| `stage` | any, ingreso, relacion o cese; las laborales por trabajador siguen la categoría del catálogo. |
+| `condition` | always, plame, afp, sis o essalud. AFP/seguros derivan de sus códigos estables. |
+| `included` | boolean. Excluidos permanecen en el borrador como decisión explícita. |
+| `position` | Entero positivo; orden de partida de los aplicables. Código duplicado rechazado. |
+| `configuration.frequency` | Una de las diez periodicidades H04; NULL admitido solo en borrador. |
+| `configuration.deadline_offset_days` | Entero -366…366; NULL solo en borrador. Cero para único, con fecha explícita en anchor_date. |
+| `configuration.interval_count`, `interval_unit` | Entero 1…1200 / days, weeks o months para personalizada; NULL cuando no corresponde. |
+| `configuration.anchor_date` | Fecha civil o NULL; ancla de personalizada/fecha del único. |
+| `configuration.priority`, `is_required` | alta/media/baja y boolean de exigibilidad. |
+| `configuration.max_file_bytes` | Entero positivo, máximo 50.000.000; 20.000.000 inicial como base técnica. |
+| `configuration.allowed_formats` | Array no vacío de pdf, xls, xlsx, doc, docx, jpg, jpeg o png. |
+| `configuration.deliverable_specs` | 1–20 archivos requeridos con position_code único, label, display_order, allowed_formats y max_file_bytes. Cada límite/formato respeta la configuración general. |
+
+Las etapas Ingreso/Cese usan periodicidad eventual. La publicación valida calendario, plazo, formatos, archivos, condición, tipo habilitado y todos los incluidos. Los faltantes se devuelven en consulta como `{code,message}`; no son estado persistido adicional. Al copiar se crean `rule_versions` con sus `applicability_conditions` y snapshots existentes: ingreso→worker_hired, cese→worker_terminated, relación eventual→manual_request. No se crean eventos laborales por copiar una plantilla.
+
+### Contrato J-H09-02 — perfil documental
+
+Objeto estricto, sin claves adicionales:
+
+```json
+{"schema_version":1,"plame":true,"afp":false,"igv_renta":true,"health_coverage":"essalud"}
+```
+
+`schema_version` numérico 1; plame/afp/igv_renta boolean; health_coverage none/sis/essalud. CHECK y RPC exigen PLAME o IGV renta, AFP implica PLAME y no-PLAME implica none. La ausencia de cobertura con PLAME se rechaza. El borrador de formulario admite selección vacía antes del envío, pero nunca se persiste como perfil válido.
+
+### Conservación, orden y estados calculados
+
+No se convierten empresas anteriores. Régimen/perfil/versiones se guardan atómicamente con las configuraciones iniciales. Publicar una versión posterior no modifica las empresas que ya conservaron otra. Las incompatibles por cambio confirmado de perfil se pausan con motivo; sus obligaciones no se cancelan ni se borran automáticamente.
+
+La numeración visible y los conteos se calculan. `setup_state` de consulta distingue pending_responsible, scheduled, paused y active; `starts_on` procede del inicio de control. Los grupos se obtienen del conjunto autorizado completo, antes de paginar, conservando tipos configurados con cero obligaciones. Para empresas anteriores sin `presentation_order`, se reutiliza el orden documental original y se añaden tipos particulares después, sin backfill de sus datos.

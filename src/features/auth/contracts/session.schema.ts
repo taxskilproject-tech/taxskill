@@ -4,6 +4,10 @@ import {
   capabilitySchema,
   organizationSettingsSchema,
 } from "@/domain/access/contracts/access.schema";
+import {
+  documentaryProfileSchema,
+  taxRegimeSchema,
+} from "@/domain/company-profile/contracts/profile.schema";
 
 export const sessionContextSchema = z.object({
   session_id: z.uuid(),
@@ -34,6 +38,8 @@ export const sessionContextSchema = z.object({
       id: z.uuid(),
       legal_name: z.string(),
       ruc: z.string(),
+      documentary_profile: documentaryProfileSchema.nullable().optional(),
+      tax_regime_code: taxRegimeSchema.nullable().optional(),
       status: z.string(),
     }),
   ),

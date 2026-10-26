@@ -12,7 +12,7 @@ export function SlotFields({ position, maximum, spec }: SlotFieldsProps) {
       <FormField
         defaultValue={spec?.label ?? `Archivo ${position}`}
         id={`slot-${position}`}
-        label="Nombre de la posición"
+        label="Nombre del archivo requerido"
         maxLength={120}
         name={`slot_label_${position}`}
         required

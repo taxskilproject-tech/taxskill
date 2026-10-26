@@ -30,6 +30,12 @@ export type DocumentRow = z.infer<typeof documentRowSchema>;
 export type DocumentResult = z.infer<typeof documentResultSchema>;
 export type RequirementInput = z.infer<typeof requirementInputSchema>;
 export interface DocumentQueryInput {
+  include_history?: boolean;
+  year?: number;
+  month?: number;
+  tax_code?: string;
+  document_code?: string;
+  document_scope?: "calendar" | "periodic" | "event" | "checklist";
   active?: boolean;
   worker_id?: string;
   employment_period_id?: string;

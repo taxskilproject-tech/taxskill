@@ -13,16 +13,28 @@ import type {
 } from "@/domain/documents/types/engine.types";
 
 export interface RecurrenceFieldsProps {
-  frequency: Frequency;
+  frequency: Frequency | null;
   onFrequency: (value: Frequency) => void;
-  configuration?: EngineVersion;
+  configuration?: RecurrenceConfiguration;
   allowEventual?: boolean;
+  allowIncomplete?: boolean;
+}
+export type RecurrenceConfiguration = Pick<
+  EngineVersion,
+  "interval_count" | "interval_unit" | "anchor_date"
+> & { deadline_offset_days: number | null };
+export interface DeadlineFieldsProps {
+  initial?: number | null;
+  eventual: boolean;
+  allowIncomplete?: boolean;
 }
 export interface RuleMetadataProps {
+  companyId?: string;
   rule?: RuleRow;
   maximum: number;
   onMaximum: (value: number) => void;
 }
+export type RuleStartFieldsProps = Pick<RuleMetadataProps, "rule" | "companyId">;
 export interface RuleSlotsProps {
   maximum: number;
   slots?: SlotSpec[];

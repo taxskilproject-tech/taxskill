@@ -18,7 +18,10 @@ export function readRecurrenceForm(data: FormData) {
         : null,
     anchor_date: nullableText(data, "anchor_date"),
     deadline_offset_days: Number(data.get("deadline_offset_days")),
-    reference_date: nullableText(data, "reference_date"),
+    reference_date:
+      nullableText(data, "reference_date") ??
+      nullableText(data, "control_start_date") ??
+      nullableText(data, "effective_from"),
   };
 }
 export function parseRequirementForm(
@@ -41,6 +44,7 @@ export function parseRequirementForm(
     description: nullableText(data, "description"),
     ...readRecurrenceForm(data),
     effective_from: nullableText(data, "effective_from"),
+    ...(!rule ? { control_start_date: String(data.get("control_start_date") ?? "") } : {}),
     priority: data.get("priority"),
     is_required: data.has("is_required"),
     active: data.has("active"),

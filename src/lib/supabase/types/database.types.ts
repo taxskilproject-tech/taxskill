@@ -1,4 +1,3 @@
-// Generado con yarn db:types. No editar manualmente.
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
@@ -197,13 +196,13 @@ isOneToOne: false
                   ]
                 },"companies": {
                   Row: {
-                    "accountant_id": string | null,"address": string | null,"contact_email": string | null,"contact_phone": string | null,"control_start_date": string,"created_at": string,"created_by": string | null,"deleted_at": string | null,"deleted_by": string | null,"deletion_reason": string | null,"id": string,"legal_name": string,"legal_representative": string | null,"operation_pauses": NonNullable<Json>,"organization_id": string,"revision": number,"ruc": string,"status": string,"supervisor_id": string | null,"tax_regime": string | null,"trade_name": string | null,"updated_at": string,"updated_by": string | null
+                    "accountant_id": string | null,"address": string | null,"contact_email": string | null,"contact_phone": string | null,"control_start_date": string,"created_at": string,"created_by": string | null,"deleted_at": string | null,"deleted_by": string | null,"deletion_reason": string | null,"document_template_version_id": string | null,"documentary_profile": Json | null,"id": string,"legal_name": string,"legal_representative": string | null,"operation_pauses": NonNullable<Json>,"organization_id": string,"revision": number,"ruc": string,"status": string,"supervisor_id": string | null,"tax_regime": string | null,"tax_regime_code": string | null,"trade_name": string | null,"updated_at": string,"updated_by": string | null
                   }
                   Insert: {
-                    "accountant_id"?: string | null,"address"?: string | null,"contact_email"?: string | null,"contact_phone"?: string | null,"control_start_date": string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"id"?: string,"legal_name": string,"legal_representative"?: string | null,"operation_pauses"?: NonNullable<Json>,"organization_id": string,"revision"?: number,"ruc": string,"status"?: string,"supervisor_id"?: string | null,"tax_regime"?: string | null,"trade_name"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                    "accountant_id"?: string | null,"address"?: string | null,"contact_email"?: string | null,"contact_phone"?: string | null,"control_start_date": string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"document_template_version_id"?: string | null,"documentary_profile"?: Json | null,"id"?: string,"legal_name": string,"legal_representative"?: string | null,"operation_pauses"?: NonNullable<Json>,"organization_id": string,"revision"?: number,"ruc": string,"status"?: string,"supervisor_id"?: string | null,"tax_regime"?: string | null,"tax_regime_code"?: string | null,"trade_name"?: string | null,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Update: {
-                    "accountant_id"?: string | null,"address"?: string | null,"contact_email"?: string | null,"contact_phone"?: string | null,"control_start_date"?: string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"id"?: string,"legal_name"?: string,"legal_representative"?: string | null,"operation_pauses"?: NonNullable<Json>,"organization_id"?: string,"revision"?: number,"ruc"?: string,"status"?: string,"supervisor_id"?: string | null,"tax_regime"?: string | null,"trade_name"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                    "accountant_id"?: string | null,"address"?: string | null,"contact_email"?: string | null,"contact_phone"?: string | null,"control_start_date"?: string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"document_template_version_id"?: string | null,"documentary_profile"?: Json | null,"id"?: string,"legal_name"?: string,"legal_representative"?: string | null,"operation_pauses"?: NonNullable<Json>,"organization_id"?: string,"revision"?: number,"ruc"?: string,"status"?: string,"supervisor_id"?: string | null,"tax_regime"?: string | null,"tax_regime_code"?: string | null,"trade_name"?: string | null,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Relationships: [
                     {
@@ -248,6 +247,12 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "organization_members"
       referencedColumns: ["organization_id","user_id"]
+    },{
+      foreignKeyName: "companies_organization_id_document_template_version_id_fkey"
+      columns: ["organization_id","document_template_version_id"]
+isOneToOne: false
+      referencedRelation: "deliverable_template_versions"
+      referencedColumns: ["organization_id","id"]
     },{
       foreignKeyName: "companies_organization_id_fkey"
       columns: ["organization_id"]
@@ -359,6 +364,110 @@ isOneToOne: false
       referencedColumns: ["user_id"]
     },{
       foreignKeyName: "company_module_settings_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"deliverable_template_versions": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"id": string,"items": NonNullable<Json>,"organization_id": string,"published_at": string | null,"revision": number,"template_id": string,"updated_at": string,"updated_by": string | null,"version_number": number
+                  }
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"items"?: NonNullable<Json>,"organization_id": string,"published_at"?: string | null,"revision"?: number,"template_id": string,"updated_at"?: string,"updated_by"?: string | null,"version_number": number
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"items"?: NonNullable<Json>,"organization_id"?: string,"published_at"?: string | null,"revision"?: number,"template_id"?: string,"updated_at"?: string,"updated_by"?: string | null,"version_number"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "deliverable_template_versions_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "deliverable_template_versions_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "deliverable_template_versions_organization_id_template_id_fkey"
+      columns: ["organization_id","template_id"]
+isOneToOne: false
+      referencedRelation: "deliverable_templates"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "deliverable_template_versions_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "deliverable_template_versions_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"deliverable_templates": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"deleted_at": string | null,"deleted_by": string | null,"deletion_reason": string | null,"id": string,"organization_id": string,"published_version_id": string | null,"regime_code": string,"revision": number,"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"id"?: string,"organization_id": string,"published_version_id"?: string | null,"regime_code": string,"revision"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"id"?: string,"organization_id"?: string,"published_version_id"?: string | null,"regime_code"?: string,"revision"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "deliverable_templates_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "deliverable_templates_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "deliverable_templates_deleted_by_fkey"
+      columns: ["deleted_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "deliverable_templates_deleted_by_fkey"
+      columns: ["deleted_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "deliverable_templates_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "deliverable_templates_organization_id_id_published_version_fkey"
+      columns: ["organization_id","id","published_version_id"]
+isOneToOne: false
+      referencedRelation: "deliverable_template_versions"
+      referencedColumns: ["organization_id","template_id","id"]
+    },{
+      foreignKeyName: "deliverable_templates_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "deliverable_templates_updated_by_fkey"
       columns: ["updated_by"]
 isOneToOne: false
       referencedRelation: "profiles"
@@ -1192,13 +1301,13 @@ isOneToOne: false
                   ]
                 },"requirement_rules": {
                   Row: {
-                    "active": boolean,"class": string,"company_id": string | null,"control_start_date": string,"created_at": string,"created_by": string | null,"current_version_id": string | null,"deleted_at": string | null,"deleted_by": string | null,"deletion_reason": string | null,"delivery_responsible_id": string | null,"description": string | null,"document_type_id": string | null,"employment_period_id": string | null,"generation_cursor": NonNullable<Json>,"id": string,"inherit_responsible": boolean,"module": string,"operation_pauses": NonNullable<Json>,"organization_id": string,"revision": number,"target_scope": string,"title": string,"updated_at": string,"updated_by": string | null
+                    "active": boolean,"applicability_key": string,"class": string,"company_id": string | null,"control_start_date": string,"created_at": string,"created_by": string | null,"current_version_id": string | null,"deleted_at": string | null,"deleted_by": string | null,"deletion_reason": string | null,"delivery_responsible_id": string | null,"description": string | null,"document_type_id": string | null,"employment_period_id": string | null,"generation_cursor": NonNullable<Json>,"id": string,"inherit_responsible": boolean,"module": string,"operation_pauses": NonNullable<Json>,"organization_id": string,"preparation_pending": boolean,"presentation_order": number | null,"revision": number,"target_scope": string,"template_version_id": string | null,"title": string,"updated_at": string,"updated_by": string | null
                   }
                   Insert: {
-                    "active"?: boolean,"class"?: string,"company_id"?: string | null,"control_start_date": string,"created_at"?: string,"created_by"?: string | null,"current_version_id"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"delivery_responsible_id"?: string | null,"description"?: string | null,"document_type_id"?: string | null,"employment_period_id"?: string | null,"generation_cursor"?: NonNullable<Json>,"id"?: string,"inherit_responsible"?: boolean,"module": string,"operation_pauses"?: NonNullable<Json>,"organization_id": string,"revision"?: number,"target_scope": string,"title": string,"updated_at"?: string,"updated_by"?: string | null
+                    "active"?: boolean,"applicability_key"?: string,"class"?: string,"company_id"?: string | null,"control_start_date": string,"created_at"?: string,"created_by"?: string | null,"current_version_id"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"delivery_responsible_id"?: string | null,"description"?: string | null,"document_type_id"?: string | null,"employment_period_id"?: string | null,"generation_cursor"?: NonNullable<Json>,"id"?: string,"inherit_responsible"?: boolean,"module": string,"operation_pauses"?: NonNullable<Json>,"organization_id": string,"preparation_pending"?: boolean,"presentation_order"?: number | null,"revision"?: number,"target_scope": string,"template_version_id"?: string | null,"title": string,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Update: {
-                    "active"?: boolean,"class"?: string,"company_id"?: string | null,"control_start_date"?: string,"created_at"?: string,"created_by"?: string | null,"current_version_id"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"delivery_responsible_id"?: string | null,"description"?: string | null,"document_type_id"?: string | null,"employment_period_id"?: string | null,"generation_cursor"?: NonNullable<Json>,"id"?: string,"inherit_responsible"?: boolean,"module"?: string,"operation_pauses"?: NonNullable<Json>,"organization_id"?: string,"revision"?: number,"target_scope"?: string,"title"?: string,"updated_at"?: string,"updated_by"?: string | null
+                    "active"?: boolean,"applicability_key"?: string,"class"?: string,"company_id"?: string | null,"control_start_date"?: string,"created_at"?: string,"created_by"?: string | null,"current_version_id"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"delivery_responsible_id"?: string | null,"description"?: string | null,"document_type_id"?: string | null,"employment_period_id"?: string | null,"generation_cursor"?: NonNullable<Json>,"id"?: string,"inherit_responsible"?: boolean,"module"?: string,"operation_pauses"?: NonNullable<Json>,"organization_id"?: string,"preparation_pending"?: boolean,"presentation_order"?: number | null,"revision"?: number,"target_scope"?: string,"template_version_id"?: string | null,"title"?: string,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Relationships: [
                     {
@@ -1273,6 +1382,12 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "rule_versions"
       referencedColumns: ["organization_id","rule_id","id"]
+    },{
+      foreignKeyName: "requirement_rules_organization_id_template_version_id_fkey"
+      columns: ["organization_id","template_version_id"]
+isOneToOne: false
+      referencedRelation: "deliverable_template_versions"
+      referencedColumns: ["organization_id","id"]
     },{
       foreignKeyName: "requirement_rules_updated_by_fkey"
       columns: ["updated_by"]

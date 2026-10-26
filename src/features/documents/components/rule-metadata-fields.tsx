@@ -3,19 +3,21 @@ import { FormField } from "@/components/molecules/form-field";
 import { SelectField } from "@/components/molecules/select-field";
 import { MAX_CONFIGURED_FILE_BYTES } from "@/domain/documents/constants/engine";
 import { FileSizeField } from "@/features/documents/components/file-size-field";
+import { RuleStartFields } from "@/features/documents/components/rule-start-fields";
 import type { RuleMetadataProps } from "@/features/documents/types/engine-ui.types";
 
 export function RuleMetadataFields({
   rule,
   maximum,
   onMaximum,
+  companyId,
 }: RuleMetadataProps) {
   return (
     <fieldset className="space-y-4">
       <FormField
         defaultValue={rule?.title}
         id="rule-title"
-        label="Título de la obligación"
+        label="Nombre del entregable"
         maxLength={150}
         name="title"
         required
@@ -47,15 +49,7 @@ export function RuleMetadataFields({
           value={maximum}
         />
       </div>
-      {rule && (
-        <FormField
-          hint="Vacío: siguiente ciclo no iniciado. Una fecha posterior debe coincidir con el inicio de un ciclo de la configuración anterior."
-          id="rule-effective"
-          label="Vigencia posterior opcional"
-          name="effective_from"
-          type="date"
-        />
-      )}
+      <RuleStartFields rule={rule} companyId={companyId} />
       <CheckboxField
         defaultChecked={rule?.configuration.is_required ?? true}
         id="rule-required"
@@ -65,12 +59,12 @@ export function RuleMetadataFields({
       <CheckboxField
         defaultChecked={rule?.active ?? false}
         id="rule-active"
-        label="Regla activa: validar responsable y habilitar generación"
+        label="Entregable activo: validar responsable y habilitar generación"
         name="active"
       />
       <p className="text-sm text-zinc-600">
-        Una regla guardada inactiva es un borrador. Las obligaciones emitidas
-        conservan sus condiciones aunque edites o pauses la regla.
+        Un entregable guardado inactivo es un borrador. Las obligaciones
+        emitidas conservan sus condiciones aunque edites o pauses el entregable.
       </p>
     </fieldset>
   );

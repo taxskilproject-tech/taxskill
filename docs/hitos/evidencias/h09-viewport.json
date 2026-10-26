@@ -1,0 +1,37 @@
+[
+  {
+    "emptyTop": 417.7372741699219,
+    "scrollWidth": 376,
+    "selectedTypes": 6,
+    "width": 376,
+    "requested_width": 375
+  },
+  {
+    "emptyTop": 417.7372741699219,
+    "scrollWidth": 391,
+    "selectedTypes": 6,
+    "width": 391,
+    "requested_width": 390
+  },
+  {
+    "emptyTop": 361.7476806640625,
+    "scrollWidth": 768,
+    "selectedTypes": 6,
+    "width": 768,
+    "requested_width": 768
+  },
+  {
+    "emptyTop": 363.614013671875,
+    "scrollWidth": 1024,
+    "selectedTypes": 6,
+    "width": 1024,
+    "requested_width": 1024
+  },
+  {
+    "emptyTop": 363.614013671875,
+    "scrollWidth": 1441,
+    "selectedTypes": 6,
+    "width": 1441,
+    "requested_width": 1440
+  }
+]

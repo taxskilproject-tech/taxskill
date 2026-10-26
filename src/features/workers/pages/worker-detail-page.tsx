@@ -75,13 +75,6 @@ export function WorkerDetailPage({
     );
   return (
     <div className="space-y-2">
-      <Link
-        scroll={false}
-        className="inline-flex min-h-11 items-center text-sm underline underline-offset-4 lg:hidden"
-        href={returnTo}
-      >
-        ← Volver a Laboral por trabajador
-      </Link>
       <QueryState
         error={query.error}
         loading={query.isPending}
@@ -93,14 +86,17 @@ export function WorkerDetailPage({
         {query.data && (
           <div className="space-y-2">
             <PageHeading
-              showDescriptionOnMobile
               action={
                 <Link
                   scroll={false}
-                  className="hidden min-h-11 items-center text-sm text-blue-800 underline underline-offset-4 lg:inline-flex"
+                  className="inline-flex min-h-11 items-center text-sm text-blue-800 underline underline-offset-4"
+                  aria-label="Volver a Laboral por trabajador"
                   href={returnTo}
                 >
-                  ← Volver a Laboral por trabajador
+                  <span className="lg:hidden">← Volver</span>
+                  <span className="hidden lg:inline">
+                    ← Volver a Laboral por trabajador
+                  </span>
                 </Link>
               }
               description={`${query.data.company_name} · Expediente laboral`}
