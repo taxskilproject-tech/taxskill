@@ -1,0 +1,27 @@
+{
+  "environment": "Docker 54431 / aplicación 4003",
+  "synthetic": true,
+  "checks": [
+    "Credenciales: origen ajeno rechazado antes de guardar",
+    "Guardado cifrado por endpoint e idempotencia ante reintento",
+    "Verificación de credenciales mediante worker local simulado",
+    "Consulta concurrente sin duplicados y exclusión global entre workers",
+    "No permite certificar un mes sin verificar ambas bandejas",
+    "Conserva la continuación independiente de ambas bandejas",
+    "Paginación real de 25 antes de renderizar, sin filas repetidas",
+    "Contenido bajo demanda y PDF privado descargado con autorización y URL de 60 segundos",
+    "Storage no permite enumerar objetos privados desde el navegador",
+    "Revisión diaria sintética: novedad interna única y sin duplicar el trabajo del día",
+    "Una página inconsistente conserva el resultado anterior y registra el mes incompleto",
+    "Continúa desde un cursor durable y rechaza continuar páginas inconsistentes",
+    "Acceso explícito, administración restringida y revocación inmediata: contador",
+    "Empresa ajena y sesión revocada rechazadas: contador",
+    "Acceso revocado con trabajo reclamado: descarta escrituras de contador",
+    "Acceso explícito, administración restringida y revocación inmediata: supervisor",
+    "Empresa ajena y sesión revocada rechazadas: supervisor",
+    "Acceso revocado con trabajo reclamado: descarta escrituras de supervisor",
+    "Cliente sin acceso incluso con empresa documental asignada",
+    "Desconectar detiene la operación y conserva mensajes; reconexión con credenciales nuevas"
+  ],
+  "passed": 20
+}

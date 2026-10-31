@@ -2,6 +2,7 @@ import type { IconName } from "@/components/types/visual.types";
 
 export const ICON_PATHS: Record<IconName, string> = {
   check: "m5 12 4 4L19 6",
+  inbox: "M3 4h18v16H3V4Zm0 10h5l2 3h4l2-3h5M7 8h10m-10 3h7",
   home: "m3 10 9-7 9 7v10H6V10m4 10v-7h4v7",
   activity: "M9 5h10v16H5V5h4m0-2h6v4H9V3m0 9 2 2 4-4m-6 8h6",
   tax: "M6 3h12v18l-3-2-3 2-3-2-3 2V3m3 4h6m-6 4h6m-6 4h3",

@@ -104,6 +104,8 @@ export function dumpDatabase(mode: BackupMode, container?: string): Buffer {
       "--table=auth.users",
       "--table=auth.identities",
       "--table=private.h08_recovery_runs",
+      "--table=private.sunat_credentials",
+      "--table=private.sunat_attachment_sources",
     ],
     undefined,
     container,

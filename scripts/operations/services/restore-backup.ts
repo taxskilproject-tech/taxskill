@@ -100,7 +100,11 @@ export async function restoreBackup(
   const buckets = await client.storage.listBuckets();
   if (buckets.error)
     throw new Error("No se pudo preparar Storage privado restaurado.");
-  for (const bucket of ["documents", "document-reception"]) {
+  for (const bucket of new Set([
+    "documents",
+    "document-reception",
+    ...manifest.objects.map((object) => object.bucket),
+  ])) {
     if (buckets.data.some((existing) => existing.id === bucket)) continue;
     const created = await client.storage.createBucket(bucket, {
       public: false,

@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-10-29T02:01:52.667Z",
+  "authorized_live": true,
+  "pilot_reference": "pilot-3",
+  "query_and_attachment_complete": false,
+  "source_validated": false,
+  "stable_ids": true,
+  "read_effect": {
+    "status": "not_demonstrated",
+    "reason": "NO_UNREAD_REFERENCE"
+  },
+  "session": {
+    "renewed": true,
+    "stable_ids_after_renewal": true
+  },
+  "results": [
+    {
+      "mailbox": "notifications",
+      "month": "2026-10",
+      "status": "complete",
+      "reason": null,
+      "count": 1,
+      "metrics": {
+        "duration_ms": 5365,
+        "cpu_time_ms": 120.271,
+        "peak_memory_mb": 162,
+        "request_count": 5,
+        "pages_read": 5,
+        "pages_accepted": 5,
+        "session_renewals": 0
+      }
+    },
+    {
+      "mailbox": "messages",
+      "month": "2026-10",
+      "status": "partial",
+      "reason": "PAGE_INCONSISTENT",
+      "count": 0,
+      "metrics": {
+        "duration_ms": 247,
+        "cpu_time_ms": 12.977,
+        "peak_memory_mb": 162,
+        "request_count": 2,
+        "pages_read": 2,
+        "pages_accepted": 0,
+        "session_renewals": 0
+      }
+    },
+    {
+      "mailbox": "notifications",
+      "month": "2026-09",
+      "status": "complete",
+      "reason": null,
+      "count": 0,
+      "metrics": {
+        "duration_ms": 2885,
+        "cpu_time_ms": 38.189,
+        "peak_memory_mb": 162,
+        "request_count": 5,
+        "pages_read": 5,
+        "pages_accepted": 5,
+        "session_renewals": 0
+      }
+    },
+    {
+      "mailbox": "messages",
+      "month": "2026-09",
+      "status": "partial",
+      "reason": "PAGE_INCONSISTENT",
+      "count": 0,
+      "metrics": {
+        "duration_ms": 252,
+        "cpu_time_ms": 10.919,
+        "peak_memory_mb": 162,
+        "request_count": 2,
+        "pages_read": 2,
+        "pages_accepted": 0,
+        "session_renewals": 0
+      }
+    }
+  ],
+  "attachment": {
+    "bytes": 87581,
+    "sha256": "04be9e664184e3a5eff3fbf2c0c4412dcd15732106eed7d75112aa762d68d3c2",
+    "mime": "application/pdf"
+  },
+  "metrics": {
+    "duration_ms": 30502,
+    "cpu_ms": 1744.117,
+    "max_rss_mb": 165.38671875,
+    "requests": 251,
+    "container": {
+      "peak_memory_mb": 429.75390625,
+      "cpu_time_ms": 14661.6639
+    }
+  },
+  "comparison": {
+    "environment": "official_sol_chrome",
+    "mailbox": "messages",
+    "pages": [
+      {
+        "page": 1,
+        "counter_total": 54,
+        "range_start": 1,
+        "range_end": 25,
+        "visible_rows": 17
+      },
+      {
+        "page": 2,
+        "counter_total": 54,
+        "range_start": 26,
+        "range_end": 50,
+        "visible_rows": 0
+      },
+      {
+        "page": 3,
+        "counter_total": 54,
+        "range_start": 51,
+        "range_end": 54,
+        "visible_rows": 0
+      }
+    ],
+    "subjects_and_credentials_recorded": false
+  },
+  "execution": {
+    "attempt_1": "SOURCE_UNAVAILABLE at mailbox_frame (TimeoutError)",
+    "attempt_2": "report_written_with_partial_messages",
+    "docker_cli_exit_code": 1
+  },
+  "production_jobs_activated": false,
+  "cloud_changed": false
+}

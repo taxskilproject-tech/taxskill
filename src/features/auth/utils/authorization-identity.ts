@@ -8,6 +8,7 @@ export function authorizationIdentity(context: SessionContext) {
     context.organization.status,
     context.organization.deleted_at,
     context.companies.map((company) => company.id).sort(),
+    [...(context.mailbox_company_ids ?? [])].sort(),
     context.capabilities
       .map((item) => [item.company_id, item.module, item.action].join(":"))
       .sort(),

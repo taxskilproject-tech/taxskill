@@ -1,0 +1,86 @@
+{
+  "recorded_at": "2026-10-31T02:18:16.173Z",
+  "project": "taxskill",
+  "instances": [
+    {
+      "name": "taxskill-h10-5c32a5e1-0a6e-476a-bbf1-7ee3d7e32f3d",
+      "status": "stopped",
+      "persistent": false,
+      "duration_ms": 22857,
+      "active_cpu_ms": 15335
+    },
+    {
+      "name": "taxskill-h10-8ccd94c2-31b7-4b96-b157-cd376c10440d",
+      "status": "stopped",
+      "persistent": false,
+      "duration_ms": 21899,
+      "active_cpu_ms": 12400
+    },
+    {
+      "name": "taxskill-h10-374e06fe-1ab9-42a6-94a6-4e85d1a0b639",
+      "status": "stopped",
+      "persistent": false,
+      "duration_ms": 22583,
+      "active_cpu_ms": 14247
+    },
+    {
+      "name": "taxskill-h10-53979778-88c2-40b3-8495-f2ec9e945e62",
+      "status": "stopped",
+      "persistent": false,
+      "duration_ms": 21361,
+      "active_cpu_ms": 10688
+    },
+    {
+      "name": "taxskill-h10-275350e2-26e3-48f7-af58-1d041a222120",
+      "status": "stopped",
+      "persistent": false,
+      "duration_ms": 23292,
+      "active_cpu_ms": 14617
+    },
+    {
+      "name": "taxskill-h10-78b29043-c550-4a72-8207-a2c1b9e72f6e",
+      "status": "stopped",
+      "persistent": false,
+      "duration_ms": 22900,
+      "active_cpu_ms": 16659
+    },
+    {
+      "name": "taxskill-h10-ef8c6706-7bbf-4096-a134-3ed1b8b85f33",
+      "status": "stopped",
+      "persistent": false,
+      "duration_ms": 21618,
+      "active_cpu_ms": 5211
+    },
+    {
+      "name": "taxskill-h10-937ee2ae-c9dc-4e95-b050-03910162c288",
+      "status": "stopped",
+      "persistent": false,
+      "duration_ms": 21745,
+      "active_cpu_ms": 6199
+    },
+    {
+      "name": "taxskill-h10-8293a209-ba7d-476c-b475-1c46cafe6c4d",
+      "status": "stopped",
+      "persistent": false,
+      "duration_ms": 22958,
+      "active_cpu_ms": 6744
+    },
+    {
+      "name": "taxskill-h10-9c65bd45-c0eb-4bae-a2be-18228c04a74c",
+      "status": "stopped",
+      "persistent": false,
+      "duration_ms": 21882,
+      "active_cpu_ms": 5201
+    },
+    {
+      "name": "taxskill-h10-0d6dc247-3536-4cb5-9353-078a729fbcb5",
+      "status": "stopped",
+      "persistent": false,
+      "duration_ms": 21568,
+      "active_cpu_ms": 5839
+    }
+  ],
+  "all_stopped": true,
+  "snapshots": 0,
+  "image": "sha256:a95f20dc27a50ff4f1f4b5b10cb1e24b778c0dbe3330e5aa887c84750269820a"
+}

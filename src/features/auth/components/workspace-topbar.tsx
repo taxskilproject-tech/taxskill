@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/atoms/button";
 import { Select } from "@/components/atoms/select";
+import { canReadSunat } from "@/domain/sunat/utils/access";
 import type { ShellProps } from "@/features/auth/types/auth.types";
 import { NotificationBell } from "@/features/notifications/components/notification-bell";
 
@@ -15,6 +17,7 @@ export function WorkspaceTopbar({
   loggingOut,
   documentaryModule,
 }: Omit<ShellProps, "children">) {
+  const mailbox = usePathname() === "/buzon-sunat";
   const selected =
     company.kind === "company" ? company.companyId : company.kind;
   const internal =
@@ -25,13 +28,19 @@ export function WorkspaceTopbar({
   const options = (
     <>
       <option value="all">
-        {documentaryModule ? "Seleccionar empresa" : "Todas mis empresas"}
+        {documentaryModule || mailbox
+          ? "Seleccionar empresa"
+          : "Todas mis empresas"}
       </option>
-      {internal && !documentaryModule && (
+      {internal && !documentaryModule && !mailbox && (
         <option value="internal">Internas del estudio</option>
       )}
       {context.companies
-        .filter((item) => !documentaryModule || item.status === "active")
+        .filter(
+          (item) =>
+            ((!documentaryModule && !mailbox) || item.status === "active") &&
+            (!mailbox || canReadSunat(context, item.id)),
+        )
         .map((item) => (
           <option key={item.id} value={item.id}>
             {item.legal_name}

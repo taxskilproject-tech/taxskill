@@ -13,6 +13,7 @@ import type {
   ExportRun,
 } from "@/features/reporting/types/export.types";
 import { exportFailureMessage } from "@/features/reporting/utils/export-failure-message";
+import { saveBlob } from "@/lib/files/save-blob";
 
 export function useReportExport(filters: ReportFilters, result: ReportResult) {
   const { context, company } = useWorkspace();
@@ -65,12 +66,7 @@ export function useReportExport(filters: ReportFilters, result: ReportResult) {
       current.controller.signal.throwIfAborted();
       if (current.discarded || activeIdentity.current !== current.identity)
         return;
-      const url = URL.createObjectURL(file.blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = file.filename;
-      link.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      saveBlob(file.blob, file.filename);
       setFeedback({
         identity,
         progress: `Archivo preparado: ${file.rows.length} obligaciones. Descarga solicitada al navegador.`,

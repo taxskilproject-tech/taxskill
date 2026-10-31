@@ -4,6 +4,7 @@ export interface WorkspaceRoute {
   companyId: string | null;
   module: DocumentaryModuleId | null;
   picker: boolean;
+  singleCompany?: boolean;
 }
 
 export interface RememberedCompany {

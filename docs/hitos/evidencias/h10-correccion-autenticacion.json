@@ -1,0 +1,191 @@
+{
+  "checked_on": "2026-10-30",
+  "environment": "local_docker",
+  "unit_files": 69,
+  "unit_tests_passed": 482,
+  "typecheck": true,
+  "targeted_lint": true,
+  "architecture": true,
+  "canonical_yarn_build": {
+    "exit_code": 0,
+    "next_version": "16.4.3",
+    "pages": 22,
+    "proxy": true,
+    "client_bundle_secret_check": true
+  },
+  "login": {
+    "max_attempts": 2,
+    "retry_delay_ms": 2000,
+    "connection_timeout_ms": 70000,
+    "caller_deadline_respected": true,
+    "retry_only": "SOURCE_UNAVAILABLE",
+    "username_official_uppercase": true,
+    "password_unchanged": true,
+    "close_once": true
+  },
+  "fixture": {
+    "network": "none",
+    "exit_code": 0,
+    "first_login_transient_recovered": true,
+    "new_nonce_per_attempt": true,
+    "delayed_form_ready": true,
+    "ruc_mode_selected": true,
+    "password_unchanged": true,
+    "username_official_normalization": true,
+    "renewal_completed": true,
+    "browsers_closed_once": true,
+    "redirect_simulation": "javascript_navigation"
+  },
+  "local_live_pilot": {
+    "reference": "pilot-3",
+    "run_finished": true,
+    "identity_verified": true,
+    "initial_mailbox_open_retried": true,
+    "results": [
+      {
+        "mailbox": "notifications",
+        "month": "2026-10",
+        "status": "complete",
+        "reason": null,
+        "count": 1,
+        "available_count": 1
+      },
+      {
+        "mailbox": "messages",
+        "month": "2026-10",
+        "status": "partial",
+        "reason": "PAGE_INCONSISTENT",
+        "count": 0,
+        "available_count": 3
+      },
+      {
+        "mailbox": "notifications",
+        "month": "2026-09",
+        "status": "complete",
+        "reason": null,
+        "count": 0,
+        "available_count": 0
+      },
+      {
+        "mailbox": "messages",
+        "month": "2026-09",
+        "status": "partial",
+        "reason": "PAGE_INCONSISTENT",
+        "count": 0,
+        "available_count": 1
+      }
+    ],
+    "attachment_bytes": 87581,
+    "attachment_matches_reference": true,
+    "renewal_completed": true,
+    "stable_ids_after_renewal": true,
+    "cleanup": "closed",
+    "failure": null,
+    "duration_ms": 60432,
+    "requests": 324,
+    "node_max_rss_mb": 166.55078125,
+    "container_peak_memory_mb": 452.15234375,
+    "container_memory_limit_mb": 768,
+    "container_cpu_ms": 23301.4158,
+    "reported_shell_exit_code": 1,
+    "query_and_attachment_complete": false,
+    "source_validated": false
+  },
+  "image": {
+    "private_registry_tag": "h10-auth-recovery-20261030",
+    "manifest": "sha256:563e9fad3f228f16665c9bcfab032efad691cbc09b6b8b948970c127477b3e96",
+    "status": "ready",
+    "stored_bytes": 976766346,
+    "worker_modules": 64
+  },
+  "presentation": {
+    "port": 4003,
+    "http_status": 200,
+    "worker_mode": "simulator",
+    "real_daily_enabled": false,
+    "data_reset": false
+  },
+  "remote_validation": {
+    "attempt": 6,
+    "authorized": true,
+    "max_instances": 1,
+    "max_duration_ms": 300000,
+    "status": "failed_opening_mailbox",
+    "evidence": "h10-vercel-piloto-6.json",
+    "sol_menu_reached_attempts": 2,
+    "mailbox_identity_verified": false,
+    "stopped": true,
+    "snapshots": 0
+  },
+  "supabase_cloud_writes": false,
+  "production_deployment": false,
+  "h10_complete": false,
+  "menu_fixture": {
+    "network": "none",
+    "handler_delay_ms": 3000,
+    "before_exit_code": 1,
+    "before_error": "SOURCE_UNAVAILABLE",
+    "after_exit_code": 0,
+    "waits_for_click_handler": true
+  },
+  "menu_ready_pilot": {
+    "run_finished": true,
+    "identity_verified": true,
+    "renewal_completed": true,
+    "stable_ids_after_renewal": true,
+    "attachment_bytes": 87581,
+    "messages_complete": false,
+    "messages_error": "PAGE_INCONSISTENT",
+    "cleanup": "closed",
+    "duration_ms": 29632,
+    "requests": 252,
+    "node_max_rss_mb": 168.10546875,
+    "container_peak_memory_mb": 417.5546875,
+    "container_memory_limit_mb": 768,
+    "container_cpu_ms": 15653.6831,
+    "reported_shell_exit_code": 1
+  },
+  "current_image": {
+    "private_registry_tag": "h10-auth-menu-ready-20261030",
+    "manifest": "sha256:e77607a780c76ac323d54cfbd0e31e833693fa5dde4f6a3a91b0d789fef55ace",
+    "stored_bytes": 976766649,
+    "worker_modules": 65,
+    "status": "ready"
+  },
+  "remote_retest": {
+    "attempt": 7,
+    "authorized": true,
+    "max_instances": 1,
+    "max_duration_ms": 300000,
+    "status": "completed_with_source_coverage_limit",
+    "conditional_eighth_allowed_only_after_access_download_renewal": true,
+    "evidence": "h10-vercel-piloto-7.json",
+    "login_mailbox_download_renewal_completed": true,
+    "stopped": true,
+    "snapshot_created": false
+  },
+  "remote_repeat": {
+    "attempt": 8,
+    "authorized": true,
+    "condition_satisfied": true,
+    "status": "completed_with_source_coverage_limit",
+    "same_image": true,
+    "evidence": "h10-vercel-piloto-8.json",
+    "login_mailbox_download_renewal_completed": true,
+    "stopped": true,
+    "snapshot_created": false,
+    "project_sessions_all_stopped": true,
+    "project_snapshots": 0
+  },
+  "authentication_correction_verified_in_vercel": true,
+  "daily_operation_validated": false,
+  "final_targeted_tests_passed": 30,
+  "final_typecheck": true,
+  "final_targeted_lint": true,
+  "final_format": true,
+  "final_unit_files": 69,
+  "final_unit_tests_passed": 482,
+  "final_unit_duration_seconds": 112.07,
+  "final_yarn_build_exit_code": 0,
+  "final_bundle_secret_check": true
+}

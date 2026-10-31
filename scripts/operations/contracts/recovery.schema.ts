@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const hashSchema = z.string().regex(/^[a-f0-9]{64}$/);
 export const backupObjectSchema = z.object({
-  bucket: z.literal("documents"),
+  bucket: z.enum(["documents", "sunat-mailbox"]),
   path: z
     .string()
     .regex(/^[a-zA-Z0-9/_\-.]+$/)

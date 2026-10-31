@@ -1,0 +1,23 @@
+{
+  "recorded_at": "2026-10-31T02:39:33.141Z",
+  "deployment_id": "dpl_5WfDQHb6VFvP9KuTByCYzq73GSXd",
+  "canonical_url": "https://taxskill.vercel.app",
+  "alias_mapping_verified": true,
+  "responses": [
+    {
+      "page": "/login",
+      "status": 200
+    },
+    {
+      "page": "/buzon-sunat",
+      "status": 200
+    }
+  ],
+  "admin_session_valid": true,
+  "connection_connected": true,
+  "client_chunks": 16,
+  "client_bytes": 1089047,
+  "configured_secrets_absent_from_client": true,
+  "unsigned_dispatch_status": 401,
+  "created_sunat_jobs": false
+}

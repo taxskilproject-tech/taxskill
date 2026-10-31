@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-10-29T02:25:56.610Z",
+  "authorized_live": true,
+  "pilot_reference": "pilot-3",
+  "query_and_attachment_complete": false,
+  "source_validated": false,
+  "stable_ids": true,
+  "read_effect": {
+    "status": "read_changed",
+    "mailbox": "messages",
+    "source_reported_update": true,
+    "checks": 3,
+    "reason": null
+  },
+  "session": {
+    "renewed": true,
+    "stable_ids_after_renewal": true
+  },
+  "results": [
+    {
+      "mailbox": "notifications",
+      "month": "2026-10",
+      "status": "complete",
+      "reason": null,
+      "count": 1,
+      "available_count": 1,
+      "metrics": {
+        "duration_ms": 2670,
+        "cpu_time_ms": 42.212,
+        "peak_memory_mb": 161,
+        "request_count": 5,
+        "pages_read": 5,
+        "pages_accepted": 5,
+        "session_renewals": 0
+      }
+    },
+    {
+      "mailbox": "messages",
+      "month": "2026-10",
+      "status": "partial",
+      "reason": "PAGE_INCONSISTENT",
+      "count": 0,
+      "available_count": 3,
+      "metrics": {
+        "duration_ms": 422,
+        "cpu_time_ms": 13.754,
+        "peak_memory_mb": 161,
+        "request_count": 2,
+        "pages_read": 2,
+        "pages_accepted": 0,
+        "session_renewals": 0
+      }
+    },
+    {
+      "mailbox": "notifications",
+      "month": "2026-09",
+      "status": "complete",
+      "reason": null,
+      "count": 0,
+      "available_count": 0,
+      "metrics": {
+        "duration_ms": 2620,
+        "cpu_time_ms": 36.518,
+        "peak_memory_mb": 161,
+        "request_count": 5,
+        "pages_read": 5,
+        "pages_accepted": 5,
+        "session_renewals": 0
+      }
+    },
+    {
+      "mailbox": "messages",
+      "month": "2026-09",
+      "status": "partial",
+      "reason": "PAGE_INCONSISTENT",
+      "count": 0,
+      "available_count": 1,
+      "metrics": {
+        "duration_ms": 216,
+        "cpu_time_ms": 11.889,
+        "peak_memory_mb": 161,
+        "request_count": 2,
+        "pages_read": 2,
+        "pages_accepted": 0,
+        "session_renewals": 0
+      }
+    }
+  ],
+  "attachment": {
+    "bytes": 87581,
+    "sha256": "04be9e664184e3a5eff3fbf2c0c4412dcd15732106eed7d75112aa762d68d3c2",
+    "mime": "application/pdf"
+  },
+  "metrics": {
+    "duration_ms": 29883,
+    "cpu_ms": 1822.092,
+    "max_rss_mb": 166.83203125,
+    "requests": 267,
+    "container": {
+      "peak_memory_mb": 434.7890625,
+      "cpu_time_ms": 15278.3015
+    }
+  },
+  "production_jobs_activated": false,
+  "cloud_changed": false
+}

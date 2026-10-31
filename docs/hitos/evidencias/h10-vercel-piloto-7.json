@@ -1,0 +1,161 @@
+{
+  "checked_on": "2026-10-30",
+  "attempt": 7,
+  "authorized_temporary_pilot": true,
+  "name": "taxskill-h10-pilot-20261029-7",
+  "session_id": "sbx_bVVqfvzXnQNgr16cAfy2GjasRLPl",
+  "started_at": "2026-10-30T05:49:11.037Z",
+  "finished_at": "2026-10-30T05:49:49.106Z",
+  "image_manifest": "sha256:e77607a780c76ac323d54cfbd0e31e833693fa5dde4f6a3a91b0d789fef55ace",
+  "persistent": false,
+  "timeout_ms": 300000,
+  "vcpus": 1,
+  "memory_mb": 2048,
+  "preflight_exit_code": 0,
+  "command_exit_code": 2,
+  "login_mailbox_download_renewal_completed": true,
+  "attachment_matches_docker": true,
+  "events": [
+    {
+      "event": "source_mailbox_opening",
+      "control_visible": true,
+      "controls": 1
+    },
+    {
+      "event": "pilot_connected",
+      "verified_identity": true
+    },
+    {
+      "event": "source_mailbox_opening",
+      "control_visible": true,
+      "controls": 1
+    },
+    {
+      "event": "pilot_finished",
+      "attachment_downloaded": true
+    }
+  ],
+  "connector": {
+    "schema_version": 2,
+    "authorized_live": true,
+    "pilot_reference": "pilot-3",
+    "current_stage": "finished",
+    "last_completed_stage": "renewal",
+    "run_finished": true,
+    "verified_identity": true,
+    "query_and_attachment_complete": false,
+    "source_validated": false,
+    "stable_ids": true,
+    "read_effect": {
+      "status": "not_demonstrated",
+      "reason": "NO_UNREAD_REFERENCE"
+    },
+    "session": {
+      "renewed": true,
+      "stable_ids_after_renewal": true
+    },
+    "results": [
+      {
+        "mailbox": "notifications",
+        "month": "2026-10",
+        "status": "complete",
+        "reason": null,
+        "count": 1,
+        "available_count": 1,
+        "metrics": {
+          "duration_ms": 3146,
+          "cpu_time_ms": 25.267,
+          "peak_memory_mb": 169,
+          "request_count": 5,
+          "pages_read": 5,
+          "pages_accepted": 5,
+          "session_renewals": 0
+        }
+      },
+      {
+        "mailbox": "messages",
+        "month": "2026-10",
+        "status": "partial",
+        "reason": "PAGE_INCONSISTENT",
+        "count": 0,
+        "available_count": 3,
+        "metrics": {
+          "duration_ms": 413,
+          "cpu_time_ms": 10.094,
+          "peak_memory_mb": 170,
+          "request_count": 2,
+          "pages_read": 2,
+          "pages_accepted": 0,
+          "session_renewals": 0
+        }
+      },
+      {
+        "mailbox": "notifications",
+        "month": "2026-09",
+        "status": "complete",
+        "reason": null,
+        "count": 0,
+        "available_count": 0,
+        "metrics": {
+          "duration_ms": 2866,
+          "cpu_time_ms": 27.378,
+          "peak_memory_mb": 171,
+          "request_count": 5,
+          "pages_read": 5,
+          "pages_accepted": 5,
+          "session_renewals": 0
+        }
+      },
+      {
+        "mailbox": "messages",
+        "month": "2026-09",
+        "status": "partial",
+        "reason": "PAGE_INCONSISTENT",
+        "count": 0,
+        "available_count": 1,
+        "metrics": {
+          "duration_ms": 397,
+          "cpu_time_ms": 6.018,
+          "peak_memory_mb": 171,
+          "request_count": 2,
+          "pages_read": 2,
+          "pages_accepted": 0,
+          "session_renewals": 0
+        }
+      }
+    ],
+    "attachment": {
+      "bytes": 87581,
+      "sha256": "04be9e664184e3a5eff3fbf2c0c4412dcd15732106eed7d75112aa762d68d3c2",
+      "mime": "application/pdf"
+    },
+    "failure": null,
+    "cleanup": "closed",
+    "cleanup_error": null,
+    "metrics": {
+      "duration_ms": 30650,
+      "cpu_ms": 1038.061,
+      "max_rss_mb": 187.56640625,
+      "requests": 252,
+      "container": {
+        "peak_memory_mb": 929.10546875,
+        "cpu_time_ms": 8973.892
+      }
+    }
+  },
+  "stopped": true,
+  "snapshot_created": false,
+  "independent_verification": {
+    "source": "Vercel MCP",
+    "session_status": "stopped",
+    "persistent": false,
+    "resumed": false,
+    "public_routes": 0,
+    "duration_ms": 36427,
+    "active_cpu_ms": 15066
+  },
+  "supabase_cloud_writes": false,
+  "real_daily_enabled": false,
+  "production_deployment": false,
+  "scope_limit": "Acceso, identidad, Notificaciones, PDF y renovación demostrados. Mensajes sigue parcial por PAGE_INCONSISTENT; salida 2, sin certificación de cobertura completa."
+}

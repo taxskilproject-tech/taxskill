@@ -44,6 +44,7 @@ export const sessionContextSchema = z.object({
     }),
   ),
   capabilities: z.array(capabilitySchema),
+  mailbox_company_ids: z.array(z.uuid()).optional(),
 });
 export const loginSchema = z.object({
   email: z.email(),

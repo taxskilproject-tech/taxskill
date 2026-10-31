@@ -2,12 +2,23 @@
 import Link from "next/link";
 
 import { notificationCountSchema } from "@/domain/notifications/contracts/notification.schema";
+import { sunatAlertsSchema } from "@/domain/sunat/contracts/sunat.schema";
+import { canReadSunat } from "@/domain/sunat/utils/access";
 import { useActivityQuery } from "@/features/activities/hooks/use-activity-query";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 import { useNotificationRealtime } from "@/features/notifications/hooks/use-notification-realtime";
+import { useSunatQuery } from "@/features/sunat-mailbox/hooks/use-sunat-query";
 
 export function NotificationBell() {
-  const { company } = useWorkspace();
+  const { company, context } = useWorkspace();
+  const mailboxEnabled = canReadSunat(context);
+  const mailbox = useSunatQuery(
+    "alert_count",
+    { company_id: company.kind === "company" ? company.companyId : undefined },
+    sunatAlertsSchema,
+    mailboxEnabled,
+    30000,
+  );
   const query = useActivityQuery(
     "unread_count",
     {
@@ -36,7 +47,7 @@ export function NotificationBell() {
         <span className="sr-only">Notificaciones</span>
         <span aria-atomic="true" role="status">
           {query.data
-            ? `${query.data.unread_count} sin leer`
+            ? `${query.data.unread_count + (mailboxEnabled ? (mailbox.data?.count ?? 0) : 0)} sin leer`
             : query.error
               ? "No disponibles"
               : "Consultando avisos"}
@@ -45,6 +56,11 @@ export function NotificationBell() {
       {realtimeError && (
         <p className="text-xs text-zinc-600" role="status">
           {realtimeError}
+        </p>
+      )}
+      {mailboxEnabled && mailbox.error && (
+        <p role="status" className="text-xs text-red-700">
+          Avisos SUNAT no disponibles.
         </p>
       )}
     </div>

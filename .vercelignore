@@ -1,0 +1,17 @@
+.agents
+.aws
+.codex
+.env
+.env.*
+.envs
+.git
+.next*
+.sunat-worker-build
+.yarn-cache
+coverage
+docs
+test-results
+*.tsbuildinfo
+supabase/.temp
+supabase/.branches
+*.log

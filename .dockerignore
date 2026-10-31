@@ -1,0 +1,16 @@
+.agents
+.aws
+.codex
+.env
+.env.*
+.envs
+.git
+.next*
+.vercel
+.sunat-worker-build
+.yarn-cache
+node_modules
+test-results
+coverage
+docs
+*.log

@@ -1,0 +1,133 @@
+{
+  "recorded_at": "2026-10-31T02:39:36.566Z",
+  "environment": "production_real_authorized_company",
+  "connection_verified": true,
+  "steps": [
+    {
+      "kind": "verify",
+      "state": "complete",
+      "error_code": null,
+      "metrics": {
+        "cpu_time_ms": 935.596,
+        "duration_ms": 14851,
+        "request_count": 113,
+        "peak_memory_mb": 200
+      }
+    },
+    {
+      "kind": "monthly",
+      "state": "partial",
+      "error_code": "PAGE_INCONSISTENT",
+      "metrics": {
+        "pages": 5,
+        "cpu_time_ms": 868.509,
+        "duration_ms": 18932,
+        "request_count": 118,
+        "peak_memory_mb": 200,
+        "session_renewals": 0
+      }
+    },
+    {
+      "kind": "monthly",
+      "state": "partial",
+      "error_code": "PAGE_INCONSISTENT",
+      "metrics": {
+        "pages": 5,
+        "cpu_time_ms": 632.232,
+        "duration_ms": 14046,
+        "request_count": 120,
+        "peak_memory_mb": 205,
+        "session_renewals": 0
+      }
+    },
+    {
+      "kind": "message",
+      "state": "complete",
+      "error_code": null,
+      "metrics": {
+        "cpu_time_ms": 837.975,
+        "duration_ms": 15844,
+        "request_count": 121,
+        "peak_memory_mb": 205
+      }
+    },
+    {
+      "kind": "attachment",
+      "state": "complete",
+      "error_code": null,
+      "metrics": {
+        "cpu_time_ms": 754.783,
+        "duration_ms": 11750,
+        "request_count": 122,
+        "peak_memory_mb": 200
+      }
+    }
+  ],
+  "attachment": {
+    "bytes": 87581,
+    "sha256": "04be9e664184e3a5eff3fbf2c0c4412dcd15732106eed7d75112aa762d68d3c2",
+    "cache_reused": true,
+    "matches_pilot_reference": true
+  },
+  "scheduler": {
+    "active": true,
+    "schedule": "* * * * *"
+  },
+  "http_callback": {
+    "status": 200,
+    "timed_out": false,
+    "transport_error": false
+  },
+  "daily": {
+    "created_at": "2026-10-31T02:14:06.45971+00:00",
+    "daily_date": "2026-10-30",
+    "error_code": "BUDGET_EXHAUSTED",
+    "finished_at": "2026-10-31T02:14:27.875006+00:00",
+    "progress": {
+      "mailbox": "messages",
+      "messages": 3,
+      "metrics": {
+        "cpu_time_ms": 891.272,
+        "duration_ms": 16656,
+        "pages": 3,
+        "peak_memory_mb": 205,
+        "request_count": 116,
+        "session_renewals": 0
+      },
+      "pages": 0
+    },
+    "state": "partial"
+  },
+  "daily_jobs_for_lima_day": 1,
+  "connection": {
+    "baseline_established": true,
+    "daily_enabled": true,
+    "daily_time": "08:00:00",
+    "last_daily_success_at": null,
+    "last_success_at": null,
+    "state": "connected"
+  },
+  "record_counts": [
+    {
+      "count": 3,
+      "mailbox": "messages",
+      "published_month": 10,
+      "published_year": 2026
+    },
+    {
+      "count": 1,
+      "mailbox": "messages",
+      "published_month": 9,
+      "published_year": 2026
+    },
+    {
+      "count": 1,
+      "mailbox": "notifications",
+      "published_month": 10,
+      "published_year": 2026
+    }
+  ],
+  "dispatcher_idle": true,
+  "source_messages_complete": false,
+  "whatsapp_enabled": false
+}

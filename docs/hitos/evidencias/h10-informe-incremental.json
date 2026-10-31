@@ -1,0 +1,69 @@
+{
+  "checked_on": "2026-10-29",
+  "environment": "local_docker",
+  "report_schema_version": 2,
+  "unit_files": 68,
+  "unit_tests_passed": 464,
+  "new_report_tests": 6,
+  "typecheck": true,
+  "targeted_lint": true,
+  "canonical_yarn_build": {
+    "exit_code": 0,
+    "next_version": "16.4.3",
+    "pages": 22,
+    "proxy": true,
+    "client_bundle_secret_check": true
+  },
+  "image": {
+    "local_id": "sha256:116bbdd913b3745a9d385a39d7c834ac8767ab58f5fd4ff6f3469e4aa071971f",
+    "local_bytes": 2571734135,
+    "private_registry_tag": "h10-pilot-checkpoints-20261029",
+    "manifest": "sha256:d8116700a4c0f33d1d360b9695e1aeaaa9df6b7d86cd92ab352e5d37d227bbcf",
+    "status": "ready",
+    "stored_bytes": 976764365,
+    "worker_modules": 61
+  },
+  "filesystem_fixture": {
+    "network": "none",
+    "exit_code": 0,
+    "atomic_replace": true,
+    "mode_600": true,
+    "previous_report_preserved_after_write_error": true
+  },
+  "local_live_pilot": {
+    "reference": "pilot-3",
+    "run_finished": true,
+    "identity_verified": true,
+    "notification_counts": { "2026-10": 1, "2026-09": 0 },
+    "messages_complete": false,
+    "messages_error": "PAGE_INCONSISTENT",
+    "recoverable_message_counts": { "2026-10": 3, "2026-09": 1 },
+    "attachment_bytes": 87581,
+    "attachment_matches_reference": true,
+    "renewal_completed": true,
+    "stable_ids_after_renewal": true,
+    "cleanup": "closed",
+    "failure": null,
+    "duration_ms": 39470,
+    "requests": 252,
+    "node_max_rss_mb": 166.2265625,
+    "container_peak_memory_mb": 768,
+    "container_memory_limit_mb": 768,
+    "container_cpu_ms": 20150.2608,
+    "reported_shell_exit_code": 1,
+    "query_and_attachment_complete": false,
+    "source_validated": false
+  },
+  "presentation": {
+    "port": 4003,
+    "next_version": "16.4.3",
+    "http_status": 200,
+    "worker_mode": "simulator",
+    "real_daily_enabled": false,
+    "data_reset": false
+  },
+  "fifth_remote_pilot_executed": true,
+  "fifth_pilot_evidence": "h10-vercel-piloto-5.json",
+  "supabase_cloud_writes": false,
+  "h10_complete": false
+}

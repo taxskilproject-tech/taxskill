@@ -1,3 +1,4 @@
+import { canReadSunat } from "@/domain/sunat/utils/access";
 import type { SessionContext } from "@/features/auth/types/auth.types";
 import type { NavigationItem } from "@/features/auth/types/navigation.types";
 import {
@@ -47,6 +48,20 @@ export function workspaceNavigation(
       group: "Trabajo",
     },
     ...modules,
+    ...(canReadSunat(context)
+      ? [
+          {
+            id: "buzon-sunat" as const,
+            label: "Buzón SUNAT",
+            group: "Módulos",
+            href:
+              "/buzon-sunat" +
+              (company.kind === "company"
+                ? "?companyId=" + company.companyId
+                : ""),
+          },
+        ]
+      : []),
     { id: "empresas", href: "/empresas", label: "Empresas", group: "Consulta" },
     {
       id: "documentos",

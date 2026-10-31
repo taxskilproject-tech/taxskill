@@ -1,0 +1,63 @@
+{
+  "checked_on": "2026-10-30",
+  "environment": "vercel_hobby_sandbox",
+  "attempt": 5,
+  "authorized_instances": 1,
+  "verified_instances": 1,
+  "image_manifest": "sha256:d8116700a4c0f33d1d360b9695e1aeaaa9df6b7d86cd92ab352e5d37d227bbcf",
+  "vcpus": 1,
+  "allocated_memory_mb": 2048,
+  "maximum_duration_ms": 300000,
+  "actual_session_duration_ms": 36067,
+  "active_cpu_duration_ms": 12498,
+  "ingress_bytes": 570242,
+  "egress_bytes": 60043,
+  "persistent": false,
+  "public_routes": 0,
+  "chromium_preflight_passed": true,
+  "command_exit_code": 1,
+  "connector_report_available": true,
+  "connector": {
+    "schema_version": 2,
+    "current_stage": "connecting",
+    "last_completed_stage": null,
+    "run_finished": false,
+    "verified_identity": false,
+    "query_and_attachment_complete": false,
+    "source_validated": false,
+    "results": [],
+    "attachment": null,
+    "session": null,
+    "failure": { "stage": "connecting", "code": "SOURCE_UNAVAILABLE" },
+    "cleanup": "closed",
+    "cleanup_error": null,
+    "metrics": {
+      "duration_ms": 29006,
+      "cpu_ms": 334.559,
+      "node_max_rss_mb": 159.02734375,
+      "requests": 17,
+      "container_peak_memory_mb": 836.45703125,
+      "container_cpu_ms": 5212.845,
+      "scope": "failed_initial_login_only"
+    }
+  },
+  "network_observation": {
+    "redirects": [{ "from": "sol_login", "to": "sol_login", "status": 302, "https": true }],
+    "document_responses": [{ "origin": "sol_login", "status": 302 }, { "origin": "sol_login", "status": 200 }],
+    "failed_requests": [],
+    "blocked_requests": 0,
+    "request_limit_exceeded": false,
+    "web_error_count": 0,
+    "console_error_count": 0
+  },
+  "cause_determined": false,
+  "proves_ip_block": false,
+  "cleanup": {
+    "status": "stopped",
+    "snapshots": 0,
+    "checked_with": ["sdk", "mcp_get_named_sandbox", "mcp_list_sessions", "mcp_list_session_snapshots"]
+  },
+  "supabase_cloud_writes": false,
+  "production_daily_enabled": false,
+  "h10_complete": false
+}

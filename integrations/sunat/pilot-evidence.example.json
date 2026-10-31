@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "environment": "not_run",
+  "provenance": "not_run",
+  "authorization_reference": null,
+  "checks": [
+    {
+      "id": "authenticated_access",
+      "status": "pending",
+      "evidence_reference": null
+    },
+    {
+      "id": "current_and_previous_month",
+      "status": "pending",
+      "evidence_reference": null
+    },
+    {
+      "id": "attachment_matches_source",
+      "status": "pending",
+      "evidence_reference": null
+    },
+    {
+      "id": "stable_message_identifiers",
+      "status": "pending",
+      "evidence_reference": null
+    },
+    {
+      "id": "session_recovery_and_errors",
+      "status": "pending",
+      "evidence_reference": null
+    },
+    {
+      "id": "bounded_month_queries",
+      "status": "pending",
+      "evidence_reference": null
+    },
+    {
+      "id": "resource_measurements",
+      "status": "pending",
+      "evidence_reference": null
+    },
+    {
+      "id": "read_state_effects",
+      "status": "pending",
+      "evidence_reference": null
+    }
+  ],
+  "measurements": {
+    "duration_ms": null,
+    "peak_memory_mb": null,
+    "cpu_time_ms": null,
+    "request_count": null,
+    "pages_read": null,
+    "attachment_bytes": null
+  },
+  "limits": {
+    "max_duration_ms": null,
+    "max_memory_mb": null,
+    "max_requests": null,
+    "max_pages": null
+  },
+  "behavior": {
+    "month_query": "unknown",
+    "unattended_daily_verified": false,
+    "read_state": "unknown"
+  }
+}

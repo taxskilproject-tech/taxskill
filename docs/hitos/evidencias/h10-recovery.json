@@ -1,0 +1,12 @@
+{
+  "recorded_at": "2026-10-31T02:16:48.931Z",
+  "source": "authorized_cloud",
+  "target": "isolated_docker_restore_54561",
+  "database_restored": true,
+  "foreign_keys_valid": true,
+  "attachments_restored": 1,
+  "keys_recovered": true,
+  "credentials_decrypted_in_memory": true,
+  "restored_jobs_disabled": true,
+  "live_sunat_requests": false
+}

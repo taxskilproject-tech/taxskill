@@ -5,6 +5,7 @@ import ts from "typescript";
 const sourceRoot = resolve("src");
 const componentLimit = 170;
 const violations: string[] = [];
+const checkedDependencies = new Set<string>();
 
 function listFiles(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -77,9 +78,11 @@ function checkDependencyPath(
     );
     return;
   }
+  if (checkedDependencies.has(filename)) return;
   for (const dependency of graph.get(filename) ?? []) {
     checkDependencyPath(dependency, graph, [...trail, filename]);
   }
+  checkedDependencies.add(filename);
 }
 
 function checkClientBoundary(

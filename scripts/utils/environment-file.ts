@@ -14,6 +14,14 @@ export function parseEnvironment(contents: string): Record<string, string> {
 export function ensureEnvironmentDirectory(path: string): void {
   mkdirSync(dirname(path), { recursive: true });
 }
+function quoteEnvironmentValue(value: string): string {
+  const quoted = JSON.stringify(value);
+  if (parseEnv("VALUE=" + quoted).VALUE === value) return quoted;
+  if (!value.includes("'")) return "'" + value + "'";
+  throw new Error(
+    "No se puede representar este valor de entorno sin alterarlo.",
+  );
+}
 export function saveEnvironmentFile(
   path: string,
   values: EnvironmentValues,
@@ -30,7 +38,7 @@ export function saveEnvironmentFile(
     );
   const content =
     entries
-      .map(([name, value]) => `${name}=${JSON.stringify(value)}`)
+      .map(([name, value]) => `${name}=${quoteEnvironmentValue(value)}`)
       .join("\n") + "\n";
   const parsed = parseEnv(content);
   if (entries.some(([name, value]) => parsed[name] !== value))

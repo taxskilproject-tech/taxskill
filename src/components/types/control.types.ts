@@ -11,7 +11,7 @@ import type { VisualTone } from "@/components/types/visual.types";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   loadingText?: string;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "danger";
 }
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -27,7 +27,7 @@ export interface BadgeProps {
 
 export interface FeedbackMessageProps {
   children: ReactNode;
-  kind?: "error" | "info" | "success";
+  kind?: "error" | "info" | "success" | "warning";
   id?: string;
 }
 

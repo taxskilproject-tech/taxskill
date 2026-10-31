@@ -5,7 +5,9 @@
 - **Fuentes:** [diseño técnico 1.1](diseno-tecnico.md), [análisis funcional](analisis_completo_sistema_documental_contable.md) y [resumen ejecutivo](resumen_ejecutivo_sistema_documental_contable.md).
 - **Relacionados:** [procesos](diagrama-flujo.md), [navegación](flujo-navegacion.md) y [carpetas](estructura-carpetas.md).
 
-**Extensión implementada H09:** el modelo original de 29 tablas se amplía a **31** mediante plantillas y versiones. Consultar [diccionario H09](#extensión-h09--plantillas-y-perfil-documental) y [migraciones y comprobaciones locales](hitos/evidencias/h09.md). Las menciones a modelo propuesto/RLS posterior en el cuerpo original son históricas; H08 protege el modelo existente y H09 añade sus propias políticas administrativas. No se aplicaron estas migraciones H09 a Cloud.
+**Extensión implementada H09:** el modelo original de 29 tablas se amplía a **31** mediante plantillas y versiones. Consultar [diccionario H09](#extensión-h09--plantillas-y-perfil-documental) y [migraciones y comprobaciones](hitos/evidencias/h09.md). Las menciones a modelo propuesto/RLS posterior en el cuerpo original son históricas; H08 protege el modelo existente y H09 añade sus propias políticas administrativas. Las migraciones H09 se publicaron posteriormente en Cloud por solicitud del usuario, según [el registro](hitos/evidencias/h09-cloud.json).
+
+**Extensión H10:** el [Buzón SUNAT](buzon-sunat-implementacion.md#persistencia-y-contratos) añade siete tablas públicas y seis privadas, con quince migraciones publicadas en Cloud. Mantiene aislamiento, soft delete de conexión/permisos y conservación de mensajes/trabajos/archivos. Ver [modelo operativo](#extensión-h10--buzón-sunat) y [evidencia de publicación](hitos/evidencias/h10-cloud-migrations.json).
 
 ## 1. Alcance y convenciones
 
@@ -2366,3 +2368,64 @@ Objeto estricto, sin claves adicionales:
 No se convierten empresas anteriores. Régimen/perfil/versiones se guardan atómicamente con las configuraciones iniciales. Publicar una versión posterior no modifica las empresas que ya conservaron otra. Las incompatibles por cambio confirmado de perfil se pausan con motivo; sus obligaciones no se cancelan ni se borran automáticamente.
 
 La numeración visible y los conteos se calculan. `setup_state` de consulta distingue pending_responsible, scheduled, paused y active; `starts_on` procede del inicio de control. Los grupos se obtienen del conjunto autorizado completo, antes de paginar, conservando tipos configurados con cero obligaciones. Para empresas anteriores sin `presentation_order`, se reutiliza el orden documental original y se añaden tipos particulares después, sin backfill de sus datos.
+
+## Extensión H10 — Buzón SUNAT
+
+Se añaden **siete tablas públicas y seis privadas**. El catálogo documental y el cumplimiento conservan sus relaciones anteriores. El [esquema base](../supabase/migrations/20261027024407_h10_mailbox_schema.sql), [despachador](../supabase/migrations/20261030060053_h10_dispatcher_runtime.sql), [programador](../supabase/migrations/20261030061258_h10_dispatch_schedule.sql) y [firma](../supabase/migrations/20261031012538_h10_signed_dispatch.sql) son la definición ejecutable de restricciones e índices. [Contratos y conservación](buzon-sunat-implementacion.md#persistencia-y-contratos).
+
+```mermaid
+erDiagram
+  COMPANIES ||--o| SUNAT_CONNECTIONS : configura
+  ORGANIZATION_MEMBERS ||--o{ SUNAT_ACCESS_GRANTS : recibe
+  COMPANIES ||--o{ SUNAT_ACCESS_GRANTS : autoriza
+  SUNAT_CONNECTIONS ||--o| SUNAT_CREDENTIALS : cifra
+  SUNAT_CONNECTIONS ||--o{ SUNAT_JOBS : procesa
+  SUNAT_CONNECTIONS ||--o{ SUNAT_MESSAGES : conserva
+  SUNAT_CONNECTIONS ||--o{ SUNAT_MONTH_QUERIES : consulta
+  SUNAT_MESSAGES ||--o{ SUNAT_ATTACHMENTS : adjunta
+  SUNAT_ATTACHMENTS ||--o| SUNAT_ATTACHMENT_SOURCES : localiza
+  SUNAT_MESSAGES o|--o{ SUNAT_NOTIFICATIONS : avisa
+  SUNAT_JOBS o|--o| SUNAT_DISPATCH_RUNTIME : ultimo_trabajo
+  SUNAT_WORKER_RUNTIME {
+    text id PK
+    timestamptz last_seen_at
+    text mode
+  }
+  SUNAT_DISPATCH_SETTINGS {
+    boolean id PK
+    boolean enabled
+    uuid secret_id
+  }
+  SUNAT_DISPATCH_NONCES {
+    uuid nonce PK
+    bigint issued_at
+    timestamptz expires_at
+    timestamptz consumed_at
+  }
+```
+
+Los vínculos por estudio/empresa usan FK compuestas con `ON DELETE RESTRICT`. `sunat_connections` y `sunat_access_grants` incluyen `created_at`, `updated_at` (`timestamptz NOT NULL DEFAULT now()`), `created_by`, `updated_by` (UUID nullable → profiles.user_id), revisión integer NOT NULL DEFAULT 0 y soft delete coordinado (`deleted_at`, `deleted_by`, `deletion_reason`). El motivo no puede quedar vacío al eliminar. La conexión conserva unicidad por estudio/empresa después de eliminarse lógicamente.
+
+| Tabla | Claves y campos específicos |
+|---|---|
+| `sunat_connections` | `id uuid PK DEFAULT gen_random_uuid()`, `organization_id`, `company_id uuid NOT NULL`; únicos `(organization_id,id)`, `(organization_id,company_id)` y `(organization_id,company_id,id)`. `state text NOT NULL DEFAULT pending_verification`: pending_verification/connected/needs_attention/disconnected. `credential_version integer NOT NULL DEFAULT 1 CHECK >0`; `daily_enabled boolean NOT NULL DEFAULT false`; `daily_time time NOT NULL DEFAULT 08:00`. Verificación, consulta, diario y último error: `timestamptz NULL`. `error_code text NULL`; `consent_version integer NOT NULL CHECK =1`, `consented_at timestamptz NOT NULL`, `consented_by uuid NOT NULL → profiles`. `daily_baseline_at timestamptz NULL` se separa del éxito completo y se limpia al rotar. |
+| `sunat_access_grants` | `id uuid PK`, estudio/empresa/membresía UUID NOT NULL; FK a companies y organization_members. `active boolean NOT NULL DEFAULT true`; único estudio/empresa/membresía, revisión y soft delete descritos arriba. |
+| `sunat_jobs` | `id uuid PK`; estudio, empresa, conexión UUID NOT NULL; `kind text`: verify/monthly/daily/message/attachment; `state text DEFAULT queued`: queued/running/complete/partial/failed/cancelled. `request_key text NOT NULL` de 1–120 caracteres, único por estudio/conexión; versión integer NOT NULL. Fechas civiles from/through y daily_date nullable; message_id/attachment_id y solicitante/sesión UUID nullable. Worker/lease UUID y vencimiento timestamptz nullable. `attempts integer NOT NULL DEFAULT 0 CHECK 0..3`. `checkpoint jsonb NOT NULL DEFAULT {}` ≤1 MiB; `progress jsonb NOT NULL DEFAULT {}` ≤8 KiB. Error text nullable; creación default now y comienzo/final timestamptz nullable. Índice único de trabajo queued/running por conexión e índice de cola por creación/id. |
+| `sunat_messages` | UUID PK; ámbito y conexión UUID NOT NULL; `mailbox text NOT NULL` notifications/messages; `source_id text NOT NULL` de 1–128 caracteres, identidad estable por conexión/bandeja. `published_on date NOT NULL`, instante de publicación nullable, asunto text NOT NULL 1–1000, lectura y presencia de adjuntos boolean; contenido y carga del detalle nullable. La consulta ordena por fecha e ID y filtra antes de paginar. |
+| `sunat_attachments` | UUID PK y ámbito/mensaje UUID NOT NULL; clave del origen text 1–128, nombre text 1–250. Estado available/cached/failed DEFAULT available. MIME, tamaño bigint 0–20.000.000, objeto privado único, SHA-256 hexadecimal de 64 caracteres y error son nullable hasta disponer de copia. FK compuestas al mensaje. |
+| `sunat_month_queries` | Identidad por estudio/empresa/conexión/bandeja/año/mes; estado complete/partial/failed. Distingue `last_attempt_at` de `last_success_at`, error y cantidad. No existe fila para un mes todavía no consultado. |
+| `sunat_notifications` | UUID PK; ámbito, conexión, destinatario y clave de evento. Mensaje nullable para avisos técnicos, título/cuerpo y creación. `read_at timestamptz NULL`; unicidad conexión/destinatario/evento. Su consulta vuelve a comprobar acceso vigente. |
+| `private.sunat_credentials` | `connection_id uuid PK`, estudio UUID y versión integer NOT NULL; FK estudio/conexión RESTRICT. `encrypted jsonb NOT NULL` con schema_version=1, algorithm=aes-256-gcm, key_id, IV hex de 24 caracteres, tag hex de 32 y ciphertext base64 de 1–8192 caracteres. `updated_at timestamptz NOT NULL DEFAULT now()`. No contiene usuario/clave en texto claro. |
+| `private.sunat_attachment_sources` | `attachment_id uuid PK → sunat_attachments.id ON DELETE RESTRICT`; `locator text NOT NULL`, comienza con `/ol-ti-itvisornoti/visor/bajarArchivo/`, sin query/hash y longitud menor que 1.000. Conserva el origen de archivos aún no cacheados y se respalda junto a las credenciales cifradas. El localizador no se entrega al navegador. |
+| `private.sunat_worker_runtime` | `id text PK CHECK =primary`, `mode text NOT NULL CHECK simulator/sunat` y `last_seen_at timestamptz NOT NULL`. No contiene worker UUID, no representa un documento ni tiene soft delete. |
+| `private.sunat_dispatch_runtime` | `id boolean PK DEFAULT true CHECK(id)`; lease_token UUID y lease_expires_at timestamptz, ambos null o ambos presentes. `job_id uuid NULL → sunat_jobs RESTRICT`, worker UUID nullable; comienzo/final timestamptz nullable; error text nullable con código `[A-Z_]` de 3–60. El cierre incierto conserva el lease. |
+| `private.sunat_dispatch_settings` | `id boolean PK DEFAULT true CHECK(id)`; `enabled boolean NOT NULL DEFAULT false`; endpoint text, secret_id UUID y last_request_id bigint nullable; updated_at timestamptz NOT NULL DEFAULT now(). secret_id es referencia lógica a Vault; no es el secreto. La operación administrativa valida el endpoint fijo y configura/retira el cron. |
+| `private.sunat_dispatch_nonces` | `nonce uuid PK`, `issued_at bigint NOT NULL`, `expires_at timestamptz NOT NULL`, `consumed_at timestamptz NULL`, `created_at timestamptz NOT NULL DEFAULT now()`. Índice de expiración; RLS y revocación de acceso directo. RPC de servicio consume una vez un nonce coincidente y vigente. TTL inicial 90 segundos; limpieza técnica de expirados después de dos días. |
+
+### JSON y estados H10
+
+`checkpoint` contiene entradas independientes `notifications`/`messages`: `schema_version`, `connection_key`, `mailbox`, fechas `from`/`through`, `next_page`, `total`, `order`, `first_id`, `last_date`, `seen_ids`, `items` y `complete`; el contenedor puede indicar `resume`. Los items transportan ID estable, fecha, lectura y presencia de adjuntos; no credenciales. La continuación diaria puede ampliar `through` sin perder el rango original.
+
+`progress` conserva bandeja, páginas, registros y `metrics`: duración, CPU del proceso, pico RSS, solicitudes, renovaciones y páginas. Los estados mensual/parcial y entrega documental pertenecen a dominios distintos. Un trabajo partial conserva datos y error; no adelanta la consulta completa. Los estados de VM, cola y cron son técnicos y no se suman al cumplimiento documental.
+
+Las tablas públicas usan RLS. Las privadas no conceden lectura directa a usuarios; sus operaciones se realizan mediante RPC autorizados. Mensajes, trabajos, adjuntos y auditoría se conservan. Desconectar retira el sobre operativo de credenciales, cancela trabajos y pausa la revisión, conservando el expediente consultable por quienes mantengan permiso.

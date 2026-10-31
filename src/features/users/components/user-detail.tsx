@@ -9,6 +9,7 @@ import { loadMemberAccess } from "@/features/access/repositories/access.reposito
 import type { UserDetailProps } from "@/features/access/types/access-ui.types";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 import { WhatsappContactForm } from "@/features/notifications/components/whatsapp-contact-form";
+import { SunatUserAccess } from "@/features/sunat-mailbox/components/user-access";
 import { AccountControls } from "@/features/users/components/account-controls";
 import { GrantList } from "@/features/users/components/grant-list";
 import { MembershipForm } from "@/features/users/components/membership-form";
@@ -20,6 +21,7 @@ export function UserDetail({ user, directory, onChanged }: UserDetailProps) {
     "cuenta",
     "accesos",
     "contacto",
+    "buzon",
   ]);
   const { context } = useWorkspace();
   const scope = useDataScope();
@@ -47,8 +49,12 @@ export function UserDetail({ user, directory, onChanged }: UserDetailProps) {
           { id: "cuenta", label: "Cuenta" },
           { id: "accesos", label: "Accesos" },
           { id: "contacto", label: "Contacto" },
+          { id: "buzon", label: "Buzón SUNAT" },
         ]}
       />
+      {view === "buzon" && (
+        <SunatUserAccess memberId={user.member.id} onChanged={changed} />
+      )}
       <div hidden={view !== "cuenta"} className="space-y-4">
         {!user.profile.deleted_at && !user.member.deleted_at && (
           <AccountControls

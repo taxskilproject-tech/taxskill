@@ -1,3 +1,4 @@
+// Generado con yarn db:types. No editar manualmente.
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
@@ -1659,6 +1660,295 @@ isOneToOne: false
       referencedColumns: ["user_id"]
     }
                   ]
+                },"sunat_access_grants": {
+                  Row: {
+                    "active": boolean,"company_id": string,"created_at": string,"created_by": string | null,"deleted_at": string | null,"deleted_by": string | null,"deletion_reason": string | null,"id": string,"member_id": string,"organization_id": string,"revision": number,"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "active"?: boolean,"company_id": string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"id"?: string,"member_id": string,"organization_id": string,"revision"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "active"?: boolean,"company_id"?: string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"id"?: string,"member_id"?: string,"organization_id"?: string,"revision"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sunat_access_grants_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_access_grants_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_access_grants_deleted_by_fkey"
+      columns: ["deleted_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_access_grants_deleted_by_fkey"
+      columns: ["deleted_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_access_grants_organization_id_company_id_fkey"
+      columns: ["organization_id","company_id"]
+isOneToOne: false
+      referencedRelation: "companies"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "sunat_access_grants_organization_id_member_id_fkey"
+      columns: ["organization_id","member_id"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["organization_id","member_id"]
+    },{
+      foreignKeyName: "sunat_access_grants_organization_id_member_id_fkey"
+      columns: ["organization_id","member_id"]
+isOneToOne: false
+      referencedRelation: "organization_members"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "sunat_access_grants_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_access_grants_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"sunat_attachments": {
+                  Row: {
+                    "byte_size": number | null,"cached_at": string | null,"company_id": string,"created_at": string,"error_code": string | null,"filename": string,"id": string,"message_id": string,"mime_type": string | null,"object_name": string | null,"organization_id": string,"sha256": string | null,"source_key": string,"state": string
+                  }
+                  Insert: {
+                    "byte_size"?: number | null,"cached_at"?: string | null,"company_id": string,"created_at"?: string,"error_code"?: string | null,"filename": string,"id"?: string,"message_id": string,"mime_type"?: string | null,"object_name"?: string | null,"organization_id": string,"sha256"?: string | null,"source_key": string,"state"?: string
+                  }
+                  Update: {
+                    "byte_size"?: number | null,"cached_at"?: string | null,"company_id"?: string,"created_at"?: string,"error_code"?: string | null,"filename"?: string,"id"?: string,"message_id"?: string,"mime_type"?: string | null,"object_name"?: string | null,"organization_id"?: string,"sha256"?: string | null,"source_key"?: string,"state"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sunat_attachments_organization_id_company_id_message_id_fkey"
+      columns: ["organization_id","company_id","message_id"]
+isOneToOne: false
+      referencedRelation: "sunat_messages"
+      referencedColumns: ["organization_id","company_id","id"]
+    }
+                  ]
+                },"sunat_connections": {
+                  Row: {
+                    "company_id": string,"consent_version": number,"consented_at": string,"consented_by": string,"created_at": string,"created_by": string | null,"credential_version": number,"daily_baseline_at": string | null,"daily_enabled": boolean,"daily_time": string,"deleted_at": string | null,"deleted_by": string | null,"deletion_reason": string | null,"error_code": string | null,"id": string,"last_daily_success_at": string | null,"last_error_at": string | null,"last_success_at": string | null,"last_verified_at": string | null,"organization_id": string,"revision": number,"state": string,"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "company_id": string,"consent_version": number,"consented_at": string,"consented_by": string,"created_at"?: string,"created_by"?: string | null,"credential_version"?: number,"daily_baseline_at"?: string | null,"daily_enabled"?: boolean,"daily_time"?: string,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"error_code"?: string | null,"id"?: string,"last_daily_success_at"?: string | null,"last_error_at"?: string | null,"last_success_at"?: string | null,"last_verified_at"?: string | null,"organization_id": string,"revision"?: number,"state"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "company_id"?: string,"consent_version"?: number,"consented_at"?: string,"consented_by"?: string,"created_at"?: string,"created_by"?: string | null,"credential_version"?: number,"daily_baseline_at"?: string | null,"daily_enabled"?: boolean,"daily_time"?: string,"deleted_at"?: string | null,"deleted_by"?: string | null,"deletion_reason"?: string | null,"error_code"?: string | null,"id"?: string,"last_daily_success_at"?: string | null,"last_error_at"?: string | null,"last_success_at"?: string | null,"last_verified_at"?: string | null,"organization_id"?: string,"revision"?: number,"state"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sunat_connections_consented_by_fkey"
+      columns: ["consented_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_connections_consented_by_fkey"
+      columns: ["consented_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_connections_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_connections_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_connections_deleted_by_fkey"
+      columns: ["deleted_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_connections_deleted_by_fkey"
+      columns: ["deleted_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_connections_organization_id_company_id_fkey"
+      columns: ["organization_id","company_id"]
+isOneToOne: true
+      referencedRelation: "companies"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "sunat_connections_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "sunat_connections_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_connections_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"sunat_jobs": {
+                  Row: {
+                    "attachment_id": string | null,"attempts": number,"checkpoint": NonNullable<Json>,"company_id": string,"connection_id": string,"created_at": string,"credential_version": number,"daily_date": string | null,"error_code": string | null,"finished_at": string | null,"from_date": string | null,"id": string,"kind": string,"lease_expires_at": string | null,"lease_token": string | null,"message_id": string | null,"organization_id": string,"progress": NonNullable<Json>,"request_key": string,"requester_id": string | null,"requester_session": string | null,"started_at": string | null,"state": string,"through_date": string | null,"worker_id": string | null
+                  }
+                  Insert: {
+                    "attachment_id"?: string | null,"attempts"?: number,"checkpoint"?: NonNullable<Json>,"company_id": string,"connection_id": string,"created_at"?: string,"credential_version": number,"daily_date"?: string | null,"error_code"?: string | null,"finished_at"?: string | null,"from_date"?: string | null,"id"?: string,"kind": string,"lease_expires_at"?: string | null,"lease_token"?: string | null,"message_id"?: string | null,"organization_id": string,"progress"?: NonNullable<Json>,"request_key": string,"requester_id"?: string | null,"requester_session"?: string | null,"started_at"?: string | null,"state"?: string,"through_date"?: string | null,"worker_id"?: string | null
+                  }
+                  Update: {
+                    "attachment_id"?: string | null,"attempts"?: number,"checkpoint"?: NonNullable<Json>,"company_id"?: string,"connection_id"?: string,"created_at"?: string,"credential_version"?: number,"daily_date"?: string | null,"error_code"?: string | null,"finished_at"?: string | null,"from_date"?: string | null,"id"?: string,"kind"?: string,"lease_expires_at"?: string | null,"lease_token"?: string | null,"message_id"?: string | null,"organization_id"?: string,"progress"?: NonNullable<Json>,"request_key"?: string,"requester_id"?: string | null,"requester_session"?: string | null,"started_at"?: string | null,"state"?: string,"through_date"?: string | null,"worker_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sunat_jobs_organization_id_company_id_attachment_id_fkey"
+      columns: ["organization_id","company_id","attachment_id"]
+isOneToOne: false
+      referencedRelation: "sunat_attachments"
+      referencedColumns: ["organization_id","company_id","id"]
+    },{
+      foreignKeyName: "sunat_jobs_organization_id_company_id_connection_id_fkey"
+      columns: ["organization_id","company_id","connection_id"]
+isOneToOne: false
+      referencedRelation: "sunat_connections"
+      referencedColumns: ["organization_id","company_id","id"]
+    },{
+      foreignKeyName: "sunat_jobs_organization_id_company_id_message_id_fkey"
+      columns: ["organization_id","company_id","message_id"]
+isOneToOne: false
+      referencedRelation: "sunat_messages"
+      referencedColumns: ["organization_id","company_id","id"]
+    },{
+      foreignKeyName: "sunat_jobs_requester_id_fkey"
+      columns: ["requester_id"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_jobs_requester_id_fkey"
+      columns: ["requester_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"sunat_messages": {
+                  Row: {
+                    "company_id": string,"connection_id": string,"content_text": string | null,"details_loaded_at": string | null,"first_seen_at": string,"has_attachments": boolean,"id": string,"last_seen_at": string,"mailbox": string,"organization_id": string,"published_at": string | null,"published_on": string,"source_id": string,"source_read": boolean,"subject": string
+                  }
+                  Insert: {
+                    "company_id": string,"connection_id": string,"content_text"?: string | null,"details_loaded_at"?: string | null,"first_seen_at"?: string,"has_attachments"?: boolean,"id"?: string,"last_seen_at"?: string,"mailbox": string,"organization_id": string,"published_at"?: string | null,"published_on": string,"source_id": string,"source_read"?: boolean,"subject": string
+                  }
+                  Update: {
+                    "company_id"?: string,"connection_id"?: string,"content_text"?: string | null,"details_loaded_at"?: string | null,"first_seen_at"?: string,"has_attachments"?: boolean,"id"?: string,"last_seen_at"?: string,"mailbox"?: string,"organization_id"?: string,"published_at"?: string | null,"published_on"?: string,"source_id"?: string,"source_read"?: boolean,"subject"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sunat_messages_organization_id_company_id_connection_id_fkey"
+      columns: ["organization_id","company_id","connection_id"]
+isOneToOne: false
+      referencedRelation: "sunat_connections"
+      referencedColumns: ["organization_id","company_id","id"]
+    }
+                  ]
+                },"sunat_month_queries": {
+                  Row: {
+                    "company_id": string,"connection_id": string,"error_code": string | null,"id": string,"job_id": string,"last_attempt_at": string,"last_success_at": string | null,"mailbox": string,"message_count": number | null,"month": number,"organization_id": string,"state": string,"year": number
+                  }
+                  Insert: {
+                    "company_id": string,"connection_id": string,"error_code"?: string | null,"id"?: string,"job_id": string,"last_attempt_at"?: string,"last_success_at"?: string | null,"mailbox": string,"message_count"?: number | null,"month": number,"organization_id": string,"state": string,"year": number
+                  }
+                  Update: {
+                    "company_id"?: string,"connection_id"?: string,"error_code"?: string | null,"id"?: string,"job_id"?: string,"last_attempt_at"?: string,"last_success_at"?: string | null,"mailbox"?: string,"message_count"?: number | null,"month"?: number,"organization_id"?: string,"state"?: string,"year"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sunat_month_queries_organization_id_company_id_connection__fkey"
+      columns: ["organization_id","company_id","connection_id"]
+isOneToOne: false
+      referencedRelation: "sunat_connections"
+      referencedColumns: ["organization_id","company_id","id"]
+    },{
+      foreignKeyName: "sunat_month_queries_organization_id_job_id_fkey"
+      columns: ["organization_id","job_id"]
+isOneToOne: false
+      referencedRelation: "sunat_jobs"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
+                },"sunat_notifications": {
+                  Row: {
+                    "body": string,"company_id": string,"connection_id": string,"created_at": string,"event_key": string,"id": string,"message_id": string | null,"organization_id": string,"published_on": string | null,"read_at": string | null,"recipient_id": string,"title": string
+                  }
+                  Insert: {
+                    "body": string,"company_id": string,"connection_id": string,"created_at"?: string,"event_key": string,"id"?: string,"message_id"?: string | null,"organization_id": string,"published_on"?: string | null,"read_at"?: string | null,"recipient_id": string,"title": string
+                  }
+                  Update: {
+                    "body"?: string,"company_id"?: string,"connection_id"?: string,"created_at"?: string,"event_key"?: string,"id"?: string,"message_id"?: string | null,"organization_id"?: string,"published_on"?: string | null,"read_at"?: string | null,"recipient_id"?: string,"title"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sunat_notifications_organization_id_company_id_connection__fkey"
+      columns: ["organization_id","company_id","connection_id"]
+isOneToOne: false
+      referencedRelation: "sunat_connections"
+      referencedColumns: ["organization_id","company_id","id"]
+    },{
+      foreignKeyName: "sunat_notifications_organization_id_company_id_message_id_fkey"
+      columns: ["organization_id","company_id","message_id"]
+isOneToOne: false
+      referencedRelation: "sunat_messages"
+      referencedColumns: ["organization_id","company_id","id"]
+    },{
+      foreignKeyName: "sunat_notifications_organization_id_recipient_id_fkey"
+      columns: ["organization_id","recipient_id"]
+isOneToOne: false
+      referencedRelation: "organization_members"
+      referencedColumns: ["organization_id","user_id"]
+    },{
+      foreignKeyName: "sunat_notifications_recipient_id_fkey"
+      columns: ["recipient_id"]
+isOneToOne: false
+      referencedRelation: "h02_users"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "sunat_notifications_recipient_id_fkey"
+      columns: ["recipient_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
                 },"upload_intents": {
                   Row: {
                     "confirmed_version_id": string | null,"created_at": string,"created_by": string | null,"cycle_id": string,"declared_bytes": number,"declared_mime": string,"deliverable_id": string,"error_code": string | null,"expected_deliverable_revision": number,"expires_at": string,"final_bucket": string,"final_path": string,"id": string,"organization_id": string,"original_name": string,"request_id": string,"reserved_version_id": string,"revision": number,"staging_bucket": string,"staging_cleaned_at": string | null,"staging_path": string,"state": string,"updated_at": string,"updated_by": string | null,"user_id": string,"validation_lease_until": string | null,"validation_result": Json | null,"validation_token": string | null
@@ -2041,6 +2331,54 @@ isOneToOne: false
                            },
 "h08_schedule_generation":
 { Args: { "p_enabled"?: boolean }; Returns: undefined
+                           },
+"h10_command":
+{ Args: { "p_input": Json,"p_operation": string,"p_organization_id": string,"p_request_id": string }; Returns: Json
+                           },
+"h10_dispatch_authorize":
+{ Args: { "p_job_id": string,"p_organization_id": string }; Returns: boolean
+                           },
+"h10_dispatch_claim":
+{ Args: { "p_run_daily"?: boolean }; Returns: Json
+                           },
+"h10_dispatch_configure":
+{ Args: { "p_enabled"?: boolean,"p_endpoint": string,"p_secret": string }; Returns: boolean
+                           },
+"h10_dispatch_consume_nonce":
+{ Args: { "p_issued_at": number,"p_nonce": string }; Returns: boolean
+                           },
+"h10_dispatch_finish":
+{ Args: { "p_error_code"?: string,"p_run_id": string,"p_stopped"?: boolean }; Returns: boolean
+                           },
+"h10_download_authorize":
+{ Args: { "p_actor_id": string,"p_attachment_id": string,"p_organization_id": string,"p_request_id": string,"p_session_id": string }; Returns: Json
+                           },
+"h10_query":
+{ Args: { "p_input"?: Json,"p_organization_id": string,"p_resource": string }; Returns: Json
+                           },
+"h10_store_credentials":
+{ Args: { "p_input": Json }; Returns: Json
+                           },
+"h10_worker_abandon":
+{ Args: { "p_error_code": string,"p_job_id": string,"p_lease_token": string }; Returns: boolean
+                           },
+"h10_worker_attachment":
+{ Args: { "p_input": Json,"p_job_id": string,"p_lease_token": string }; Returns: boolean
+                           },
+"h10_worker_batch":
+{ Args: { "p_checkpoint": Json,"p_job_id": string,"p_lease_token": string,"p_mailbox": string,"p_progress": Json,"p_records": Json }; Returns: boolean
+                           },
+"h10_worker_details":
+{ Args: { "p_attachments": Json,"p_job_id": string,"p_lease_token": string,"p_text": string }; Returns: boolean
+                           },
+"h10_worker_finish":
+{ Args: { "p_error_code": string,"p_job_id": string,"p_lease_token": string,"p_metrics": Json,"p_results": Json,"p_state": string }; Returns: boolean
+                           },
+"h10_worker_heartbeat":
+{ Args: { "p_job_id": string,"p_lease_token": string }; Returns: boolean
+                           },
+"h10_worker_tick":
+{ Args: { "p_mode": string,"p_now"?: string,"p_run_daily"?: boolean,"p_worker_id": string }; Returns: Json
                            }
           }
           Enums: {

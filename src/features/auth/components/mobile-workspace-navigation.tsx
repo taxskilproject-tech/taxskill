@@ -24,7 +24,8 @@ export function MobileWorkspaceNavigation({
       item.id !== "inicio" &&
       item.id !== "actividades",
   );
-  const moduleActive = documentaryModule(active) !== null;
+  const moduleActive =
+    documentaryModule(active) !== null || active === "buzon-sunat";
   return (
     <>
       <nav

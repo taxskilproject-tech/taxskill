@@ -1,0 +1,15 @@
+{
+  "recorded_at": "2026-10-31T02:07:31.850Z",
+  "environment": "isolated_local_4004_54431",
+  "synthetic": true,
+  "checks": [
+    "Login con loading contextual y bloqueo hasta completar la operación",
+    "Bandeja local con empresa, periodo y filas de mensajes visibles",
+    "Panel de conexión con foco contenido, Escape y devolución de foco",
+    "Móvil 390 × 844 sin desbordamiento horizontal",
+    "Detalle móvil accesible y cierre con teclado"
+  ],
+  "runtime_errors": 0,
+  "presentation_4003_unchanged": true,
+  "remote_requests": false
+}

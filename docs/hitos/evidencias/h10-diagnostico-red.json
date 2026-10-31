@@ -1,0 +1,38 @@
+{
+  "checked_on": "2026-10-29",
+  "environment": "local_docker_and_private_registry",
+  "local_image_id": "sha256:296222282fb9f659e73a9f18ab4b69197f144adde4c2f15e9e664ba94aa55944",
+  "local_image_bytes": 2571730805,
+  "registry": {
+    "private": true,
+    "tag": "h10-login-trace-20261029",
+    "manifest": "sha256:993effc2ad6fdbec4e84730439e804c789492eed6ac496b06319b183525c7fe2",
+    "push_exit_code": 0,
+    "stored_bytes": 976763607,
+    "last_observed_status": "ready"
+  },
+  "worker_modules": 59,
+  "trace_limit_per_list": 16,
+  "regression": {
+    "test_files": 67,
+    "tests_passed": 458,
+    "typecheck": true,
+    "lint": true
+  },
+  "chromium_fixture": {
+    "location": "Docker loopback HTTP server",
+    "external_network": "none",
+    "credentials_supplied": false,
+    "exit_code": 0,
+    "redirect_observed": true,
+    "policy_abort_observed": true,
+    "script_error_observed": true,
+    "raw_content_absent": true,
+    "packaged_image_verified": true
+  },
+  "fourth_remote_pilot_executed": true,
+  "fourth_pilot_evidence": "h10-vercel-piloto-4.json",
+  "supabase_cloud_writes": false,
+  "production_daily_enabled": false,
+  "h10_complete": false
+}

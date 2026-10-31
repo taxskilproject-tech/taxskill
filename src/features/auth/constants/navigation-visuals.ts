@@ -14,6 +14,7 @@ export const NAVIGATION_ICONS: Record<NavigationId, IconName> = {
   notificaciones: "bell",
   usuarios: "users",
   configuracion: "settings",
+  "buzon-sunat": "inbox",
 };
 
 export const MODULE_ICON_STYLES: Partial<Record<NavigationId, string>> = {

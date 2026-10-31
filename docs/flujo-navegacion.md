@@ -221,4 +221,6 @@ Componentes pequeños y accesibles: campos etiquetados, foco visible, teclado, m
 
 ## 7. Referencias
 
+**Navegación H10:** `/buzon-sunat` está en Módulos, con selección obligatoria de empresa. URL: `companyId`, `year`, `month`, `mailbox`, `q`, `page`, `messageId`; cambiar empresa limpia el mensaje y filtros anteriores. Administrador configura conexiones; usuarios internos autorizados consultan. Los permisos se gestionan en Usuarios → Buzón SUNAT y los avisos en Notificaciones → Buzón SUNAT. No modifica pestañas documentales ni cumplimiento H09. [Publicación, diario y límites del origen verificados](hitos/evidencias/h10-cierre.md).
+
 Convenciones verificadas en node_modules/next/dist/docs/01-app/01-getting-started/02-project-structure.md y guías locales de Route Groups/Server and Client Components. Los flujos y permisos provienen del diseño central; este archivo no crea páginas ni modifica rutas existentes.

@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-10-29T02:16:00.130Z",
+  "source": "synthetic",
+  "environment": "isolated_docker_simulator",
+  "live_sunat_connector_validated": false,
+  "network": "none; loopback fixture only",
+  "checks": [
+    {
+      "name": "monthly_window_complete",
+      "passed": true
+    },
+    {
+      "name": "both_months_reconciled",
+      "passed": true
+    },
+    {
+      "name": "older_history_not_fetched",
+      "passed": true
+    },
+    {
+      "name": "success_advances_only_after_completion",
+      "passed": true
+    },
+    {
+      "name": "certified_empty_requires_consistent_source",
+      "passed": true
+    },
+    {
+      "name": "transient_empty_page_recovers",
+      "passed": true
+    },
+    {
+      "name": "counter_without_rows_is_partial",
+      "passed": true
+    },
+    {
+      "name": "bad_page_does_not_advance_cursor",
+      "passed": true
+    },
+    {
+      "name": "retries_are_bounded",
+      "passed": true
+    },
+    {
+      "name": "twenty_four_of_twenty_five_rejected",
+      "passed": true
+    },
+    {
+      "name": "foreign_company_page_rejected",
+      "passed": true
+    },
+    {
+      "name": "moving_total_requires_attention",
+      "passed": true
+    },
+    {
+      "name": "repeated_page_is_not_appended",
+      "passed": true
+    },
+    {
+      "name": "descending_order_must_hold",
+      "passed": true
+    },
+    {
+      "name": "unverified_order_cannot_stop_at_date",
+      "passed": true
+    },
+    {
+      "name": "request_budget_preserves_partial",
+      "passed": true
+    },
+    {
+      "name": "cloud_refused_before_network",
+      "passed": true
+    },
+    {
+      "name": "expired_session_renews_once",
+      "passed": true
+    },
+    {
+      "name": "renewal_counted_in_request_budget",
+      "passed": true
+    },
+    {
+      "name": "session_expiry_never_loops",
+      "passed": true
+    },
+    {
+      "name": "invalid_password_not_retried",
+      "passed": true
+    },
+    {
+      "name": "captcha_requires_human_intervention",
+      "passed": true
+    },
+    {
+      "name": "unavailable_is_never_an_empty_success",
+      "passed": true
+    },
+    {
+      "name": "hung_page_aborts_with_cursor_preserved",
+      "passed": true
+    },
+    {
+      "name": "read_effect_consent_required_before_requests",
+      "passed": true
+    },
+    {
+      "name": "daily_window_starts_at_last_successful_day",
+      "passed": true
+    },
+    {
+      "name": "daily_query_skips_old_history",
+      "passed": true
+    },
+    {
+      "name": "page_budget_persists_continuation",
+      "passed": true
+    },
+    {
+      "name": "resume_finishes_without_duplicate_rows",
+      "passed": true
+    },
+    {
+      "name": "resume_revalidates_first_page_anchor",
+      "passed": true
+    },
+    {
+      "name": "failed_refresh_keeps_last_complete_snapshot",
+      "passed": true
+    },
+    {
+      "name": "changed_anchor_blocks_unsafe_resume",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_is_explicit",
+      "passed": true
+    },
+    {
+      "name": "duplicate_click_reuses_same_job",
+      "passed": true
+    },
+    {
+      "name": "different_query_cannot_overlap_company",
+      "passed": true
+    },
+    {
+      "name": "next_company_can_run_after_completion",
+      "passed": true
+    },
+    {
+      "name": "checkpoint_capacity_stops_without_losing_progress",
+      "passed": true
+    },
+    {
+      "name": "different_connections_run_sequentially",
+      "passed": true
+    },
+    {
+      "name": "future_consent_cannot_authorize_requests",
+      "passed": true
+    },
+    {
+      "name": "short_page_records_preserved_separately",
+      "passed": true
+    },
+    {
+      "name": "repeated_partial_rows_deduplicated",
+      "passed": true
+    },
+    {
+      "name": "partial_records_never_certify_coverage",
+      "passed": true
+    },
+    {
+      "name": "foreign_partial_rows_never_persisted",
+      "passed": true
+    },
+    {
+      "name": "worker_measures_actual_local_requests",
+      "passed": true
+    },
+    {
+      "name": "worker_measures_cpu_memory_and_time",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "suite_duration_ms": 1422,
+    "suite_cpu_time_ms": 598.047,
+    "suite_peak_memory_mb": 87,
+    "container_peak_memory_bytes": 108224512,
+    "actual_simulator_http_requests": 66,
+    "sample_query": {
+      "duration_ms": 44,
+      "cpu_time_ms": 11.057,
+      "peak_memory_mb": 87,
+      "request_count": 2,
+      "pages_read": 2,
+      "pages_accepted": 2,
+      "session_renewals": 0
+    }
+  },
+  "budgets": {
+    "container_memory_mb": 256,
+    "container_cpus": 0.5,
+    "per_query_timeout_ms": 5000
+  },
+  "production_jobs_activated": false
+}

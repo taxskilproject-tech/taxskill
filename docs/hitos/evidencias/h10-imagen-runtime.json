@@ -1,0 +1,31 @@
+{
+  "checked_on": "2026-10-29",
+  "environment": "local_docker",
+  "historical_variant": true,
+  "recommended_for_live_login": false,
+  "superseded_by": "h10-runtime-y-validacion.md",
+  "image": "taxskill-sunat-worker:h10-compact",
+  "local_image_id": "sha256:f35086878bf4d37e34e69e947e7bab31a780a90527bd29fe4be4843e7d9d9aa1",
+  "image_bytes": 1040709587,
+  "previous_image_bytes": 3127852998,
+  "build": {
+    "command": "docker build -f integrations/sunat/worker/Dockerfile -t taxskill-sunat-worker:h10-compact .",
+    "exit_code": 0,
+    "compiler": "Yarn 1.22.22 and root yarn.lock",
+    "runtime_dependencies": ["@supabase/supabase-js", "pdf-lib", "playwright-core", "zod"]
+  },
+  "smoke": {
+    "exit_code": 0,
+    "uid": 1001,
+    "chromium_version": "156.0.8078.4",
+    "chromium_sandbox": true,
+    "network": "none",
+    "read_only": true,
+    "capabilities": "all_dropped",
+    "libraries_loaded": true,
+    "private_inputs_absent": true,
+    "credentials_supplied": false
+  },
+  "proves_vercel_compatibility": false,
+  "proves_sunat_pilot_complete": false
+}

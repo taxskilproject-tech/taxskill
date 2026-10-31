@@ -36,7 +36,7 @@ export function WorkspaceSidebar({
           <NavigationLinks active={active} dark items={primary} />
         </div>
         {modules.length > 0 && (
-          <section aria-label="Módulos documentales">
+          <section aria-label="Módulos">
             <p className="px-3 pt-1 pb-1 text-[11px] font-semibold tracking-widest text-slate-400">
               MÓDULOS
             </p>

@@ -10,6 +10,7 @@ export type IconName =
   | "team"
   | "company"
   | "document"
+  | "inbox"
   | "report"
   | "audit"
   | "bell"

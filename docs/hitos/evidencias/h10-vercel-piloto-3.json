@@ -1,0 +1,57 @@
+{
+  "checked_on": "2026-10-29",
+  "environment": "vercel_hobby_sandbox",
+  "attempt": 3,
+  "authorized_instances": 1,
+  "verified_instances": 1,
+  "image_manifest": "sha256:8122542ab101f6895792a2264e5c6304bf859600ac65e4c1f72f130f32976d32",
+  "architecture": "amd64",
+  "vcpus": 1,
+  "allocated_memory_mb": 2048,
+  "peak_memory_mb": null,
+  "maximum_duration_ms": 300000,
+  "actual_session_duration_ms": 38174,
+  "active_cpu_duration_ms": 10296,
+  "ingress_bytes": 718590,
+  "egress_bytes": 66467,
+  "persistent": false,
+  "public_routes": 0,
+  "allowed_domains": ["*.sunat.gob.pe", "sunat.gob.pe"],
+  "chromium_preflight": {
+    "exit_code": 0,
+    "uid": 1001,
+    "sandbox_enabled": true
+  },
+  "sunat_pilot": {
+    "exit_code": 1,
+    "failure_stage": "login_submit",
+    "error": "SOURCE_UNAVAILABLE",
+    "login_completed": false,
+    "mailbox_queried": false,
+    "connector_report_available": false,
+    "diagnostics": {
+      "page_kind": "sol_login",
+      "login_form_visible": false,
+      "captcha_visible": false,
+      "exit_count": 0,
+      "mailbox_count": 0,
+      "credential_error": false,
+      "verification_notice": false,
+      "maintenance_notice": false,
+      "access_denied_notice": false,
+      "login_http_status": 302,
+      "menu_http_status": null
+    },
+    "cause_determined": false,
+    "proves_ip_block": false
+  },
+  "cleanup": {
+    "status": "stopped",
+    "snapshots": 0,
+    "checked_with": ["sdk", "mcp_get_named_sandbox", "mcp_list_sessions", "mcp_list_session_snapshots"]
+  },
+  "supabase_cloud_writes": false,
+  "production_daily_enabled": false,
+  "h10_complete": false,
+  "follow_up": "h10-runtime-y-validacion.md"
+}

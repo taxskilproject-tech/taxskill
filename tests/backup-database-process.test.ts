@@ -44,7 +44,12 @@ describe("ejecutor PostgreSQL de respaldo", () => {
     dumpDatabase("cloud");
     expect(subprocess.run).toHaveBeenCalledWith(
       "docker",
-      expect.arrayContaining(["pg_dump", "--role=postgres"]),
+      expect.arrayContaining([
+        "pg_dump",
+        "--role=postgres",
+        "--table=private.sunat_credentials",
+        "--table=private.sunat_attachment_sources",
+      ]),
       expect.anything(),
     );
     expect(subprocess.run).not.toHaveBeenCalledWith(

@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import { MAX_NAVIGATION_ORIGIN_DEPTH } from "@/features/auth/constants/navigation";
 import type { WorkspaceRoute } from "@/features/auth/types/company-context.types";
 import type { NavigationId } from "@/features/auth/types/navigation.types";
@@ -16,6 +18,7 @@ const BASE_NAVIGATION: Readonly<Record<string, NavigationId>> = {
   notificaciones: "notificaciones",
   usuarios: "usuarios",
   configuracion: "configuracion",
+  "buzon-sunat": "buzon-sunat",
 };
 
 export function workspaceRoute(
@@ -23,6 +26,15 @@ export function workspaceRoute(
   parameters: URLSearchParams,
   depth = 0,
 ): WorkspaceRoute {
+  if (pathname === "/buzon-sunat") {
+    const id = z.uuid().safeParse(parameters.get("companyId"));
+    return {
+      companyId: id.success ? id.data : null,
+      module: null,
+      picker: false,
+      singleCompany: true,
+    };
+  }
   const company = COMPANY_ROUTE.exec(pathname);
   if (company)
     return {

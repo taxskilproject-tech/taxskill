@@ -1,0 +1,98 @@
+{
+  "checked_on": "2026-10-28",
+  "environment": "docker_local",
+  "provenance": "authorized_live",
+  "live_source_validated": false,
+  "query_and_attachment_complete": false,
+  "identity_verified": true,
+  "stable_ids": true,
+  "read_effect": {
+    "status": "not_demonstrated",
+    "reason": "NO_UNREAD_REFERENCE"
+  },
+  "session": {
+    "renewed": true,
+    "stable_ids_after_renewal": true
+  },
+  "periods": [
+    {
+      "mailbox": "notifications",
+      "month": "2026-10",
+      "status": "complete",
+      "reason": null,
+      "count": 7,
+      "metrics": {
+        "duration_ms": 5444,
+        "cpu_time_ms": 153.177,
+        "peak_memory_mb": 163,
+        "request_count": 8,
+        "pages_read": 8,
+        "pages_accepted": 8,
+        "session_renewals": 0
+      }
+    },
+    {
+      "mailbox": "messages",
+      "month": "2026-10",
+      "status": "partial",
+      "reason": "PAGE_INCONSISTENT",
+      "count": 0,
+      "metrics": {
+        "duration_ms": 343,
+        "cpu_time_ms": 10.001,
+        "peak_memory_mb": 163,
+        "request_count": 2,
+        "pages_read": 2,
+        "pages_accepted": 0,
+        "session_renewals": 0
+      }
+    },
+    {
+      "mailbox": "notifications",
+      "month": "2026-09",
+      "status": "complete",
+      "reason": null,
+      "count": 4,
+      "metrics": {
+        "duration_ms": 4266,
+        "cpu_time_ms": 43.539,
+        "peak_memory_mb": 163,
+        "request_count": 8,
+        "pages_read": 8,
+        "pages_accepted": 8,
+        "session_renewals": 0
+      }
+    },
+    {
+      "mailbox": "messages",
+      "month": "2026-09",
+      "status": "partial",
+      "reason": "PAGE_INCONSISTENT",
+      "count": 0,
+      "metrics": {
+        "duration_ms": 428,
+        "cpu_time_ms": 8.063,
+        "peak_memory_mb": 163,
+        "request_count": 2,
+        "pages_read": 2,
+        "pages_accepted": 0,
+        "session_renewals": 0
+      }
+    }
+  ],
+  "attachment": {
+    "bytes": 88793,
+    "mime": "application/pdf",
+    "matches_private_reference": true
+  },
+  "metrics": {
+    "duration_ms": 37545,
+    "cpu_ms": 1800.865,
+    "max_rss_mb": 167.87109375,
+    "requests": 255,
+    "container": {
+      "peak_memory_mb": 422.625,
+      "cpu_time_ms": 14071.7324
+    }
+  }
+}

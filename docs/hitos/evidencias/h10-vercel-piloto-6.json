@@ -1,0 +1,102 @@
+{
+  "checked_on": "2026-10-30",
+  "attempt": 6,
+  "authorized_temporary_pilot": true,
+  "name": "taxskill-h10-pilot-20261029-6",
+  "session_id": "sbx_HQEOFEPBOTKdMho7MesQS8ptq4Rj",
+  "started_at": "2026-10-30T05:41:29.248Z",
+  "finished_at": "2026-10-30T05:42:43.079Z",
+  "image_manifest": "sha256:563e9fad3f228f16665c9bcfab032efad691cbc09b6b8b948970c127477b3e96",
+  "persistent": false,
+  "timeout_ms": 300000,
+  "vcpus": 1,
+  "memory_mb": 2048,
+  "preflight_exit_code": 0,
+  "command_exit_code": 1,
+  "sol_menu_reached_attempts": 2,
+  "mailbox_frame_opened": false,
+  "mailbox_identity_verified": false,
+  "renewal_reached": false,
+  "events": [
+    {
+      "event": "source_mailbox_opening"
+    },
+    {
+      "event": "source_mailbox_layout"
+    },
+    {
+      "event": "source_connection_failed",
+      "stage": "mailbox_frame",
+      "reason": "SOURCE_UNAVAILABLE"
+    },
+    {
+      "event": "source_login_retry",
+      "attempt": 1
+    },
+    {
+      "event": "source_mailbox_opening"
+    },
+    {
+      "event": "source_mailbox_layout"
+    },
+    {
+      "event": "source_connection_failed",
+      "stage": "mailbox_frame",
+      "reason": "SOURCE_UNAVAILABLE"
+    },
+    {
+      "event": "pilot_failed",
+      "code": "SOURCE_UNAVAILABLE"
+    }
+  ],
+  "connector": {
+    "schema_version": 2,
+    "authorized_live": true,
+    "pilot_reference": "pilot-3",
+    "current_stage": "connecting",
+    "last_completed_stage": null,
+    "run_finished": false,
+    "verified_identity": false,
+    "query_and_attachment_complete": false,
+    "source_validated": false,
+    "stable_ids": null,
+    "read_effect": null,
+    "session": null,
+    "results": [],
+    "attachment": null,
+    "failure": {
+      "stage": "connecting",
+      "code": "SOURCE_UNAVAILABLE"
+    },
+    "cleanup": "closed",
+    "cleanup_error": null,
+    "metrics": {
+      "duration_ms": 63267,
+      "cpu_ms": 914.639,
+      "max_rss_mb": 171.90234375,
+      "requests": 126,
+      "container": {
+        "peak_memory_mb": 890.3515625,
+        "cpu_time_ms": 11526.369
+      }
+    }
+  },
+  "stopped": true,
+  "snapshot_created": false,
+  "independent_verification": {
+    "source": "Vercel MCP",
+    "session_status": "stopped",
+    "persistent": false,
+    "resumed": false,
+    "public_routes": 0,
+    "project_sessions_count": 6,
+    "project_sessions_all_stopped": true,
+    "project_snapshots_count": 0,
+    "duration_ms": 72171,
+    "active_cpu_ms": 20023
+  },
+  "supabase_cloud_writes": false,
+  "real_daily_enabled": false,
+  "production_deployment": false,
+  "scope_limit": "Acceso al menú SOL conseguido; la apertura del buzón no completó. No valida consulta ni renovación remotas."
+}

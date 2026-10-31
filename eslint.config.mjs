@@ -7,8 +7,11 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   globalIgnores([
+    ".envs/**",
     ".next/**",
     ".next-h09/**",
+    ".next-h10/**",
+    ".sunat-worker-build/**",
     ".yarn-cache/**",
     "coverage/**",
     "test-results/**",

@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-31T02:30:28.936Z",
+  "environment": "isolated_docker_54431",
+  "checks": [
+    "Administrador accede a la empresa local autorizada",
+    "Origen ajeno rechazado antes de guardar credenciales",
+    "Descarga anónima rechazada",
+    "Consulta autorizada por empresa: contador",
+    "Empresa ajena rechazada: contador",
+    "Revocación inmediata: contador",
+    "Consulta autorizada por empresa: supervisor",
+    "Empresa ajena rechazada: supervisor",
+    "Revocación inmediata: supervisor",
+    "Cliente: asignación de buzón y consulta rechazadas"
+  ],
+  "passed": 10,
+  "presentation_worker_stopped": false,
+  "cloud_writes": false
+}

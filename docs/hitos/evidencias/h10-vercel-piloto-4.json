@@ -1,0 +1,54 @@
+{
+  "checked_on": "2026-10-29",
+  "environment": "vercel_hobby_sandbox",
+  "attempt": 4,
+  "authorized_instances": 1,
+  "verified_instances": 1,
+  "image_manifest": "sha256:993effc2ad6fdbec4e84730439e804c789492eed6ac496b06319b183525c7fe2",
+  "vcpus": 1,
+  "allocated_memory_mb": 2048,
+  "peak_memory_mb": null,
+  "maximum_duration_ms": 300000,
+  "actual_session_duration_ms": 77563,
+  "active_cpu_duration_ms": 20158,
+  "ingress_bytes": 2550851,
+  "egress_bytes": 418248,
+  "persistent": false,
+  "public_routes": 0,
+  "initial_login": {
+    "mailbox_opened": true,
+    "identity_verified": true,
+    "evidence": "pilot_connected with verified_identity=true before the subsequent login failure"
+  },
+  "subsequent_login": {
+    "completed": false,
+    "reason": "SOURCE_UNAVAILABLE",
+    "page_kind": "sol_login",
+    "login_http_status": 302,
+    "menu_http_status": null,
+    "network_observation": {
+      "redirects": [{ "from": "sol_login", "to": "sol_login", "status": 302, "https": true }],
+      "document_responses": [{ "origin": "sol_login", "status": 302 }, { "origin": "sol_login", "status": 200 }],
+      "failed_requests": [],
+      "blocked_requests": 0,
+      "last_blocked_origin": null,
+      "request_limit_exceeded": false,
+      "web_error_count": 0,
+      "last_web_error": null,
+      "console_error_count": 0
+    },
+    "failure_within_exact_pilot_phase": "not_checkpointed",
+    "proves_ip_block": false
+  },
+  "connector_report_available": false,
+  "monthly_counts_certified": false,
+  "attachment_certified_in_this_run": false,
+  "cleanup": {
+    "status": "stopped",
+    "snapshots": 0,
+    "checked_with": ["sdk", "mcp_get_named_sandbox", "mcp_list_sessions", "mcp_list_session_snapshots"]
+  },
+  "supabase_cloud_writes": false,
+  "production_daily_enabled": false,
+  "h10_complete": false
+}

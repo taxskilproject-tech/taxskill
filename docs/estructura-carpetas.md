@@ -492,3 +492,9 @@ El repositorio compartido sigue en `features/access/repositories`; no se creó `
 - `scripts/run-h09-lab.ts`, `scripts/utils/h09-lab-environment.ts` y fixtures H09: laboratorio Docker separado, con conexión validada antes de solicitar o escribir datos.
 
 No se añaden rutas App Router, API routes, bibliotecas visuales ni servicios duplicados por módulo. Los artefactos locales `.next-h09` y `test-results/local/h09-lab` están excluidos del repositorio. [Especificación y conservación H09](entregables-plantillas-empresa.md).
+
+## Extensión H10 — implementación y operación
+
+La implementación del [Buzón SUNAT](buzon-sunat-implementacion.md) añade la ruta delgada `src/app/(app)/buzon-sunat/page.tsx`, composiciones en `src/features/sunat-mailbox`, contratos/tipos puros en `src/domain/sunat` y cuatro excepciones con secretos en `src/app/api/sunat/{credentials,download,run,dispatch}`. Los adaptadores del conector permanecen fuera del navegador, en `scripts/sunat-worker/{source,services,repositories,contracts,types,utils}`. Reutiliza controles Atomic Design, paneles y la descarga compartida `src/lib/files/save-blob.ts`. No añade middleware ni una biblioteca visual.
+
+El build `.next-h10` y `.sunat-worker-build` son productos generados ignorados por Git y ESLint. El simulador rechaza Cloud antes de crear solicitudes. `run-one.ts` procesa un claim en una VM temporal Vercel; sus adaptadores, contratos y tipos de despacho permanecen en la feature. La [publicación y recuperación H10](hitos/evidencias/h10-cierre.md) tienen evidencia separada de las pruebas locales; `integrations/sunat/worker/Dockerfile` construye la imagen privada sin archivos de entorno.

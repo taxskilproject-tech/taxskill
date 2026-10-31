@@ -10,6 +10,7 @@ export type NavigationId =
   | "notificaciones"
   | "usuarios"
   | "configuracion"
+  | "buzon-sunat"
   | DocumentaryModuleId;
 
 export interface NavigationItem {

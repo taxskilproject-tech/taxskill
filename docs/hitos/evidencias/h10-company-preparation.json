@@ -1,0 +1,15 @@
+{
+  "recorded_at": "2026-10-31T01:38:19.624Z",
+  "environment": "cloud_real_company_user_confirmed",
+  "regime": "mype",
+  "igv_renta": true,
+  "plame": true,
+  "afp": true,
+  "health_coverage": "essalud",
+  "mype_template_published": true,
+  "other_templates_untouched": true,
+  "prepared_count": 28,
+  "pending_responsible": true,
+  "obligations_generated": false,
+  "internal_deadline_days": 0
+}

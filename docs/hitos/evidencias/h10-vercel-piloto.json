@@ -1,0 +1,44 @@
+{
+  "checked_on": "2026-10-29",
+  "environment": "vercel_hobby_sandbox",
+  "authorized_instances": 1,
+  "verified_instances": 1,
+  "image_manifest": "sha256:d8c62907985d7b96518073920cd31ee4b77cc469e0fc64834e914eed92dc8061",
+  "architecture": "amd64",
+  "vcpus": 1,
+  "allocated_memory_mb": 2048,
+  "peak_memory_mb": null,
+  "maximum_duration_ms": 300000,
+  "actual_session_duration_ms": 34147,
+  "active_cpu_duration_ms": 6902,
+  "ingress_bytes": 723825,
+  "egress_bytes": 68662,
+  "persistent": false,
+  "public_routes": 0,
+  "allowed_domains": ["*.sunat.gob.pe", "sunat.gob.pe"],
+  "chromium_preflight": {
+    "exit_code": 0,
+    "uid": 1001,
+    "sandbox_enabled": true,
+    "duration_ms": 1119
+  },
+  "sunat_pilot": {
+    "exit_code": 1,
+    "duration_ms": 29620,
+    "failure_stage": "login_submit",
+    "error": "SOURCE_UNAVAILABLE",
+    "login_completed": false,
+    "mailbox_queried": false,
+    "connector_report_available": false,
+    "cause_determined": false
+  },
+  "cleanup": {
+    "status": "stopped",
+    "snapshots": 0,
+    "checked_with": ["sdk", "mcp_get_named_sandbox", "mcp_list_sessions", "mcp_list_session_snapshots"],
+    "logs_after_stop": "HTTP_410_CONFIRMED_BY_MCP_AND_CLI"
+  },
+  "supabase_cloud_writes": false,
+  "production_daily_enabled": false,
+  "h10_complete": false
+}

@@ -1,0 +1,47 @@
+{
+  "reference_date_lima": "2026-10-30",
+  "milestone": "H10",
+  "status": "operationally_complete_with_explicit_source_limitation",
+  "automated_tests": { "files_passed": 75, "tests_passed": 501 },
+  "last_backup_adjustment": { "files_passed": 3, "tests_passed": 4 },
+  "checks": {
+    "typecheck": "passed",
+    "lint": "passed",
+    "architecture": "passed",
+    "yarn_build": "passed",
+    "build_profile": "h10_isolated",
+    "next_version": "16.4.3",
+    "local_client_bundle": "passed",
+    "deployed_client_chunks_checked": 16,
+    "deployed_configured_secrets_absent": true,
+    "sql_rollback_checks": 34,
+    "current_access_checks_four_profiles": 10,
+    "local_ui_checks": 5,
+    "local_ui_runtime_errors": 0,
+    "real_pdf_hash_matches_pilot": true,
+    "real_pdf_cache_reused": true,
+    "daily_signed_callback_status": 200,
+    "daily_jobs_for_lima_day": 1,
+    "daily_partial_did_not_advance_success": true,
+    "database_and_one_attachment_recovery": "passed",
+    "keyring_recovery_and_memory_decryption": "passed"
+  },
+  "publication": {
+    "migration_count": 98,
+    "h10_migrations": 15,
+    "history_fingerprints_preserved_before_real_company_setup": 13,
+    "deployment_id": "dpl_5WfDQHb6VFvP9KuTByCYzq73GSXd",
+    "ready_state": "READY",
+    "canonical_url": "https://taxskill.vercel.app",
+    "daily_schedule": "08:00 America/Lima"
+  },
+  "local_presentation": { "port": 4003, "isolated_build_preserved": true },
+  "limits": {
+    "source_messages_complete": false,
+    "source_pagination_inconsistency_visible": true,
+    "partial_result_is_not_empty_or_complete": true,
+    "h08_operational_pending_items_not_closed": true,
+    "no_fictitious_data_in_cloud": true,
+    "no_whatsapp_or_automatic_activities_added": true
+  }
+}

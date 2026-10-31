@@ -1,6 +1,8 @@
 const ALLOWED_ROUTES =
-  /^\/(dashboard|empresas(?:\/[0-9a-f-]{36}(?:\/trabajadores\/[0-9a-f-]{36})?)?|usuarios|configuracion|actividades(?:\/[0-9a-f-]{36})?|reportes|notificaciones|documentos|auditoria)$/;
+  /^\/(dashboard|buzon-sunat|empresas(?:\/[0-9a-f-]{36}(?:\/trabajadores\/[0-9a-f-]{36})?)?|usuarios|configuracion|actividades(?:\/[0-9a-f-]{36})?|reportes|notificaciones|documentos|auditoria)$/;
 const ALLOWED_QUERY = new Set([
+  "mailbox",
+  "messageId",
   "newDeliverable",
   "documentYear",
   "documentMonth",

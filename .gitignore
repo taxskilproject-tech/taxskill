@@ -49,3 +49,5 @@ next-env.d.ts
 
 # Build isolated from the running presentation server
 /.next-h09/
+/.next-h10/
+/.sunat-worker-build/

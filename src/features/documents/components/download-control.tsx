@@ -11,6 +11,7 @@ import { FilePreviewPanel } from "@/features/documents/components/file-preview-p
 import { invokeDocumentEdge } from "@/features/documents/repositories/document.repository";
 import type { DownloadProps } from "@/features/documents/types/document-ui.types";
 import type { PreviewFile } from "@/features/documents/types/preview.types";
+import { saveBlob } from "@/lib/files/save-blob";
 
 export function DownloadControl({
   versionId,
@@ -58,8 +59,8 @@ export function DownloadControl({
       if (!response.ok) throw { code: "DEPENDENCY_UNAVAILABLE" };
       const blob = await response.blob();
       current.signal.throwIfAborted();
-      const url = URL.createObjectURL(blob);
       if (preview) {
+        const url = URL.createObjectURL(blob);
         closePreview();
         objectUrl.current = url;
         setPreviewLoading(true);
@@ -70,11 +71,7 @@ export function DownloadControl({
         });
         return success(null);
       }
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = signed.original_name;
-      link.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      saveBlob(blob, signed.original_name);
       return success(null);
     });
   }

@@ -12,6 +12,8 @@ import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { describe, expect, it } from "vitest";
 
+import type { ClientBundleTestProfile } from "./types/client-bundle-ci.types";
+
 const workflow = readFileSync(resolve(".github/workflows/ci.yml"), "utf8");
 const canaries = Object.fromEntries(
   [...workflow.matchAll(/^ {6}([A-Z0-9_]+): (.+)$/gm)].map((match) => [
@@ -20,9 +22,13 @@ const canaries = Object.fromEntries(
   ]),
 );
 
-function runCleanBundle(leak: string | null) {
+function runCleanBundle(
+  leak: string | null,
+  buildProfile: ClientBundleTestProfile = undefined,
+) {
   const directory = mkdtempSync(join(tmpdir(), "taxskill-ci-bundle-"));
-  const staticDirectory = join(directory, ".next", "static");
+  const buildDirectory = buildProfile ? ".next-" + buildProfile : ".next";
+  const staticDirectory = join(directory, buildDirectory, "static");
   mkdirSync(staticDirectory, { recursive: true });
   const bundle = join(staticDirectory, "client.js");
   writeFileSync(
@@ -39,7 +45,13 @@ function runCleanBundle(leak: string | null) {
       ],
       {
         cwd: directory,
-        env: { ...process.env, ...canaries },
+        env: {
+          ...process.env,
+          ...canaries,
+          TAXSKILL_BUILD_PROFILE: buildProfile,
+          SUNAT_CREDENTIALS_CURRENT_KEY: undefined,
+          SUNAT_CREDENTIALS_KEYS: undefined,
+        },
         encoding: "utf8",
         windowsHide: true,
       },
@@ -47,7 +59,7 @@ function runCleanBundle(leak: string | null) {
   } finally {
     unlinkSync(bundle);
     rmdirSync(staticDirectory);
-    rmdirSync(join(directory, ".next"));
+    rmdirSync(join(directory, buildDirectory));
     rmdirSync(directory);
   }
 }
@@ -58,6 +70,13 @@ describe("verificación real del bundle con el entorno de CI", () => {
     expect(result.status, result.stderr).toBe(0);
     expect(result.stdout).toContain("Bundle del navegador verificado");
   });
+  it.each(["h09", "h10"] satisfies ClientBundleTestProfile[])(
+    "verifica el directorio correcto para el perfil %s",
+    (profile) => {
+      const result = runCleanBundle(null, profile);
+      expect(result.status, result.stderr).toBe(0);
+    },
+  );
   it.each([
     "SUPABASE_SECRET_KEY",
     "IDEMPOTENCY_HMAC_KEY",

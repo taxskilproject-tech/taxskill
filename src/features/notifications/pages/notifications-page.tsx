@@ -4,16 +4,23 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/atoms/button";
 import { SectionNavigation } from "@/components/molecules/section-navigation";
 import { notificationListSchema } from "@/domain/notifications/contracts/notification.schema";
+import { canReadSunat } from "@/domain/sunat/utils/access";
 import { PageHeading } from "@/features/access/components/page-heading";
 import { Pagination } from "@/features/access/components/pagination";
 import { QueryState } from "@/features/access/components/query-state";
 import { useCurrentRoute } from "@/features/access/hooks/use-current-route";
+import { usePresentation } from "@/features/access/hooks/use-presentation";
 import { useActivityQuery } from "@/features/activities/hooks/use-activity-query";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 import { NotificationItem } from "@/features/notifications/components/notification-item";
+import { SunatAlerts } from "@/features/sunat-mailbox/components/alerts";
 
 export function NotificationsPage() {
-  const { company } = useWorkspace();
+  const { company, context } = useWorkspace();
+  const [view, setView] = usePresentation("view", "documentales", [
+    "documentales",
+    "buzon",
+  ]);
   const parameters = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -52,58 +59,78 @@ export function NotificationsPage() {
         description="Avisos personales de tus alcances actuales. Leerlos no completa las actividades."
         title="Notificaciones"
       />
-      <SectionNavigation
-        label="Bandeja de notificaciones"
-        selected={unread ? "unread" : "all"}
-        items={[
-          { id: "all", label: "Todas" },
-          { id: "unread", label: "Sin leer" },
-        ]}
-        onSelect={(value) =>
-          router.replace(`${pathname}?page=1&unread=${value === "unread"}`, {
-            scroll: false,
-          })
-        }
-      />
-      <QueryState
-        error={query.error}
-        loading={query.isPending}
-        onRetry={() => {
-          void query.refetch();
-        }}
-        retrying={query.isFetching}
-      >
-        <Pagination
-          count={query.data?.count ?? 0}
-          onPage={(value) =>
-            router.replace(`${pathname}?page=${value}&unread=${unread}`, {
-              scroll: false,
-            })
-          }
-          page={page}
+      {canReadSunat(context) && (
+        <SectionNavigation
+          label="Origen de los avisos"
+          selected={view}
+          onSelect={setView}
+          items={[
+            { id: "documentales", label: "Documentales" },
+            { id: "buzon", label: "Buzón SUNAT" },
+          ]}
         />
-        {query.data?.rows.map((notification) => (
-          <NotificationItem
-            key={notification.id}
-            notification={notification}
-            origin={origin}
+      )}
+      {view === "buzon" && canReadSunat(context) ? (
+        <SunatAlerts key={JSON.stringify(company)} />
+      ) : (
+        <>
+          <SectionNavigation
+            label="Bandeja de notificaciones"
+            selected={unread ? "unread" : "all"}
+            items={[
+              { id: "all", label: "Todas" },
+              { id: "unread", label: "Sin leer" },
+            ]}
+            onSelect={(value) =>
+              router.replace(
+                `${pathname}?page=1&unread=${value === "unread"}`,
+                {
+                  scroll: false,
+                },
+              )
+            }
           />
-        ))}
-        {query.data?.count === 0 && (
-          <p className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
-            No tienes avisos en este contexto.
-          </p>
-        )}
-        <Pagination
-          count={query.data?.count ?? 0}
-          onPage={(value) =>
-            router.replace(`${pathname}?page=${value}&unread=${unread}`, {
-              scroll: false,
-            })
-          }
-          page={page}
-        />
-      </QueryState>
+          <QueryState
+            error={query.error}
+            loading={query.isPending}
+            onRetry={() => {
+              void query.refetch();
+            }}
+            retrying={query.isFetching}
+          >
+            <Pagination
+              count={query.data?.count ?? 0}
+              onPage={(value) =>
+                router.replace(`${pathname}?page=${value}&unread=${unread}`, {
+                  scroll: false,
+                })
+              }
+              page={page}
+            />
+            {query.data?.rows.map((notification) => (
+              <NotificationItem
+                key={notification.id}
+                notification={notification}
+                origin={origin}
+              />
+            ))}
+            {query.data?.count === 0 && (
+              <p className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
+                No tienes avisos en este contexto.
+              </p>
+            )}
+            <Pagination
+              count={query.data?.count ?? 0}
+              onPage={(value) =>
+                router.replace(`${pathname}?page=${value}&unread=${unread}`, {
+                  scroll: false,
+                })
+              }
+              page={page}
+            />
+          </QueryState>
+        </>
+      )}
     </div>
   );
 }

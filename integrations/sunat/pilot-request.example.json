@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "company": { "company_id": null, "ruc": null, "legal_name": null },
+  "authorization": {
+    "reference": null,
+    "approved_by": null,
+    "approved_at": null,
+    "allow_read": false,
+    "allow_download": false,
+    "allow_local_evidence": false,
+    "allow_read_state_change": false
+  },
+  "months": { "current": null, "previous": null },
+  "access": {
+    "sol_user_available": false,
+    "mailbox_permission_confirmed": false,
+    "private_entry_arranged": false
+  },
+  "references": {
+    "known_message_available": false,
+    "known_attachment_available": false
+  },
+  "infrastructure": {
+    "private_worker_confirmed": false,
+    "maintenance_contact_confirmed": false
+  }
+}

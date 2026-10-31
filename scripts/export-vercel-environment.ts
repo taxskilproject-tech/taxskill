@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { adminEnvironmentSchema } from "../src/config/env/schemas/admin-environment.schema";
 import { isPublishableKey } from "../src/config/env/utils/validate-public-key";
+import { sunatDispatcherEnvironmentSchema } from "../src/features/sunat-mailbox/contracts/dispatch.schema";
 import {
   CLOUD_APPLICATION_ENV_FILE,
   CLOUD_EDGE_ENV_FILE,
@@ -34,6 +35,18 @@ function main() {
     throw new Error(
       "Faltan HMAC o token de receipts; conserva las claves operativas existentes.",
     );
+  const sunat =
+    application.SUNAT_EXECUTION_MODE === "vercel"
+      ? sunatDispatcherEnvironmentSchema.parse(application)
+      : {};
+  if (
+    application.SUNAT_EXECUTION_MODE === "vercel" &&
+    (!/^[a-f0-9]{64}$/.test(application.SUNAT_DISPATCH_SECRET ?? "") ||
+      !["true", "false"].includes(application.SUNAT_DAILY_ENABLED ?? ""))
+  )
+    throw new Error(
+      "Completa el secreto y la configuración diaria de SUNAT antes de exportar.",
+    );
   saveEnvironmentFile(VERCEL_ENV_FILE, {
     NEXT_PUBLIC_SUPABASE_URL: url,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
@@ -42,9 +55,16 @@ function main() {
     IDEMPOTENCY_HMAC_KEY: hmac.data,
     APP_BASE_URL: "https://taxskill.vercel.app",
     N8N_RECEIPT_TOKEN: receipt.data,
+    ...sunat,
+    ...(application.SUNAT_EXECUTION_MODE === "vercel"
+      ? {
+          SUNAT_DISPATCH_SECRET: application.SUNAT_DISPATCH_SECRET,
+          SUNAT_DAILY_ENABLED: application.SUNAT_DAILY_ENABLED,
+        }
+      : {}),
   });
   console.info(
-    ".env.vercel listo: seis variables de la aplicación real, sin credenciales Docker ni secretos Edge/n8n de salida.",
+    ".env.vercel listo: configuración de la aplicación real, sin credenciales Docker ni secretos Edge/n8n de salida.",
   );
 }
 try {

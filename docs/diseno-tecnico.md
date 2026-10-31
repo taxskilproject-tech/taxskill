@@ -8,6 +8,8 @@
 
 **Ampliación H09 — 25/10/2026:** [Entregables, plantillas por régimen y empresas](hitos/h09-entregables-plantillas-empresa.md). Esta especificación reciente prevalece sobre las referencias anteriores a reglas y alta sin perfil documental. Implementación y pruebas exclusivamente locales; [estado de validación](hitos/evidencias/h09.md). H08 conserva sus pendientes operativos.
 
+**Ampliación H10 — cierre del 30/10/2026:** [Buzón SUNAT](buzon-sunat-implementacion.md) integrado en Vercel Hobby/Supabase: permisos independientes, custodia cifrada, consultas mensuales, adjuntos y diario a las 08:00. [Aceptación y límites](hitos/evidencias/h10-cierre.md), [puesta en marcha](hitos/evidencias/h10-production.json) y [recuperación](hitos/evidencias/h10-recovery.json). Quince migraciones H10 publicadas, 98 totales. El worker se ejecuta secuencialmente en Sandbox temporal y se despierta mediante HMAC de un solo uso. Mensajes conserva cobertura parcial del origen; no se certifica ausencia ni éxito completo. Otras integraciones SUNAT de P12 y operación general H08 mantienen su alcance pendiente.
+
 ### Índice
 
 - [Decisiones confirmadas](#2-registro-de-decisiones-confirmadas) y [alcance y valores iniciales](#3-alcance-y-valores-de-partida).
@@ -1002,7 +1004,7 @@ Los identificadores P permiten comprobar que todas las ampliaciones de A1 y A2 q
 | P09 | Aplicación móvil nativa | A1, sección 74 y A2; la primera aplicación es web responsive. | Contratos de dominio estabilizados y alcance móvil. | Flujos autorizados de entrega y consulta desde la aplicación móvil. |
 | P10 | Integración Google Drive | A1, sección 74; Storage es el repositorio inicial. | OAuth, mapeo y política de sincronización. | Importación/sincronización sin duplicados ni exposición entre empresas. |
 | P11 | Integración OneDrive | A1, sección 74; mismo motivo que P10. | Autorización Microsoft y política de sincronización. | Archivos y metadatos sincronizados con trazabilidad. |
-| P12 | Integración SUNAT | A1, sección 74; no hay conexión a sistemas tributarios en el MVP. | Fuente/API disponible, credenciales y alcance funcional validado. | Operaciones autorizadas y conciliadas con evidencia del sistema externo. |
+| P12 | Integración SUNAT | A1, sección 74. [H10](hitos/h10-buzon-sunat.md) concreta el buzón en una evaluación condicionada; otras integraciones SUNAT siguen posteriores. | Fuente/acceso permitido, credenciales, piloto medido y alcance validado. | Ocho comprobaciones del buzón y posterior módulo autorizados y conciliados; acceso al portal por sí solo no cierra P12. |
 | P13 | Calendario tributario integrado | A1, sección 74 y A2; los plazos iniciales se configuran manualmente. | Fuente actualizada, reglas por empresa y validación de vigencias. | Fechas reproducibles con fuente y cambios auditados. |
 | P14 | OCR | A1, secciones 74 y 75; búsqueda inicial por metadatos. | Procesamiento asíncrono, documentos de prueba y presupuesto. | Texto extraído por versión con calidad medida y acceso autorizado. |
 | P15 | Extracción de datos | A1, sección 75; no se leen automáticamente RUC, periodo ni importes. | P14 o lector de formatos, esquema de campos y confirmación humana. | Datos extraídos con evidencia de origen y correcciones auditadas. |
