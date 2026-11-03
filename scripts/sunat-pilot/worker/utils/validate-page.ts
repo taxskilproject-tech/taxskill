@@ -12,28 +12,44 @@ export function validateMailboxPage(
   job: MailboxJob,
   checkpoint: MailboxCheckpoint,
 ): void {
+  const start =
+    page.total === 0 ? 1 : (requestedPage - 1) * MAILBOX_PAGE_SIZE + 1;
+  const end = Math.min(requestedPage * MAILBOX_PAGE_SIZE, page.total);
+  const expectedCount = page.total === 0 ? 0 : end - start + 1;
+  const counts = {
+    start: page.start,
+    end: page.end,
+    expected: Math.max(0, expectedCount),
+    received: page.items.length,
+    total: page.total,
+  };
   if (
     page.connection_key !== job.connection_key ||
     page.mailbox !== job.mailbox ||
     page.page !== requestedPage
   )
-    throw new MailboxError("UNEXPECTED_RESPONSE");
-  const start =
-    page.total === 0 ? 1 : (requestedPage - 1) * MAILBOX_PAGE_SIZE + 1;
-  const end = Math.min(requestedPage * MAILBOX_PAGE_SIZE, page.total);
-  const expectedCount = page.total === 0 ? 0 : end - start + 1;
+    throw new MailboxError("UNEXPECTED_RESPONSE", { rule: "identity", counts });
+  if (checkpoint.total !== null && checkpoint.total !== page.total)
+    throw new MailboxError("SOURCE_CHANGED", { rule: "page_total", counts });
+  const recoverableTotal = expectedCount > 0 ? page.total : undefined;
   if (
     page.start !== start ||
     page.end !== end ||
     expectedCount < 0 ||
     page.items.length !== expectedCount
   )
-    throw new MailboxError("PAGE_INCONSISTENT");
+    throw new MailboxError("PAGE_INCONSISTENT", {
+      rule: "range_or_count",
+      counts,
+      recoverableTotal,
+    });
   if (new Set(page.items.map((item) => item.id)).size !== page.items.length)
-    throw new MailboxError("PAGE_INCONSISTENT");
+    throw new MailboxError("PAGE_INCONSISTENT", {
+      rule: "duplicate_ids",
+      counts,
+      recoverableTotal,
+    });
   if (page.items.some((item) => checkpoint.seen_ids.includes(item.id)))
-    throw new MailboxError("SOURCE_CHANGED");
-  if (checkpoint.total !== null && checkpoint.total !== page.total)
     throw new MailboxError("SOURCE_CHANGED");
   if (checkpoint.order !== null && checkpoint.order !== page.order)
     throw new MailboxError("SOURCE_CHANGED");
@@ -43,5 +59,9 @@ export function validateMailboxPage(
     ...page.items.map((item) => item.published_on),
   ].filter((date) => date !== null);
   if (dates.some((date, index) => index > 0 && dates[index - 1] < date))
-    throw new MailboxError("PAGE_INCONSISTENT");
+    throw new MailboxError("PAGE_INCONSISTENT", {
+      rule: "order",
+      counts,
+      recoverableTotal,
+    });
 }

@@ -31,7 +31,7 @@ it("conserva las filas válidas sin aceptar la página ni avanzar el cursor", as
   const partial = vi.fn();
   const result = await runMonthlyMailboxQuery(job, {
     transport: {
-      readPage: async () => incompletePage(),
+      readPage: async () => ({ ...incompletePage(), total: 25 }),
       renewSession: async () => undefined,
     },
     checkpoints: { load: async () => null, save, savePartial: partial },
@@ -56,7 +56,7 @@ it("persiste solo los registros del periodo pedido", () => {
   expect(partialMailboxItems(page, 1, job)).toHaveLength(16);
 });
 
-it("rechaza la recuperación de empresa, bandeja, página o IDs ambiguos", () => {
+it("rechaza otra empresa, bandeja o página y deduplica filas de la bandeja verificada", () => {
   const job = mailboxLabJob({ mailbox: "messages" });
   const page = incompletePage();
   expect(
@@ -72,7 +72,49 @@ it("rechaza la recuperación de empresa, bandeja, página o IDs ambiguos", () =>
       1,
       job,
     ),
-  ).toEqual([]);
+  ).toEqual([page.items[0]]);
+});
+
+it("recupera páginas posteriores sin certificar la primera página incompleta", async () => {
+  const gap = incompletePage();
+  const tail = {
+    ...gap,
+    page: 2,
+    start: 26,
+    end: 27,
+    total: 27,
+    items: gap.items
+      .slice(0, 2)
+      .map((item) => ({ ...item, id: item.id + "-tail" })),
+  };
+  const readPage = vi.fn(async ({ page }: { page: number }) =>
+    page === 1 ? { ...gap, total: 27 } : tail,
+  );
+  const savePartial = vi.fn();
+  const onPageFailure = vi.fn();
+  const result = await runMonthlyMailboxQuery(
+    mailboxLabJob({ mailbox: "messages" }),
+    {
+      transport: { readPage, renewSession: async () => undefined },
+      checkpoints: { load: async () => null, save: vi.fn(), savePartial },
+      onPageFailure,
+    },
+  );
+  expect(savePartial.mock.lastCall?.[1]).toEqual(tail.items);
+  expect(onPageFailure).toHaveBeenCalledWith(
+    expect.objectContaining({
+      mailbox: "messages",
+      page: 1,
+      attempt: 1,
+      validation: expect.objectContaining({
+        rule: "range_or_count",
+        counts: { start: 1, end: 25, expected: 25, received: 17, total: 27 },
+      }),
+    }),
+  );
+  expect(result.reason).toBe("PAGE_INCONSISTENT");
+  expect(result.checkpoint.next_page).toBe(1);
+  expect(result.last_success_may_advance).toBe(false);
 });
 
 it("no persiste una página de otra empresa aunque contenga filas válidas", async () => {

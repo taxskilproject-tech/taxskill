@@ -3,7 +3,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/components/atoms/button";
-import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { sunatWorkspaceSchema } from "@/domain/sunat/contracts/sunat.schema";
 import { getLimaDate } from "@/domain/time/utils/instant";
 import { PageHeading } from "@/features/access/components/page-heading";
@@ -125,11 +124,8 @@ export function SunatCompanyWorkspace({ companyId }: SunatCompanyProps) {
           <>
             <SunatConnectionStatus
               workspace={workspace.data}
-              onChanged={refresh}
+              actionError={action.error}
             />
-            {action.error && (
-              <FeedbackMessage kind="error">{action.error}</FeedbackMessage>
-            )}
             <SunatInboxResults
               companyId={companyId}
               filters={filters}

@@ -25,8 +25,7 @@ export function parseSunatFilters(
         ? month
         : Number(local.data.slice(5, 7)),
     page: Number.isInteger(page) && page >= 1 && page <= 100000 ? page : 1,
-    mailbox:
-      mailbox === "notifications" || mailbox === "messages" ? mailbox : "all",
+    mailbox: mailbox === "notifications" ? "notifications" : "messages",
     q: (parameters.get("q") ?? "").slice(0, 150),
     messageId: message.success ? message.data : null,
   };

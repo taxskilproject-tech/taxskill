@@ -30,12 +30,22 @@ export function parseNativePage(
   const parsed = sunatPagePayloadSchema.safeParse(input);
   if (!parsed.success) throw new MailboxError("UNEXPECTED_RESPONSE");
   const payload = parsed.data;
-  if (
-    !consistentPageCount(payload) ||
-    payload.rows.some((row) => row.indTipmsj !== mailboxType(mailbox))
-  )
-    throw new MailboxError("PAGE_INCONSISTENT");
-  return {
+  const counts = {
+    start: payload.startPage,
+    end: payload.endPage,
+    expected:
+      payload.records === 0
+        ? 0
+        : Math.max(0, payload.endPage - payload.startPage + 1),
+    received: payload.rows.length,
+    total: payload.records,
+  };
+  if (payload.rows.some((row) => row.indTipmsj !== mailboxType(mailbox)))
+    throw new MailboxError("PAGE_INCONSISTENT", {
+      rule: "wrong_mailbox",
+      counts,
+    });
+  const normalized: MailboxPage = {
     connection_key: connection,
     mailbox,
     page:
@@ -55,4 +65,12 @@ export function parseNativePage(
       has_attachments: row.cantidadArchAdj > 0,
     })),
   };
+  if (!consistentPageCount(payload))
+    throw new MailboxError(
+      "PAGE_INCONSISTENT",
+      { rule: "page_total", counts },
+      undefined,
+      normalized,
+    );
+  return normalized;
 }

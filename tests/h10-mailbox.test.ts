@@ -116,6 +116,27 @@ it("cambiar empresa limpia mensaje y periodo; login conserva un retorno válido"
     ).month,
   ).toBe(10);
 });
+it("abre Mensajes por defecto y conserva la bandeja elegida al navegar", () => {
+  const now = new Date("2026-11-03T12:00:00Z");
+  expect(
+    parseSunatFilters(new URLSearchParams("mailbox=all"), now).mailbox,
+  ).toBe("messages");
+  const next = sunatFilterDestination(
+    new URLSearchParams(
+      `year=2026&month=11&page=5&messageId=${moduleCompanyB}`,
+    ),
+    { mailbox: "notifications" },
+  );
+  expect(
+    parseSunatFilters(new URL(next, "http://localhost").searchParams, now),
+  ).toMatchObject({
+    mailbox: "notifications",
+    year: 2026,
+    month: 11,
+    page: 1,
+    messageId: null,
+  });
+});
 it("rechaza adjuntos con destino ajeno, tokens, identidad distinta y HTML", () => {
   expect(isOfficialSunatUrl("https://sunat.gob.pe.evil.example")).toBe(false);
   const path = "/ol-ti-itvisornoti/visor/bajarArchivo/observed/20000000001";

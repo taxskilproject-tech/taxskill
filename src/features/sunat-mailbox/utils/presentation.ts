@@ -24,7 +24,7 @@ export function sunatDate(value: string | null): string {
         timeStyle: "short",
         timeZone: "America/Lima",
       }).format(new Date(value))
-    : "Todavía no consultado";
+    : "Sin consulta completa registrada";
 }
 export function canResumeSunatMonth(
   workspace: SunatWorkspace | undefined,

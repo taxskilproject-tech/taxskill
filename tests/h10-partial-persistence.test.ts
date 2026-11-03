@@ -34,7 +34,7 @@ async function recoverIntoRepository(failWrite = false) {
     mailbox: "messages",
     page: 1,
     page_size: 25,
-    total: 54,
+    total: 25,
     start: 1,
     end: 25,
     order: "unverified",

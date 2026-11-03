@@ -12,7 +12,7 @@ import type {
 export interface SunatFilters {
   year: number;
   month: number;
-  mailbox: "all" | "notifications" | "messages";
+  mailbox: "notifications" | "messages";
   q: string;
   page: number;
   messageId: string | null;
@@ -28,6 +28,10 @@ export interface SunatCompanyProps {
 export interface SunatWorkspaceProps {
   workspace: SunatWorkspace;
   onChanged: () => void;
+}
+export interface SunatConnectionStatusProps {
+  workspace: SunatWorkspace;
+  actionError: string | null;
 }
 export interface SunatConnectionPanelProps extends SunatWorkspaceProps {
   onClose: () => void;

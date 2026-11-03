@@ -119,8 +119,11 @@ export async function openSunatSession(
       }),
     );
     await close();
-    if (error instanceof MailboxError) throw error;
-    throw new MailboxError("SOURCE_UNAVAILABLE");
+    throw new MailboxError(
+      error instanceof MailboxError ? error.code : "SOURCE_UNAVAILABLE",
+      undefined,
+      stage,
+    );
   } finally {
     options.signal?.removeEventListener("abort", abort);
   }

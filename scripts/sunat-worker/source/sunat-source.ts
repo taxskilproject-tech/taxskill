@@ -2,6 +2,7 @@ import type { SunatCredentialPayload } from "../../../src/domain/sunat/types/cre
 import { MailboxError } from "../../sunat-pilot/worker/services/mailbox-error";
 import type {
   MailboxKind,
+  MailboxPage,
   MailboxReadRequest,
 } from "../../sunat-pilot/worker/types/mailbox.types";
 import { WORKER_CLEANUP_TIMEOUT_MS } from "../constants/runtime";
@@ -137,19 +138,28 @@ export class OfficialSunatSource implements SunatSource {
       tipoOrden: "NADA",
     });
     request.signal.throwIfAborted();
-    const parsed = parseNativePage(
-      payload,
-      request.connectionKey,
-      request.mailbox,
-    );
+    try {
+      const parsed = parseNativePage(
+        payload,
+        request.connectionKey,
+        request.mailbox,
+      );
+      this.rememberPage(parsed, payload);
+      return parsed;
+    } catch (error) {
+      if (error instanceof MailboxError && error.partialPage)
+        this.rememberPage(error.partialPage, payload);
+      throw error;
+    }
+  }
+  private rememberPage(parsed: MailboxPage, payload: unknown) {
     const rows = sunatPagePayloadSchema.parse(payload).rows;
     parsed.items.forEach((item, index) =>
-      this.records.set(request.mailbox + ":" + item.id, {
+      this.records.set(parsed.mailbox + ":" + item.id, {
         ...item,
         subject: rows[index].desAsunto.trim().slice(0, 500) || "Registro SUNAT",
       }),
     );
-    return parsed;
   }
   async details(mailbox: MailboxKind, sourceId: string) {
     const { frame, credentials } = this.ready();

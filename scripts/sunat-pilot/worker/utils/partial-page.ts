@@ -12,11 +12,11 @@ export function partialMailboxItems(
   if (
     page.connection_key !== job.connection_key ||
     page.mailbox !== job.mailbox ||
-    page.page !== requestedPage ||
-    new Set(page.items.map((item) => item.id)).size !== page.items.length
+    page.page !== requestedPage
   )
     return [];
-  return page.items.filter(
+  const selected = page.items.filter(
     (item) => item.published_on >= job.from && item.published_on <= job.through,
   );
+  return [...new Map(selected.map((item) => [item.id, item])).values()];
 }

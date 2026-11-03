@@ -29,6 +29,7 @@ export async function processMailboxes(
     const result = await execute(job, {
       transport: dependencies.source,
       checkpoints,
+      onPageFailure: dependencies.onPageFailure,
     });
     results.push({
       mailbox,

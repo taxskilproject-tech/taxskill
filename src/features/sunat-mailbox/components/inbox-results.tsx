@@ -9,6 +9,7 @@ import { QueryState } from "@/features/access/components/query-state";
 
 import { useSunatQuery } from "../hooks/use-sunat-query";
 import type { SunatInboxProps } from "../types/ui.types";
+import { sunatErrorMessage } from "../utils/presentation";
 import { SunatMessageList } from "./message-list";
 
 export function SunatInboxResults({
@@ -29,23 +30,30 @@ export function SunatInboxResults({
     },
     sunatMessageListSchema,
   );
-  const relevant = workspace.months.filter(
-    (month) => filters.mailbox === "all" || month.mailbox === filters.mailbox,
+  const period = workspace.months.find(
+    (month) => month.mailbox === filters.mailbox,
   );
-  const certified =
-    relevant.length === (filters.mailbox === "all" ? 2 : 1) &&
-    relevant.every((month) => month.state === "complete");
+  const certified = period?.state === "complete";
+  const mailboxName =
+    filters.mailbox === "notifications" ? "Notificaciones" : "Mensajes";
   const finished = workspace.jobs.map((job) => job.id + job.state).join(":");
   const refetch = messages.refetch;
   useEffect(() => {
     void refetch();
   }, [finished, refetch]);
   return (
-    <section className="space-y-2">
-      {!certified && (messages.data?.count ?? 0) > 0 && (
+    <section className="space-y-2" aria-label={mailboxName}>
+      {period?.state === "partial" && (
         <FeedbackMessage kind="warning">
-          Hay registros guardados, pero la consulta completa de este periodo
-          todavía no está confirmada.
+          Consulta parcial de {mailboxName}.{" "}
+          {sunatErrorMessage(period.error_code) ||
+            "Los registros recuperados permanecen disponibles."}
+        </FeedbackMessage>
+      )}
+      {period?.state === "failed" && (
+        <FeedbackMessage kind="error">
+          Falló la consulta de {mailboxName}.{" "}
+          {sunatErrorMessage(period.error_code)}
         </FeedbackMessage>
       )}
       <QueryState
@@ -68,7 +76,7 @@ export function SunatInboxResults({
               filters.q
                 ? "Sin coincidencias con esta búsqueda"
                 : certified
-                  ? "Periodo consultado sin mensajes"
+                  ? `Sin ${mailboxName.toLowerCase()} en este periodo`
                   : "Periodo todavía sin consulta completa"
             }
             description={

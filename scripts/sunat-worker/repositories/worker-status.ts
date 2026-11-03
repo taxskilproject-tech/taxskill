@@ -1,4 +1,5 @@
 import { sunatJobSchema } from "../../../src/domain/sunat/contracts/sunat.schema";
+import type { Json } from "../../../src/lib/supabase/types/database.types";
 import { WORKER_RPC_TIMEOUT_MS } from "../constants/runtime";
 import { workerTerminalStateSchema } from "../contracts/worker.schema";
 import type { WorkerStatusWriteResult } from "../types/lifetime.types";
@@ -51,6 +52,7 @@ export async function failSunatJob(
   claim: ClaimedSunatJob,
   client: WorkerDependencies["client"],
   code: string,
+  metrics: Json = {},
 ): Promise<WorkerTerminalState> {
   if (!/^[A-Z_]{3,60}$/.test(code))
     throw new Error("WORKER_ERROR_CODE_INVALID");
@@ -61,7 +63,7 @@ export async function failSunatJob(
       p_state: "failed",
       p_error_code: code,
       p_results: [],
-      p_metrics: {},
+      p_metrics: metrics,
     }),
   );
   if (failed) return "failed";

@@ -2,17 +2,38 @@ import { Badge } from "@/components/atoms/badge";
 import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { SUNAT_STATUS_LABELS } from "@/domain/sunat/constants/sunat";
 
-import type { SunatWorkspaceProps } from "../types/ui.types";
+import type { SunatConnectionStatusProps } from "../types/ui.types";
 import {
   activeSunatJob,
   sunatDate,
   sunatErrorMessage,
 } from "../utils/presentation";
 
-export function SunatConnectionStatus({ workspace }: SunatWorkspaceProps) {
+export function SunatConnectionStatus({
+  workspace,
+  actionError,
+}: SunatConnectionStatusProps) {
   const connection = workspace.connection;
   const active = activeSunatJob(workspace);
   const latest = workspace.jobs[0];
+  const latestMessage = active
+    ? ""
+    : sunatErrorMessage(latest?.error_code ?? null);
+  const connectionMessage =
+    active || connection?.error_code === latest?.error_code
+      ? ""
+      : sunatErrorMessage(connection?.error_code ?? null);
+  const partial = latest?.state === "partial";
+  const partialShownByMailbox =
+    partial &&
+    latest.kind === "monthly" &&
+    workspace.months.some(
+      (month) =>
+        month.state === "partial" &&
+        month.error_code === latest.error_code &&
+        latest.from_date ===
+          `${month.year}-${String(month.month).padStart(2, "0")}-01`,
+    );
   return (
     <div className="space-y-2">
       {workspace.worker_mode === "simulator" && (
@@ -27,7 +48,7 @@ export function SunatConnectionStatus({ workspace }: SunatWorkspaceProps) {
             : "Sin conexión configurada"}
         </Badge>
         <span>
-          Última consulta correcta:{" "}
+          Última consulta completa:{" "}
           {sunatDate(connection?.last_success_at ?? null)}
         </span>
         {connection?.daily_enabled && (
@@ -57,17 +78,19 @@ export function SunatConnectionStatus({ workspace }: SunatWorkspaceProps) {
           recuperados.
         </FeedbackMessage>
       )}
-      {!active && latest?.error_code && (
-        <FeedbackMessage kind="error">
-          {sunatErrorMessage(latest.error_code)}
+      {latestMessage && !partialShownByMailbox && (
+        <FeedbackMessage kind={partial ? "warning" : "error"}>
+          {partial && "Consulta parcial. "}
+          {latestMessage}
         </FeedbackMessage>
       )}
-      {!active &&
-        connection?.error_code &&
-        connection.error_code !== latest?.error_code && (
-          <FeedbackMessage kind="error">
-            {sunatErrorMessage(connection.error_code)}
-          </FeedbackMessage>
+      {connectionMessage && (
+        <FeedbackMessage kind="error">{connectionMessage}</FeedbackMessage>
+      )}
+      {actionError &&
+        actionError !== latestMessage &&
+        actionError !== connectionMessage && (
+          <FeedbackMessage kind="error">{actionError}</FeedbackMessage>
         )}
     </div>
   );

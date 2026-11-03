@@ -67,6 +67,37 @@ export interface MailboxRunResult {
 export interface MailboxRunDependencies {
   transport: MailboxTransport;
   checkpoints: MailboxCheckpointStore;
+  onPageFailure?(diagnostic: MailboxPageDiagnostic): void;
+}
+export interface MailboxPageCounts {
+  start: number;
+  end: number;
+  expected: number;
+  received: number;
+  total: number;
+}
+export interface MailboxPageFailure {
+  rule:
+    | "range_or_count"
+    | "duplicate_ids"
+    | "order"
+    | "page_total"
+    | "wrong_mailbox"
+    | "identity";
+  counts: MailboxPageCounts;
+  recoverableTotal?: number;
+}
+export interface MailboxPageDiagnostic {
+  mailbox: MailboxKind;
+  page: number;
+  attempt: number;
+  code: MailboxFailureCode;
+  phase: "read";
+  validation?: MailboxPageFailure;
+}
+export interface MailboxPageReadOptions {
+  recoveryTotal?: number;
+  anchor?: boolean;
 }
 export interface MailboxRunContext {
   job: MailboxJob;

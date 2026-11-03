@@ -35,7 +35,15 @@ export function SunatMessageDetailPanel({
     changed();
   }
   return (
-    <SidePanel title="Mensaje del Buzón SUNAT" onClose={onClose} wide>
+    <SidePanel
+      title={
+        detail.data?.message.mailbox === "notifications"
+          ? "Notificación del Buzón SUNAT"
+          : "Registro del Buzón SUNAT"
+      }
+      onClose={onClose}
+      wide
+    >
       <QueryState
         loading={detail.isPending}
         error={detail.error}

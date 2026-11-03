@@ -1,13 +1,22 @@
 import { readFile, writeFile } from "node:fs/promises";
 
+import { MAILBOX_PAGE_SIZE } from "../constants/worker";
 import { createLocalMailboxSimulatorTransport } from "../repositories/local-simulator-transport";
 import { runMonthlyMailboxQuery } from "../services/run-monthly-query";
 import type { MailboxItem } from "../types/mailbox.types";
+import { mailboxLabDataset } from "./dataset";
 import { mailboxLabCheck, mailboxLabJob } from "./helpers";
 
 export async function checkPartialMailboxRecovery(origin: string) {
+  const job = mailboxLabJob();
+  const expected = mailboxLabDataset().filter(
+    (item, index) =>
+      index % MAILBOX_PAGE_SIZE !== 0 &&
+      item.published_on >= job.from &&
+      item.published_on <= job.through,
+  ).length;
   const recovered = new Map<string, MailboxItem>();
-  const result = await runMonthlyMailboxQuery(mailboxLabJob(), {
+  const result = await runMonthlyMailboxQuery(job, {
     transport: createLocalMailboxSimulatorTransport(origin, "short_page"),
     checkpoints: {
       load: async () => null,
@@ -40,11 +49,11 @@ export async function checkPartialMailboxRecovery(origin: string) {
   return [
     mailboxLabCheck(
       "short_page_records_preserved_separately",
-      Array.isArray(persisted) && persisted.length === 24,
+      Array.isArray(persisted) && persisted.length === expected,
     ),
     mailboxLabCheck(
       "repeated_partial_rows_deduplicated",
-      recovered.size === 24,
+      recovered.size === expected,
     ),
     mailboxLabCheck(
       "partial_records_never_certify_coverage",

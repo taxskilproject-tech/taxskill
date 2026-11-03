@@ -31,7 +31,13 @@ export async function retrySunatConnection<T>(
       return await withConnectionSignal(connect, signal);
     } catch (error) {
       requireRetryableConnection(error, attempt, signal);
-      console.info(JSON.stringify({ event: "source_login_retry", attempt }));
+      console.info(
+        JSON.stringify({
+          event: "source_login_retry",
+          attempt,
+          phase: error instanceof MailboxError ? error.phase : undefined,
+        }),
+      );
       await withConnectionSignal(
         () => delay(SUNAT_LOGIN_RETRY_DELAY_MS, undefined, { signal }),
         signal,

@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { z } from "zod";
 
 import type { Database } from "../../../src/lib/supabase/types/database.types";
+import type { MailboxRunDependencies } from "../../sunat-pilot/worker/types/mailbox.types";
 import type {
   claimedJobSchema,
   workerTerminalStateSchema,
@@ -13,6 +14,7 @@ export type WorkerTerminalState = z.infer<typeof workerTerminalStateSchema>;
 export interface WorkerDependencies {
   client: SupabaseClient<Database>;
   source: SunatSource;
+  onPageFailure?: MailboxRunDependencies["onPageFailure"];
 }
 export interface WorkerCheckpointContext extends WorkerDependencies {
   claim: ClaimedSunatJob;

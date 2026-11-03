@@ -6,6 +6,7 @@ import type {
 import { isOfficialSunatUrl } from "../utils/source-validation";
 
 const MAX_RESPONSE_BYTES = 1048576;
+const PAGE_TIMEOUT_MS = 15000;
 
 export async function requestSunatPage(
   session: BrowserSession,
@@ -18,12 +19,16 @@ export async function requestSunatPage(
   );
   if (!isOfficialSunatUrl(url.href))
     throw new MailboxError("UNEXPECTED_RESPONSE");
-  const response = await session.context.request.get(url.href, {
-    headers: { "X-Ruc": ruc },
-    params,
-    maxRedirects: 0,
-    timeout: 15000,
-  });
+  const response = await session.context.request
+    .get(url.href, {
+      headers: { "X-Ruc": ruc },
+      params,
+      maxRedirects: 0,
+      timeout: PAGE_TIMEOUT_MS,
+    })
+    .catch(() => {
+      throw new MailboxError("SOURCE_UNAVAILABLE", undefined, "page_request");
+    });
   try {
     if ([301, 302, 303, 307, 308, 401].includes(response.status()))
       throw new MailboxError("SESSION_EXPIRED");

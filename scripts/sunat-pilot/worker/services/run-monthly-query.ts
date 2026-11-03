@@ -17,6 +17,7 @@ import { parseMailboxJob } from "../utils/parse-job";
 import { validateMailboxCheckpoint } from "../utils/validate-checkpoint";
 import { MailboxError, mailboxFailureCode } from "./mailbox-error";
 import { readReliableMailboxPage } from "./read-page";
+import { recoverMailboxPages } from "./recover-mailbox-pages";
 
 async function loadCheckpoint(
   job: MailboxJob,
@@ -61,14 +62,9 @@ function runResult(
 async function verifyResumeAnchor(context: MailboxRunContext): Promise<void> {
   if (context.checkpoint.next_page === 1 || context.checkpoint.complete) return;
   const saved = context.checkpoint;
-  context.checkpoint = initialMailboxCheckpoint(context.job);
-  try {
-    const first = await readReliableMailboxPage(context, 1);
-    if (first.total !== saved.total || first.items[0]?.id !== saved.first_id)
-      throw new MailboxError("SOURCE_CHANGED");
-  } finally {
-    context.checkpoint = saved;
-  }
+  const first = await readReliableMailboxPage(context, 1, { anchor: true });
+  if (first.total !== saved.total || first.items[0]?.id !== saved.first_id)
+    throw new MailboxError("SOURCE_CHANGED");
 }
 
 async function consumePage(context: MailboxRunContext): Promise<void> {
@@ -85,6 +81,15 @@ async function consumePage(context: MailboxRunContext): Promise<void> {
   await context.dependencies.checkpoints.save(context.job, accepted);
   context.checkpoint = accepted;
   context.pages += 1;
+}
+
+async function consumeWithRecovery(context: MailboxRunContext): Promise<void> {
+  try {
+    await consumePage(context);
+  } catch (error) {
+    await recoverMailboxPages(context, error);
+    throw error;
+  }
 }
 
 export async function runMonthlyMailboxQuery(
@@ -112,7 +117,7 @@ export async function runMonthlyMailboxQuery(
       !context.checkpoint.complete &&
       context.pages < context.job.limits.max_pages
     )
-      await consumePage(context);
+      await consumeWithRecovery(context);
     return runResult(
       context,
       context.checkpoint.complete ? null : "BUDGET_EXHAUSTED",
