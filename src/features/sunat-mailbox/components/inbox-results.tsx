@@ -34,6 +34,8 @@ export function SunatInboxResults({
     (month) => month.mailbox === filters.mailbox,
   );
   const certified = period?.state === "complete";
+  const limitedCoverage =
+    period?.state === "partial" && period.error_code === "PAGE_INCONSISTENT";
   const mailboxName =
     filters.mailbox === "notifications" ? "Notificaciones" : "Mensajes";
   const finished = workspace.jobs.map((job) => job.id + job.state).join(":");
@@ -48,13 +50,16 @@ export function SunatInboxResults({
     <section className="space-y-2" aria-label={mailboxName}>
       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
         <h2 className="text-sm font-semibold">Resultados guardados</h2>
+        {limitedCoverage && (
+          <span className="text-xs text-slate-600">Cobertura parcial</span>
+        )}
         <p className="text-xs text-slate-600">
           {period
             ? `Último intento de esta bandeja en el mes: ${sunatDate(period.last_attempt_at)} · Lima`
             : "Sin consulta mensual registrada para esta bandeja."}
         </p>
       </div>
-      {period?.state === "partial" && (
+      {period?.state === "partial" && !limitedCoverage && (
         <FeedbackMessage kind="warning">
           Consulta parcial de {mailboxName}.{" "}
           {sunatErrorMessage(period.error_code) ||

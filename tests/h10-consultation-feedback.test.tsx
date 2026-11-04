@@ -5,7 +5,7 @@ import { SUNAT_ERROR_MESSAGES } from "@/domain/sunat/constants/sunat";
 import type { SunatWorkspace } from "@/domain/sunat/types/sunat.types";
 import { SunatConnectionStatus } from "@/features/sunat-mailbox/components/connection-status";
 
-it("anuncia una sola advertencia cuando el intento y el trabajo indican la misma consulta parcial", () => {
+it("omite el aviso repetitivo de paginación y conserva otros errores de consulta", () => {
   const workspace: SunatWorkspace = {
     company: {
       id: "fixture",
@@ -34,8 +34,14 @@ it("anuncia una sola advertencia cuando el intento y el trabajo indican la misma
   const html = renderToStaticMarkup(
     <SunatConnectionStatus workspace={workspace} actionError={message} />,
   );
-  expect(html.split(message)).toHaveLength(2);
-  expect(html).toContain('role="status"');
+  expect(html).not.toContain(message);
   expect(html).not.toContain('role="alert"');
   expect(html).toContain("Sin consulta completa registrada");
+  const failed = renderToStaticMarkup(
+    <SunatConnectionStatus
+      workspace={workspace}
+      actionError={SUNAT_ERROR_MESSAGES.SOURCE_UNAVAILABLE}
+    />,
+  );
+  expect(failed).toContain('role="alert"');
 });

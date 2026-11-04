@@ -1,6 +1,9 @@
 import { Badge } from "@/components/atoms/badge";
 import { FeedbackMessage } from "@/components/molecules/feedback-message";
-import { SUNAT_STATUS_LABELS } from "@/domain/sunat/constants/sunat";
+import {
+  SUNAT_ERROR_MESSAGES,
+  SUNAT_STATUS_LABELS,
+} from "@/domain/sunat/constants/sunat";
 
 import type { SunatConnectionStatusProps } from "../types/ui.types";
 import {
@@ -8,6 +11,10 @@ import {
   sunatDate,
   sunatErrorMessage,
 } from "../utils/presentation";
+
+function statusError(code: string | null | undefined) {
+  return code === "PAGE_INCONSISTENT" ? "" : sunatErrorMessage(code ?? null);
+}
 
 export function SunatConnectionStatus({
   workspace,
@@ -17,13 +24,12 @@ export function SunatConnectionStatus({
   const connection = workspace.connection;
   const active = activeSunatJob(workspace);
   const latest = workspace.jobs[0];
-  const latestMessage = active
-    ? ""
-    : sunatErrorMessage(latest?.error_code ?? null);
+  const latestMessage = active ? "" : statusError(latest?.error_code);
   const connectionMessage =
     active || connection?.error_code === latest?.error_code
       ? ""
-      : sunatErrorMessage(connection?.error_code ?? null);
+      : statusError(connection?.error_code);
+  const dispatcherMessage = statusError(workspace.dispatcher_error_code);
   const partial = latest?.state === "partial";
   const partialShownByMailbox =
     partial &&
@@ -65,12 +71,10 @@ export function SunatConnectionStatus({
           servicio.
         </FeedbackMessage>
       )}
-      {workspace.dispatcher_error_code &&
+      {dispatcherMessage &&
         workspace.dispatcher_error_code !== latest?.error_code &&
         workspace.dispatcher_error_code !== connection?.error_code && (
-          <FeedbackMessage kind="error">
-            {sunatErrorMessage(workspace.dispatcher_error_code)}
-          </FeedbackMessage>
+          <FeedbackMessage kind="error">{dispatcherMessage}</FeedbackMessage>
         )}
       {active && (
         <FeedbackMessage>
@@ -95,6 +99,7 @@ export function SunatConnectionStatus({
         </FeedbackMessage>
       )}
       {actionError &&
+        actionError !== SUNAT_ERROR_MESSAGES.PAGE_INCONSISTENT &&
         actionError !== latestMessage &&
         actionError !== connectionMessage && (
           <FeedbackMessage kind="error">{actionError}</FeedbackMessage>
