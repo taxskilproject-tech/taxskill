@@ -87,8 +87,8 @@ export function SunatMailboxFilters({
             </option>
           ))}
         </SelectField>
-        <div className="col-span-2 flex items-start gap-2 lg:col-span-1">
-          <div className="min-w-0 flex-1">
+        <div className="col-span-2 flex flex-col gap-2 sm:flex-row sm:items-start lg:col-span-1">
+          <div className="min-w-0 sm:flex-1">
             <FilterDisclosure
               label="Buscar por asunto"
               count={Number(Boolean(filters.q))}
@@ -116,6 +116,13 @@ export function SunatMailboxFilters({
           </div>
           {action}
         </div>
+        <p
+          id="sunat-refresh-help"
+          className="col-span-full text-xs text-slate-600"
+        >
+          Al cambiar el mes ves los registros guardados. Usa el botón para
+          consultar ambas bandejas del periodo directamente en SUNAT.
+        </p>
       </div>
     </div>
   );

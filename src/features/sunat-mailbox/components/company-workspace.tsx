@@ -25,6 +25,7 @@ export function SunatCompanyWorkspace({ companyId }: SunatCompanyProps) {
   const parameters = useSearchParams();
   const router = useRouter();
   const [configure, setConfigure] = useState(false);
+  const [requestedPeriod, setRequestedPeriod] = useState<number | null>(null);
   const filters = parseSunatFilters(
     new URLSearchParams(parameters.toString()),
     new Date(),
@@ -47,9 +48,10 @@ export function SunatCompanyWorkspace({ companyId }: SunatCompanyProps) {
     filters.month,
   );
   const today = getLimaDate(new Date());
+  const selectedPeriod = filters.year * 100 + filters.month;
   const future =
     today.ok &&
-    filters.year * 100 + filters.month >
+    selectedPeriod >
       Number(today.data.slice(0, 4)) * 100 + Number(today.data.slice(5, 7));
   function refresh() {
     void workspace.refetch();
@@ -65,6 +67,7 @@ export function SunatCompanyWorkspace({ companyId }: SunatCompanyProps) {
     );
   }
   async function sync() {
+    setRequestedPeriod(selectedPeriod);
     const pending = action.submit(
       resume ? "ResumeSync" : "RequestSync",
       { company_id: companyId, year: filters.year, month: filters.month },
@@ -97,7 +100,8 @@ export function SunatCompanyWorkspace({ companyId }: SunatCompanyProps) {
         action={
           <Button
             loading={action.busy}
-            loadingText="Consultando…"
+            loadingText="Consultando SUNAT…"
+            aria-describedby="sunat-refresh-help"
             disabled={
               !workspace.data?.worker_ready ||
               workspace.data.connection?.state !== "connected" ||
@@ -108,7 +112,7 @@ export function SunatCompanyWorkspace({ companyId }: SunatCompanyProps) {
               void sync();
             }}
           >
-            {resume ? "Continuar consulta" : "Consultar periodo"}
+            {resume ? "Continuar consulta en SUNAT" : "Actualizar desde SUNAT"}
           </Button>
         }
       />
@@ -124,7 +128,13 @@ export function SunatCompanyWorkspace({ companyId }: SunatCompanyProps) {
           <>
             <SunatConnectionStatus
               workspace={workspace.data}
-              actionError={action.error}
+              actionError={
+                requestedPeriod === selectedPeriod ? action.error : null
+              }
+              periodUpdated={
+                requestedPeriod === selectedPeriod &&
+                action.result?.state === "complete"
+              }
             />
             <SunatInboxResults
               companyId={companyId}

@@ -12,6 +12,7 @@ import {
 export function SunatConnectionStatus({
   workspace,
   actionError,
+  periodUpdated,
 }: SunatConnectionStatusProps) {
   const connection = workspace.connection;
   const active = activeSunatJob(workspace);
@@ -48,7 +49,7 @@ export function SunatConnectionStatus({
             : "Sin conexión configurada"}
         </Badge>
         <span>
-          Última consulta completa:{" "}
+          Última consulta completa de la empresa:{" "}
           {sunatDate(connection?.last_success_at ?? null)}
         </span>
         {connection?.daily_enabled && (
@@ -86,6 +87,12 @@ export function SunatConnectionStatus({
       )}
       {connectionMessage && (
         <FeedbackMessage kind="error">{connectionMessage}</FeedbackMessage>
+      )}
+      {periodUpdated && (
+        <FeedbackMessage kind="success">
+          Periodo actualizado. Mensajes y Notificaciones se consultaron
+          correctamente en SUNAT.
+        </FeedbackMessage>
       )}
       {actionError &&
         actionError !== latestMessage &&

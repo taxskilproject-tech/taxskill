@@ -32,6 +32,7 @@ export interface SunatWorkspaceProps {
 export interface SunatConnectionStatusProps {
   workspace: SunatWorkspace;
   actionError: string | null;
+  periodUpdated?: boolean;
 }
 export interface SunatConnectionPanelProps extends SunatWorkspaceProps {
   onClose: () => void;

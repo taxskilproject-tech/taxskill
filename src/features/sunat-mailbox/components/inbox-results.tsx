@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { ResourceState } from "@/components/organisms/resource-state";
@@ -9,7 +9,7 @@ import { QueryState } from "@/features/access/components/query-state";
 
 import { useSunatQuery } from "../hooks/use-sunat-query";
 import type { SunatInboxProps } from "../types/ui.types";
-import { sunatErrorMessage } from "../utils/presentation";
+import { sunatDate, sunatErrorMessage } from "../utils/presentation";
 import { SunatMessageList } from "./message-list";
 
 export function SunatInboxResults({
@@ -37,12 +37,23 @@ export function SunatInboxResults({
   const mailboxName =
     filters.mailbox === "notifications" ? "Notificaciones" : "Mensajes";
   const finished = workspace.jobs.map((job) => job.id + job.state).join(":");
+  const previousJobs = useRef(finished);
   const refetch = messages.refetch;
   useEffect(() => {
+    if (previousJobs.current === finished) return;
+    previousJobs.current = finished;
     void refetch();
   }, [finished, refetch]);
   return (
     <section className="space-y-2" aria-label={mailboxName}>
+      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+        <h2 className="text-sm font-semibold">Resultados guardados</h2>
+        <p className="text-xs text-slate-600">
+          {period
+            ? `Último intento de esta bandeja en el mes: ${sunatDate(period.last_attempt_at)} · Lima`
+            : "Sin consulta mensual registrada para esta bandeja."}
+        </p>
+      </div>
       {period?.state === "partial" && (
         <FeedbackMessage kind="warning">
           Consulta parcial de {mailboxName}.{" "}
@@ -77,14 +88,14 @@ export function SunatInboxResults({
                 ? "Sin coincidencias con esta búsqueda"
                 : certified
                   ? `Sin ${mailboxName.toLowerCase()} en este periodo`
-                  : "Periodo todavía sin consulta completa"
+                  : "Sin registros guardados para este periodo"
             }
             description={
               filters.q
-                ? "Prueba otro asunto o elimina el filtro de búsqueda. La integridad de la consulta se indica por separado."
-                : workspace.connection?.state === "connected"
-                  ? "Consulta este periodo para verificar los registros. Los errores se muestran por separado."
-                  : "El administrador debe configurar y verificar la conexión de esta empresa."
+                ? "Prueba otro asunto o elimina el filtro de búsqueda."
+                : certified
+                  ? "La última consulta completa de esta bandeja no encontró registros para el periodo."
+                  : "El listado está pendiente de confirmación. Usa Actualizar desde SUNAT cuando la conexión esté disponible."
             }
           />
         ) : (
