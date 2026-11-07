@@ -42,3 +42,14 @@ La regresión general pasó **76 archivos y 504 pruebas**. El laboratorio Docker
 La imagen corregida está publicada en el registro privado de TaxSkill y su digest está configurado en `SUNAT_SANDBOX_IMAGE` de Production. El despliegue posterior incorpora ese valor para las consultas manuales y la revisión diaria.
 
 La comprobación Vercel demuestra apertura e identidad con la imagen corregida. La próxima revisión de las 08:00 de Lima permitirá comprobar el recorrido diario con esta versión. Una única comprobación de acceso no acredita disponibilidad continua de SUNAT.
+
+## Comprobación posterior a la publicación
+
+El despliegue `dpl_BUz62A5YMs7v8McB2LJVQT3Dp2G8` quedó Ready con el commit `7b7721a` y el dominio `taxskill.vercel.app`. Una actualización real de noviembre finalizó en aproximadamente 35 segundos, con 23.684 ms de ejecución del worker.
+
+| Bandeja | Resultado guardado | Registros de noviembre |
+|---|---|---:|
+| Notificaciones | Completa | 0 |
+| Mensajes | Parcial por paginación del origen | 1 |
+
+La consulta superó la apertura y persistió ambas bandejas. Los seis diagnósticos de reintento de Mensajes reproducen los conteos anteriores de SOL. Esta actualización manual demuestra el recorrido productivo con la nueva imagen. La siguiente ejecución programada sigue siendo una comprobación posterior independiente.

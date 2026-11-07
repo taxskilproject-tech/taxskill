@@ -47,5 +47,25 @@
   "production_image_config": "taxskill-sunat-worker@sha256:386b2e98f73458e89ee14efa8925ee617dfd3d0bf4621c8fff2b58e8aeaca4cc",
   "daily_execution_after_release": "pending_next_scheduled_execution",
   "fiscal_content_in_evidence": false,
-  "local_turbopack_failure": "child_process_exited_before_postcss_connection"
+  "local_turbopack_failure": "child_process_exited_before_postcss_connection",
+  "production_query": {
+    "deployment": "dpl_BUz62A5YMs7v8McB2LJVQT3Dp2G8",
+    "commit": "7b7721ac9b20eea8551d6a6a652b0dbff70d44f3",
+    "recorded_at": "2026-11-07T16:37:05.425Z",
+    "state": "partial",
+    "error_code": "PAGE_INCONSISTENT",
+    "duration_ms": 23684,
+    "mailboxes": [
+      {
+        "mailbox": "notifications",
+        "state": "complete",
+        "message_count": 0
+      },
+      {
+        "mailbox": "messages",
+        "state": "partial",
+        "message_count": 1
+      }
+    ]
+  }
 }
