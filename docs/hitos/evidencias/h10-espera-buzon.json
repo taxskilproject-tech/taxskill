@@ -1,0 +1,51 @@
+{
+  "recorded_at": "2026-11-07T16:32:21.278Z",
+  "local_chromium": {
+    "passed": 6,
+    "checks": [
+      "legacy_global_wait_times_out_with_pending_resource",
+      "identity_ready_without_waiting_for_pending_resource",
+      "other_company_rejected",
+      "ambiguous_identity_rejected",
+      "delayed_identity_awaited",
+      "missing_identity_fails_with_bounded_timeout"
+    ]
+  },
+  "vercel_identity": {
+    "recorded_at": "2026-11-07T16:29:46.778Z",
+    "image": "taxskill-sunat-worker@sha256:386b2e98f73458e89ee14efa8925ee617dfd3d0bf4621c8fff2b58e8aeaca4cc",
+    "verified_identity": true,
+    "stopped": true,
+    "snapshot_created": false,
+    "name": "taxskill-mailbox-ready-20261107",
+    "events": [
+      {
+        "event": "source_mailbox_opening",
+        "control_visible": true,
+        "controls": 1
+      },
+      {
+        "event": "mailbox_ready_verified",
+        "duration_ms": 8553,
+        "request_count": 73
+      }
+    ],
+    "exit_code": 0,
+    "finished_at": "2026-11-07T16:30:11.209Z"
+  },
+  "regressions": {
+    "test_files": 76,
+    "tests_passed": 504,
+    "pagination_lab_checks": 45,
+    "typecheck": "passed",
+    "architecture": "passed",
+    "lint": "passed",
+    "worker_build": "passed",
+    "web_build": "yarn build --webpack, isolated .next-h10",
+    "browser_bundle": "passed"
+  },
+  "production_image_config": "taxskill-sunat-worker@sha256:386b2e98f73458e89ee14efa8925ee617dfd3d0bf4621c8fff2b58e8aeaca4cc",
+  "daily_execution_after_release": "pending_next_scheduled_execution",
+  "fiscal_content_in_evidence": false,
+  "local_turbopack_failure": "child_process_exited_before_postcss_connection"
+}

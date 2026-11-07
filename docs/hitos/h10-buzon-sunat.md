@@ -1,5 +1,7 @@
 # H10 — Buzón SUNAT
 
+**Corrección del 07/11/2026**. Se reemplazó la espera global de apertura por validación explícita de identidad. Seis regresiones Chromium Docker y apertura real Vercel verificadas. [Incidencia, pruebas y límites](evidencias/h10-espera-buzon.md).
+
 **Cierre operativo — 30/10/2026, Lima:** implementación y puesta en marcha verificadas. [Matriz de aceptación y límites](evidencias/h10-cierre.md), [validación final](evidencias/h10-validacion-final.json), [recorrido real y diario](evidencias/h10-production.json), [publicación final](evidencias/h10-release-smoke.json) y [recuperación](evidencias/h10-recovery.json). Quince migraciones H10 publicadas, 98 totales; empresa real autorizada conectada y diario habilitado a las 08:00. Mensajes conserva la cobertura parcial del origen aceptada por el usuario; nunca se certifica una consulta incompleta. H08 mantiene sus pendientes propios.
 
 ## Cronología anterior al cierre

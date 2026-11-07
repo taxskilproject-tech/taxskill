@@ -61,6 +61,7 @@ function compile(filename: string): void {
 }
 compile(resolve("scripts/sunat-worker/worker.ts"));
 compile(resolve("scripts/sunat-worker/run-one.ts"));
+compile(resolve("scripts/fixtures/h10-mailbox-ready.ts"));
 if (existsSync("scripts/sunat-worker/pilot.ts"))
   compile(resolve("scripts/sunat-worker/pilot.ts"));
 if (existsSync("scripts/sunat-worker/source-probe.ts"))

@@ -2,6 +2,8 @@
 
 Actualizado el **30/10/2026, America/Lima**. [Hito](hitos/h10-buzon-sunat.md) · [Cierre y aceptación](hitos/evidencias/h10-cierre.md) · [Evidencia productiva](hitos/evidencias/h10-production.json).
 
+La [corrección de apertura del 07/11/2026](hitos/evidencias/h10-espera-buzon.md) espera la identidad del buzón, con plazo acotado, evitando depender de la carga global de recursos del visor.
+
 ## Estado y alcance
 
 El conector está integrado con **Next.js en Vercel Hobby y Supabase Cloud**. La empresa real autorizada verifica su conexión, consulta meses y recupera mensajes y adjuntos. Su revisión diaria está habilitada a las **08:00 de Lima**. La aplicación conserva la cobertura parcial de Mensajes que SUNAT devuelve también en SOL: una consulta incompleta no certifica ausencia de mensajes ni adelanta la última consulta correcta.

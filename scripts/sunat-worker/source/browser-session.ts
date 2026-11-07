@@ -8,10 +8,10 @@ import {
   SUNAT_OFFICIAL_ENTRY,
 } from "../constants/source";
 import type { BrowserSession, SourceOptions } from "../types/source.types";
-import { requireMailboxIdentity } from "../utils/mailbox-identity";
 import { isOfficialSunatUrl } from "../utils/source-validation";
 import { requireLoginOutcome } from "./login-outcome";
 import { observeLoginResponses } from "./login-responses";
+import { requireMailboxReady } from "./mailbox-ready";
 import { openMailbox } from "./open-mailbox";
 import { prepareSolLogin } from "./prepare-login";
 
@@ -94,16 +94,8 @@ export async function openSunatSession(
     stage = "mailbox_frame";
     const located = await openMailbox(context, page);
     const { frame } = located;
-    stage = "mailbox_loaded";
-    await frame.waitForLoadState("domcontentloaded");
     stage = "mailbox_identity";
-    const identity = frame.locator('meta[name="meta-token"]');
-    if ((await identity.count()) !== 1)
-      throw new MailboxError("UNEXPECTED_RESPONSE");
-    requireMailboxIdentity(
-      await identity.getAttribute("content"),
-      credentials.ruc,
-    );
+    await requireMailboxReady(frame, credentials.ruc);
     return { browser: { close }, context, page: located.page, frame };
   } catch (error) {
     console.error(
