@@ -1,0 +1,29 @@
+{
+  "recorded_at": "2026-11-08T02:07:59.730Z",
+  "canonical_url": "https://taxskill.vercel.app",
+  "deployment_id": "dpl_Cy7emPxGkFQxmKNP7CX49NsUhTjY",
+  "source_commit": "0579253f48439dca9bd9d08d4279d3d2443f5119",
+  "responses": [
+    {
+      "route": "/login",
+      "status": 200
+    },
+    {
+      "route": "/dashboard",
+      "status": 200
+    },
+    {
+      "route": "/documentos",
+      "status": 200
+    }
+  ],
+  "client_chunks": 18,
+  "client_bytes": 1166058,
+  "h11_client_labels_verified": true,
+  "configured_private_values_absent": true,
+  "anonymous_rpc_status": 401,
+  "real_business_records_exported": false,
+  "fixtures_created": false,
+  "production_jobs_changed": false,
+  "authenticated_profile_acceptance": "docker_only"
+}

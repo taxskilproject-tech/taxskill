@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-11-08T02:10:22.3151386Z",
+  "playbook": "https://vercel.com/get-started.md",
+  "cli_version": "65.8.0",
+  "cli_authentication": "awaiting_user_oauth",
+  "guidance": "Vercel plugin 0.54.1 already installed for Codex",
+  "guidance_scope": "user",
+  "status_command_discoverable": true,
+  "mcp_endpoint": "https://mcp.vercel.com",
+  "mcp_management": "installed Vercel plugin",
+  "documentation_search": "PASS",
+  "authenticated_list_teams": "PASS",
+  "confirmed_team": "team_aajSGg1rIUDPJcu93lzOEI91",
+  "confirmed_project": "prj_07EFpTQSHF70A6fqbw7dTYDPbUKI",
+  "codex_cli_inventory": "blocked_by_existing_service_tier_default_config_incompatibility",
+  "existing_codex_configuration_changed": false,
+  "duplicate_plugin_or_mcp_added": false,
+  "reload_needed": false
+}

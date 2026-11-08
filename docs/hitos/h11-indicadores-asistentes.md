@@ -2,9 +2,9 @@
 
 Fecha de referencia: 07/11/2026, America/Lima. [Índice](README.md) · [Evidencias](evidencias/h11.md).
 
-**Estado: implementado y validado en Docker local.** Publicación productiva pendiente como etapa separada.
+**Estado: implementado, validado en Docker y publicado.** La publicación posterior fue solicitada expresamente por el usuario.
 
-**Actualización de publicación:** migración H11 instalada posteriormente por petición del usuario, con 99 versiones Cloud/local coincidentes y lint SQL aprobado. Frontend en preparación; consultar el [registro](evidencias/h11-cloud.json).
+**Actualización de publicación:** migración H11 instalada con 99 versiones Cloud/local coincidentes y lint SQL aprobado. Frontend 0579253 publicado en Vercel Production, estado Ready y dominio taxskill.vercel.app asignado. Consultar [SQL](evidencias/h11-cloud.json) y [comprobaciones de publicación](evidencias/h11-release-smoke.json).
 
 ## Objetivo y dependencias
 

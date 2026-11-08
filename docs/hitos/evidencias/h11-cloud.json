@@ -12,5 +12,8 @@
   "sql_lint": "PASS",
   "business_data_dml": false,
   "history_fingerprint_export": "not_performed_auto_review_rejected",
-  "frontend_state": "pending"
+  "frontend_state": "READY",
+  "frontend_commit": "0579253f48439dca9bd9d08d4279d3d2443f5119",
+  "deployment_id": "dpl_Cy7emPxGkFQxmKNP7CX49NsUhTjY",
+  "canonical_url": "https://taxskill.vercel.app"
 }
