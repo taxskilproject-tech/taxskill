@@ -1,8 +1,8 @@
 {
-  "recorded_at": "2026-11-08T02:10:22.3151386Z",
+  "recorded_at": "2026-11-08T02:40:34.5131631Z",
   "playbook": "https://vercel.com/get-started.md",
   "cli_version": "65.8.0",
-  "cli_authentication": "awaiting_user_oauth",
+  "cli_authentication": "authenticated",
   "guidance": "Vercel plugin 0.54.1 already installed for Codex",
   "guidance_scope": "user",
   "status_command_discoverable": true,
@@ -15,5 +15,10 @@
   "codex_cli_inventory": "blocked_by_existing_service_tier_default_config_incompatibility",
   "existing_codex_configuration_changed": false,
   "duplicate_plugin_or_mcp_added": false,
-  "reload_needed": false
+  "reload_needed": false,
+  "cli_username": "taxskilproject-6139",
+  "cli_project_inspection": "PASS",
+  "local_project_link_created": false,
+  "production_environment_downloaded": false,
+  "standalone_codex_inventory_affects_plugin_mcp": false
 }
