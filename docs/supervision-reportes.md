@@ -1,5 +1,7 @@
 # Supervisión, búsqueda y reportes · H07
 
+**Ampliación H11 — 07/11/2026:** [indicadores por empresa y asistente](hitos/h11-indicadores-asistentes.md). Las proyecciones nuevas cuentan archivos únicos, puntualidad por ciclo y pendientes por responsable. Inicio/ficha comparten resumen; Documentos alterna subidas/pendientes y fuerza la identidad del Cliente. Los reportes históricos H07 conservan sus fórmulas de ciclos y filtros por inicio del periodo. [Validación local](hitos/evidencias/h11.md).
+
 Implementado el 17 de octubre de 2026. Ocho migraciones originales y las dos correcciones adicionales publicadas con autorización expresa e historia conservada: 57 versiones local/Cloud coincidentes y 13 huellas sin cambios. Sin fixtures remotos. Ver [cierre anterior](hitos/evidencias/h07-correcciones.md), [cierre complementario](hitos/evidencias/h07-cierre-complementario.md), [hito](hitos/h07-supervision-reportes.md), [evidencia inicial](hitos/evidencias/h07.md), [entornos](desarrollo.md) y [H08](hitos/h08-preparacion-produccion.md).
 
 El [cierre complementario](hitos/evidencias/h07-cierre-complementario.md) corrige REV-04–REV-05: indicadores por intersección y feedback de exportación ligado a su identidad. Verifica los casos de la [revisión anterior](hitos/evidencias/revision-final-pre-h08.md) en Docker y la publicación correctiva autorizada en Cloud. REV-01–REV-03 conservan su cierre.

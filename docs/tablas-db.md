@@ -1,5 +1,7 @@
 # Tablas DB y diccionario de datos
 
+**H11 — 07/11/2026:** [métricas y seguimiento por asistente](hitos/h11-indicadores-asistentes.md) reutilizan obligations, periods, deliverables, submission_cycles y document_versions. La migración 20261107183652 incorpora helpers privados de lectura e índice cycle_id/version_number/id incluyendo uploaded_by. La puntualidad usa first_submitted_at/due_date del ciclo y el primer autor; se agrupa por deliverables.id. La firma pública de h07_query se conserva y las filas históricas mantienen sus valores.
+
 - **Versión:** 1.0 — 10 de octubre de 2026.
 - **Estado:** modelo físico propuesto; no existen migraciones aplicadas por esta entrega.
 - **Fuentes:** [diseño técnico 1.1](diseno-tecnico.md), [análisis funcional](analisis_completo_sistema_documental_contable.md) y [resumen ejecutivo](resumen_ejecutivo_sistema_documental_contable.md).

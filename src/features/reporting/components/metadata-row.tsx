@@ -19,6 +19,11 @@ export function MetadataRow({ document, origin }: MetadataRowProps) {
           {document.company_name ?? "Interna del estudio"} · {document.period} ·
           Versión {document.version_number}
         </p>
+        {document.uploader_name && (
+          <p className="text-xs text-slate-600">
+            Subido por {document.uploader_name}
+          </p>
+        )}
         {!document.is_current && <Badge>Histórica</Badge>}
       </div>
       <RecordInspector title={document.original_name} label="Abrir archivo">

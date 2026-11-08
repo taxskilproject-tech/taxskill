@@ -1,0 +1,23 @@
+{
+  "recorded_at": "2026-11-07T19:31:38.084Z",
+  "environment": "docker_h11_54631_app_4011",
+  "fictitious": true,
+  "checks": [
+    "h11-admin: login, mes y detalle del indicador, Escape",
+    "h11-admin: resumen de empresa con pestaña y periodo",
+    "h11-admin: subidas, asistente, pendientes y retorno al listado",
+    "375, 390, 768, 1024 y 1440px sin desbordamiento",
+    "Móvil 390px sin desbordamiento y empresa ampliable",
+    "h11-staff: login, mes y detalle del indicador, Escape",
+    "h11-staff: resumen de empresa con pestaña y periodo",
+    "h11-staff: subidas, asistente, pendientes y retorno al listado",
+    "h11-supervisor: login, mes y detalle del indicador, Escape",
+    "h11-supervisor: resumen de empresa con pestaña y periodo",
+    "h11-supervisor: subidas, asistente, pendientes y retorno al listado",
+    "h11-client: login, mes y detalle del indicador, Escape",
+    "h11-client: resumen de empresa con pestaña y periodo",
+    "h11-client: subidas, asistente, pendientes y retorno al listado"
+  ],
+  "runtime_errors": 0,
+  "remote_requests": false
+}

@@ -17,6 +17,12 @@ export const reportFiltersSchema = z
       .default([])
       .transform((values) => [...new Set(values)].sort()),
     company_id: z.uuid().optional(),
+    assistant_id: z.uuid().optional(),
+    document_month: z
+      .string()
+      .regex(/^[12]\d{3}-(0[1-9]|1[0-2])$/)
+      .optional(),
+    document_view: z.enum(["uploaded", "pending"]).optional(),
     scope: z.enum(["all", "company", "internal"]).default("all"),
     module: z
       .enum([

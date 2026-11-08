@@ -1,6 +1,7 @@
 import type { z } from "zod";
 
 import { exportReceiptSchema } from "@/domain/reporting/contracts/reporting.schema";
+import { legacyReportingInput } from "@/domain/reporting/utils/followup-filters";
 import {
   asJson,
   requireBrowserClient,
@@ -21,7 +22,11 @@ export async function queryReporting<T>(
     .rpc("h07_query", {
       p_organization_id: organizationId,
       p_resource: resource,
-      p_input: asJson(input),
+      p_input: asJson(
+        ["dashboard", "report", "audit"].includes(resource)
+          ? legacyReportingInput(input)
+          : input,
+      ),
     })
     .abortSignal(signal);
   const decoded = decodeRpc(response.data, response.error, schema);

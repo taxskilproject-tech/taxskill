@@ -1,0 +1,44 @@
+{
+  "recorded_at": "2026-11-07T19:33:59.0059678Z",
+  "environment": "docker_h11_54631_app_4011",
+  "production_changed": false,
+  "fictitious_data_only_local": true,
+  "migration": {
+    "file": "20261107183652_h11_delivery_indicators.sql",
+    "sha256": "fbbd415885e751e8d32ae8dace8744e6b4e4ee5fbea6303f2d14c0c4c9ea7709",
+    "local_copy_matches": true,
+    "applied_from_scratch": true
+  },
+  "results": {
+    "sql_h11": 47,
+    "sql_h07_regression": "PASS",
+    "sql_combined": 48,
+    "sql_files": 2,
+    "sql_lint": "PASS",
+    "automated_tests": 511,
+    "automated_files": 77,
+    "ui_checks": 14,
+    "profiles": [
+      "administrator",
+      "accountant",
+      "supervisor",
+      "client"
+    ],
+    "widths_px": [
+      375,
+      390,
+      768,
+      1024,
+      1440
+    ],
+    "types": "PASS",
+    "lint": "PASS",
+    "architecture": "PASS",
+    "yarn_build": "PASS",
+    "build_runtime": "Next.js 16.4.3 / Webpack",
+    "client_bundle": "PASS"
+  },
+  "application": "http://localhost:4011",
+  "presentation_preserved": "4003",
+  "publication_pending": true
+}

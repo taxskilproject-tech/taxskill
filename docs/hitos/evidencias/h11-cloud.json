@@ -1,0 +1,16 @@
+{
+  "recorded_at": "2026-11-08T02:05:42.5846938Z",
+  "project_ref": "gzwrqvqofcrdjvzoblaz",
+  "migration": "20261107183652_h11_delivery_indicators.sql",
+  "sha256": "fbbd415885e751e8d32ae8dace8744e6b4e4ee5fbea6303f2d14c0c4c9ea7709",
+  "migrations_local": 99,
+  "migrations_remote": 99,
+  "mismatches": 0,
+  "dry_run_only_h11": true,
+  "seeds": false,
+  "roles": false,
+  "sql_lint": "PASS",
+  "business_data_dml": false,
+  "history_fingerprint_export": "not_performed_auto_review_rejected",
+  "frontend_state": "pending"
+}

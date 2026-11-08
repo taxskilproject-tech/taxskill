@@ -3,6 +3,8 @@ import { z } from "zod";
 import { documentRowSchema } from "@/domain/documents/contracts/document.schema";
 
 export const metadataDocumentSchema = documentRowSchema.extend({
+  uploaded_by: z.uuid().optional(),
+  uploader_name: z.string().nullable().optional(),
   worker_name: z.string(),
   worker_identity: z.string().nullable(),
   period: z.string(),

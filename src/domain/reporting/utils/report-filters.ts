@@ -1,8 +1,16 @@
 import { reportFiltersSchema } from "@/domain/reporting/contracts/reporting.schema";
 import type { ReportFilters } from "@/domain/reporting/types/reporting.types";
 
-export function parseReportFilters(parameters: URLSearchParams): ReportFilters {
-  const raw = Object.fromEntries(parameters);
+export function parseReportFilters(
+  parameters: URLSearchParams,
+  ignorePresentation = false,
+): ReportFilters {
+  const entries = [...parameters.entries()];
+  const raw = Object.fromEntries(
+    ignorePresentation
+      ? entries.filter(([key]) => Object.hasOwn(reportFiltersSchema.shape, key))
+      : entries,
+  );
   delete raw.returnTo;
   return reportFiltersSchema.parse({
     ...raw,

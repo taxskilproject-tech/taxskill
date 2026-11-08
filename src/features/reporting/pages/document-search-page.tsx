@@ -3,11 +3,14 @@ import { Button } from "@/components/atoms/button";
 import { FeedbackMessage } from "@/components/molecules/feedback-message";
 import { ResourceState } from "@/components/organisms/resource-state";
 import { metadataResultSchema } from "@/domain/reporting/contracts/consultation.schema";
+import { deliveryDetailsSchema } from "@/domain/reporting/contracts/followup.schema";
 import { limaMoment } from "@/domain/reporting/utils/report-filters";
 import { PageHeading } from "@/features/access/components/page-heading";
 import { Pagination } from "@/features/access/components/pagination";
 import { QueryState } from "@/features/access/components/query-state";
+import { DocumentFollowupControls } from "@/features/reporting/components/document-followup-controls";
 import { MetadataRow } from "@/features/reporting/components/metadata-row";
+import { PendingDocumentResults } from "@/features/reporting/components/pending-document-results";
 import { ReportFilters } from "@/features/reporting/components/report-filters";
 import { useReportFilters } from "@/features/reporting/hooks/use-report-filters";
 import { useReportQuery } from "@/features/reporting/hooks/use-report-query";
@@ -18,24 +21,40 @@ export function DocumentSearchPage() {
     "documents",
     filters,
     metadataResultSchema,
-    !error,
+    !error && filters.document_view !== "pending",
+  );
+  const pending = useReportQuery(
+    "pending_deliveries",
+    filters,
+    deliveryDetailsSchema,
+    !error && filters.document_view === "pending",
   );
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <PageHeading
-        description="Busca archivos entregados y sus versiones en tus empresas autorizadas."
+        description="Consulta los archivos subidos y las entregas pendientes por asistente."
         title="Documentos"
+        action={
+          <Button onClick={reset} variant="secondary">
+            Limpiar filtros
+          </Button>
+        }
+      />
+      <DocumentFollowupControls
+        filters={filters}
+        onChange={change}
+        onView={(view) => change("document_view", view)}
+        onInvalidAssistant={() => change("assistant_id", "")}
       />
       <ReportFilters
-        busy={query.isFetching}
+        busy={query.isFetching || pending.isFetching}
         filters={filters}
         onChange={change}
       />
-      <Button onClick={reset} variant="secondary">
-        Limpiar filtros
-      </Button>
       {error ? (
         <FeedbackMessage kind="error">{error}</FeedbackMessage>
+      ) : filters.document_view === "pending" ? (
+        <PendingDocumentResults query={pending} />
       ) : (
         <QueryState
           error={query.error}

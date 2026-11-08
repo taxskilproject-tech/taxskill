@@ -4,6 +4,8 @@ H01 y H02 aportan la base, acceso y administración. H03 añade el primer recorr
 
 **Regla confirmada por el usuario:** todos los datos ficticios, seeds y pruebas de integración/SQL se ejecutan exclusivamente en Supabase local sobre Docker. `gzwrqvqofcrdjvzoblaz` es el proyecto Cloud de la aplicación real. Nunca sustituir Docker por ese proyecto. Ver [corrección e inventario histórico](hitos/evidencias/correccion-entornos.md).
 
+**Laboratorio H11:** proyecto Docker independiente `tax-skill-h11`, API 54631, PostgreSQL 54632, aplicación [localhost:4011](http://localhost:4011) y build `.next-h11`. Variables privadas en `test-results/local/h11-lab/runtime.env`; el cargador valida proyecto, URL y puertos antes de operar. `yarn tsx scripts/run-h11-lab.ts` admite `seed`, `types`, `build`, `bundle`, `start` y `ui`. La presentación 4003 y los demás proyectos se conservan. Ver [hito](hitos/h11-indicadores-asistentes.md) y [evidencias](hitos/evidencias/h11.md). No usar este perfil local en Vercel.
+
 ## 1. Requisitos y versiones
 
 - Node.js 22.12 o posterior compatible; verificado con Node.js 22.16.0.

@@ -4,8 +4,19 @@ import {
   stateLabel,
 } from "@/domain/reporting/utils/report-labels";
 
-const OMIT = new Set(["page", "pageSize", "report", "sort", "scope"]);
+const OMIT = new Set([
+  "page",
+  "pageSize",
+  "report",
+  "sort",
+  "scope",
+  "assistant_id",
+  "document_view",
+]);
 const LABELS: Readonly<Record<string, string>> = {
+  assistant_id: "Asistente contable",
+  document_month: "Periodo documental",
+  document_view: "Vista de documentos",
   company_id: "Empresa",
   q: "Búsqueda",
   period: "Periodo",

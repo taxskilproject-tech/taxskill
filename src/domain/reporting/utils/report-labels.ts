@@ -27,6 +27,9 @@ export function periodLabel(key: string, start: string): string {
   return key;
 }
 const FILTER_LABELS: Readonly<Record<keyof ReportFilters, string>> = {
+  assistant_id: "Asistente contable",
+  document_month: "Periodo documental",
+  document_view: "Vista de documentos",
   indicator: "Indicador",
   indicators: "Indicadores (todos)",
   company_id: "Empresa",

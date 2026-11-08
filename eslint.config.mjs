@@ -11,6 +11,7 @@ const eslintConfig = defineConfig([
     ".next/**",
     ".next-h09/**",
     ".next-h10/**",
+    ".next-h11/**",
     ".sunat-worker-build/**",
     ".yarn-cache/**",
     "coverage/**",

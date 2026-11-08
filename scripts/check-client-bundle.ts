@@ -30,11 +30,13 @@ const secrets = [
 ].filter((value): value is string => Boolean(value));
 const buildProfile = process.env.TAXSKILL_BUILD_PROFILE;
 inspectClientBundle(
-  buildProfile === "h10"
-    ? ".next-h10/static"
-    : buildProfile === "h09"
-      ? ".next-h09/static"
-      : ".next/static",
+  buildProfile === "h11"
+    ? ".next-h11/static"
+    : buildProfile === "h10"
+      ? ".next-h10/static"
+      : buildProfile === "h09"
+        ? ".next-h09/static"
+        : ".next/static",
   secrets,
 );
 console.info(

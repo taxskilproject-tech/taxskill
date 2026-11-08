@@ -5,11 +5,13 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   turbopack: { root: process.cwd() },
   distDir:
-    process.env.TAXSKILL_BUILD_PROFILE === "h10"
-      ? ".next-h10"
-      : process.env.TAXSKILL_BUILD_PROFILE === "h09"
-        ? ".next-h09"
-        : ".next",
+    process.env.TAXSKILL_BUILD_PROFILE === "h11"
+      ? ".next-h11"
+      : process.env.TAXSKILL_BUILD_PROFILE === "h10"
+        ? ".next-h10"
+        : process.env.TAXSKILL_BUILD_PROFILE === "h09"
+          ? ".next-h09"
+          : ".next",
   cacheComponents: true,
   partialPrefetching: true,
 };

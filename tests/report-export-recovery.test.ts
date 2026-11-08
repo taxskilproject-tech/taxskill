@@ -128,6 +128,24 @@ it("returns a prepared file only after the remote result is confirmed", async ()
   ]);
 });
 
+it("keeps report exports on their historical filters when a followup URL contains new controls", async () => {
+  await generateReport({
+    ...options,
+    filters: {
+      ...options.filters,
+      document_month: "2026-10",
+      document_view: "pending",
+    },
+    signal: new AbortController().signal,
+  });
+  expect(mocks.send.mock.calls[0][0].p_input.filters).not.toHaveProperty(
+    "document_month",
+  );
+  expect(mocks.worker.mock.calls[0][0].payload.filters).not.toHaveProperty(
+    "document_view",
+  );
+});
+
 it.each(["batch", "worker"])(
   "cancels during %s and records a terminal cancellation",
   async (phase) => {

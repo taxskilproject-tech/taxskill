@@ -1,5 +1,7 @@
 # Flujo de navegación: páginas y rutas
 
+**H11 — 07/11/2026:** las rutas existentes /dashboard y /empresas/{id} presentan indicadores por empresa/mes y paneles de detalle. /documentos alterna document_view=uploaded/pending, con assistant_id y document_month=AAAA-MM. Estos parámetros se conservan al abrir una obligación y volver mediante returnTo. Cambiar vista reinicia página; el contexto de empresa descarta un asistente fuera de alcance. [Contrato H11](hitos/h11-indicadores-asistentes.md).
+
 **Actualización local del 25/10/2026:** [vista unificada por periodos](vista-documental-periodos.md). Año → Mes → Tipo → Archivo reutiliza las rutas existentes; `documentYear`, `documentMonth`, `documentType`, `documentState`, `documentPage`, `documentStage` y `documentScope` se conservan mediante retorno validado. Ingreso/Cese del expediente no requieren mes.
 
 **H09:** Configuración distingue `tab=catalogo` (Catálogo de entregables), `tab=plantillas` (Plantillas por régimen) y `tab=reglas` (Entregables por empresa, URL compatible). Esta última exige empresa mediante `rulesCompany`; `rulesModule` y `newDeliverable=true` permiten añadir desde el módulo con contexto preseleccionado. La ficha conserva Administración para responsables. El alta de empresa se divide en Datos, Módulos y cobertura y Resumen, dentro del panel existente. Ver [recorridos y permisos H09](entregables-plantillas-empresa.md).

@@ -7,7 +7,7 @@ import { parseReportFilters } from "@/domain/reporting/utils/report-filters";
 import { useCurrentRoute } from "@/features/access/hooks/use-current-route";
 import { useWorkspace } from "@/features/auth/providers/workspace-context";
 
-export function useReportFilters() {
+export function useReportFilters(ignorePresentation = false) {
   const { company } = useWorkspace();
   const parameters = useSearchParams();
   const router = useRouter();
@@ -16,7 +16,10 @@ export function useReportFilters() {
   let parsed = reportFiltersSchema.parse({});
   let error = "";
   try {
-    parsed = parseReportFilters(new URLSearchParams(parameters.toString()));
+    parsed = parseReportFilters(
+      new URLSearchParams(parameters.toString()),
+      ignorePresentation,
+    );
   } catch {
     error =
       "Hay filtros inválidos en la dirección. Corrige los valores o limpia los filtros.";
@@ -36,6 +39,10 @@ export function useReportFilters() {
     else next.delete(name);
     if (name === "company_id") next.set("scope", value ? "company" : "all");
     if (name === "scope" && value === "internal") next.delete("company_id");
+    if (name === "document_month") {
+      next.delete("year");
+      next.delete("month");
+    }
     if (name !== "page") next.delete("page");
     router.replace(`${pathname}?${next}`, { scroll: false });
   }
@@ -43,7 +50,13 @@ export function useReportFilters() {
     filters,
     error,
     change,
-    reset: () => router.replace(pathname, { scroll: false }),
+    reset: () =>
+      router.replace(
+        pathname === "/documentos" && filters.document_view === "pending"
+          ? pathname + "?document_view=pending"
+          : pathname,
+        { scroll: false },
+      ),
     origin,
   };
 }

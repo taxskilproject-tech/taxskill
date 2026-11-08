@@ -1,5 +1,9 @@
-import { reportResultSchema } from "@/domain/reporting/contracts/reporting.schema";
+import {
+  reportFiltersSchema,
+  reportResultSchema,
+} from "@/domain/reporting/contracts/reporting.schema";
 import type { ExportReceipt } from "@/domain/reporting/types/reporting.types";
+import { legacyReportingInput } from "@/domain/reporting/utils/followup-filters";
 import {
   queryReporting,
   recordReportExport,
@@ -11,8 +15,10 @@ import type { ReportExportOptions } from "@/features/reporting/types/export.type
 import { ExportAuditRejection } from "@/features/reporting/utils/export-audit-rejection";
 
 export async function generateReport(options: ReportExportOptions) {
-  const { organizationId, format, filters, result, signal, onProgress } =
-    options;
+  const { organizationId, format, result, signal, onProgress } = options;
+  const filters = reportFiltersSchema.parse(
+    legacyReportingInput(options.filters),
+  );
   const requestId = crypto.randomUUID();
   let registered = false;
   signal.throwIfAborted();

@@ -1,6 +1,9 @@
 const ALLOWED_ROUTES =
   /^\/(dashboard|buzon-sunat|empresas(?:\/[0-9a-f-]{36}(?:\/trabajadores\/[0-9a-f-]{36})?)?|usuarios|configuracion|actividades(?:\/[0-9a-f-]{36})?|reportes|notificaciones|documentos|auditoria)$/;
 const ALLOWED_QUERY = new Set([
+  "assistant_id",
+  "document_month",
+  "document_view",
   "mailbox",
   "messageId",
   "newDeliverable",

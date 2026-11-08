@@ -1,5 +1,7 @@
 # Diseño técnico del sistema documental contable y laboral
 
+**Ampliación H11 — 07/11/2026:** [indicadores y seguimiento por asistente](hitos/h11-indicadores-asistentes.md). Inicio y ficha comparten mes documental y métricas calculadas por obligación/archivo. Documentos incorpora subidas y pendientes, con autor real y responsable actual respectivamente. El servidor limita a Cliente a su identidad. [Evidencias locales](hitos/evidencias/h11.md).
+
 - **Versión:** 1.1
 - **Fecha:** 10 de octubre de 2026
 - **Proyecto:** tax-skill / SGD Contable
